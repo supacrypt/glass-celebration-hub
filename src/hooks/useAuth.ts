@@ -64,7 +64,7 @@ export const useAuth = () => {
         .from('profiles')
         .select('*')
         .eq('user_id', userId)
-        .single();
+        .maybeSingle();
       
       setProfile(profileData);
 
@@ -73,7 +73,7 @@ export const useAuth = () => {
         .from('user_roles')
         .select('role')
         .eq('user_id', userId)
-        .single();
+        .maybeSingle();
       
       setUserRole(roleData);
     } catch (error) {
