@@ -229,7 +229,7 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
                         View Gallery
                       </button>
                       <button
-                        onClick={() => handleNavigate('/gallery/upload')}
+                        onClick={() => handleNavigate('/gifts')}
                         className="p-3 bg-gradient-to-br from-[#e8e0d7] to-[#f5ede4] rounded-xl text-sm font-medium text-[#5a5651] hover:scale-105 transition-transform"
                         style={{
                           boxShadow: `
@@ -238,7 +238,7 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
                           `
                         }}
                       >
-                        Upload Photos
+                        Gift Registry
                       </button>
                     </>
                   )}

@@ -14,6 +14,62 @@ export type Database = {
   }
   public: {
     Tables: {
+      gift_registry: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          is_purchased: boolean | null
+          price: number | null
+          priority: number | null
+          purchased_at: string | null
+          purchased_by: string | null
+          store_url: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_purchased?: boolean | null
+          price?: number | null
+          priority?: number | null
+          purchased_at?: string | null
+          purchased_by?: string | null
+          store_url?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_purchased?: boolean | null
+          price?: number | null
+          priority?: number | null
+          purchased_at?: string | null
+          purchased_by?: string | null
+          store_url?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_registry_purchased_by_fkey"
+            columns: ["purchased_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       message_likes: {
         Row: {
           created_at: string

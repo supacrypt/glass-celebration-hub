@@ -7,9 +7,9 @@ import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-ro
 import GlassLayout from "./components/GlassLayout";
 import Home from "./pages/Home";
 import Venue from "./pages/Venue";
-
 import Social from "./pages/Social";
 import Gallery from "./pages/Gallery";
+import GiftRegistry from "./pages/GiftRegistry";
 import RSVP from "./pages/RSVP";
 import FAQ from "./pages/FAQ";
 import Auth from "./pages/Auth";
@@ -71,6 +71,7 @@ const AppContent = () => {
         
         <Route path="/social" element={<Social />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/gifts" element={<GiftRegistry />} />
         <Route path="/rsvp" element={<RSVP />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/auth" element={<Auth />} />
