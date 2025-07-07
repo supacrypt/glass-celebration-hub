@@ -129,33 +129,41 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
                   }}
                 />
                 
-                {/* 4-dot grid - raised through the glass */}
-                <div 
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '8px 8px',
-                    gridTemplateRows: '8px 8px',
-                    gap: '4px',
-                    position: 'relative',
-                    zIndex: 1,
-                    filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))'
-                  }}
-                >
-                  {[...Array(4)].map((_, i) => (
-                    <span 
-                      key={i}
-                      style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                        borderRadius: '2px',
-                        display: 'block',
-                        boxShadow: `
-                          0 2px 3px rgba(0, 0, 0, 0.3),
-                          inset 0 1px 2px rgba(255, 255, 255, 0.6)
-                        `
-                      }}
-                    />
-                  ))}
-                </div>
+                 {/* 4-dot grid - raised through the glass */}
+                 <div 
+                   style={{
+                     display: 'grid',
+                     gridTemplateColumns: '8px 8px',
+                     gridTemplateRows: '8px 8px',
+                     gap: '4px',
+                     position: 'relative',
+                     zIndex: 1,
+                     filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))'
+                   }}
+                 >
+                   {[...Array(4)].map((_, i) => (
+                     <span 
+                       key={i}
+                       style={{
+                         backgroundColor: isDashboardOpen 
+                           ? 'rgba(255, 255, 255, 1)' 
+                           : 'rgba(255, 255, 255, 0.9)',
+                         borderRadius: '2px',
+                         display: 'block',
+                         boxShadow: isDashboardOpen 
+                           ? `
+                             0 2px 3px rgba(0, 0, 0, 0.3),
+                             inset 0 1px 2px rgba(255, 255, 255, 0.6),
+                             inset 0 0 8px rgba(255, 255, 255, 0.8)
+                           `
+                           : `
+                             0 2px 3px rgba(0, 0, 0, 0.3),
+                             inset 0 1px 2px rgba(255, 255, 255, 0.6)
+                           `
+                       }}
+                     />
+                   ))}
+                 </div>
               </div>
             )}
 
