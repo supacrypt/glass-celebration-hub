@@ -8,7 +8,7 @@ interface NavigationProps {
 
 const DashboardIcon: React.FC<{ isActive: boolean }> = ({ isActive }) => (
   <div className="relative w-6 h-6 flex items-center justify-center">
-    <div className="grid grid-cols-2 gap-1 w-4 h-4">
+    <div className="grid grid-cols-2 gap-1 w-4 h-4 place-items-center">
       <div className={`w-1.5 h-1.5 rounded-sm transition-all duration-300 ${
         isActive ? 'bg-white shadow-sm' : 'bg-current'
       }`} />

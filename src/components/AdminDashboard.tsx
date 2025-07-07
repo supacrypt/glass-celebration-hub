@@ -1,33 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import GlassCard from '@/components/GlassCard';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
-import { 
-  Users, 
-  Image, 
-  Calendar, 
-  MessageSquare, 
-  Shield, 
-  TrendingUp,
-  Eye,
-  Check,
-  X,
-  Search,
-  Filter,
-  Download,
-  Send,
-  Settings,
-  Activity,
-  BarChart3,
-  Clock,
-  MapPin,
-  Heart
-} from 'lucide-react';
+import { Shield } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import AdminStatsComponent from '@/components/admin/AdminStats';
+import UserManagement from '@/components/admin/UserManagement';
+import PhotoModeration from '@/components/admin/PhotoModeration';
+import RSVPManagement from '@/components/admin/RSVPManagement';
+import AdminOverview from '@/components/admin/AdminOverview';
 
 interface AdminStats {
   totalUsers: number;
@@ -88,7 +70,6 @@ const AdminDashboard: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [rsvps, setRSVPs] = useState<RSVP[]>([]);
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
@@ -192,62 +173,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handlePhotoApproval = async (photoId: string, approved: boolean) => {
-    try {
-      const { error } = await supabase
-        .from('photos')
-        .update({ is_approved: approved })
-        .eq('id', photoId);
-
-      if (error) throw error;
-
-      setPhotos(prev => prev.map(photo => 
-        photo.id === photoId ? { ...photo, is_approved: approved } : photo
-      ));
-
-      toast({
-        title: "Success",
-        description: `Photo ${approved ? 'approved' : 'rejected'} successfully`,
-      });
-
-      // Refresh stats
-      fetchAdminData();
-    } catch (error) {
-      console.error('Error updating photo:', error);
-      toast({
-        title: "Error",
-        description: "Failed to update photo status",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleRoleChange = async (userId: string, newRole: 'guest' | 'admin' | 'couple') => {
-    try {
-      const { error } = await supabase
-        .from('user_roles')
-        .update({ role: newRole })
-        .eq('user_id', userId);
-
-      if (error) throw error;
-
-      setUsers(prev => prev.map(user => 
-        user.id === userId ? { ...user, role: newRole } : user
-      ));
-
-      toast({
-        title: "Success",
-        description: "User role updated successfully",
-      });
-    } catch (error) {
-      console.error('Error updating user role:', error);
-      toast({
-        title: "Error",
-        description: "Failed to update user role",
-        variant: "destructive"
-      });
-    }
-  };
 
   if (userRole?.role !== 'admin') {
     return (
@@ -269,12 +194,6 @@ const AdminDashboard: React.FC = () => {
     );
   }
 
-  const filteredUsers = users.filter(user => 
-    user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    `${user.first_name} ${user.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const pendingPhotos = photos.filter(p => !p.is_approved);
 
   return (
     <div className="min-h-screen px-5 pt-12 pb-6">
@@ -292,33 +211,7 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-        {[
-          { label: 'Total Users', value: stats.totalUsers, icon: Users, color: 'text-glass-blue' },
-          { label: 'Total RSVPs', value: stats.totalRSVPs, icon: Calendar, color: 'text-glass-green' },
-          { label: 'Pending Photos', value: stats.pendingPhotos, icon: Clock, color: 'text-glass-pink' },
-          { label: 'Approved Photos', value: stats.approvedPhotos, icon: Check, color: 'text-glass-purple' },
-          { label: 'Messages', value: stats.totalMessages, icon: MessageSquare, color: 'text-glass-blue' },
-          { label: 'Active Users', value: stats.activeUsers, icon: Activity, color: 'text-glass-green' },
-        ].map((stat, index) => (
-          <GlassCard 
-            key={stat.label}
-            className="p-4 animate-fade-up" 
-            style={{ animationDelay: `${0.1 * (index + 1)}s` }}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <stat.icon className={`w-5 h-5 ${stat.color}`} />
-              <TrendingUp className="w-4 h-4 text-muted-foreground" />
-            </div>
-            <div className="text-2xl font-light text-wedding-navy mb-1">
-              {stat.value}
-            </div>
-            <div className="text-sm text-muted-foreground">
-              {stat.label}
-            </div>
-          </GlassCard>
-        ))}
-      </div>
+      <AdminStatsComponent stats={stats} />
 
       {/* Admin Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -330,166 +223,19 @@ const AdminDashboard: React.FC = () => {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
-          <GlassCard className="p-6">
-            <h2 className="text-lg font-semibold mb-4 text-wedding-navy flex items-center gap-2">
-              <BarChart3 className="w-5 h-5" />
-              Recent Activity
-            </h2>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 p-3 rounded-glass bg-secondary/30">
-                <div className="w-2 h-2 bg-glass-green rounded-full" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{stats.totalUsers} users registered</p>
-                  <p className="text-xs text-muted-foreground">Total platform users</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 rounded-glass bg-secondary/30">
-                <div className="w-2 h-2 bg-glass-blue rounded-full" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{stats.pendingPhotos} photos pending approval</p>
-                  <p className="text-xs text-muted-foreground">Require moderation</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 rounded-glass bg-secondary/30">
-                <div className="w-2 h-2 bg-glass-purple rounded-full" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{stats.totalRSVPs} total RSVPs received</p>
-                  <p className="text-xs text-muted-foreground">Guest confirmations</p>
-                </div>
-              </div>
-            </div>
-          </GlassCard>
+          <AdminOverview stats={stats} />
         </TabsContent>
 
         <TabsContent value="users" className="space-y-4">
-          <GlassCard className="p-4">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search users..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              <Button variant="outline" size="sm">
-                <Filter className="w-4 h-4 mr-2" />
-                Filter
-              </Button>
-            </div>
-            
-            <div className="space-y-3">
-              {filteredUsers.map((user) => (
-                <div key={user.id} className="flex items-center justify-between p-3 rounded-glass bg-secondary/30">
-                  <div className="flex-1">
-                    <div className="font-medium text-wedding-navy">
-                      {user.first_name} {user.last_name}
-                    </div>
-                    <div className="text-sm text-muted-foreground">{user.email}</div>
-                    <div className="text-xs text-muted-foreground">
-                      Joined {new Date(user.created_at).toLocaleDateString()}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
-                      {user.role}
-                    </Badge>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleRoleChange(user.id, user.role === 'admin' ? 'guest' : 'admin')}
-                    >
-                      {user.role === 'admin' ? 'Remove Admin' : 'Make Admin'}
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </GlassCard>
+          <UserManagement users={users} onRefresh={fetchAdminData} />
         </TabsContent>
 
         <TabsContent value="photos" className="space-y-4">
-          <GlassCard className="p-4">
-            <h3 className="font-semibold mb-4 text-wedding-navy">Pending Photo Approvals</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {pendingPhotos.map((photo) => (
-                <div key={photo.id} className="rounded-glass bg-secondary/30 p-4">
-                  <img 
-                    src={photo.file_url} 
-                    alt={photo.title || 'Wedding photo'} 
-                    className="w-full h-48 object-cover rounded-glass mb-3"
-                  />
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium">
-                        By {photo.profiles?.first_name} {photo.profiles?.last_name}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(photo.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handlePhotoApproval(photo.id, false)}
-                      >
-                        <X className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        onClick={() => handlePhotoApproval(photo.id, true)}
-                      >
-                        <Check className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {pendingPhotos.length === 0 && (
-              <div className="text-center py-8">
-                <Image className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-muted-foreground">No photos pending approval</p>
-              </div>
-            )}
-          </GlassCard>
+          <PhotoModeration photos={photos} onRefresh={fetchAdminData} />
         </TabsContent>
 
         <TabsContent value="rsvps" className="space-y-4">
-          <GlassCard className="p-4">
-            <h3 className="font-semibold mb-4 text-wedding-navy">RSVP Management</h3>
-            <div className="space-y-3">
-              {rsvps.map((rsvp) => (
-                <div key={rsvp.id} className="flex items-center justify-between p-3 rounded-glass bg-secondary/30">
-                  <div className="flex-1">
-                    <div className="font-medium text-wedding-navy">
-                      {rsvp.profiles?.first_name} {rsvp.profiles?.last_name}
-                    </div>
-                    <div className="text-sm text-muted-foreground">{rsvp.profiles?.email}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {rsvp.guest_count} guest{rsvp.guest_count !== 1 ? 's' : ''}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant={rsvp.status === 'attending' ? 'default' : 'secondary'}>
-                      {rsvp.status}
-                    </Badge>
-                    <div className="text-xs text-muted-foreground">
-                      {new Date(rsvp.created_at).toLocaleDateString()}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {rsvps.length === 0 && (
-              <div className="text-center py-8">
-                <Calendar className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-muted-foreground">No RSVPs received yet</p>
-              </div>
-            )}
-          </GlassCard>
+          <RSVPManagement rsvps={rsvps} />
         </TabsContent>
       </Tabs>
     </div>
