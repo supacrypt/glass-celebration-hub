@@ -1,0 +1,7 @@
+-- Insert mock messages for the social feed using existing user
+INSERT INTO public.messages (user_id, content, created_at, is_public) VALUES
+('3c3a1bb8-c0f6-4865-b45d-04c79b1ea474', 'So excited for Tim and Kirsten''s wedding! The venue looks absolutely stunning. Can''t wait to celebrate with everyone! 💕 #TimAndKirsten2025', NOW() - INTERVAL '2 hours', true),
+('3c3a1bb8-c0f6-4865-b45d-04c79b1ea474', 'Just booked my stay at the Ben Ean Pokolbin! Looking forward to a weekend of love, laughter, and good wine. Congratulations to the happy couple! 🥂 #BenEan #WeddingBliss', NOW() - INTERVAL '1 day', true),
+('3c3a1bb8-c0f6-4865-b45d-04c79b1ea474', 'Tim and Kirsten, you two are absolutely perfect for each other! I''ve watched your love story unfold and it''s been beautiful. Can''t wait to see you say "I do"! #ForeverLove', NOW() - INTERVAL '3 hours', true),
+('3c3a1bb8-c0f6-4865-b45d-04c79b1ea474', 'Hunter Valley weddings hit different! This is going to be such a magical celebration. Congratulations Tim & Kirsten! 🍾 #HunterValleyWedding', NOW() - INTERVAL '5 hours', true),
+('3c3a1bb8-c0f6-4865-b45d-04c79b1ea474', 'Already planning my outfit for the big day! Tim and Kirsten, thank you for including us in your special moment. Love you both! ✨ #TimAndKirsten2025 #WeddingBliss', NOW() - INTERVAL '8 hours', true);
