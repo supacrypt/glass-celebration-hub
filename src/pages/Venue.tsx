@@ -266,6 +266,263 @@ const Venue: React.FC = () => {
           ))}
         </div>
 
+        {/* Dress Code Card */}
+        <div className="venue-card" style={{ animationDelay: '0.4s' }}>
+          <div className="card-header">
+            <div className="card-content">
+              <div className="venue-name">
+                💗 Dress Code
+              </div>
+              <div className="event-type">What to Wear</div>
+            </div>
+          </div>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '1fr 1fr', 
+            gap: '20px', 
+            marginBottom: '25px' 
+          }}>
+            <div className="schedule-item" style={{ 
+              flexDirection: 'column', 
+              alignItems: 'flex-start',
+              padding: '20px'
+            }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '10px', 
+                marginBottom: '12px' 
+              }}>
+                <div className="info-icon">👔</div>
+                <span style={{ fontWeight: '600', color: '#2d3f51', fontSize: '16px' }}>
+                  For Him:
+                </span>
+              </div>
+              <p style={{ fontSize: '14px', color: '#5a5651', lineHeight: '1.6' }}>
+                Suits, dress chinos, button up shirt and optional tie. We love a pocket kerchief!
+              </p>
+            </div>
+
+            <div className="schedule-item" style={{ 
+              flexDirection: 'column', 
+              alignItems: 'flex-start',
+              padding: '20px'
+            }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '10px', 
+                marginBottom: '12px' 
+              }}>
+                <div className="info-icon">👗</div>
+                <span style={{ fontWeight: '600', color: '#2d3f51', fontSize: '16px' }}>
+                  For Her:
+                </span>
+              </div>
+              <p style={{ fontSize: '14px', color: '#5a5651', lineHeight: '1.6' }}>
+                Classy dress, pantsuit or jumpsuit.
+              </p>
+            </div>
+          </div>
+
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(255, 220, 235, 0.4) 0%, rgba(255, 220, 235, 0.2) 100%)',
+            borderRadius: '20px',
+            padding: '15px',
+            textAlign: 'center',
+            fontWeight: '600',
+            color: '#f5576c',
+            fontSize: '16px',
+            letterSpacing: '0.5px',
+            boxShadow: 'inset 3px 3px 6px rgba(245, 87, 108, 0.1), inset -3px -3px 6px rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(5px)',
+            border: '1px solid rgba(245, 87, 108, 0.2)',
+            position: 'relative' as const,
+            overflow: 'hidden'
+          }}>
+            ✨ Dapper/Cocktail Attire ✨
+          </div>
+        </div>
+
+        {/* Accommodation Card */}
+        <div className="venue-card" style={{ animationDelay: '0.5s' }}>
+          <div className="card-header">
+            <div className="card-content">
+              <div className="venue-name">
+                📍 Accommodation Recommendations
+              </div>
+              <div className="event-type">Where to Stay</div>
+            </div>
+          </div>
+
+          {/* Newcastle Area */}
+          <div style={{ marginBottom: '30px' }}>
+            <h3 style={{
+              fontSize: '18px',
+              fontWeight: '600',
+              color: '#2d3f51',
+              marginBottom: '12px',
+              paddingBottom: '10px',
+              borderBottom: '2px solid rgba(163, 155, 146, 0.2)',
+              position: 'relative' as const
+            }}>
+              Newcastle Area
+              <span style={{
+                position: 'absolute' as const,
+                bottom: '-2px',
+                left: '0',
+                width: '60px',
+                height: '2px',
+                background: 'linear-gradient(90deg, #667eea 0%, transparent 100%)',
+                content: '""',
+                display: 'block'
+              }}></span>
+            </h3>
+            <p style={{
+              fontSize: '14px',
+              color: '#7a736b',
+              marginBottom: '20px',
+              fontStyle: 'italic'
+            }}>
+              Cooks Hill and Newcastle (East/West) are the most central suburbs.
+            </p>
+            
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: '1fr 1fr', 
+              gap: '15px' 
+            }}>
+              {['Ibis Newcastle', 'Holiday Inn Newcastle', 'Kingsley Crystalbrook', 'QT Newcastle'].map((hotel, index) => (
+                <div key={index} className="info-row" style={{
+                  background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                  borderRadius: '15px',
+                  padding: '15px',
+                  justifyContent: 'space-between',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  boxShadow: '5px 5px 10px rgba(163, 155, 146, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.6)',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                  marginBottom: '0'
+                }}>
+                  <span style={{ fontSize: '14px', color: '#2d3f51', fontWeight: '500' }}>
+                    {hotel}
+                  </span>
+                  <span style={{
+                    width: '10px',
+                    height: '10px',
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    boxShadow: '0 2px 4px rgba(102, 126, 234, 0.3)',
+                    display: 'block'
+                  }}></span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Hunter Valley */}
+          <div style={{ marginBottom: '25px' }}>
+            <h3 style={{
+              fontSize: '18px',
+              fontWeight: '600',
+              color: '#2d3f51',
+              marginBottom: '20px',
+              paddingBottom: '10px',
+              borderBottom: '2px solid rgba(163, 155, 146, 0.2)',
+              position: 'relative' as const
+            }}>
+              Hunter Valley
+              <span style={{
+                position: 'absolute' as const,
+                bottom: '-2px',
+                left: '0',
+                width: '60px',
+                height: '2px',
+                background: 'linear-gradient(90deg, #667eea 0%, transparent 100%)',
+                content: '""',
+                display: 'block'
+              }}></span>
+            </h3>
+            
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: '1fr 1fr', 
+              gap: '15px' 
+            }}>
+              {['Elfin Hill Vineyard Accommodation', 'Oaks Cypress Lakes Resort'].map((hotel, index) => (
+                <div key={index} className="info-row" style={{
+                  background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                  borderRadius: '15px',
+                  padding: '15px',
+                  justifyContent: 'space-between',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  boxShadow: '5px 5px 10px rgba(163, 155, 146, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.6)',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                  marginBottom: '0'
+                }}>
+                  <span style={{ fontSize: '14px', color: '#2d3f51', fontWeight: '500' }}>
+                    {hotel}
+                  </span>
+                  <span style={{
+                    width: '10px',
+                    height: '10px',
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    boxShadow: '0 2px 4px rgba(102, 126, 234, 0.3)',
+                    display: 'block'
+                  }}></span>
+                </div>
+              ))}
+              <div className="info-row" style={{
+                background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                borderRadius: '15px',
+                padding: '15px',
+                justifyContent: 'space-between',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                boxShadow: '5px 5px 10px rgba(163, 155, 146, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.6)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer',
+                marginBottom: '0',
+                gridColumn: 'span 2'
+              }}>
+                <span style={{ fontSize: '14px', color: '#2d3f51', fontWeight: '500' }}>
+                  Chateau Elan
+                </span>
+                <span style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  boxShadow: '0 2px 4px rgba(102, 126, 234, 0.3)',
+                  display: 'block'
+                }}></span>
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(230, 225, 255, 0.3) 0%, rgba(230, 225, 255, 0.15) 100%)',
+            borderRadius: '20px',
+            padding: '18px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            boxShadow: 'inset 3px 3px 6px rgba(102, 126, 234, 0.1), inset -3px -3px 6px rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(5px)',
+            border: '1px solid rgba(102, 126, 234, 0.2)'
+          }}>
+            <span style={{ fontSize: '24px' }}>💡</span>
+            <p style={{ fontSize: '14px', color: '#5a5651', lineHeight: '1.5' }}>
+              <strong>Tip:</strong> For houses or apartments, check Stayz, Airbnb, or Follow
+            </p>
+          </div>
+        </div>
+
         {/* Location Details Card */}
         <div className="location-card" style={{
           background: 'linear-gradient(135deg, rgba(240, 230, 255, 0.25) 0%, rgba(240, 230, 255, 0.15) 100%)',
