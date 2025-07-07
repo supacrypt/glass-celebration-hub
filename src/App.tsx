@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,13 +10,16 @@ import Venue from "./pages/Venue";
 import Dashboard from "./pages/Dashboard";
 import Social from "./pages/Social";
 import Gallery from "./pages/Gallery";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import { useAuth } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
   
   // Extract current route from pathname
   const currentRoute = location.pathname === '/' ? 'home' : location.pathname.slice(1);
@@ -26,6 +29,30 @@ const AppContent = () => {
     navigate(path);
   };
 
+  useEffect(() => {
+    if (!loading && !user && location.pathname !== '/auth') {
+      navigate('/auth');
+    } else if (!loading && user && location.pathname === '/auth') {
+      navigate('/');
+    }
+  }, [user, loading, location.pathname, navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-wedding-navy"></div>
+      </div>
+    );
+  }
+
+  if (!user && location.pathname !== '/auth') {
+    return null;
+  }
+
+  if (location.pathname === '/auth') {
+    return <Auth />;
+  }
+
   return (
     <GlassLayout activeRoute={currentRoute} onNavigate={handleNavigate}>
       <Routes>
@@ -34,6 +61,7 @@ const AppContent = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/social" element={<Social />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/auth" element={<Auth />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
