@@ -40,10 +40,22 @@ const GiftCard: React.FC<GiftCardProps> = ({
 
   return (
     <GlassCard
-      className={`p-6 animate-fade-up glass-card ${isPurchased ? 'opacity-60' : ''}`}
+      className={`animate-fade-up glass-card ${isPurchased ? 'opacity-60' : ''}`}
       style={{ animationDelay: `${0.5 + (index * 0.1)}s` }}
     >
-      <div className="flex items-start justify-between mb-4">
+      {/* Image */}
+      {gift.image_url && (
+        <div className="w-full h-48 overflow-hidden rounded-t-lg">
+          <img 
+            src={gift.image_url} 
+            alt={gift.title} 
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+      
+      <div className="p-6">
+        <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <h3 className={`font-semibold text-wedding-navy mb-2 text-lg ${isPurchased ? 'line-through' : ''}`}>
             {gift.title}
@@ -103,6 +115,7 @@ const GiftCard: React.FC<GiftCardProps> = ({
             I'll Get This
           </Button>
         )}
+      </div>
       </div>
     </GlassCard>
   );

@@ -214,7 +214,52 @@ export const usePhotos = () => {
     }
   };
 
-  return { photos, loading, likePhoto, unlikePhoto, refetch: fetchPhotos };
+  const uploadPhoto = async (file: File, title?: string, description?: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      // Upload file to storage
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `${user.id}/${fileName}`;
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('wedding-photos')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('wedding-photos')
+        .getPublicUrl(filePath);
+
+      // Insert photo record into database
+      const { error: dbError } = await supabase
+        .from('photos')
+        .insert({
+          user_id: user.id,
+          title,
+          description,
+          file_url: publicUrl,
+          file_path: filePath,
+          file_size: file.size,
+          mime_type: file.type,
+          is_approved: true
+        });
+
+      if (dbError) throw dbError;
+
+      await fetchPhotos();
+      return { success: true };
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      return { error };
+    }
+  };
+
+  return { photos, loading, likePhoto, unlikePhoto, uploadPhoto, refetch: fetchPhotos };
 };
 
 export const useMessages = () => {

@@ -65,12 +65,16 @@ const Venue: React.FC = () => {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className={`w-4 h-4 rounded-full bg-hsl(var(--glass-${venue.color.split('-')[1]}-tint))`} />
+                  <div className={`w-4 h-4 rounded-full ${
+                    venue.color === 'glass-pink' ? 'bg-glass-pink/60' :
+                    venue.color === 'glass-blue' ? 'bg-glass-blue/60' :
+                    'bg-glass-green/60'
+                  }`} />
                   <h2 className="text-xl font-semibold text-wedding-navy">
                     {venue.title}
                   </h2>
                 </div>
-                <p className="text-hsl(var(--glass-blue-tint)) font-medium mb-3">{venue.subtitle}</p>
+                <p className="text-glass-blue font-medium mb-3">{venue.subtitle}</p>
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-muted-foreground" />
@@ -87,7 +91,7 @@ const Venue: React.FC = () => {
               </div>
               <div className="ml-4 flex-shrink-0">
                 <div className="w-10 h-10 rounded-full glass-secondary flex items-center justify-center">
-                  <ArrowRight className="w-5 h-5 text-hsl(var(--glass-blue-tint))" />
+                  <ArrowRight className="w-5 h-5 text-glass-blue" />
                 </div>
               </div>
             </div>
@@ -99,8 +103,8 @@ const Venue: React.FC = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         <GlassCard className="mb-6 p-6 sm:p-8 animate-fade-up glass-shimmer" style={{ animationDelay: '0.2s' }} variant="frosted">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-hsl(var(--glass-pink-tint) / 0.2) flex items-center justify-center flex-shrink-0">
-              <MapPin className="w-6 h-6 text-hsl(var(--glass-pink-tint))" />
+            <div className="w-12 h-12 rounded-full bg-glass-pink/20 flex items-center justify-center flex-shrink-0">
+              <MapPin className="w-6 h-6 text-glass-pink" />
             </div>
             <div className="flex-1">
               <h2 className="text-xl sm:text-2xl font-semibold text-wedding-navy mb-3">
@@ -119,7 +123,7 @@ const Venue: React.FC = () => {
                 href="https://www.benean.com.au/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-hsl(var(--glass-blue-tint)) font-medium hover:underline transition-colors"
+                className="inline-flex items-center gap-2 text-glass-blue font-medium hover:underline transition-colors"
               >
                 Visit Website 
                 <ArrowRight className="w-4 h-4" />
@@ -131,12 +135,12 @@ const Venue: React.FC = () => {
         {/* Schedule */}
         <GlassCard className="mb-6 p-6 animate-fade-up" style={{ animationDelay: '0.3s' }} variant="secondary">
           <div className="flex items-center gap-3 mb-6">
-            <Clock className="w-6 h-6 text-hsl(var(--glass-blue-tint))" />
+            <Clock className="w-6 h-6 text-glass-blue" />
             <h2 className="text-xl font-semibold text-wedding-navy">Schedule</h2>
           </div>
           
           <div className="space-y-4">
-            <div className="mb-4 p-4 bg-hsl(var(--glass-blue-tint) / 0.1) rounded-xl">
+            <div className="mb-4 p-4 bg-glass-blue/10 rounded-xl">
               <p className="text-sm font-medium text-wedding-navy">
                 Arrive at Ben Ean at 2:30 PM for a 3:00 PM start
               </p>
@@ -145,7 +149,7 @@ const Venue: React.FC = () => {
             <div className="space-y-3">
               <div className="flex justify-between items-center py-4 px-4 glass-secondary rounded-lg hover:bg-secondary/30 transition-colors">
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-hsl(var(--glass-pink-tint))"></div>
+                  <div className="w-2 h-2 rounded-full bg-glass-pink"></div>
                   <div>
                     <p className="font-medium text-wedding-navy">Ceremony</p>
                     <p className="text-sm text-muted-foreground">Garden Terrace Lawn</p>
@@ -158,7 +162,7 @@ const Venue: React.FC = () => {
               
               <div className="flex justify-between items-center py-4 px-4 glass-secondary rounded-lg hover:bg-secondary/30 transition-colors">
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-hsl(var(--glass-blue-tint))"></div>
+                  <div className="w-2 h-2 rounded-full bg-glass-blue"></div>
                   <div>
                     <p className="font-medium text-wedding-navy">Cocktail Hour</p>
                     <p className="text-sm text-muted-foreground">After ceremony</p>
@@ -171,7 +175,7 @@ const Venue: React.FC = () => {
               
               <div className="flex justify-between items-center py-4 px-4 glass-secondary rounded-lg hover:bg-secondary/30 transition-colors">
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-hsl(var(--glass-green-tint))"></div>
+                  <div className="w-2 h-2 rounded-full bg-glass-green"></div>
                   <div>
                     <p className="font-medium text-wedding-navy">Reception</p>
                     <p className="text-sm text-muted-foreground">At Ben Ean - conclude at midnight</p>
@@ -188,14 +192,14 @@ const Venue: React.FC = () => {
         {/* Transport & Practical Info */}
         <GlassCard className="mb-6 p-6 animate-fade-up" style={{ animationDelay: '0.4s' }}>
           <div className="flex items-center gap-3 mb-6">
-            <Car className="w-6 h-6 text-hsl(var(--glass-green-tint))" />
+            <Car className="w-6 h-6 text-glass-green" />
             <h3 className="text-xl font-semibold text-wedding-navy">Transport</h3>
           </div>
           <div className="space-y-6 text-sm">
-            <div className="p-4 sm:p-6 bg-hsl(var(--glass-green-tint) / 0.1) rounded-xl">
+            <div className="p-4 sm:p-6 bg-glass-green/10 rounded-xl">
               <div className="flex items-start gap-3 mb-3">
-                <div className="w-8 h-8 rounded-full bg-hsl(var(--glass-green-tint) / 0.2) flex items-center justify-center flex-shrink-0">
-                  <Car className="w-4 h-4 text-hsl(var(--glass-green-tint))" />
+                <div className="w-8 h-8 rounded-full bg-glass-green/20 flex items-center justify-center flex-shrink-0">
+                  <Car className="w-4 h-4 text-glass-green" />
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold text-wedding-navy mb-2">Coach Service Available</p>
@@ -206,9 +210,9 @@ const Venue: React.FC = () => {
                     <li>One coach from Newcastle City</li>
                     <li>One coach from Hunter Valley accommodation</li>
                   </ul>
-                  <div className="inline-flex items-center gap-2 px-3 py-2 bg-hsl(var(--glass-green-tint) / 0.1) rounded-lg">
-                    <div className="w-2 h-2 bg-hsl(var(--glass-green-tint)) rounded-full"></div>
-                    <span className="text-xs font-medium text-hsl(var(--glass-green-tint))">
+                  <div className="inline-flex items-center gap-2 px-3 py-2 bg-glass-green/10 rounded-lg">
+                    <div className="w-2 h-2 bg-glass-green rounded-full"></div>
+                    <span className="text-xs font-medium text-glass-green">
                       First-come, first-served basis - indicate in RSVP
                     </span>
                   </div>
@@ -218,7 +222,7 @@ const Venue: React.FC = () => {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex items-center gap-3 p-4 glass-secondary rounded-lg">
-                <Car className="w-5 h-5 text-hsl(var(--glass-blue-tint))" />
+                <Car className="w-5 h-5 text-glass-blue" />
                 <div>
                   <p className="font-medium text-wedding-navy">Driving?</p>
                   <p className="text-muted-foreground text-sm">Plenty of on-site parking available</p>
@@ -241,27 +245,27 @@ const Venue: React.FC = () => {
         {/* Dress Code */}
         <GlassCard className="mb-6 p-6 animate-fade-up glass-animated" style={{ animationDelay: '0.5s' }} variant="secondary">
           <h3 className="text-xl font-semibold mb-6 text-wedding-navy flex items-center gap-3">
-            <Heart className="w-6 h-6 text-hsl(var(--glass-pink-tint))" />
+            <Heart className="w-6 h-6 text-glass-pink" />
             Dress Code
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm mb-6">
             <div className="p-4 glass-secondary rounded-lg">
               <p className="font-semibold text-wedding-navy mb-3 flex items-center gap-2">
-                <span className="text-hsl(var(--glass-blue-tint))">👔</span>
+                <span className="text-glass-blue">👔</span>
                 For Him:
               </p>
               <p className="text-muted-foreground leading-relaxed">Suits, dress chinos, button up shirt and optional tie. We love a pocket kerchief!</p>
             </div>
             <div className="p-4 glass-secondary rounded-lg">
               <p className="font-semibold text-wedding-navy mb-3 flex items-center gap-2">
-                <span className="text-hsl(var(--glass-pink-tint))">👗</span>
+                <span className="text-glass-pink">👗</span>
                 For Her:
               </p>
               <p className="text-muted-foreground leading-relaxed">Classy dress, pantsuit or jumpsuit.</p>
             </div>
           </div>
-          <div className="text-center p-4 bg-hsl(var(--glass-pink-tint) / 0.1) rounded-xl">
-            <p className="font-semibold text-hsl(var(--glass-pink-tint)) text-lg">Dapper/Cocktail Attire</p>
+          <div className="text-center p-4 bg-glass-pink/10 rounded-xl">
+            <p className="font-semibold text-glass-pink text-lg">Dapper/Cocktail Attire</p>
           </div>
         </GlassCard>
 
@@ -272,7 +276,7 @@ const Venue: React.FC = () => {
           variant="frosted"
         >
           <h3 className="text-xl font-semibold mb-6 text-wedding-navy flex items-center gap-3">
-            <MapPin className="w-6 h-6 text-hsl(var(--glass-green-tint))" />
+            <MapPin className="w-6 h-6 text-glass-green" />
             Accommodation Recommendations
           </h3>
           
@@ -284,7 +288,7 @@ const Venue: React.FC = () => {
                 {['Ibis Newcastle', 'Holiday Inn Newcastle', 'Kingsley Crystalbrook', 'QT Newcastle'].map((hotel, i) => (
                   <div key={hotel} className="flex items-center justify-between p-3 glass-secondary rounded-lg hover:bg-secondary/30 transition-colors">
                     <span className="font-medium text-wedding-navy">{hotel}</span>
-                    <div className="w-2 h-2 rounded-full bg-hsl(var(--glass-blue-tint))"></div>
+                    <div className="w-2 h-2 rounded-full bg-glass-blue"></div>
                   </div>
                 ))}
               </div>
@@ -296,13 +300,13 @@ const Venue: React.FC = () => {
                 {['Elfin Hill Vineyard Accommodation', 'Oaks Cypress Lakes Resort', 'Chateau Elan'].map((hotel, i) => (
                   <div key={hotel} className="flex items-center justify-between p-3 glass-secondary rounded-lg hover:bg-secondary/30 transition-colors">
                     <span className="font-medium text-wedding-navy">{hotel}</span>
-                    <div className="w-2 h-2 rounded-full bg-hsl(var(--glass-green-tint))"></div>
+                    <div className="w-2 h-2 rounded-full bg-glass-green"></div>
                   </div>
                 ))}
               </div>
             </div>
             
-            <div className="p-4 bg-hsl(var(--glass-blue-tint) / 0.1) rounded-xl">
+            <div className="p-4 bg-glass-blue/10 rounded-xl">
               <p className="text-muted-foreground text-center">
                 <span className="font-medium">💡 Tip:</span> For houses or apartments, check Stayz, Airbnb, or Follow
               </p>

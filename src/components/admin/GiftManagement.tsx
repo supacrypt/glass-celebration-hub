@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useStorage } from '@/hooks/useStorage';
+import ImageUpload from '@/components/gift-registry/ImageUpload';
 
 interface GiftItem {
   id: string;
@@ -34,6 +35,7 @@ interface GiftFormData {
   store_url: string;
   category: string;
   priority: number;
+  image_url: string;
 }
 
 const GiftManagement: React.FC = () => {
@@ -47,7 +49,8 @@ const GiftManagement: React.FC = () => {
     price: '',
     store_url: '',
     category: 'kitchen',
-    priority: 2
+    priority: 2,
+    image_url: ''
   });
   
   const { toast } = useToast();
@@ -104,7 +107,8 @@ const GiftManagement: React.FC = () => {
         price: formData.price ? parseFloat(formData.price) : null,
         store_url: formData.store_url || null,
         category: formData.category,
-        priority: formData.priority
+        priority: formData.priority,
+        image_url: formData.image_url || null
       };
 
       if (editingGift) {
@@ -180,7 +184,8 @@ const GiftManagement: React.FC = () => {
       price: gift.price?.toString() || '',
       store_url: gift.store_url || '',
       category: gift.category,
-      priority: gift.priority
+      priority: gift.priority,
+      image_url: gift.image_url || ''
     });
     setIsDialogOpen(true);
   };
@@ -193,7 +198,8 @@ const GiftManagement: React.FC = () => {
       price: '',
       store_url: '',
       category: 'kitchen',
-      priority: 2
+      priority: 2,
+      image_url: ''
     });
   };
 
@@ -311,6 +317,15 @@ const GiftManagement: React.FC = () => {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+              
+              <div>
+                <Label>Gift Image</Label>
+                <ImageUpload
+                  onImageUploaded={(imageUrl) => setFormData(prev => ({ ...prev, image_url: imageUrl }))}
+                  currentImageUrl={formData.image_url}
+                  onImageRemoved={() => setFormData(prev => ({ ...prev, image_url: '' }))}
+                />
               </div>
               
               <div className="flex justify-end space-x-2 pt-4">

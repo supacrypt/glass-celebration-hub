@@ -187,6 +187,10 @@ export const useStorage = () => {
     return uploadFile(file, 'GIFT_IMAGES', giftId ? `gift-${giftId}` : '');
   };
 
+  const uploadWeddingPhoto = async (file: File, userId: string) => {
+    return uploadFile(file, 'WEDDING_PHOTOS', userId);
+  };
+
   return {
     uploading,
     uploadFile,
@@ -197,6 +201,7 @@ export const useStorage = () => {
     uploadSocialFeedImage,
     uploadVenueImage,
     uploadGiftImage,
+    uploadWeddingPhoto,
     STORAGE_BUCKETS
   };
 };

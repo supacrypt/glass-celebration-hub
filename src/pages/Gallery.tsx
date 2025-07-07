@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 const Gallery: React.FC = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [filter, setFilter] = useState('all');
-  const { photos, loading } = usePhotos();
+  const { photos, loading, uploadPhoto } = usePhotos();
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -54,9 +54,24 @@ const Gallery: React.FC = () => {
       description: "Your photo is being uploaded...",
     });
 
-    // TODO: Implement actual file upload to Supabase storage
-    // This would involve uploading to the wedding-photos bucket
-    // and then inserting a record into the photos table
+    // Upload the photo
+    const result = await uploadPhoto(file, 'Wedding Photo', 'Shared from gallery');
+    
+    if (result.success) {
+      toast({
+        title: "Upload complete",
+        description: "Your photo has been shared successfully!",
+      });
+    } else {
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload photo. Please try again.",
+        variant: "destructive",
+      });
+    }
+
+    // Reset the input
+    event.target.value = '';
   };
 
   return (
