@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -98,13 +99,15 @@ const GlobalBackground: React.FC = () => {
   
   return (
     <div
-      className="fixed inset-0 z-[-2] transition-all duration-1000 ease-in-out"
+      className="fixed inset-0 z-[-10] w-full h-full"
       style={{
         backgroundImage: backgroundUrl ? `url("${backgroundUrl}")` : 'none',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundAttachment: 'fixed',
+        minHeight: '100vh',
+        minWidth: '100vw',
       }}
     />
   );
