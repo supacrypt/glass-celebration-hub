@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Type, Eye, Save, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
@@ -209,17 +210,21 @@ const FontManager: React.FC = () => {
             <Label className="text-sm">Primary Font</Label>
             <Badge variant="outline" className="text-xs">UI Elements</Badge>
           </div>
-          <select
+          <Select
             value={fontSettings.primaryFont}
-            onChange={(e) => handleFontChange('primaryFont', e.target.value)}
-            className="w-full px-3 py-2 text-sm border rounded-md bg-background"
+            onValueChange={(value) => handleFontChange('primaryFont', value)}
           >
-            {googleFonts.map((font) => (
-              <option key={font.name} value={font.name}>
-                {font.name} ({font.category})
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className="text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {googleFonts.map((font) => (
+                <SelectItem key={font.name} value={font.name}>
+                  <span style={{ fontFamily: font.name }}>{font.name}</span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Heading Font */}
