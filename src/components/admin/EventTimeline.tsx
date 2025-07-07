@@ -242,7 +242,7 @@ const EventTimeline: React.FC = () => {
       )}
 
       {/* Timeline */}
-      <div className="space-y-3 max-h-80 overflow-y-auto">
+      <div className="space-y-3 h-72 overflow-y-auto">
         {events.map((event) => {
           const { date, time } = formatEventTime(event.event_date);
           return (

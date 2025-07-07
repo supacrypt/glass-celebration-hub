@@ -46,7 +46,7 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
   return (
     <div className="h-full flex flex-col">
       {/* Enhanced Tab Navigation */}
-      <div className="px-4 pt-3 pb-2">
+      <div className="px-4 pt-3 pb-2 flex-shrink-0">
         <div className="flex flex-wrap gap-1">
           {adminTabs.map((tab) => (
             <button
@@ -64,21 +64,23 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
         </div>
       </div>
 
-      {/* Tab Content with Scroll */}
-      <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ maxHeight: 'calc(100vh - 200px)' }}>
-        {/* Dynamic Content Rendering */}
-        <div className="space-y-4">
-          {activeTab === 'stats' && <CompactStats stats={stats} />}
-          {activeTab === 'users' && <CompactUserManagement users={users} onRefresh={onRefresh} />}
-          {activeTab === 'guests' && <CompactGuestManagement users={users} onRefresh={onRefresh} />}
-          {activeTab === 'photos' && <CompactPhotoModeration photos={photos} onRefresh={onRefresh} />}
-          {activeTab === 'gifts' && <CompactGiftManagement />}
-          {activeTab === 'rsvps' && <CompactRSVPManagement rsvps={rsvps} />}
-          {activeTab === 'analytics' && <AnalyticsInsights />}
-          {activeTab === 'comms' && <CommunicationCenter />}
-          {activeTab === 'notifications' && <NotificationCenter />}
-          {activeTab === 'timeline' && <EventTimeline />}
-          {activeTab === 'settings' && <CompactSystemSettings />}
+      {/* Tab Content with Proper Scrolling */}
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full overflow-y-auto px-4 pb-4" style={{ maxHeight: 'calc(750px - 120px)' }}>
+          {/* Dynamic Content Rendering */}
+          <div className="space-y-4">
+            {activeTab === 'stats' && <CompactStats stats={stats} />}
+            {activeTab === 'users' && <CompactUserManagement users={users} onRefresh={onRefresh} />}
+            {activeTab === 'guests' && <CompactGuestManagement users={users} onRefresh={onRefresh} />}
+            {activeTab === 'photos' && <CompactPhotoModeration photos={photos} onRefresh={onRefresh} />}
+            {activeTab === 'gifts' && <CompactGiftManagement />}
+            {activeTab === 'rsvps' && <CompactRSVPManagement rsvps={rsvps} />}
+            {activeTab === 'analytics' && <AnalyticsInsights />}
+            {activeTab === 'comms' && <CommunicationCenter />}
+            {activeTab === 'notifications' && <NotificationCenter />}
+            {activeTab === 'timeline' && <EventTimeline />}
+            {activeTab === 'settings' && <CompactSystemSettings />}
+          </div>
         </div>
       </div>
     </div>

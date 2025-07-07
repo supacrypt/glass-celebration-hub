@@ -131,7 +131,7 @@ const NotificationCenter: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4 max-h-80 overflow-y-auto">
+    <div className="space-y-4 h-full overflow-y-auto" style={{ maxHeight: '580px' }}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">

@@ -87,7 +87,7 @@ const CompactUserManagement: React.FC<CompactUserManagementProps> = ({ users, on
       </div>
 
       {/* User List */}
-      <div className="space-y-2 max-h-80 overflow-y-auto">
+      <div className="space-y-2 h-72 overflow-y-auto">
         {filteredUsers.slice(0, 10).map((user) => {
           const RoleIcon = getRoleIcon(user.role);
           return (

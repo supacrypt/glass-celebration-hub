@@ -130,7 +130,7 @@ const CompactSystemSettings: React.FC = () => {
       </div>
 
       {/* Settings List */}
-      <div className="space-y-3 max-h-80 overflow-y-auto">
+      <div className="space-y-3 h-72 overflow-y-auto">
         {defaultSettings.map((setting) => {
           const currentValue = getSettingValue(setting.key);
           

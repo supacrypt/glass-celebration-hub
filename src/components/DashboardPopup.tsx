@@ -43,18 +43,18 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
       {/* Enhanced Dashboard Modal - Positioned close to bottom navigation */}
       <div className="fixed left-1/2 transform -translate-x-1/2 z-[110]" style={{ bottom: 'calc(30px + 80px + 10px)' }}>
         <div 
-          className="glass-popup animate-scale-in shadow-2xl"
+          className="glass-popup animate-scale-in shadow-2xl flex flex-col"
           onClick={(e) => e.stopPropagation()}
           style={{
             width: 'min(98vw, 700px)',
-            maxHeight: 'min(85vh, 900px)',
-            minHeight: '700px'
+            height: 'min(85vh, 750px)',
+            maxHeight: '750px'
           }}
         >
           <DashboardHeader userRole={authUserRole?.role} onClose={onClose} />
 
-          {/* Content */}
-          <div className="flex-1 overflow-hidden">
+          {/* Content Container with Proper Scrolling */}
+          <div className="flex-1 flex flex-col overflow-hidden">
             {loading ? (
               <div className="flex items-center justify-center h-40">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-wedding-navy" />

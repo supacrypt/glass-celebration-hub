@@ -114,7 +114,7 @@ const CommunicationCenter: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 h-full overflow-y-auto" style={{ maxHeight: '580px' }}>
       {/* Quick Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <div className="glass-card p-3 text-center">
