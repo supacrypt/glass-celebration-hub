@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-ro
 import GlassLayout from "./components/GlassLayout";
 import Home from "./pages/Home";
 import Venue from "./pages/Venue";
-
+import Dashboard from "./pages/Dashboard";
 import Social from "./pages/Social";
 import Gallery from "./pages/Gallery";
 import RSVP from "./pages/RSVP";
@@ -68,7 +68,7 @@ const AppContent = () => {
         <Route path="/venue/ben-ean" element={<BenEan />} />
         <Route path="/venue/prince-of-mereweather" element={<PrinceOfMereweather />} />
         <Route path="/venue/newcastle-beach" element={<NewcastleBeach />} />
-        
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/social" element={<Social />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/rsvp" element={<RSVP />} />

@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import DashboardPopup from './DashboardPopup';
-import { useAuth } from '@/hooks/useAuth';
+import React from 'react';
 
 interface NavigationProps {
   activeRoute: string;
@@ -8,8 +6,6 @@ interface NavigationProps {
 }
 
 const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate }) => {
-  const [isDashboardOpen, setIsDashboardOpen] = useState(false);
-  const { userRole } = useAuth();
   const routes = [
     { id: 'home', label: 'Home' },
     { id: 'venue', label: 'Venue' },
@@ -44,7 +40,7 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
         return (
           <button
             key={route.id}
-            onClick={() => route.id === 'dashboard' ? setIsDashboardOpen(true) : onNavigate(route.id)}
+            onClick={() => onNavigate(route.id)}
             className="flex flex-col items-center text-decoration-none transition-all duration-300 cursor-pointer relative"
             style={{
               color: '#7a736b',
@@ -145,12 +141,12 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
                      <span 
                        key={i}
                        style={{
-                         backgroundColor: isDashboardOpen 
+                         backgroundColor: activeRoute === 'dashboard' 
                            ? 'rgba(255, 255, 255, 1)' 
                            : 'rgba(255, 255, 255, 0.9)',
                          borderRadius: '2px',
                          display: 'block',
-                         boxShadow: isDashboardOpen 
+                         boxShadow: activeRoute === 'dashboard' 
                            ? `
                              0 2px 3px rgba(0, 0, 0, 0.3),
                              inset 0 1px 2px rgba(255, 255, 255, 0.6),
@@ -239,12 +235,6 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
           </button>
         );
       })}
-      
-      <DashboardPopup
-        isOpen={isDashboardOpen}
-        onClose={() => setIsDashboardOpen(false)}
-        userRole={userRole?.role || 'guest'}
-      />
     </nav>
   );
 };
