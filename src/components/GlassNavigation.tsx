@@ -8,18 +8,18 @@ interface NavigationProps {
 
 const DashboardIcon: React.FC<{ isActive: boolean }> = ({ isActive }) => (
   <div className="relative w-6 h-6 flex items-center justify-center">
-    <div className="grid grid-cols-2 gap-1 w-4 h-4 place-items-center">
-      <div className={`w-1.5 h-1.5 rounded-sm transition-all duration-300 ${
-        isActive ? 'bg-white shadow-sm' : 'bg-current'
+    <div className="grid grid-cols-2 gap-1.5 w-5 h-5 place-items-center">
+      <div className={`w-2 h-2 rounded-sm transition-all duration-300 ${
+        isActive ? 'bg-white shadow-sm' : 'bg-white/80'
       }`} />
-      <div className={`w-1.5 h-1.5 rounded-sm transition-all duration-300 ${
-        isActive ? 'bg-white shadow-sm' : 'bg-current'
+      <div className={`w-2 h-2 rounded-sm transition-all duration-300 ${
+        isActive ? 'bg-white shadow-sm' : 'bg-white/80'
       }`} />
-      <div className={`w-1.5 h-1.5 rounded-sm transition-all duration-300 ${
-        isActive ? 'bg-white shadow-sm' : 'bg-current'
+      <div className={`w-2 h-2 rounded-sm transition-all duration-300 ${
+        isActive ? 'bg-white shadow-sm' : 'bg-white/80'
       }`} />
-      <div className={`w-1.5 h-1.5 rounded-sm transition-all duration-300 ${
-        isActive ? 'bg-white shadow-sm' : 'bg-current'
+      <div className={`w-2 h-2 rounded-sm transition-all duration-300 ${
+        isActive ? 'bg-white shadow-sm' : 'bg-white/80'
       }`} />
     </div>
   </div>
@@ -36,7 +36,7 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
 
   return (
     <div className="fixed bottom-6 left-4 right-4 z-50">
-      <div className="relative h-20">
+      <div className="relative h-24">
         {/* Curved Glass Container */}
         <div className="absolute inset-0 glass-primary backdrop-blur-2xl border border-white/20 shadow-2xl"
              style={{
@@ -48,7 +48,7 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
         </div>
         
         {/* Navigation Items */}
-        <div className="relative h-full flex items-center justify-around px-6">
+        <div className="relative h-full flex items-center justify-around px-6 pt-2">
           {routes.map((route) => {
             const isActive = activeRoute === route.id;
             const isCenter = route.isCenter;
@@ -59,12 +59,12 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
                 key={route.id}
                 onClick={() => onNavigate(route.id)}
                 className={`flex flex-col items-center justify-center gap-1 transition-all duration-300 relative ${
-                  isCenter ? 'mt-[-16px]' : 'mt-2'
+                  isCenter ? 'mt-[-20px]' : ''
                 }`}
               >
                 {/* Center Button Background */}
                 {isCenter && (
-                  <div className="absolute w-14 h-14 bg-wedding-navy rounded-full shadow-lg -top-2 left-1/2 transform -translate-x-1/2 flex items-center justify-center">
+                  <div className="absolute w-14 h-14 bg-wedding-navy rounded-full shadow-lg -top-1 left-1/2 transform -translate-x-1/2 flex items-center justify-center">
                     <DashboardIcon isActive={isActive} />
                   </div>
                 )}
@@ -79,21 +79,13 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
                   />
                 )}
                 
-                {/* Labels */}
-                {!isCenter && (
-                  <span className={`text-xs font-medium transition-colors duration-300 ${
-                    isActive ? 'text-wedding-navy' : 'text-muted-foreground'
-                  }`}>
-                    {route.label}
-                  </span>
-                )}
-                
-                {/* Center Label */}
-                {isCenter && (
-                  <span className="text-xs font-medium text-muted-foreground mt-8">
-                    {route.label}
-                  </span>
-                )}
+                {/* Labels for all items */}
+                <span className={`text-xs font-medium transition-colors duration-300 ${
+                  isCenter ? 'mt-10 text-muted-foreground' : 
+                  isActive ? 'text-wedding-navy' : 'text-muted-foreground'
+                }`}>
+                  {route.label}
+                </span>
               </button>
             );
           })}
