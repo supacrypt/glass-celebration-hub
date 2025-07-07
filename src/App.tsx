@@ -20,6 +20,7 @@ import Help from "./pages/Help";
 import BenEan from "./pages/venues/BenEan";
 import PrinceOfMereweather from "./pages/venues/PrinceOfMereweather";
 import NewcastleBeach from "./pages/venues/NewcastleBeach";
+import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsers from "./pages/dashboard/AdminUsers";
 import AdminPhotos from "./pages/dashboard/AdminPhotos";
 import AdminGifts from "./pages/dashboard/AdminGifts";
@@ -89,6 +90,7 @@ const AppContent = () => {
         <Route path="/help" element={<Help />} />
         
         {/* Dashboard Admin Routes */}
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/dashboard/users" element={<AdminUsers />} />
         <Route path="/dashboard/users/roles" element={<AdminUserRoles />} />
         <Route path="/dashboard/photos" element={<AdminPhotos />} />

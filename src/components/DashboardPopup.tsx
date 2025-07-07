@@ -46,9 +46,9 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
           className="glass-popup animate-scale-in"
           onClick={(e) => e.stopPropagation()}
           style={{
-            width: 'min(90vw, 450px)',
-            maxHeight: 'min(60vh, 400px)',
-            minHeight: '300px'
+            width: 'min(95vw, 600px)',
+            maxHeight: 'min(80vh, 800px)',
+            minHeight: '600px'
           }}
         >
           <DashboardHeader userRole={authUserRole?.role} onClose={onClose} />

@@ -6,6 +6,9 @@ import CompactPhotoModeration from '@/components/admin/CompactPhotoModeration';
 import CompactRSVPManagement from '@/components/admin/CompactRSVPManagement';
 import CompactGiftManagement from '@/components/admin/CompactGiftManagement';
 import CompactSystemSettings from '@/components/admin/CompactSystemSettings';
+import AnalyticsInsights from '@/components/admin/AnalyticsInsights';
+import CommunicationCenter from '@/components/admin/CommunicationCenter';
+import EventTimeline from '@/components/admin/EventTimeline';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface AdminDashboardContentProps {
@@ -31,6 +34,9 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
     { id: 'photos', label: 'Photos' },
     { id: 'gifts', label: 'Gifts' },
     { id: 'rsvps', label: 'RSVPs' },
+    { id: 'analytics', label: 'Analytics' },
+    { id: 'comms', label: 'Messages' },
+    { id: 'timeline', label: 'Timeline' },
     { id: 'settings', label: 'Settings' },
   ];
 
@@ -38,12 +44,12 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
     <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
       {/* Compact Tab Navigation */}
       <div className="px-4 pt-2">
-        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 glass-secondary h-8">
+        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 glass-secondary h-8 overflow-x-auto">
           {adminTabs.map((tab) => (
             <TabsTrigger 
               key={tab.id} 
               value={tab.id} 
-              className="text-xs px-2"
+              className="text-xs px-2 whitespace-nowrap"
             >
               {tab.label}
             </TabsTrigger>
@@ -71,6 +77,18 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
 
         <TabsContent value="rsvps" className="mt-0">
           <CompactRSVPManagement rsvps={rsvps} />
+        </TabsContent>
+
+        <TabsContent value="analytics" className="mt-0">
+          <AnalyticsInsights />
+        </TabsContent>
+
+        <TabsContent value="comms" className="mt-0">
+          <CommunicationCenter />
+        </TabsContent>
+
+        <TabsContent value="timeline" className="mt-0">
+          <EventTimeline />
         </TabsContent>
 
         <TabsContent value="settings" className="mt-0">
