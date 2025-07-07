@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { X, Users, Image, Calendar, MessageSquare, BarChart3, CheckCircle, AlertTriangle, Activity, Gift, Shield } from 'lucide-react';
+import { X, Settings, Shield } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import AdminStatsComponent from '@/components/admin/AdminStats';
-import UserManagement from '@/components/admin/UserManagement';
-import PhotoModeration from '@/components/admin/PhotoModeration';
-import RSVPManagement from '@/components/admin/RSVPManagement';
-import AdminOverview from '@/components/admin/AdminOverview';
-import GiftManagement from '@/components/admin/GiftManagement';
+import CompactStats from '@/components/admin/CompactStats';
+import CompactUserManagement from '@/components/admin/CompactUserManagement';
+import CompactPhotoModeration from '@/components/admin/CompactPhotoModeration';
+import CompactRSVPManagement from '@/components/admin/CompactRSVPManagement';
+import CompactGiftManagement from '@/components/admin/CompactGiftManagement';
+import CompactSystemSettings from '@/components/admin/CompactSystemSettings';
 
 interface AdminStats {
   totalUsers: number;
@@ -80,29 +79,19 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
   const { userRole: authUserRole } = useAuth();
 
   const adminTabs = [
-    { id: 'overview', label: 'Overview', icon: BarChart3 },
-    { id: 'users', label: 'Users', icon: Users },
-    { id: 'photos', label: 'Photos', icon: Image },
-    { id: 'gifts', label: 'Gifts', icon: Gift },
-    { id: 'rsvps', label: 'RSVPs', icon: Calendar },
+    { id: 'stats', label: 'Stats' },
+    { id: 'users', label: 'Users' },
+    { id: 'photos', label: 'Photos' },
+    { id: 'gifts', label: 'Gifts' },
+    { id: 'rsvps', label: 'RSVPs' },
+    { id: 'settings', label: 'Settings' },
   ];
-
-  const guestTabs = [
-    { id: 'overview', label: 'Overview', icon: BarChart3 },
-    { id: 'photos', label: 'Photos', icon: Image },
-    { id: 'rsvps', label: 'RSVP', icon: Calendar },
-    { id: 'messages', label: 'Messages', icon: MessageSquare },
-  ];
-
-  const tabs = authUserRole?.role === 'admin' ? adminTabs : guestTabs;
 
   useEffect(() => {
-    if (isOpen && authUserRole?.role === 'admin') {
+    if (isOpen) {
       fetchAdminData();
-    } else if (isOpen) {
-      setLoading(false);
     }
-  }, [isOpen, authUserRole]);
+  }, [isOpen]);
 
   const fetchAdminData = async () => {
     try {
@@ -250,164 +239,113 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
 
   return (
     <>
-      {/* Invisible Backdrop - Maintains functionality without visual tint */}
+      {/* Invisible Backdrop */}
       <div 
-        className="fixed inset-0 z-[900] transition-all duration-300 ease-out"
+        className="fixed inset-0 z-[100] transition-all duration-300 ease-out"
         onClick={onClose}
       />
       
-      {/* Large Dashboard Modal - Positioned above bottom navigation */}
-      <div className="fixed inset-x-0 bottom-0 z-[950] flex justify-center px-3 sm:px-6">
+      {/* Compact Dashboard Modal - Positioned close to bottom navigation */}
+      <div className="fixed left-1/2 transform -translate-x-1/2 z-[110]" style={{ bottom: 'calc(30px + 80px + 15px)' }}>
         <div 
-          className="w-full max-w-7xl h-[70vh] sm:h-[75vh] mb-20 sm:mb-24 overflow-hidden flex flex-col 
-                     animate-[slide-up_0.4s_ease-out] glass-primary rounded-glass-lg
-                     shadow-glass-lg border border-glass-border"
+          className="glass-popup animate-scale-in"
           onClick={(e) => e.stopPropagation()}
           style={{
-            minHeight: 'min(60vh, 500px)',
-            maxHeight: '85vh'
+            width: 'min(90vw, 450px)',
+            maxHeight: 'min(60vh, 400px)',
+            minHeight: '300px'
           }}
         >
-          {/* Header */}
-          <div className="flex-shrink-0 flex justify-between items-center p-4 sm:p-6 border-b border-glass-border/50">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-wedding-navy flex items-center justify-center">
-                <Shield className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h2 className="wedding-heading text-wedding-navy">
-                  {authUserRole?.role === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
-                </h2>
-                <p className="wedding-body text-muted-foreground">
-                  {authUserRole?.role === 'admin' ? 'Comprehensive wedding management' : 'Your wedding dashboard'}
-                </p>
-              </div>
+          {/* Compact Header */}
+          <div className="flex items-center justify-between p-4 border-b border-glass-border/50">
+            <div className="flex items-center gap-2">
+              <Shield className="w-5 h-5 text-wedding-navy" />
+              <h2 className="text-lg font-semibold text-wedding-navy">
+                {authUserRole?.role === 'admin' ? 'Admin Control' : 'Dashboard'}
+              </h2>
             </div>
             <button
               onClick={onClose}
-              className="glass-button w-10 h-10 rounded-full flex items-center justify-center hover:scale-105 transition-transform"
+              className="glass-button w-8 h-8 rounded-full flex items-center justify-center"
             >
-              <X className="w-5 h-5 text-muted-foreground" />
+              <X className="w-4 h-4 text-muted-foreground" />
             </button>
           </div>
 
-          {/* Loading State */}
-          {loading && (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-wedding-navy"></div>
-            </div>
-          )}
-
-          {/* Dashboard Content */}
-          {!loading && (
-            <div className="flex-1 overflow-hidden">
-              {authUserRole?.role === 'admin' ? (
-                <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-                  <div className="flex-shrink-0 px-4 sm:px-6 pt-4">
-                    <TabsList className="grid w-full grid-cols-5 glass-secondary">
-                      <TabsTrigger value="overview" className="wedding-body">Overview</TabsTrigger>
-                      <TabsTrigger value="users" className="wedding-body">Users</TabsTrigger>
-                      <TabsTrigger value="photos" className="wedding-body">Photos</TabsTrigger>
-                      <TabsTrigger value="gifts" className="wedding-body">Gifts</TabsTrigger>
-                      <TabsTrigger value="rsvps" className="wedding-body">RSVPs</TabsTrigger>
-                    </TabsList>
-                  </div>
-
-                  <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-6">
-                    <TabsContent value="overview" className="space-y-6 mt-0">
-                      <AdminStatsComponent stats={stats} />
-                      <AdminOverview stats={stats} />
-                    </TabsContent>
-
-                    <TabsContent value="users" className="space-y-4 mt-0">
-                      <UserManagement users={users} onRefresh={fetchAdminData} />
-                    </TabsContent>
-
-                    <TabsContent value="photos" className="space-y-4 mt-0">
-                      <PhotoModeration photos={photos} onRefresh={fetchAdminData} />
-                    </TabsContent>
-
-                    <TabsContent value="gifts" className="space-y-4 mt-0">
-                      <GiftManagement />
-                    </TabsContent>
-
-                    <TabsContent value="rsvps" className="space-y-4 mt-0">
-                      <RSVPManagement rsvps={rsvps} />
-                    </TabsContent>
-                  </div>
-                </Tabs>
-              ) : (
-                // Guest Dashboard - Consistent with app styling
-                <div className="p-4 sm:p-6 h-full overflow-y-auto space-y-6">
-                  <div className="text-center space-y-2">
-                    <h3 className="wedding-heading text-wedding-navy">Welcome to Your Dashboard</h3>
-                    <p className="wedding-body text-muted-foreground">Access your wedding information and features</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div className="glass-card p-4 text-center space-y-2">
-                      <Calendar className="w-8 h-8 mx-auto text-glass-blue" />
-                      <div className="text-lg font-semibold text-wedding-navy">42</div>
-                      <div className="text-xs text-muted-foreground">Days Left</div>
-                    </div>
-                    <div className="glass-card p-4 text-center space-y-2">
-                      <Users className="w-8 h-8 mx-auto text-glass-green" />
-                      <div className="text-lg font-semibold text-wedding-navy">67/85</div>
-                      <div className="text-xs text-muted-foreground">RSVPs</div>
-                    </div>
-                    <div className="glass-card p-4 text-center space-y-2">
-                      <Image className="w-8 h-8 mx-auto text-glass-purple" />
-                      <div className="text-lg font-semibold text-wedding-navy">134</div>
-                      <div className="text-xs text-muted-foreground">Photos</div>
-                    </div>
-                    <div className="glass-card p-4 text-center space-y-2">
-                      <MessageSquare className="w-8 h-8 mx-auto text-glass-pink" />
-                      <div className="text-lg font-semibold text-wedding-navy">23</div>
-                      <div className="text-xs text-muted-foreground">Messages</div>
-                    </div>
-                  </div>
-
-                  <div className="glass-card p-6 space-y-4">
-                    <h3 className="wedding-heading text-wedding-navy">Quick Actions</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <button
-                        onClick={onClose}
-                        className="glass-button p-4 text-left hover:scale-105 transition-transform space-y-2"
+          {/* Compact Content */}
+          <div className="flex-1 overflow-hidden">
+            {loading ? (
+              <div className="flex items-center justify-center h-40">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-wedding-navy" />
+              </div>
+            ) : authUserRole?.role === 'admin' ? (
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
+                {/* Compact Tab Navigation */}
+                <div className="px-4 pt-2">
+                  <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 glass-secondary h-8">
+                    {adminTabs.map((tab) => (
+                      <TabsTrigger 
+                        key={tab.id} 
+                        value={tab.id} 
+                        className="text-xs px-2"
                       >
-                        <Calendar className="w-5 h-5 text-glass-blue" />
-                        <div className="font-medium text-wedding-navy">Update RSVP</div>
-                        <div className="text-xs text-muted-foreground">Confirm your attendance</div>
-                      </button>
-                      <button
-                        onClick={onClose}
-                        className="glass-button p-4 text-left hover:scale-105 transition-transform space-y-2"
-                      >
-                        <Image className="w-5 h-5 text-glass-green" />
-                        <div className="font-medium text-wedding-navy">View Gallery</div>
-                        <div className="text-xs text-muted-foreground">Browse wedding photos</div>
-                      </button>
-                      <button
-                        onClick={onClose}
-                        className="glass-button p-4 text-left hover:scale-105 transition-transform space-y-2"
-                      >
-                        <Gift className="w-5 h-5 text-glass-purple" />
-                        <div className="font-medium text-wedding-navy">Gift Registry</div>
-                        <div className="text-xs text-muted-foreground">View gift options</div>
-                      </button>
-                      <button
-                        onClick={onClose}
-                        className="glass-button p-4 text-left hover:scale-105 transition-transform space-y-2"
-                      >
-                        <MessageSquare className="w-5 h-5 text-glass-pink" />
-                        <div className="font-medium text-wedding-navy">Send Message</div>
-                        <div className="text-xs text-muted-foreground">Connect with others</div>
-                      </button>
-                    </div>
-                  </div>
+                        {tab.label}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
                 </div>
-              )}
-            </div>
-          )}
+
+                {/* Tab Content with Scroll */}
+                <div className="flex-1 overflow-y-auto px-4 py-3">
+                  <TabsContent value="stats" className="mt-0">
+                    <CompactStats stats={stats} />
+                  </TabsContent>
+
+                  <TabsContent value="users" className="mt-0">
+                    <CompactUserManagement users={users} onRefresh={fetchAdminData} />
+                  </TabsContent>
+
+                  <TabsContent value="photos" className="mt-0">
+                    <CompactPhotoModeration photos={photos} onRefresh={fetchAdminData} />
+                  </TabsContent>
+
+                  <TabsContent value="gifts" className="mt-0">
+                    <CompactGiftManagement />
+                  </TabsContent>
+
+                  <TabsContent value="rsvps" className="mt-0">
+                    <CompactRSVPManagement rsvps={rsvps} />
+                  </TabsContent>
+
+                  <TabsContent value="settings" className="mt-0">
+                    <CompactSystemSettings />
+                  </TabsContent>
+                </div>
+              </Tabs>
+            ) : (
+              // Guest Compact Dashboard
+              <div className="p-4 space-y-4 h-full overflow-y-auto">
+                <CompactStats stats={stats} />
+                
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={onClose}
+                    className="glass-card p-3 text-center space-y-1 hover:scale-105 transition-transform"
+                  >
+                    <div className="text-sm font-medium text-wedding-navy">RSVP</div>
+                    <div className="text-xs text-muted-foreground">Update status</div>
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="glass-card p-3 text-center space-y-1 hover:scale-105 transition-transform"
+                  >
+                    <div className="text-sm font-medium text-wedding-navy">Gallery</div>
+                    <div className="text-xs text-muted-foreground">View photos</div>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
