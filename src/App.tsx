@@ -14,6 +14,9 @@ import RSVP from "./pages/RSVP";
 import FAQ from "./pages/FAQ";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import BenEan from "./pages/venues/BenEan";
+import PrinceOfMereweather from "./pages/venues/PrinceOfMereweather";
+import NewcastleBeach from "./pages/venues/NewcastleBeach";
 import { useAuth } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
@@ -60,6 +63,9 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/venue" element={<Venue />} />
+        <Route path="/venue/ben-ean" element={<BenEan />} />
+        <Route path="/venue/prince-of-mereweather" element={<PrinceOfMereweather />} />
+        <Route path="/venue/newcastle-beach" element={<NewcastleBeach />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/social" element={<Social />} />
         <Route path="/gallery" element={<Gallery />} />

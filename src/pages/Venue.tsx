@@ -1,18 +1,89 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import GlassCard from '@/components/GlassCard';
-import { MapPin, Clock, Car, Phone } from 'lucide-react';
+import { MapPin, Clock, Car, Phone, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Venue: React.FC = () => {
+  const navigate = useNavigate();
+
+  const venues = [
+    {
+      id: 'ben-ean',
+      title: 'Ben Ean',
+      subtitle: 'Wedding Ceremony & Reception',
+      date: 'October 5, 2025',
+      time: '2:30 PM arrival for 3:00 PM start',
+      description: 'Ceremony on Garden Terrace Lawn, followed by cocktails and reception until midnight',
+      color: 'glass-pink',
+      path: '/venue/ben-ean'
+    },
+    {
+      id: 'prince-pub',
+      title: 'Prince of Mereweather',
+      subtitle: 'Pre-Wedding Drinks',
+      date: 'October 4, 2025',
+      time: '4:00 PM - 8:00 PM',
+      description: 'Casual drinks and dinner at the pub. Come and go as you please!',
+      color: 'glass-blue',
+      path: '/venue/prince-of-mereweather'
+    },
+    {
+      id: 'beach',
+      title: 'Newcastle Beach',
+      subtitle: 'Recovery Beach Day',
+      date: 'October 6, 2025',
+      time: 'From 11:00 AM onwards',
+      description: 'Casual beach hangout with coffee and food from the kiosk',
+      color: 'glass-green',
+      path: '/venue/newcastle-beach'
+    }
+  ];
+
   return (
     <div className="min-h-screen px-5 pt-12 pb-6">
       {/* Header */}
       <div className="text-center mb-8 animate-fade-up">
         <h1 className="wedding-heading text-wedding-navy mb-3">
-          Venue & Location
+          Venues & Locations
         </h1>
         <p className="wedding-body text-muted-foreground">
-          Everything you need to know about our wedding location
+          All the places where we'll be celebrating
         </p>
+      </div>
+
+      {/* Venue Cards */}
+      <div className="space-y-6 mb-8">
+        {venues.map((venue, index) => (
+          <GlassCard 
+            key={venue.id}
+            className="p-6 animate-fade-up cursor-pointer hover:bg-secondary/20 transition-all" 
+            style={{ animationDelay: `${0.2 + (index * 0.1)}s` }}
+            onClick={() => navigate(venue.path)}
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className={`w-3 h-3 rounded-full bg-${venue.color}`} />
+                  <h2 className="text-xl font-semibold text-wedding-navy">
+                    {venue.title}
+                  </h2>
+                </div>
+                <p className="text-glass-blue font-medium mb-2">{venue.subtitle}</p>
+                <div className="space-y-1 mb-3">
+                  <p className="text-sm font-medium text-wedding-navy">{venue.date}</p>
+                  <p className="text-sm text-muted-foreground">{venue.time}</p>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {venue.description}
+                </p>
+              </div>
+              <div className="ml-4">
+                <ArrowRight className="w-5 h-5 text-glass-blue" />
+              </div>
+            </div>
+          </GlassCard>
+        ))}
       </div>
 
       {/* Venue Details */}

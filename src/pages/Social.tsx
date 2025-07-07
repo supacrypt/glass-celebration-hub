@@ -66,11 +66,11 @@ const Social: React.FC = () => {
   };
 
   const hashtags = [
-    '#SarahAndJames2024',
+    '#TimAndKirsten2025',
     '#WeddingBliss',
-    '#SunsetGarden',
+    '#BenEan',
     '#ForeverLove',
-    '#WeddingDay'
+    '#HunterValleyWedding'
   ];
 
   return (
