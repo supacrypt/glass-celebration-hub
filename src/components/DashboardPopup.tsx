@@ -60,7 +60,13 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
   if (!isOpen) return null;
 
   return (
-    <>      
+    <>
+      {/* Invisible Overlay for click-to-close functionality */}
+      <div 
+        className="fixed inset-0 z-[998]"
+        onClick={onClose}
+      />
+      
       {/* Popup */}
       <div className="fixed bottom-16 sm:bottom-24 left-1/2 transform -translate-x-1/2 z-[999] w-[95vw] sm:w-[90vw] max-w-2xl max-h-[75vh] sm:max-h-[80vh] overflow-y-auto">
         <div 
