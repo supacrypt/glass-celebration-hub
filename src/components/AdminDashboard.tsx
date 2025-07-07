@@ -111,24 +111,23 @@ const AdminDashboard: React.FC = () => {
           first_name,
           last_name,
           created_at,
-          user_roles!inner (role)
+          user_roles (role)
         `);
 
       // Fetch RSVPs with user profiles  
       const { data: rsvpsData } = await supabase
         .from('rsvps')
-        .select(`
-          *,
-          profiles!inner (first_name, last_name, email)
-        `);
+        .select('*');
 
       // Fetch photos with user profiles
       const { data: photosData } = await supabase
         .from('photos')
-        .select(`
-          *,
-          profiles!inner (first_name, last_name)
-        `);
+        .select('*');
+
+      // Fetch all profiles for joining
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('user_id, first_name, last_name, email');
 
       // Fetch messages count
       const { count: messagesCount } = await supabase
@@ -142,13 +141,28 @@ const AdminDashboard: React.FC = () => {
           first_name: user.first_name,
           last_name: user.last_name,
           created_at: user.created_at,
-          role: (user.user_roles?.[0]?.role || 'guest') as 'guest' | 'admin' | 'couple'
+          role: (Array.isArray(user.user_roles) && user.user_roles.length > 0 
+            ? user.user_roles[0].role 
+            : 'guest') as 'guest' | 'admin' | 'couple'
         }));
         setUsers(formattedUsers);
       }
 
-      if (rsvpsData) setRSVPs(rsvpsData);
-      if (photosData) setPhotos(photosData);
+      if (rsvpsData && profilesData) {
+        const rsvpsWithProfiles = rsvpsData.map(rsvp => ({
+          ...rsvp,
+          profiles: profilesData.find(p => p.user_id === rsvp.user_id) || { first_name: '', last_name: '', email: '' }
+        }));
+        setRSVPs(rsvpsWithProfiles);
+      }
+      
+      if (photosData && profilesData) {
+        const photosWithProfiles = photosData.map(photo => ({
+          ...photo,
+          profiles: profilesData.find(p => p.user_id === photo.user_id) || { first_name: '', last_name: '' }
+        }));
+        setPhotos(photosWithProfiles);
+      }
 
       // Calculate stats
       const pendingPhotos = photosData?.filter(p => !p.is_approved).length || 0;
