@@ -22,19 +22,20 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
     <nav 
       className="fixed left-1/2 transform -translate-x-1/2 flex items-end z-50"
       style={{
-        bottom: '30px',
+        bottom: '20px',
         background: 'linear-gradient(145deg, #f5ede4, #e8e0d7)',
-        borderRadius: '30px',
-        padding: '5px 40px 6px 40px',
+        borderRadius: window.innerWidth < 768 ? '25px' : '30px',
+        padding: window.innerWidth < 768 ? '4px 20px 5px 20px' : '5px 40px 6px 40px',
         boxShadow: `
           12px 12px 24px rgba(163, 155, 146, 0.4),
           -12px -12px 24px rgba(255, 255, 255, 0.7),
           inset 2px 2px 5px rgba(255, 255, 255, 0.6),
           inset -2px -2px 5px rgba(163, 155, 146, 0.2)
         `,
-        gap: '55px',
+        gap: window.innerWidth < 768 ? '25px' : '55px',
         border: '1px solid rgba(255, 255, 255, 0.3)',
-        width: 'max-content'
+        width: 'max-content',
+        maxWidth: window.innerWidth < 768 ? '90vw' : 'auto'
       }}
     >
       {routes.map((route) => {
@@ -225,13 +226,15 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
             
             {/* Label */}
             <span 
+              className="text-xs sm:text-sm md:text-base"
               style={{
-                fontSize: '9.5px',
+                fontSize: window.innerWidth < 768 ? '8px' : '9.5px',
                 marginTop: isCenter ? '6px' : '2px',
                 fontWeight: '500',
                 letterSpacing: '0.3px',
                 color: '#7a736b',
-                textShadow: '1px 1px 2px rgba(255, 255, 255, 0.8)'
+                textShadow: '1px 1px 2px rgba(255, 255, 255, 0.8)',
+                display: window.innerWidth < 480 && !isCenter ? 'none' : 'block'
               }}
             >
               {route.label}

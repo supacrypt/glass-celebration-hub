@@ -67,7 +67,7 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
       />
       
       {/* Popup */}
-      <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-[999] w-[90vw] max-w-2xl max-h-[80vh] overflow-y-auto">
+      <div className="fixed bottom-16 sm:bottom-24 left-1/2 transform -translate-x-1/2 z-[999] w-[95vw] sm:w-[90vw] max-w-2xl max-h-[75vh] sm:max-h-[80vh] overflow-y-auto">
         <div 
           className="glass-popup p-6 relative"
           onClick={(e) => e.stopPropagation()}

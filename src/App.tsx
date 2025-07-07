@@ -19,6 +19,12 @@ import PrinceOfMereweather from "./pages/venues/PrinceOfMereweather";
 import NewcastleBeach from "./pages/venues/NewcastleBeach";
 import AdminUsers from "./pages/dashboard/AdminUsers";
 import AdminPhotos from "./pages/dashboard/AdminPhotos";
+import AdminGifts from "./pages/dashboard/AdminGifts";
+import AdminGiftsAdd from "./pages/dashboard/AdminGiftsAdd";
+import AdminRSVPs from "./pages/dashboard/AdminRSVPs";
+import AdminPhotosDetail from "./pages/dashboard/AdminPhotosDetail";
+import AdminUserRoles from "./pages/dashboard/AdminUserRoles";
+import SocialCompose from "./pages/SocialCompose";
 import { useAuth } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
@@ -75,8 +81,19 @@ const AppContent = () => {
         <Route path="/rsvp" element={<RSVP />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/auth" element={<Auth />} />
+        
+        {/* Dashboard Admin Routes */}
         <Route path="/dashboard/users" element={<AdminUsers />} />
+        <Route path="/dashboard/users/roles" element={<AdminUserRoles />} />
         <Route path="/dashboard/photos" element={<AdminPhotos />} />
+        <Route path="/dashboard/photos/:status" element={<AdminPhotosDetail />} />
+        <Route path="/dashboard/gifts" element={<AdminGifts />} />
+        <Route path="/dashboard/gifts/add" element={<AdminGiftsAdd />} />
+        <Route path="/dashboard/rsvps" element={<AdminRSVPs />} />
+        
+        {/* Social Routes */}
+        <Route path="/social/compose" element={<SocialCompose />} />
+        
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
