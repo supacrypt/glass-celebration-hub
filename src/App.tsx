@@ -25,6 +25,7 @@ import AdminRSVPs from "./pages/dashboard/AdminRSVPs";
 import AdminPhotosDetail from "./pages/dashboard/AdminPhotosDetail";
 import AdminUserRoles from "./pages/dashboard/AdminUserRoles";
 import SocialCompose from "./pages/SocialCompose";
+import RSVPStatus from "./pages/RSVPStatus";
 import { useAuth } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
@@ -93,6 +94,7 @@ const AppContent = () => {
         
         {/* Social Routes */}
         <Route path="/social/compose" element={<SocialCompose />} />
+        <Route path="/rsvp/status" element={<RSVPStatus />} />
         
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
