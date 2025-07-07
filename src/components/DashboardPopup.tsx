@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useDashboardData } from '@/hooks/useDashboardData';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import AccessRestrictedView from './dashboard/AccessRestrictedView';
-import DashboardHeader from './dashboard/DashboardHeader';
-import AdminDashboardContent from './dashboard/AdminDashboardContent';
+import AdminControlCentre from './admin/AdminControlCentre';
 import GuestDashboardContent from './dashboard/GuestDashboardContent';
 
 interface DashboardPopupProps {
@@ -32,45 +31,62 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
     return <AccessRestrictedView onClose={onClose} />;
   }
 
+  // Responsive container dimensions based on breakpoints
+  const getContainerStyles = () => {
+    return {
+      // Mobile < 640px: 60vh/400px max, 90vw
+      width: 'min(90vw, 800px)',
+      height: 'min(60vh, 400px)',
+      maxHeight: '400px',
+      // Tablet 640-1024px: 55vh/450px max, 80vw  
+      '@media (min-width: 640px)': {
+        width: 'min(80vw, 800px)',
+        height: 'min(55vh, 450px)',
+        maxHeight: '450px'
+      },
+      // Desktop > 1024px: 50vh/500px max, 800px
+      '@media (min-width: 1024px)': {
+        width: 'min(800px, 90vw)',
+        height: 'min(50vh, 500px)',
+        maxHeight: '500px'
+      }
+    };
+  };
+
   return (
     <>
       {/* Invisible Backdrop */}
       <div 
-        className="fixed inset-0 z-[100] transition-all duration-300 ease-out"
+        className="fixed inset-0 z-[100] transition-all duration-300 ease-out bg-black/20"
         onClick={onClose}
       />
       
-      {/* Enhanced Dashboard Modal - Positioned close to bottom navigation */}
-      <div className="fixed left-1/2 transform -translate-x-1/2 z-[110]" style={{ bottom: 'calc(30px + 80px + 10px)' }}>
+      {/* Enhanced Control Centre - Positioned close to bottom navigation */}
+      <div 
+        className="fixed left-1/2 transform -translate-x-1/2 z-[110]" 
+        style={{ bottom: 'calc(24px + 80px + 12px)' }}
+      >
         <div 
-          className="glass-popup animate-scale-in shadow-2xl flex flex-col"
+          className="glass-popup animate-scale-in shadow-2xl flex flex-col rounded-xl overflow-hidden
+                     w-[90vw] h-[60vh] max-h-[400px]
+                     sm:w-[80vw] sm:h-[55vh] sm:max-h-[450px]
+                     lg:w-[800px] lg:h-[50vh] lg:max-h-[500px]"
           onClick={(e) => e.stopPropagation()}
-          style={{
-            width: 'min(98vw, 700px)',
-            height: 'min(85vh, 750px)',
-            maxHeight: '750px'
-          }}
         >
-          <DashboardHeader userRole={authUserRole?.role} onClose={onClose} />
-
-          {/* Content Container with Proper Scrolling */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {loading ? (
-              <div className="flex items-center justify-center h-40">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-wedding-navy" />
-              </div>
-            ) : authUserRole?.role === 'admin' ? (
-              <AdminDashboardContent
-                stats={stats}
-                users={users}
-                rsvps={rsvps}
-                photos={photos}
-                onRefresh={fetchDashboardData}
-              />
-            ) : (
-              <GuestDashboardContent stats={stats} onClose={onClose} />
-            )}
-          </div>
+          {authUserRole?.role === 'admin' || authUserRole?.role === 'couple' ? (
+            <AdminControlCentre
+              stats={stats}
+              users={users}
+              rsvps={rsvps}
+              photos={photos}
+              loading={loading}
+              onRefresh={fetchDashboardData}
+              onClose={onClose}
+              userRole={authUserRole?.role}
+            />
+          ) : (
+            <GuestDashboardContent stats={stats} onClose={onClose} />
+          )}
         </div>
       </div>
     </>

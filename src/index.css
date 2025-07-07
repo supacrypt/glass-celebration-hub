@@ -754,5 +754,40 @@
     flex-direction: column !important;
     gap: 15px !important;
     align-items: center !important;
+}
+
+/* Admin Control Centre Styles */
+.admin-control-centre {
+  @apply flex flex-col h-full;
+}
+
+/* Scrollbar utilities */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Enhanced glass borders for control centre */
+.glass-border {
+  border-color: hsla(var(--glass-white) / 0.1);
+}
+
+/* Tab navigation improvements */
+.tabs-list-sidebar {
+  @apply bg-transparent flex-col gap-1 h-full;
+}
+
+.tabs-trigger-sidebar {
+  @apply w-full justify-start data-[state=active]:bg-wedding-navy data-[state=active]:text-wedding-cream;
+}
+
+/* Mobile tab scroll optimization */
+@media (max-width: 640px) {
+  .admin-control-centre .tabs-list {
+    @apply overflow-x-auto scrollbar-hide;
   }
 }
