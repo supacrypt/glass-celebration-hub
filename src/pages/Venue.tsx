@@ -36,26 +36,7 @@ const Venue: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen venue-page" style={{ background: '#e6ded4', padding: '40px 20px', position: 'relative', overflow: 'hidden' }}>
-      {/* Background decoration */}
-      <div 
-        style={{
-          content: '',
-          position: 'fixed',
-          top: '-50%',
-          left: '-50%',
-          width: '200%',
-          height: '200%',
-          background: `
-            radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 70%, rgba(240, 147, 251, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 40% 80%, rgba(250, 112, 154, 0.1) 0%, transparent 50%)
-          `,
-          animation: 'float 20s infinite ease-in-out',
-          zIndex: -1
-        }}
-      />
-      
+    <div className="min-h-screen venue-page" style={{ padding: '40px 20px', position: 'relative' }}>
       <div className="container" style={{ maxWidth: '600px', margin: '0 auto' }}>
         {/* Page Header */}
         <div className="page-header" style={{ textAlign: 'center', marginBottom: '50px' }}>
