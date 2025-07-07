@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CompactStats from '@/components/admin/CompactStats';
 import CompactUserManagement from '@/components/admin/CompactUserManagement';
 import CompactPhotoModeration from '@/components/admin/CompactPhotoModeration';
@@ -41,61 +40,42 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
   ];
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-      {/* Compact Tab Navigation */}
-      <div className="px-4 pt-2">
-        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 glass-secondary h-8 overflow-x-auto">
+    <div className="h-full flex flex-col">
+      {/* Enhanced Tab Navigation */}
+      <div className="px-4 pt-3 pb-2">
+        <div className="flex flex-wrap gap-1">
           {adminTabs.map((tab) => (
-            <TabsTrigger 
-              key={tab.id} 
-              value={tab.id} 
-              className="text-xs px-2 whitespace-nowrap"
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-3 py-2 text-xs font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'bg-wedding-navy text-white shadow-md'
+                  : 'text-wedding-navy hover:bg-wedding-navy/10 glass-secondary'
+              }`}
             >
               {tab.label}
-            </TabsTrigger>
+            </button>
           ))}
-        </TabsList>
+        </div>
       </div>
 
       {/* Tab Content with Scroll */}
-      <div className="flex-1 overflow-y-auto px-4 py-3">
-        <TabsContent value="stats" className="mt-0">
-          <CompactStats stats={stats} />
-        </TabsContent>
-
-        <TabsContent value="users" className="mt-0">
-          <CompactUserManagement users={users} onRefresh={onRefresh} />
-        </TabsContent>
-
-        <TabsContent value="photos" className="mt-0">
-          <CompactPhotoModeration photos={photos} onRefresh={onRefresh} />
-        </TabsContent>
-
-        <TabsContent value="gifts" className="mt-0">
-          <CompactGiftManagement />
-        </TabsContent>
-
-        <TabsContent value="rsvps" className="mt-0">
-          <CompactRSVPManagement rsvps={rsvps} />
-        </TabsContent>
-
-        <TabsContent value="analytics" className="mt-0">
-          <AnalyticsInsights />
-        </TabsContent>
-
-        <TabsContent value="comms" className="mt-0">
-          <CommunicationCenter />
-        </TabsContent>
-
-        <TabsContent value="timeline" className="mt-0">
-          <EventTimeline />
-        </TabsContent>
-
-        <TabsContent value="settings" className="mt-0">
-          <CompactSystemSettings />
-        </TabsContent>
+      <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+        {/* Dynamic Content Rendering */}
+        <div className="space-y-4">
+          {activeTab === 'stats' && <CompactStats stats={stats} />}
+          {activeTab === 'users' && <CompactUserManagement users={users} onRefresh={onRefresh} />}
+          {activeTab === 'photos' && <CompactPhotoModeration photos={photos} onRefresh={onRefresh} />}
+          {activeTab === 'gifts' && <CompactGiftManagement />}
+          {activeTab === 'rsvps' && <CompactRSVPManagement rsvps={rsvps} />}
+          {activeTab === 'analytics' && <AnalyticsInsights />}
+          {activeTab === 'comms' && <CommunicationCenter />}
+          {activeTab === 'timeline' && <EventTimeline />}
+          {activeTab === 'settings' && <CompactSystemSettings />}
+        </div>
       </div>
-    </Tabs>
+    </div>
   );
 };
 

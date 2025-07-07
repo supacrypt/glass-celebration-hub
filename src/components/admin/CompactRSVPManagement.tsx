@@ -88,7 +88,7 @@ const CompactRSVPManagement: React.FC<CompactRSVPManagementProps> = ({ rsvps }) 
       />
 
       {/* RSVP List */}
-      <div className="space-y-2 max-h-52 overflow-y-auto">
+      <div className="space-y-2 max-h-80 overflow-y-auto">
         {filteredRSVPs.slice(0, 10).map((rsvp) => {
           const StatusIcon = getStatusIcon(rsvp.status);
           return (

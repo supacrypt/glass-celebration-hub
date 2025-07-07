@@ -471,22 +471,98 @@
 }
 
 @layer utilities {
-  /* Glass Fallbacks for browsers without backdrop-filter */
-  @supports not (backdrop-filter: blur(20px)) {
+  /* Glass Color Utilities - Using design system tints */
+  .text-glass-blue {
+    color: hsl(var(--glass-blue-tint));
+  }
+  
+  .text-glass-purple {
+    color: hsl(var(--glass-purple-tint));
+  }
+  
+  .text-glass-pink {
+    color: hsl(var(--glass-pink-tint));
+  }
+  
+  .text-glass-green {
+    color: hsl(var(--glass-green-tint));
+  }
+
+  .bg-glass-blue {
+    background-color: hsl(var(--glass-blue-tint) / 0.1);
+  }
+  
+  .bg-glass-purple {
+    background-color: hsl(var(--glass-purple-tint) / 0.1);
+  }
+  
+  .bg-glass-pink {
+    background-color: hsl(var(--glass-pink-tint) / 0.1);
+  }
+  
+  .bg-glass-green {
+    background-color: hsl(var(--glass-green-tint) / 0.1);
+  }
+
+  /* Glass Border Color Utilities */
+  .glass-border {
+    border-color: hsl(var(--glass-white) / 0.2);
+  }
+  
+  .dark .glass-border {
+    border-color: hsl(var(--glass-white) / 0.1);
+  }
+
+  /* Responsive Glass Effects */
+  @media (max-width: 768px) {
+    .glass-popup {
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+    
     .glass-primary {
-      background: hsl(var(--glass-white) / 0.95);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+  }
+
+  /* Performance optimizations for glass effects on mobile */
+  @media (max-width: 480px) {
+    .glass-animated {
+      animation: none; /* Disable complex animations on small screens */
     }
     
-    .dark .glass-primary {
-      background: hsl(var(--glass-black) / 0.95);
+    .glass-shimmer {
+      animation: none;
+    }
+  }
+
+  /* High contrast mode accessibility */
+  @media (prefers-contrast: high) {
+    .glass-primary,
+    .glass-secondary,
+    .glass-frosted,
+    .glass-popup,
+    .glass-card {
+      background: var(--background);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: 2px solid var(--foreground);
+    }
+  }
+
+  /* Reduced motion accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .glass-animated,
+    .animate-glass-float,
+    .animate-fade-up,
+    .animate-scale-in {
+      animation: none;
     }
     
-    .glass-secondary {
-      background: hsl(var(--glass-white) / 0.85);
-    }
-    
-    .dark .glass-secondary {
-      background: hsl(var(--glass-black) / 0.85);
+    .glass-card:hover,
+    .glass-button:hover {
+      transform: none;
     }
   }
 }

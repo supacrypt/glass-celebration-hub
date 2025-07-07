@@ -40,15 +40,15 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
         onClick={onClose}
       />
       
-      {/* Compact Dashboard Modal - Positioned close to bottom navigation */}
-      <div className="fixed left-1/2 transform -translate-x-1/2 z-[110]" style={{ bottom: 'calc(30px + 80px + 15px)' }}>
+      {/* Enhanced Dashboard Modal - Positioned close to bottom navigation */}
+      <div className="fixed left-1/2 transform -translate-x-1/2 z-[110]" style={{ bottom: 'calc(30px + 80px + 10px)' }}>
         <div 
-          className="glass-popup animate-scale-in"
+          className="glass-popup animate-scale-in shadow-2xl"
           onClick={(e) => e.stopPropagation()}
           style={{
-            width: 'min(95vw, 600px)',
-            maxHeight: 'min(80vh, 800px)',
-            minHeight: '600px'
+            width: 'min(98vw, 700px)',
+            maxHeight: 'min(85vh, 900px)',
+            minHeight: '700px'
           }}
         >
           <DashboardHeader userRole={authUserRole?.role} onClose={onClose} />

@@ -223,7 +223,7 @@ const CompactGiftManagement: React.FC = () => {
       )}
 
       {/* Gift List */}
-      <div className="space-y-2 max-h-48 overflow-y-auto">
+      <div className="space-y-2 max-h-72 overflow-y-auto">
         {gifts.slice(0, 8).map((gift) => (
           <div key={gift.id} className="glass-card p-3">
             <div className="flex items-center justify-between">

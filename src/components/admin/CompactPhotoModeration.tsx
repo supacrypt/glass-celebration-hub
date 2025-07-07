@@ -66,7 +66,7 @@ const CompactPhotoModeration: React.FC<CompactPhotoModerationProps> = ({ photos,
         </Badge>
       </div>
       
-      <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-60 overflow-y-auto">
         {photos.slice(0, 8).map((photo) => (
           <div key={photo.id} className="glass-card p-2 space-y-2">
             <div 
