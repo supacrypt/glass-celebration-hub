@@ -11,6 +11,7 @@ import PhotoModeration from '@/components/admin/PhotoModeration';
 import RSVPManagement from '@/components/admin/RSVPManagement';
 import AdminOverview from '@/components/admin/AdminOverview';
 import GiftManagement from '@/components/admin/GiftManagement';
+import BackgroundManager from '@/components/admin/BackgroundManager';
 
 interface AdminStats {
   totalUsers: number;
@@ -216,11 +217,12 @@ const AdminDashboard: React.FC = () => {
 
       {/* Admin Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-5 mb-6">
+        <TabsList className="grid w-full grid-cols-6 mb-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="photos">Photos</TabsTrigger>
           <TabsTrigger value="gifts">Gifts</TabsTrigger>
+          <TabsTrigger value="backgrounds">Backgrounds</TabsTrigger>
           <TabsTrigger value="rsvps">RSVPs</TabsTrigger>
         </TabsList>
 
@@ -238,6 +240,10 @@ const AdminDashboard: React.FC = () => {
 
         <TabsContent value="gifts" className="space-y-4">
           <GiftManagement />
+        </TabsContent>
+
+        <TabsContent value="backgrounds" className="space-y-4">
+          <BackgroundManager />
         </TabsContent>
 
         <TabsContent value="rsvps" className="space-y-4">

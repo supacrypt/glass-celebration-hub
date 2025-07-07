@@ -133,11 +133,6 @@
   }
 
   body {
-    background-image: url('https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/background/background-image.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
     position: relative;
   }
 

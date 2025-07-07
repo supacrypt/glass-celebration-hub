@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import GlassLayout from "./components/GlassLayout";
+import GlobalBackground from "./components/GlobalBackground";
 import Home from "./pages/Home";
 import Venue from "./pages/Venue";
 import Social from "./pages/Social";
@@ -110,6 +111,7 @@ const AppContent = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <GlobalBackground />
       <Toaster />
       <Sonner />
       <BrowserRouter>
