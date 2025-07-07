@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import DashboardPopup from './DashboardPopup';
+import { useAuth } from '@/hooks/useAuth';
 
 interface NavigationProps {
   activeRoute: string;
@@ -6,6 +8,8 @@ interface NavigationProps {
 }
 
 const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate }) => {
+  const [isDashboardOpen, setIsDashboardOpen] = useState(false);
+  const { userRole } = useAuth();
   const routes = [
     { id: 'home', label: 'Home' },
     { id: 'venue', label: 'Venue' },
@@ -40,7 +44,7 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
         return (
           <button
             key={route.id}
-            onClick={() => onNavigate(route.id)}
+            onClick={() => route.id === 'dashboard' ? setIsDashboardOpen(true) : onNavigate(route.id)}
             className="flex flex-col items-center text-decoration-none transition-all duration-300 cursor-pointer relative"
             style={{
               color: '#7a736b',
@@ -227,6 +231,12 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
           </button>
         );
       })}
+      
+      <DashboardPopup
+        isOpen={isDashboardOpen}
+        onClose={() => setIsDashboardOpen(false)}
+        userRole={userRole?.role || 'guest'}
+      />
     </nav>
   );
 };

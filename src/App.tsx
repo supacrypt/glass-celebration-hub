@@ -17,6 +17,8 @@ import NotFound from "./pages/NotFound";
 import BenEan from "./pages/venues/BenEan";
 import PrinceOfMereweather from "./pages/venues/PrinceOfMereweather";
 import NewcastleBeach from "./pages/venues/NewcastleBeach";
+import AdminUsers from "./pages/dashboard/AdminUsers";
+import AdminPhotos from "./pages/dashboard/AdminPhotos";
 import { useAuth } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
@@ -72,6 +74,8 @@ const AppContent = () => {
         <Route path="/rsvp" element={<RSVP />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/dashboard/users" element={<AdminUsers />} />
+        <Route path="/dashboard/photos" element={<AdminPhotos />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
