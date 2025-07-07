@@ -27,18 +27,20 @@ export const useAuth = () => {
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        setLoading(false);
         
         if (session?.user) {
-          // Fetch user profile and role
-          await fetchUserData(session.user.id);
+          // Defer Supabase calls with setTimeout to prevent auth deadlock
+          setTimeout(() => {
+            fetchUserData(session.user.id);
+          }, 0);
         } else {
           setProfile(null);
           setUserRole(null);
         }
-        setLoading(false);
       }
     );
 
