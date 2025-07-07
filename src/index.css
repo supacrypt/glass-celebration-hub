@@ -126,9 +126,13 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--gradient-background);
+    background-image: url('/src/assets/wedding-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     background-attachment: fixed;
     position: relative;
+    min-height: 100vh;
   }
 
   body::before {
@@ -139,6 +143,7 @@
     right: 0;
     bottom: 0;
     background: var(--gradient-mesh);
+    background-attachment: fixed;
     pointer-events: none;
     z-index: -1;
   }
