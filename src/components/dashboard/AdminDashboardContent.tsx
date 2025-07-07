@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import CompactStats from '@/components/admin/CompactStats';
 import CompactUserManagement from '@/components/admin/CompactUserManagement';
 import EnhancedGuestManagement from '@/components/admin/EnhancedGuestManagement';
-import CompactPhotoModeration from '@/components/admin/CompactPhotoModeration';
+import EnhancedPhotoModeration from '@/components/admin/EnhancedPhotoModeration';
 import EnhancedRSVPManagement from '@/components/admin/EnhancedRSVPManagement';
 import CompactGiftManagement from '@/components/admin/CompactGiftManagement';
 import CompactSystemSettings from '@/components/admin/CompactSystemSettings';
 import AnalyticsInsights from '@/components/admin/AnalyticsInsights';
-import CommunicationCenter from '@/components/admin/CommunicationCenter';
+import EnhancedCommunicationCenter from '@/components/admin/EnhancedCommunicationCenter';
 import EventTimeline from '@/components/admin/EventTimeline';
 import NotificationCenter from '@/components/admin/NotificationCenter';
 import type { AdminStats, User, RSVP, Photo } from './types';
@@ -72,11 +72,11 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
             {activeTab === 'stats' && <CompactStats stats={stats} />}
             {activeTab === 'users' && <CompactUserManagement users={users} onRefresh={onRefresh} />}
             {activeTab === 'guests' && <EnhancedGuestManagement users={users} onRefresh={onRefresh} />}
-            {activeTab === 'photos' && <CompactPhotoModeration photos={photos} onRefresh={onRefresh} />}
+            {activeTab === 'photos' && <EnhancedPhotoModeration photos={photos as any} onRefresh={onRefresh} />}
             {activeTab === 'gifts' && <CompactGiftManagement />}
             {activeTab === 'rsvps' && <EnhancedRSVPManagement rsvps={rsvps} onRefresh={onRefresh} />}
             {activeTab === 'analytics' && <AnalyticsInsights />}
-            {activeTab === 'comms' && <CommunicationCenter />}
+            {activeTab === 'comms' && <EnhancedCommunicationCenter />}
             {activeTab === 'notifications' && <NotificationCenter />}
             {activeTab === 'timeline' && <EventTimeline />}
             {activeTab === 'settings' && <CompactSystemSettings />}
