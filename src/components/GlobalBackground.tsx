@@ -89,22 +89,56 @@ const GlobalBackground: React.FC = () => {
   }
 
   console.log('GlobalBackground: Rendering with URL:', backgroundUrl);
+
+  // Add image load testing
+  const testImageLoad = (url: string) => {
+    if (!url) return;
+    
+    const img = new Image();
+    img.onload = () => {
+      console.log('GlobalBackground: Image loaded successfully:', url);
+    };
+    img.onerror = (error) => {
+      console.error('GlobalBackground: Image failed to load:', url, error);
+    };
+    img.src = url;
+  };
+
+  // Test image loading when URL changes
+  React.useEffect(() => {
+    if (backgroundUrl) {
+      testImageLoad(backgroundUrl);
+    }
+  }, [backgroundUrl]);
   
   return (
-    <div
-      className="fixed inset-0 z-[-10] w-full h-full"
-      style={{
-        backgroundImage: backgroundUrl ? `url("${backgroundUrl}")` : 'none',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        minHeight: '100vh',
-        minWidth: '100vw',
-        // Temporary debugging: light gray background to verify div is rendering
-        backgroundColor: backgroundUrl ? 'transparent' : '#f5f5f5',
-      }}
-    />
+    <>
+      {/* Visual debugging div - temporary */}
+      <div
+        className="fixed top-4 right-4 z-50 p-2 bg-black/80 text-white text-xs rounded"
+        style={{ fontSize: '10px', maxWidth: '200px' }}
+      >
+        <div>BG Status: {backgroundUrl ? 'Set' : 'Empty'}</div>
+        {backgroundUrl && (
+          <div className="break-all">URL: {backgroundUrl.substring(0, 50)}...</div>
+        )}
+      </div>
+      
+      <div
+        className="fixed inset-0 z-[-10] w-full h-full"
+        style={{
+          backgroundImage: backgroundUrl ? `url("${backgroundUrl}")` : 'none',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
+          minHeight: '100vh',
+          minWidth: '100vw',
+          // Visual debugging: make sure div is visible
+          backgroundColor: backgroundUrl ? 'transparent' : '#ffcccc', // Changed to pink for visibility
+        }}
+      />
+    </>
   );
 };
 
