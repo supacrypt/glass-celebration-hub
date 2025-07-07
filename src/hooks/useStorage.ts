@@ -11,6 +11,7 @@ export interface StorageBucket {
   USER_PROFILES: 'user-profiles';
   SOCIAL_FEED: 'social-feed';
   WEDDING_PHOTOS: 'wedding-photos'; // Legacy bucket
+  GIFT_IMAGES: 'gift-images';
 }
 
 export const STORAGE_BUCKETS: StorageBucket = {
@@ -21,7 +22,8 @@ export const STORAGE_BUCKETS: StorageBucket = {
   COUPLE_GALLERY: 'couple-gallery',
   USER_PROFILES: 'user-profiles',
   SOCIAL_FEED: 'social-feed',
-  WEDDING_PHOTOS: 'wedding-photos'
+  WEDDING_PHOTOS: 'wedding-photos',
+  GIFT_IMAGES: 'gift-images'
 };
 
 export const useStorage = () => {
@@ -181,6 +183,10 @@ export const useStorage = () => {
     return uploadFile(file, bucketMap[venue]);
   };
 
+  const uploadGiftImage = async (file: File, giftId?: string) => {
+    return uploadFile(file, 'GIFT_IMAGES', giftId ? `gift-${giftId}` : '');
+  };
+
   return {
     uploading,
     uploadFile,
@@ -190,6 +196,7 @@ export const useStorage = () => {
     uploadUserProfileImage,
     uploadSocialFeedImage,
     uploadVenueImage,
+    uploadGiftImage,
     STORAGE_BUCKETS
   };
 };
