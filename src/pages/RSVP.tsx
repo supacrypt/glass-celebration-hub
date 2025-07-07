@@ -89,18 +89,18 @@ const RSVP: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen px-5 pt-12 pb-6">
+    <div className="min-h-screen px-3 sm:px-5 pt-8 sm:pt-12 pb-6">
       {/* Header */}
-      <div className="text-center mb-8 animate-fade-up">
-        <h1 className="wedding-heading text-wedding-navy mb-3">
+      <div className="text-center mb-6 sm:mb-8 animate-fade-up">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-medium tracking-tight text-wedding-navy mb-3">
           RSVP
         </h1>
-        <p className="wedding-body text-muted-foreground">
+        <p className="text-sm sm:text-base font-normal leading-relaxed text-muted-foreground max-w-2xl mx-auto">
           We can't wait to celebrate with you! Please let us know if you'll be joining us.
         </p>
       </div>
 
-      <GlassCard className="max-w-2xl mx-auto p-8">
+      <GlassCard className="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Event Selection */}
           <div className="space-y-2">
@@ -125,7 +125,7 @@ const RSVP: React.FC = () => {
           {/* Response Status */}
           <div className="space-y-2">
             <Label>Will you be attending?</Label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {[
                 { value: 'attending', label: 'Yes, I\'ll be there!', color: 'bg-green-100 text-green-800' },
                 { value: 'not_attending', label: 'Sorry, can\'t make it', color: 'bg-red-100 text-red-800' },
@@ -135,7 +135,7 @@ const RSVP: React.FC = () => {
                   key={option.value}
                   type="button"
                   onClick={() => setStatus(option.value as any)}
-                  className={`p-3 rounded-lg text-sm font-medium transition-all ${
+                  className={`p-2 sm:p-3 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                     status === option.value 
                       ? option.color + ' scale-105' 
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'

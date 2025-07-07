@@ -75,29 +75,29 @@ const Gallery: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{ padding: '40px 20px', position: 'relative' }}>
-      <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
+    <div className="min-h-screen px-3 sm:px-5 lg:px-8 pt-8 sm:pt-12 pb-6">
+      <div className="container max-w-7xl mx-auto">
         
         {/* Page Header */}
-        <div className="page-header" style={{ textAlign: 'center', marginBottom: '40px', paddingTop: '20px' }}>
-          <h1 className="text-[36px] font-semibold text-[#2d3f51] mb-3 tracking-tight animate-fade-up">
+        <div className="text-center mb-6 sm:mb-8 lg:mb-10 pt-4 sm:pt-6">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-wedding-navy mb-3 tracking-tight animate-fade-up">
             Photo Gallery
           </h1>
-          <p className="text-lg text-[#7a736b] font-normal">
+          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground font-normal">
             Capture and share your favorite wedding moments
           </p>
         </div>
 
         {/* Upload Section */}
-        <div className="glass-card p-12 mb-10 text-center transition-all duration-300 hover:translate-y-[-3px] animate-fade-up" style={{ animationDelay: '0.2s' }}>
-          <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-[25px] flex items-center justify-center text-[36px] text-white relative overflow-hidden"
+        <div className="glass-card p-6 sm:p-8 lg:p-12 mb-6 sm:mb-8 lg:mb-10 text-center transition-all duration-300 hover:translate-y-[-3px] animate-fade-up" style={{ animationDelay: '0.2s' }}>
+          <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-[20px] sm:rounded-[25px] flex items-center justify-center text-2xl sm:text-3xl lg:text-4xl text-white relative overflow-hidden"
             style={{
-              boxShadow: '0 10px 25px rgba(102, 126, 234, 0.3), 8px 8px 20px rgba(163, 155, 146, 0.2)'
+              boxShadow: '0 8px 20px rgba(102, 126, 234, 0.3), 6px 6px 15px rgba(163, 155, 146, 0.2)'
             }}>
             📤
           </div>
-          <h2 className="text-2xl font-semibold text-[#2d3f51] mb-3">Upload Photos</h2>
-          <p className="text-base text-[#7a736b] mb-6">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-wedding-navy mb-2 sm:mb-3">Upload Photos</h2>
+          <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
             Share your favorite moments from the celebration
           </p>
           <div className="relative inline-block">
@@ -107,9 +107,9 @@ const Gallery: React.FC = () => {
               onChange={handleFileUpload}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
-            <button className="bg-[#2d3f51] text-white border-none px-9 py-4 rounded-[25px] font-semibold text-[15px] cursor-pointer inline-flex items-center gap-3 transition-all duration-300 hover:translate-y-[-2px] relative overflow-hidden"
+            <button className="bg-wedding-navy text-white border-none px-6 sm:px-8 lg:px-9 py-3 sm:py-4 rounded-[20px] sm:rounded-[25px] font-semibold text-sm sm:text-base cursor-pointer inline-flex items-center gap-2 sm:gap-3 transition-all duration-300 hover:translate-y-[-2px] relative overflow-hidden"
               style={{
-                boxShadow: '0 8px 20px rgba(45, 63, 81, 0.3), 5px 5px 15px rgba(163, 155, 146, 0.2)'
+                boxShadow: '0 6px 16px rgba(45, 63, 81, 0.3), 4px 4px 12px rgba(163, 155, 146, 0.2)'
               }}>
               📷 Choose Photos
             </button>
@@ -117,24 +117,24 @@ const Gallery: React.FC = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-5 mb-10">
-          <div className="glass-card p-8 text-center cursor-pointer transition-all duration-300 hover:translate-y-[-5px] hover:scale-[1.02] animate-fade-up" style={{ animationDelay: '0.3s' }}>
-            <div className="text-[42px] font-bold mb-2 leading-none bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">{photos.length}</div>
-            <div className="text-sm text-[#7a736b] font-medium">Total Photos</div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5 mb-6 sm:mb-8 lg:mb-10">
+          <div className="glass-card p-4 sm:p-6 lg:p-8 text-center cursor-pointer transition-all duration-300 hover:translate-y-[-3px] sm:hover:translate-y-[-5px] hover:scale-[1.02] animate-fade-up" style={{ animationDelay: '0.3s' }}>
+            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 leading-none bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">{photos.length}</div>
+            <div className="text-xs sm:text-sm text-muted-foreground font-medium">Total Photos</div>
           </div>
           
-          <div className="glass-card p-8 text-center cursor-pointer transition-all duration-300 hover:translate-y-[-5px] hover:scale-[1.02] animate-fade-up" style={{ animationDelay: '0.4s' }}>
-            <div className="text-[42px] font-bold mb-2 leading-none bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
+          <div className="glass-card p-4 sm:p-6 lg:p-8 text-center cursor-pointer transition-all duration-300 hover:translate-y-[-3px] sm:hover:translate-y-[-5px] hover:scale-[1.02] animate-fade-up" style={{ animationDelay: '0.4s' }}>
+            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 leading-none bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
               {photos.reduce((total, photo) => total + (photo.photo_likes?.length || 0), 0)}
             </div>
-            <div className="text-sm text-[#7a736b] font-medium">Total Likes</div>
+            <div className="text-xs sm:text-sm text-muted-foreground font-medium">Total Likes</div>
           </div>
           
-          <div className="glass-card p-8 text-center cursor-pointer transition-all duration-300 hover:translate-y-[-5px] hover:scale-[1.02] animate-fade-up" style={{ animationDelay: '0.5s' }}>
-            <div className="text-[42px] font-bold mb-2 leading-none bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
+          <div className="glass-card p-4 sm:p-6 lg:p-8 text-center cursor-pointer transition-all duration-300 hover:translate-y-[-3px] sm:hover:translate-y-[-5px] hover:scale-[1.02] animate-fade-up" style={{ animationDelay: '0.5s' }}>
+            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 leading-none bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
               {new Set(photos.map(photo => photo.user_id)).size}
             </div>
-            <div className="text-sm text-[#7a736b] font-medium">Contributors</div>
+            <div className="text-xs sm:text-sm text-muted-foreground font-medium">Contributors</div>
           </div>
         </div>
 

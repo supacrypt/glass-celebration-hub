@@ -513,20 +513,41 @@
     border-color: hsl(var(--glass-white) / 0.1);
   }
 
-  /* Responsive Glass Effects */
+/* Responsive Glass Effects and Mobile Optimizations */
   @media (max-width: 768px) {
     .glass-popup {
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
+      margin: 1rem;
+      border-radius: 20px;
+      padding: 1.5rem;
     }
     
     .glass-primary {
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
     }
+
+    .glass-card {
+      border-radius: 20px;
+      padding: 1.5rem;
+    }
+
+    /* Mobile Typography Scaling */
+    .wedding-display {
+      @apply text-4xl md:text-6xl;
+    }
+
+    .wedding-heading {
+      @apply text-2xl md:text-3xl;
+    }
+
+    .wedding-subheading {
+      @apply text-lg md:text-xl;
+    }
   }
 
-  /* Performance optimizations for glass effects on mobile */
+  /* Mobile-specific adjustments */
   @media (max-width: 480px) {
     .glass-animated {
       animation: none; /* Disable complex animations on small screens */
@@ -534,6 +555,71 @@
     
     .glass-shimmer {
       animation: none;
+    }
+
+    /* Mobile container spacing */
+    .glass-popup {
+      margin: 0.75rem;
+      border-radius: 16px;
+      padding: 1rem;
+    }
+
+    .glass-card {
+      border-radius: 16px;
+      padding: 1rem;
+    }
+
+    /* Mobile Typography */
+    .wedding-display {
+      @apply text-3xl;
+    }
+
+    .wedding-heading {
+      @apply text-xl;
+    }
+
+    .wedding-subheading {
+      @apply text-base;
+    }
+
+    /* Mobile grid adjustments */
+    .home-countdown-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 12px !important;
+    }
+
+    .venue-grid {
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+    }
+
+    /* Mobile padding and spacing */
+    .mobile-container {
+      padding: 0.75rem !important;
+    }
+
+    .mobile-card {
+      padding: 1rem !important;
+      border-radius: 16px !important;
+    }
+
+    /* Mobile navigation adjustments */
+    .glass-navigation {
+      bottom: 1rem !important;
+      left: 0.75rem !important;
+      right: 0.75rem !important;
+      border-radius: 24px !important;
+      padding: 0.5rem 1rem !important;
+      gap: 1rem !important;
+    }
+
+    .nav-icon {
+      width: 40px !important;
+      height: 40px !important;
+    }
+
+    .nav-label {
+      font-size: 8px !important;
     }
   }
 

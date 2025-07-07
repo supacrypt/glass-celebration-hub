@@ -20,21 +20,22 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
 
 return (
     <nav 
-      className="fixed left-1/2 transform -translate-x-1/2 flex items-end z-50"
+      className="fixed left-1/2 transform -translate-x-1/2 flex items-end z-50 px-4 sm:px-0"
       style={{
-        bottom: '30px',
+        bottom: '20px',
         background: 'linear-gradient(145deg, #f5ede4, #e8e0d7)',
-        borderRadius: '40px',
-        padding: '5px 20px 6px 20px',
+        borderRadius: '32px',
+        padding: '4px 12px 5px 12px',
         boxShadow: `
-          12px 12px 24px rgba(163, 155, 146, 0.4),
-          -12px -12px 24px rgba(255, 255, 255, 0.7),
+          8px 8px 16px rgba(163, 155, 146, 0.4),
+          -8px -8px 16px rgba(255, 255, 255, 0.7),
           inset 2px 2px 5px rgba(255, 255, 255, 0.6),
           inset -2px -2px 5px rgba(163, 155, 146, 0.2)
         `,
-        gap: '25px',
+        gap: '16px',
         border: '1px solid rgba(255, 255, 255, 0.3)',
         width: 'max-content',
+        maxWidth: 'calc(100vw - 2rem)',
         transition: 'all 0.3s ease'
       }}
     >
@@ -75,19 +76,19 @@ return (
                 background: isActive && isCenter 
                   ? 'linear-gradient(135deg, #3d5f81 0%, #2e3b4a 100%)'
                   : 'linear-gradient(135deg, #2d3f51 0%, #1e2b3a 100%)',
-                width: '50px',
-                height: '50px',
+                width: window.innerWidth < 640 ? '42px' : '50px',
+                height: window.innerWidth < 640 ? '42px' : '50px',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 position: 'relative',
-                top: '-10px',
-                marginBottom: '-8px',
+                top: window.innerWidth < 640 ? '-8px' : '-10px',
+                marginBottom: window.innerWidth < 640 ? '-6px' : '-8px',
                 boxShadow: `
-                  0 0 25px rgba(45, 63, 81, 0.2),
-                  0 8px 20px rgba(45, 63, 81, 0.4),
-                  0 4px 8px rgba(45, 63, 81, 0.3),
+                  0 0 ${window.innerWidth < 640 ? '20px' : '25px'} rgba(45, 63, 81, 0.2),
+                  0 ${window.innerWidth < 640 ? '6px 16px' : '8px 20px'} rgba(45, 63, 81, 0.4),
+                  0 ${window.innerWidth < 640 ? '3px 6px' : '4px 8px'} rgba(45, 63, 81, 0.3),
                   inset 0 -2px 4px rgba(0, 0, 0, 0.3),
                   inset 0 2px 4px rgba(255, 255, 255, 0.1)
                 `,
