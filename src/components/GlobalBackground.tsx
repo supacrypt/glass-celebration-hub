@@ -24,30 +24,18 @@ const GlobalBackground: React.FC = () => {
 
       if (data?.setting_value) {
         console.log('GlobalBackground: Using background from database:', data.setting_value);
-        // Use the direct URL you provided for background 1.png
-        if (data.setting_value === 'background 1.png' || data.setting_value === 'background-1.png') {
-          const directUrl = 'https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/backgrounds/background%201.png';
-          console.log('GlobalBackground: Using direct URL for background 1:', directUrl);
-          setBackgroundUrl(directUrl);
-        } else {
-          const publicUrl = supabase.storage
-            .from('backgrounds')
-            .getPublicUrl(data.setting_value).data.publicUrl;
-          console.log('GlobalBackground: Generated URL:', publicUrl);
-          setBackgroundUrl(publicUrl);
-        }
+        const publicUrl = supabase.storage
+          .from('backgrounds')
+          .getPublicUrl(data.setting_value).data.publicUrl;
+        console.log('GlobalBackground: Generated URL:', publicUrl);
+        setBackgroundUrl(publicUrl);
       } else {
-        console.log('GlobalBackground: No active background found, using fallback');
-        // Use the direct URL as fallback
-        const fallbackUrl = 'https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/backgrounds/background%201.png';
-        console.log('GlobalBackground: Fallback URL:', fallbackUrl);
-        setBackgroundUrl(fallbackUrl);
+        console.log('GlobalBackground: No active background found, using empty background');
+        setBackgroundUrl('');
       }
     } catch (error) {
       console.error('Error in fetchActiveBackground:', error);
-      // Use the direct URL as fallback
-      const fallbackUrl = 'https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/backgrounds/background%201.png';
-      setBackgroundUrl(fallbackUrl);
+      setBackgroundUrl('');
     } finally {
       setLoading(false);
     }
@@ -60,16 +48,13 @@ const GlobalBackground: React.FC = () => {
     const handleBackgroundChange = (event: CustomEvent) => {
       const { backgroundName } = event.detail;
       if (backgroundName) {
-        if (backgroundName === 'background 1.png' || backgroundName === 'background-1.png') {
-          const directUrl = 'https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/backgrounds/background%201.png';
-          setBackgroundUrl(directUrl);
-        } else {
-          const publicUrl = supabase.storage
-            .from('backgrounds')
-            .getPublicUrl(backgroundName).data.publicUrl;
-          setBackgroundUrl(publicUrl);
-        }
+        const publicUrl = supabase.storage
+          .from('backgrounds')
+          .getPublicUrl(backgroundName).data.publicUrl;
+        console.log('GlobalBackground: Background changed to:', backgroundName, 'URL:', publicUrl);
+        setBackgroundUrl(publicUrl);
       } else {
+        console.log('GlobalBackground: Background cleared');
         setBackgroundUrl('');
       }
     };
@@ -116,6 +101,8 @@ const GlobalBackground: React.FC = () => {
         backgroundAttachment: 'fixed',
         minHeight: '100vh',
         minWidth: '100vw',
+        // Temporary debugging: light gray background to verify div is rendering
+        backgroundColor: backgroundUrl ? 'transparent' : '#f5f5f5',
       }}
     />
   );
