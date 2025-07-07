@@ -1,8 +1,16 @@
 import React from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import AdminDashboard from '@/components/AdminDashboard';
 import GlassCard from '@/components/GlassCard';
 import { Users, Image, Calendar, Heart, Gift, MessageCircle } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
+  const { userRole } = useAuth();
+
+  // Show admin dashboard for admin users
+  if (userRole?.role === 'admin') {
+    return <AdminDashboard />;
+  }
   const stats = [
     { label: 'RSVPs', value: '67', total: '85', icon: Users, color: 'text-glass-blue' },
     { label: 'Photos', value: '134', total: null, icon: Image, color: 'text-glass-green' },

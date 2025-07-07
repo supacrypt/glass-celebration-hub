@@ -8,18 +8,18 @@ interface NavigationProps {
 
 const DashboardIcon: React.FC<{ isActive: boolean }> = ({ isActive }) => (
   <div className="relative w-6 h-6 flex items-center justify-center">
-    <div className="grid grid-cols-2 gap-1">
-      <div className={`w-2 h-2 rounded-sm transition-colors duration-300 ${
-        isActive ? 'bg-white' : 'bg-current'
+    <div className="grid grid-cols-2 gap-1 w-4 h-4">
+      <div className={`w-1.5 h-1.5 rounded-sm transition-all duration-300 ${
+        isActive ? 'bg-white shadow-sm' : 'bg-current'
       }`} />
-      <div className={`w-2 h-2 rounded-sm transition-colors duration-300 ${
-        isActive ? 'bg-white' : 'bg-current'
+      <div className={`w-1.5 h-1.5 rounded-sm transition-all duration-300 ${
+        isActive ? 'bg-white shadow-sm' : 'bg-current'
       }`} />
-      <div className={`w-2 h-2 rounded-sm transition-colors duration-300 ${
-        isActive ? 'bg-white' : 'bg-current'
+      <div className={`w-1.5 h-1.5 rounded-sm transition-all duration-300 ${
+        isActive ? 'bg-white shadow-sm' : 'bg-current'
       }`} />
-      <div className={`w-2 h-2 rounded-sm transition-colors duration-300 ${
-        isActive ? 'bg-white' : 'bg-current'
+      <div className={`w-1.5 h-1.5 rounded-sm transition-all duration-300 ${
+        isActive ? 'bg-white shadow-sm' : 'bg-current'
       }`} />
     </div>
   </div>
@@ -37,13 +37,11 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
   return (
     <div className="fixed bottom-6 left-5 right-5 z-50 pointer-events-none">
       <div className="relative h-20 pointer-events-auto">
-        {/* Glass Navigation Container with Custom Shape */}
-        <div 
-          className="absolute inset-0 glass-primary rounded-glass-xl"
-          style={{
-            clipPath: `path('M 24 80 L 24 44 Q 24 24 44 24 L 120 24 Q 140 24 150 16 Q 160 8 50% 8 Q calc(50% + 10px) 8 calc(50% + 20px) 16 Q calc(50% + 30px) 24 calc(100% - 120px) 24 L calc(100% - 44px) 24 Q calc(100% - 24px) 24 calc(100% - 24px) 44 L calc(100% - 24px) 80 Z')`
-          }}
-        />
+        {/* Enhanced Glass Navigation Container with Perfect Curve */}
+        <div className="absolute inset-0 glass-primary rounded-glass-xl shadow-glass-lg backdrop-blur-glass-lg border border-white/20">
+          <div className="absolute inset-0 bg-gradient-to-r from-glass-blue/5 via-transparent to-glass-purple/5 rounded-glass-xl" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent rounded-glass-xl" />
+        </div>
         
         {/* Navigation Items */}
         <div className="relative h-full flex items-end justify-around px-6 pb-3">
@@ -58,33 +56,49 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
                 onClick={() => onNavigate(route.id)}
                 className={`
                   flex flex-col items-center justify-center gap-1 h-12 flex-1 
-                  transition-all duration-300 ease-out relative
-                  ${isCenter ? '-mb-4' : ''}
-                  ${isActive && !isCenter ? 'text-wedding-navy' : 'text-muted-foreground'}
+                  transition-all duration-500 ease-out relative group
+                  ${isCenter ? '-mb-6' : ''}
+                  ${isActive && !isCenter ? 'text-wedding-navy scale-110' : 'text-muted-foreground hover:text-wedding-navy-light'}
                   hover:scale-105 active:scale-95
                 `}
               >
-                {/* Center Button Special Background */}
+                {/* Enhanced Center Button with Glass Effect */}
                 {isCenter && isActive && (
-                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-14 h-14 bg-wedding-navy rounded-full shadow-glass-lg animate-scale-in" />
+                  <>
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-16 h-16 bg-wedding-navy rounded-full shadow-glass-lg animate-scale-in" />
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-16 h-16 bg-gradient-to-t from-wedding-navy to-wedding-navy-light rounded-full opacity-90" />
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-16 h-16 border border-white/20 rounded-full" />
+                  </>
+                )}
+                
+                {/* Hover Effect for Non-Center Items */}
+                {!isCenter && (
+                  <div className="absolute inset-0 bg-white/5 rounded-glass opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 )}
                 
                 {/* Icon */}
-                <div className={`relative z-10 transition-colors duration-300 ${
-                  isActive && isCenter ? 'text-white' : ''
+                <div className={`relative z-10 transition-all duration-300 ${
+                  isActive && isCenter ? 'text-white transform scale-110' : ''
                 }`}>
                   {route.icon === 'custom' ? (
                     <DashboardIcon isActive={isActive} />
                   ) : IconComponent ? (
-                    <IconComponent size={24} strokeWidth={1.5} />
+                    <IconComponent size={24} strokeWidth={isActive ? 2 : 1.5} />
                   ) : null}
                 </div>
                 
-                {/* Label - Hidden for active center item */}
+                {/* Enhanced Label with Glass Background */}
                 {(!isActive || !isCenter) && (
-                  <span className="text-xs font-medium tracking-wide opacity-80">
+                  <span className={`text-xs font-medium tracking-wide transition-all duration-300 ${
+                    isActive ? 'opacity-100 font-semibold' : 'opacity-70 group-hover:opacity-100'
+                  }`}>
                     {route.label}
                   </span>
+                )}
+                
+                {/* Active Indicator */}
+                {isActive && !isCenter && (
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-wedding-navy rounded-full animate-scale-in" />
                 )}
               </button>
             );

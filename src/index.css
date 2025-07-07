@@ -158,10 +158,18 @@
 
   .dark .glass-primary {
     background: hsl(var(--glass-black) / var(--glass-opacity-primary));
-    border: 1px solid hsl(var(--glass-white) / 0.1);
+    border: 1px solid hsl(var(--glass-white) / 0.15);
     box-shadow: 
-      0 8px 32px hsl(var(--glass-black) / 0.24),
-      inset 0 0 0 1px hsl(var(--glass-white) / 0.1);
+      0 8px 32px hsl(var(--glass-black) / 0.32),
+      0 0 0 1px hsl(var(--glass-white) / 0.15),
+      inset 0 1px 0 hsl(var(--glass-white) / 0.1);
+  }
+
+  .dark .glass-primary::before {
+    background: linear-gradient(135deg, 
+      hsl(var(--glass-white) / 0.05) 0%, 
+      transparent 50%, 
+      hsl(var(--glass-white) / 0.02) 100%);
   }
 
   .glass-secondary {
@@ -202,9 +210,31 @@
 
   /* Glass Performance Optimization */
   .glass-animated {
-    will-change: backdrop-filter, transform;
+    will-change: backdrop-filter, transform, opacity;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
+    animation: glass-shimmer 3s ease-in-out infinite;
+  }
+
+  /* Glass Shimmer Effect */
+  @keyframes glass-shimmer {
+    0%, 100% {
+      background-position: -200% 0;
+    }
+    50% {
+      background-position: 200% 0;
+    }
+  }
+
+  .glass-shimmer {
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      hsl(var(--glass-white) / 0.1) 50%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+    animation: glass-shimmer 3s ease-in-out infinite;
   }
 
   /* Typography Classes */
