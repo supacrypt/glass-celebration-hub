@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import DashboardPopup from './DashboardPopup';
 import { useAuth } from '@/hooks/useAuth';
+import HomePopup from './popups/HomePopup';
+import VenuePopup from './popups/VenuePopup';
+import DashboardPopup from './popups/DashboardPopup';
+import SocialPopup from './popups/SocialPopup';
+import GalleryPopup from './popups/GalleryPopup';
 
 interface NavigationProps {
   activeRoute: string;
@@ -8,7 +12,7 @@ interface NavigationProps {
 }
 
 const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate }) => {
-  const [isDashboardOpen, setIsDashboardOpen] = useState(false);
+  const [activePopup, setActivePopup] = useState<string | null>(null);
   const { userRole } = useAuth();
   const routes = [
     { id: 'home', label: 'Home' },
@@ -44,7 +48,7 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
         return (
           <button
             key={route.id}
-            onClick={() => route.id === 'dashboard' ? setIsDashboardOpen(true) : onNavigate(route.id)}
+            onClick={() => route.id === 'dashboard' ? setActivePopup('dashboard') : onNavigate(route.id)}
             className="flex flex-col items-center text-decoration-none transition-all duration-300 cursor-pointer relative"
             style={{
               color: '#7a736b',
@@ -240,11 +244,11 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
         );
       })}
       
-      <DashboardPopup
-        isOpen={isDashboardOpen}
-        onClose={() => setIsDashboardOpen(false)}
-        userRole={userRole?.role || 'guest'}
-      />
+      <HomePopup isOpen={activePopup === 'home'} onClose={() => setActivePopup(null)} />
+      <VenuePopup isOpen={activePopup === 'venue'} onClose={() => setActivePopup(null)} />
+      <DashboardPopup isOpen={activePopup === 'dashboard'} onClose={() => setActivePopup(null)} />
+      <SocialPopup isOpen={activePopup === 'social'} onClose={() => setActivePopup(null)} />
+      <GalleryPopup isOpen={activePopup === 'gallery'} onClose={() => setActivePopup(null)} />
     </nav>
   );
 };
