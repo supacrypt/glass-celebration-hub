@@ -1,12 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import GlassCard from '@/components/GlassCard';
-import { MapPin, Clock, Car, Phone, ArrowRight, Calendar, Heart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const Venue: React.FC = () => {
-  const navigate = useNavigate();
-
   const venues = [
     {
       id: 'ben-ean',
@@ -15,7 +10,7 @@ const Venue: React.FC = () => {
       date: 'October 5, 2025',
       time: '2:30 PM arrival for 3:00 PM start',
       description: 'Ceremony on Garden Terrace Lawn, followed by cocktails and reception until midnight',
-      color: 'glass-pink',
+      dotColor: 'dot-pink',
       path: '/venue/ben-ean'
     },
     {
@@ -25,7 +20,7 @@ const Venue: React.FC = () => {
       date: 'October 4, 2025',
       time: '4:00 PM - 8:00 PM',
       description: 'Casual drinks and dinner at the pub. Come and go as you please!',
-      color: 'glass-blue',
+      dotColor: 'dot-blue',
       path: '/venue/prince-of-mereweather'
     },
     {
@@ -35,285 +30,340 @@ const Venue: React.FC = () => {
       date: 'October 6, 2025',
       time: 'From 11:00 AM onwards',
       description: 'Casual beach hangout with coffee and food from the kiosk',
-      color: 'glass-green',
+      dotColor: 'dot-green',
       path: '/venue/newcastle-beach'
     }
   ];
 
   return (
-    <div className="min-h-screen px-4 sm:px-5 pt-8 sm:pt-12 pb-20 sm:pb-24">
-      {/* Header */}
-      <div className="text-center mb-8 animate-fade-up max-w-4xl mx-auto">
-        <h1 className="wedding-heading text-wedding-navy mb-3">
-          Venues & Locations
-        </h1>
-        <p className="wedding-body text-muted-foreground">
-          All the places where we'll be celebrating
-        </p>
-      </div>
+    <div className="min-h-screen venue-page" style={{ background: '#e6ded4', padding: '40px 20px', position: 'relative', overflow: 'hidden' }}>
+      {/* Background decoration */}
+      <div 
+        style={{
+          content: '',
+          position: 'fixed',
+          top: '-50%',
+          left: '-50%',
+          width: '200%',
+          height: '200%',
+          background: `
+            radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(240, 147, 251, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 80%, rgba(250, 112, 154, 0.1) 0%, transparent 50%)
+          `,
+          animation: 'float 20s infinite ease-in-out',
+          zIndex: -1
+        }}
+      />
+      
+      <div className="container" style={{ maxWidth: '600px', margin: '0 auto' }}>
+        {/* Page Header */}
+        <div className="page-header" style={{ textAlign: 'center', marginBottom: '50px' }}>
+          <h1 className="page-title" style={{ 
+            fontSize: '36px', 
+            fontWeight: '700', 
+            color: '#2d3f51', 
+            marginBottom: '10px', 
+            letterSpacing: '-1px' 
+          }}>
+            Venues & Locations
+          </h1>
+          <p className="page-subtitle" style={{ 
+            fontSize: '16px', 
+            color: '#7a736b', 
+            fontWeight: '400' 
+          }}>
+            All the places where we'll be celebrating
+          </p>
+        </div>
 
-      {/* Venue Cards */}
-      <div className="space-y-6 mb-8 max-w-4xl mx-auto">
-        {venues.map((venue, index) => (
-          <GlassCard 
-            key={venue.id}
-            className="p-6 animate-fade-up cursor-pointer hover:scale-[1.02] transition-all duration-300 glass-animated" 
-            style={{ animationDelay: `${0.2 + (index * 0.1)}s` }}
-            onClick={() => navigate(venue.path)}
-            variant="secondary"
-          >
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className={`w-4 h-4 rounded-full ${
-                    venue.color === 'glass-pink' ? 'bg-glass-pink/60' :
-                    venue.color === 'glass-blue' ? 'bg-glass-blue/60' :
-                    'bg-glass-green/60'
-                  }`} />
-                  <h2 className="text-xl font-semibold text-wedding-navy">
+        {/* Venue Cards */}
+        <div className="venues-container" style={{ display: 'flex', flexDirection: 'column', gap: '25px', marginBottom: '40px' }}>
+          {venues.map((venue, index) => (
+            <Link 
+              key={venue.id}
+              to={venue.path}
+              className="venue-card"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
+                backdropFilter: 'blur(15px)',
+                WebkitBackdropFilter: 'blur(15px)',
+                borderRadius: '25px',
+                padding: '28px',
+                position: 'relative',
+                overflow: 'hidden',
+                boxShadow: `
+                  20px 20px 40px rgba(163, 155, 146, 0.3),
+                  -20px -20px 40px rgba(255, 255, 255, 0.8),
+                  inset 1px 1px 3px rgba(255, 255, 255, 0.6),
+                  inset -1px -1px 3px rgba(163, 155, 146, 0.15)
+                `,
+                border: '1px solid rgba(255, 255, 255, 0.4)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                color: 'inherit',
+                display: 'block',
+                animation: `fadeIn 0.6s ease-out ${0.1 + index * 0.1}s backwards`
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-5px) scale(1.02)';
+                e.currentTarget.style.boxShadow = `
+                  25px 25px 50px rgba(163, 155, 146, 0.35),
+                  -25px -25px 50px rgba(255, 255, 255, 0.85),
+                  inset 1px 1px 3px rgba(255, 255, 255, 0.7),
+                  inset -1px -1px 3px rgba(163, 155, 146, 0.2)
+                `;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.boxShadow = `
+                  20px 20px 40px rgba(163, 155, 146, 0.3),
+                  -20px -20px 40px rgba(255, 255, 255, 0.8),
+                  inset 1px 1px 3px rgba(255, 255, 255, 0.6),
+                  inset -1px -1px 3px rgba(163, 155, 146, 0.15)
+                `;
+              }}
+            >
+              {/* Glass shine effect */}
+              <div 
+                className="shine-effect"
+                style={{
+                  content: '',
+                  position: 'absolute',
+                  top: '-50%',
+                  left: '-50%',
+                  width: '200%',
+                  height: '200%',
+                  background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%)',
+                  transform: 'rotate(45deg)',
+                  transition: 'all 0.6s',
+                  opacity: 0,
+                  pointerEvents: 'none'
+                }}
+              />
+              
+              <div className="card-header" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '20px' }}>
+                <div className="card-content" style={{ flex: 1 }}>
+                  <div className="venue-name" style={{ 
+                    fontSize: '20px', 
+                    fontWeight: '600', 
+                    color: '#2d3f51', 
+                    marginBottom: '8px', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '10px' 
+                  }}>
+                    <span 
+                      className={`venue-dot ${venue.dotColor}`}
+                      style={{
+                        width: '14px',
+                        height: '14px',
+                        borderRadius: '50%',
+                        display: 'inline-block',
+                        position: 'relative',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                        background: venue.dotColor === 'dot-pink' 
+                          ? 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+                          : venue.dotColor === 'dot-blue'
+                          ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                          : 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)'
+                      }}
+                    />
                     {venue.title}
-                  </h2>
-                </div>
-                <p className="text-glass-blue font-medium mb-3">{venue.subtitle}</p>
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-muted-foreground" />
-                    <p className="text-sm font-medium text-wedding-navy">{venue.date}</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">{venue.time}</p>
+                  <div className="event-type" style={{ 
+                    fontSize: '15px', 
+                    color: '#667eea', 
+                    fontWeight: '500', 
+                    marginBottom: '15px' 
+                  }}>
+                    {venue.subtitle}
+                  </div>
+                  
+                  <div className="info-row" style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '12px', 
+                    marginBottom: '12px', 
+                    fontSize: '14px', 
+                    color: '#5a5651' 
+                  }}>
+                    <div className="info-icon" style={{
+                      width: '32px',
+                      height: '32px',
+                      background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
+                      borderRadius: '10px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: 'inset 2px 2px 4px rgba(163, 155, 146, 0.2), inset -2px -2px 4px rgba(255, 255, 255, 0.8)',
+                      fontSize: '16px'
+                    }}>
+                      📅
+                    </div>
+                    <span>{venue.date}</span>
+                  </div>
+                  
+                  <div className="info-row" style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '12px', 
+                    marginBottom: '12px', 
+                    fontSize: '14px', 
+                    color: '#5a5651' 
+                  }}>
+                    <div className="info-icon" style={{
+                      width: '32px',
+                      height: '32px',
+                      background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
+                      borderRadius: '10px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: 'inset 2px 2px 4px rgba(163, 155, 146, 0.2), inset -2px -2px 4px rgba(255, 255, 255, 0.8)',
+                      fontSize: '16px'
+                    }}>
+                      🕐
+                    </div>
+                    <span>{venue.time}</span>
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {venue.description}
-                </p>
-              </div>
-              <div className="ml-4 flex-shrink-0">
-                <div className="w-10 h-10 rounded-full glass-secondary flex items-center justify-center">
-                  <ArrowRight className="w-5 h-5 text-glass-blue" />
+                
+                <div className="arrow-btn" style={{
+                  width: '40px',
+                  height: '40px',
+                  background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '5px 5px 10px rgba(163, 155, 146, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.7)',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  flexShrink: 0
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#667eea">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                  </svg>
                 </div>
               </div>
-            </div>
-          </GlassCard>
-        ))}
-      </div>
-
-      {/* Main Venue Details */}
-      <div className="max-w-4xl mx-auto space-y-6">
-        <GlassCard className="mb-6 p-6 sm:p-8 animate-fade-up glass-shimmer" style={{ animationDelay: '0.2s' }} variant="frosted">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-glass-pink/20 flex items-center justify-center flex-shrink-0">
-              <MapPin className="w-6 h-6 text-glass-pink" />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-xl sm:text-2xl font-semibold text-wedding-navy mb-3">
-                Ben Ean
-              </h2>
-              <div className="space-y-2 mb-4">
-                <p className="text-muted-foreground">
-                  119 McDonalds Rd<br />
-                  Pokolbin NSW 2320
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Approximately 1 hr drive from Newcastle
-                </p>
+              
+              <div className="description" style={{
+                marginTop: '20px',
+                padding: '15px',
+                background: 'linear-gradient(135deg, rgba(230, 222, 214, 0.3) 0%, rgba(245, 237, 228, 0.3) 100%)',
+                borderRadius: '15px',
+                fontSize: '14px',
+                color: '#5a5651',
+                lineHeight: '1.6',
+                boxShadow: 'inset 3px 3px 6px rgba(163, 155, 146, 0.15), inset -3px -3px 6px rgba(255, 255, 255, 0.6)',
+                backdropFilter: 'blur(5px)'
+              }}>
+                {venue.description}
               </div>
-              <a 
-                href="https://www.benean.com.au/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-glass-blue font-medium hover:underline transition-colors"
-              >
-                Visit Website 
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-        </GlassCard>
+            </Link>
+          ))}
+        </div>
 
-        {/* Schedule */}
-        <GlassCard className="mb-6 p-6 animate-fade-up" style={{ animationDelay: '0.3s' }} variant="secondary">
-          <div className="flex items-center gap-3 mb-6">
-            <Clock className="w-6 h-6 text-glass-blue" />
-            <h2 className="text-xl font-semibold text-wedding-navy">Schedule</h2>
+        {/* Location Details Card */}
+        <div className="location-card" style={{
+          background: 'linear-gradient(135deg, rgba(240, 230, 255, 0.25) 0%, rgba(240, 230, 255, 0.15) 100%)',
+          backdropFilter: 'blur(15px)',
+          WebkitBackdropFilter: 'blur(15px)',
+          borderRadius: '25px',
+          padding: '30px',
+          position: 'relative',
+          overflow: 'hidden',
+          boxShadow: `
+            20px 20px 40px rgba(163, 155, 146, 0.3),
+            -20px -20px 40px rgba(255, 255, 255, 0.8),
+            inset 1px 1px 3px rgba(255, 255, 255, 0.6),
+            inset -1px -1px 3px rgba(163, 155, 146, 0.15)
+          `,
+          border: '1px solid rgba(255, 255, 255, 0.4)',
+          transition: 'all 0.3s ease',
+          animation: 'fadeIn 0.6s ease-out 0.4s backwards'
+        }}>
+          <div className="location-header" style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
+            <div className="location-icon" style={{
+              width: '50px',
+              height: '50px',
+              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              borderRadius: '15px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '24px',
+              boxShadow: '5px 5px 10px rgba(240, 87, 108, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.7), inset 2px 2px 5px rgba(255, 255, 255, 0.3)'
+            }}>
+              📍
+            </div>
+            <h2 className="location-title" style={{ fontSize: '22px', fontWeight: '600', color: '#2d3f51' }}>
+              Ben Ean
+            </h2>
           </div>
           
-          <div className="space-y-4">
-            <div className="mb-4 p-4 bg-glass-blue/10 rounded-xl">
-              <p className="text-sm font-medium text-wedding-navy">
-                Arrive at Ben Ean at 2:30 PM for a 3:00 PM start
-              </p>
-            </div>
-            
-            <div className="space-y-3">
-              <div className="flex justify-between items-center py-4 px-4 glass-secondary rounded-lg hover:bg-secondary/30 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-glass-pink"></div>
-                  <div>
-                    <p className="font-medium text-wedding-navy">Ceremony</p>
-                    <p className="text-sm text-muted-foreground">Garden Terrace Lawn</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="font-medium text-wedding-navy">3:00 PM</p>
-                </div>
-              </div>
-              
-              <div className="flex justify-between items-center py-4 px-4 glass-secondary rounded-lg hover:bg-secondary/30 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-glass-blue"></div>
-                  <div>
-                    <p className="font-medium text-wedding-navy">Cocktail Hour</p>
-                    <p className="text-sm text-muted-foreground">After ceremony</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="font-medium text-wedding-navy">After Ceremony</p>
-                </div>
-              </div>
-              
-              <div className="flex justify-between items-center py-4 px-4 glass-secondary rounded-lg hover:bg-secondary/30 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-glass-green"></div>
-                  <div>
-                    <p className="font-medium text-wedding-navy">Reception</p>
-                    <p className="text-sm text-muted-foreground">At Ben Ean - conclude at midnight</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="font-medium text-wedding-navy">Until 12:00 AM</p>
-                </div>
-              </div>
-            </div>
+          <div className="address-info" style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
+            <span className="address-line" style={{ color: '#5a5651', fontSize: '15px', lineHeight: '1.5' }}>
+              119 McDonalds Rd
+            </span>
+            <span className="address-line" style={{ color: '#5a5651', fontSize: '15px', lineHeight: '1.5' }}>
+              Pokolbin NSW 2320
+            </span>
           </div>
-        </GlassCard>
-
-        {/* Transport & Practical Info */}
-        <GlassCard className="mb-6 p-6 animate-fade-up" style={{ animationDelay: '0.4s' }}>
-          <div className="flex items-center gap-3 mb-6">
-            <Car className="w-6 h-6 text-glass-green" />
-            <h3 className="text-xl font-semibold text-wedding-navy">Transport</h3>
-          </div>
-          <div className="space-y-6 text-sm">
-            <div className="p-4 sm:p-6 bg-glass-green/10 rounded-xl">
-              <div className="flex items-start gap-3 mb-3">
-                <div className="w-8 h-8 rounded-full bg-glass-green/20 flex items-center justify-center flex-shrink-0">
-                  <Car className="w-4 h-4 text-glass-green" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-semibold text-wedding-navy mb-2">Coach Service Available</p>
-                  <p className="text-muted-foreground mb-3">
-                    Two coaches will transport guests to and from the wedding:
-                  </p>
-                  <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-2 mb-3">
-                    <li>One coach from Newcastle City</li>
-                    <li>One coach from Hunter Valley accommodation</li>
-                  </ul>
-                  <div className="inline-flex items-center gap-2 px-3 py-2 bg-glass-green/10 rounded-lg">
-                    <div className="w-2 h-2 bg-glass-green rounded-full"></div>
-                    <span className="text-xs font-medium text-glass-green">
-                      First-come, first-served basis - indicate in RSVP
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="flex items-center gap-3 p-4 glass-secondary rounded-lg">
-                <Car className="w-5 h-5 text-glass-blue" />
-                <div>
-                  <p className="font-medium text-wedding-navy">Driving?</p>
-                  <p className="text-muted-foreground text-sm">Plenty of on-site parking available</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3 p-4 bg-amber-50/50 border border-amber-200/50 rounded-lg">
-                <div className="w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">!</span>
-                </div>
-                <div>
-                  <p className="font-medium text-amber-800 text-sm">Limited Uber</p>
-                  <p className="text-amber-700 text-xs">Consider coach service</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </GlassCard>
-
-        {/* Dress Code */}
-        <GlassCard className="mb-6 p-6 animate-fade-up glass-animated" style={{ animationDelay: '0.5s' }} variant="secondary">
-          <h3 className="text-xl font-semibold mb-6 text-wedding-navy flex items-center gap-3">
-            <Heart className="w-6 h-6 text-glass-pink" />
-            Dress Code
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm mb-6">
-            <div className="p-4 glass-secondary rounded-lg">
-              <p className="font-semibold text-wedding-navy mb-3 flex items-center gap-2">
-                <span className="text-glass-blue">👔</span>
-                For Him:
-              </p>
-              <p className="text-muted-foreground leading-relaxed">Suits, dress chinos, button up shirt and optional tie. We love a pocket kerchief!</p>
-            </div>
-            <div className="p-4 glass-secondary rounded-lg">
-              <p className="font-semibold text-wedding-navy mb-3 flex items-center gap-2">
-                <span className="text-glass-pink">👗</span>
-                For Her:
-              </p>
-              <p className="text-muted-foreground leading-relaxed">Classy dress, pantsuit or jumpsuit.</p>
-            </div>
-          </div>
-          <div className="text-center p-4 bg-glass-pink/10 rounded-xl">
-            <p className="font-semibold text-glass-pink text-lg">Dapper/Cocktail Attire</p>
-          </div>
-        </GlassCard>
-
-        {/* Accommodation */}
-        <GlassCard 
-          className="p-6 sm:p-8 animate-fade-up glass-shimmer" 
-          style={{ animationDelay: '0.6s' }}
-          variant="frosted"
-        >
-          <h3 className="text-xl font-semibold mb-6 text-wedding-navy flex items-center gap-3">
-            <MapPin className="w-6 h-6 text-glass-green" />
-            Accommodation Recommendations
-          </h3>
           
-          <div className="space-y-8 text-sm">
-            <div>
-              <h4 className="font-semibold text-wedding-navy mb-4 text-lg">Newcastle Area</h4>
-              <p className="text-muted-foreground mb-4">Cooks Hill and Newcastle (East/West) are the most central suburbs.</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {['Ibis Newcastle', 'Holiday Inn Newcastle', 'Kingsley Crystalbrook', 'QT Newcastle'].map((hotel, i) => (
-                  <div key={hotel} className="flex items-center justify-between p-3 glass-secondary rounded-lg hover:bg-secondary/30 transition-colors">
-                    <span className="font-medium text-wedding-navy">{hotel}</span>
-                    <div className="w-2 h-2 rounded-full bg-glass-blue"></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold text-wedding-navy mb-4 text-lg">Hunter Valley</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {['Elfin Hill Vineyard Accommodation', 'Oaks Cypress Lakes Resort', 'Chateau Elan'].map((hotel, i) => (
-                  <div key={hotel} className="flex items-center justify-between p-3 glass-secondary rounded-lg hover:bg-secondary/30 transition-colors">
-                    <span className="font-medium text-wedding-navy">{hotel}</span>
-                    <div className="w-2 h-2 rounded-full bg-glass-green"></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div className="p-4 bg-glass-blue/10 rounded-xl">
-              <p className="text-muted-foreground text-center">
-                <span className="font-medium">💡 Tip:</span> For houses or apartments, check Stayz, Airbnb, or Follow
-              </p>
-            </div>
+          <div className="distance-info" style={{
+            background: 'linear-gradient(135deg, rgba(245, 237, 228, 0.5) 0%, rgba(230, 222, 214, 0.5) 100%)',
+            borderRadius: '15px',
+            padding: '12px 16px',
+            fontSize: '14px',
+            color: '#7a736b',
+            textAlign: 'center',
+            marginBottom: '20px',
+            boxShadow: 'inset 2px 2px 4px rgba(163, 155, 146, 0.2), inset -2px -2px 4px rgba(255, 255, 255, 0.7)'
+          }}>
+            Approximately 1 hr drive from Newcastle
           </div>
-        </GlassCard>
+          
+          <a 
+            href="https://www.benean.com.au/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="website-btn" 
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              padding: '12px 24px',
+              borderRadius: '20px',
+              textDecoration: 'none',
+              fontWeight: '500',
+              fontSize: '14px',
+              boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3), 5px 5px 10px rgba(163, 155, 146, 0.2)',
+              transition: 'all 0.3s ease',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4), 7px 7px 14px rgba(163, 155, 146, 0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3), 5px 5px 10px rgba(163, 155, 146, 0.2)';
+            }}
+          >
+            Visit Website
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+            </svg>
+          </a>
+        </div>
       </div>
+
     </div>
   );
 };
