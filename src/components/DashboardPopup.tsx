@@ -62,7 +62,7 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
     <>
       {/* Overlay */}
       <div 
-        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[998] transition-opacity duration-300"
+        className="fixed inset-0 z-[998] transition-opacity duration-300"
         onClick={onClose}
       />
       
