@@ -14,7 +14,7 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
     { id: 'home', label: 'Home' },
     { id: 'venue', label: 'Venue' },
     { id: 'dashboard', label: 'Dashboard', isCenter: true },
-    { id: 'social', label: 'Messages' },
+    { id: 'social', label: 'Social' },
     { id: 'gallery', label: 'Gallery' },
   ];
 
@@ -196,7 +196,7 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
               </div>
             )}
 
-            {/* Messages Icon */}
+            {/* Social Icon */}
             {route.id === 'social' && !isCenter && (
               <div 
                 className="w-6 h-6 mb-1 flex items-center justify-center" 
@@ -205,7 +205,7 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
                 }}
               >
                 <svg className="w-5.5 h-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                  <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                 </svg>
               </div>
             )}

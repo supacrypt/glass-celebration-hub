@@ -1,7 +1,5 @@
 import React, { ReactNode } from 'react';
 import GlassNavigation from './GlassNavigation';
-import ProfileDropdown from './ProfileDropdown';
-import { useRealTimeNotifications } from '@/hooks/useRealTimeNotifications';
 
 interface GlassLayoutProps {
   children: ReactNode;
@@ -16,14 +14,9 @@ const GlassLayout: React.FC<GlassLayoutProps> = ({
   onNavigate, 
   showNavigation = true 
 }) => {
-  // Initialize real-time notifications
-  useRealTimeNotifications();
   return (
     <div className="min-h-screen relative">
       {/* Background Mesh Gradient - Applied globally in CSS */}
-      
-      {/* Profile Dropdown */}
-      <ProfileDropdown />
       
       {/* Main Content Area */}
       <main className={`relative ${showNavigation ? 'pb-glass-nav' : ''}`}>

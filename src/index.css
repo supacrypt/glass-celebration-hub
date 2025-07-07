@@ -409,11 +409,6 @@
     animation: glass-shimmer 3s ease-in-out infinite;
   }
 
-  /* Glass Navigation Bottom Padding */
-  .pb-glass-nav {
-    padding-bottom: 6rem; /* 96px for glass navigation clearance */
-  }
-
   /* Glass Shimmer Effect */
   @keyframes glass-shimmer {
     0%, 100% {
