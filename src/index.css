@@ -2,95 +2,119 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* Glassmorphism Wedding App Design System
+   All colors MUST be HSL. Glass effects optimized for 60fps performance.
 */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Wedding App Brand Colors - HSL */
+    --wedding-navy: 210 22% 22%;           /* #2C3E50 */
+    --wedding-cream: 40 33% 94%;           /* #F5F2ED */
+    --wedding-navy-light: 210 22% 35%;     /* Lighter navy */
+    --wedding-cream-dark: 40 20% 85%;      /* Darker cream */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Glass Effect Colors - Optimized for transparency */
+    --glass-white: 0 0% 100%;              /* Pure white base */
+    --glass-black: 0 0% 0%;                /* Pure black base */
+    --glass-navy: 210 22% 22%;             /* Navy glass tint */
+    --glass-cream: 40 33% 94%;             /* Cream glass tint */
+
+    /* Glass Accent Tints - Subtle colors for glass overlays */
+    --glass-blue-tint: 220 68% 50%;        /* #3B82F6 */
+    --glass-purple-tint: 256 68% 58%;      /* #8B5CF6 */
+    --glass-pink-tint: 330 68% 60%;        /* #EC4899 */
+    --glass-green-tint: 142 76% 47%;       /* #22C55E */
+
+    /* Core Design System Colors */
+    --background: 40 33% 94%;              /* Wedding cream */
+    --foreground: 210 22% 22%;             /* Wedding navy */
+
+    --card: 0 0% 100%;                     /* Pure white for glass base */
+    --card-foreground: 210 22% 22%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 210 22% 22%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 210 22% 22%;                /* Wedding navy */
+    --primary-foreground: 40 33% 94%;      /* Wedding cream */
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 98%;                 /* Light glass base */
+    --secondary-foreground: 210 22% 22%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 14% 89%;                  /* Muted glass */
+    --muted-foreground: 210 22% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 220 68% 50%;                 /* Glass blue accent */
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 210 14% 89%;                 /* Subtle borders for glass */
+    --input: 210 14% 89%;
+    --ring: 220 68% 50%;                   /* Focus ring */
 
-    --radius: 0.5rem;
+    --radius: 1rem;                        /* Rounded corners for glass */
 
-    --sidebar-background: 0 0% 98%;
+    /* Glass Effect Variables */
+    --glass-blur-primary: 20px;            /* Main glass blur */
+    --glass-blur-secondary: 10px;          /* Secondary glass blur */
+    --glass-blur-frosted: 40px;            /* Maximum blur */
+    
+    --glass-opacity-primary: 0.8;          /* Main glass opacity */
+    --glass-opacity-secondary: 0.6;        /* Secondary glass opacity */
+    --glass-opacity-frosted: 0.4;          /* Frosted glass opacity */
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    /* Background Gradients */
+    --gradient-mesh: 
+      radial-gradient(at 30% 20%, hsl(220 68% 50% / 0.1) 0px, transparent 50%),
+      radial-gradient(at 80% 80%, hsl(256 68% 58% / 0.1) 0px, transparent 50%),
+      radial-gradient(at 20% 70%, hsl(330 68% 60% / 0.1) 0px, transparent 50%);
 
-    --sidebar-primary: 240 5.9% 10%;
+    --gradient-background: linear-gradient(135deg, hsl(40 33% 96%) 0%, hsl(40 20% 92%) 100%);
 
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Animation Easing */
+    --ease-glass: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark Mode Overrides */
+    --background: 210 22% 8%;              /* Dark navy */
+    --foreground: 40 33% 94%;              /* Light cream */
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 210 22% 12%;                   /* Dark glass base */
+    --card-foreground: 40 33% 94%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 210 22% 12%;
+    --popover-foreground: 40 33% 94%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 40 33% 94%;                 /* Cream in dark mode */
+    --primary-foreground: 210 22% 8%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 210 22% 15%;              /* Dark glass */
+    --secondary-foreground: 40 33% 94%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 210 22% 15%;
+    --muted-foreground: 210 14% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 40 33% 94%;                  /* Cream accent in dark */
+    --accent-foreground: 210 22% 8%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --border: 210 22% 18%;
+    --input: 210 22% 18%;
+    --ring: 40 33% 94%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Dark Mode Gradients */
+    --gradient-mesh:
+      radial-gradient(at 30% 20%, hsl(220 68% 50% / 0.2) 0px, transparent 50%),
+      radial-gradient(at 80% 80%, hsl(256 68% 58% / 0.2) 0px, transparent 50%),
+      radial-gradient(at 20% 70%, hsl(330 68% 60% / 0.2) 0px, transparent 50%);
+
+    --gradient-background: linear-gradient(135deg, hsl(210 22% 6%) 0%, hsl(210 22% 12%) 100%);
   }
 }
 
@@ -101,5 +125,172 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--gradient-background);
+    background-attachment: fixed;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-mesh);
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
+@layer components {
+  /* Glass Effect Base Classes */
+  .glass-primary {
+    background: hsl(var(--glass-white) / var(--glass-opacity-primary));
+    backdrop-filter: blur(var(--glass-blur-primary));
+    -webkit-backdrop-filter: blur(var(--glass-blur-primary));
+    border: 1px solid hsl(var(--glass-white) / 0.2);
+    box-shadow: 
+      0 8px 32px hsl(var(--glass-black) / 0.08),
+      inset 0 0 0 1px hsl(var(--glass-white) / 0.2);
+  }
+
+  .dark .glass-primary {
+    background: hsl(var(--glass-black) / var(--glass-opacity-primary));
+    border: 1px solid hsl(var(--glass-white) / 0.1);
+    box-shadow: 
+      0 8px 32px hsl(var(--glass-black) / 0.24),
+      inset 0 0 0 1px hsl(var(--glass-white) / 0.1);
+  }
+
+  .glass-secondary {
+    background: hsl(var(--glass-white) / var(--glass-opacity-secondary));
+    backdrop-filter: blur(var(--glass-blur-secondary));
+    -webkit-backdrop-filter: blur(var(--glass-blur-secondary));
+    border: 1px solid hsl(var(--glass-white) / 0.15);
+    box-shadow: 
+      0 4px 16px hsl(var(--glass-black) / 0.04),
+      inset 0 0 0 1px hsl(var(--glass-white) / 0.1);
+  }
+
+  .dark .glass-secondary {
+    background: hsl(var(--glass-black) / var(--glass-opacity-secondary));
+    border: 1px solid hsl(var(--glass-white) / 0.08);
+    box-shadow: 
+      0 4px 16px hsl(var(--glass-black) / 0.32),
+      inset 0 0 0 1px hsl(var(--glass-white) / 0.08);
+  }
+
+  .glass-frosted {
+    background: hsl(var(--glass-white) / var(--glass-opacity-frosted));
+    backdrop-filter: blur(var(--glass-blur-frosted));
+    -webkit-backdrop-filter: blur(var(--glass-blur-frosted));
+    border: 1px solid hsl(var(--glass-white) / 0.3);
+    box-shadow: 
+      0 16px 40px hsl(var(--glass-black) / 0.1),
+      inset 0 0 0 1px hsl(var(--glass-white) / 0.3);
+  }
+
+  .dark .glass-frosted {
+    background: hsl(var(--glass-black) / var(--glass-opacity-frosted));
+    border: 1px solid hsl(var(--glass-white) / 0.15);
+    box-shadow: 
+      0 16px 40px hsl(var(--glass-black) / 0.4),
+      inset 0 0 0 1px hsl(var(--glass-white) / 0.15);
+  }
+
+  /* Glass Performance Optimization */
+  .glass-animated {
+    will-change: backdrop-filter, transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+
+  /* Typography Classes */
+  .wedding-display {
+    @apply text-6xl md:text-7xl font-light tracking-tight;
+  }
+
+  .wedding-heading {
+    @apply text-3xl md:text-4xl font-medium tracking-tight;
+  }
+
+  .wedding-subheading {
+    @apply text-xl md:text-2xl font-normal;
+  }
+
+  .wedding-body {
+    @apply text-base font-normal leading-relaxed;
+  }
+
+  .wedding-caption {
+    @apply text-sm font-medium tracking-wide uppercase;
+  }
+
+  /* Animation Classes */
+  .animate-glass-float {
+    animation: glass-float 6s ease-in-out infinite;
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.8s var(--ease-glass) forwards;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.5s var(--ease-bounce) forwards;
+  }
+}
+
+@layer utilities {
+  /* Glass Fallbacks for browsers without backdrop-filter */
+  @supports not (backdrop-filter: blur(20px)) {
+    .glass-primary {
+      background: hsl(var(--glass-white) / 0.95);
+    }
+    
+    .dark .glass-primary {
+      background: hsl(var(--glass-black) / 0.95);
+    }
+    
+    .glass-secondary {
+      background: hsl(var(--glass-white) / 0.85);
+    }
+    
+    .dark .glass-secondary {
+      background: hsl(var(--glass-black) / 0.85);
+    }
+  }
+}
+
+/* Keyframe Animations */
+@keyframes glass-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
