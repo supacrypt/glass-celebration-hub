@@ -35,16 +35,20 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
   ];
 
   return (
-    <div className="fixed bottom-6 left-5 right-5 z-50 pointer-events-none">
-      <div className="relative h-20 pointer-events-auto">
-        {/* Enhanced Glass Navigation Container with Perfect Curve */}
-        <div className="absolute inset-0 glass-primary rounded-glass-xl shadow-glass-lg backdrop-blur-glass-lg border border-white/20">
-          <div className="absolute inset-0 bg-gradient-to-r from-glass-blue/5 via-transparent to-glass-purple/5 rounded-glass-xl" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent rounded-glass-xl" />
+    <div className="fixed bottom-6 left-4 right-4 z-50">
+      <div className="relative h-20">
+        {/* Curved Glass Container */}
+        <div className="absolute inset-0 glass-primary backdrop-blur-2xl border border-white/20 shadow-2xl"
+             style={{
+               clipPath: 'path("M 20 60 Q 20 20 40 20 L 130 20 Q 150 20 160 8 Q 170 -4 187.5 -4 Q 205 -4 215 8 Q 225 20 245 20 L 335 20 Q 355 20 355 60 L 355 60 Q 355 80 335 80 L 40 80 Q 20 80 20 60 Z")',
+               background: 'rgba(255, 255, 255, 0.1)',
+               backdropFilter: 'blur(20px)'
+             }}>
+          <div className="absolute inset-0 bg-gradient-to-r from-glass-blue/10 via-transparent to-glass-purple/10" />
         </div>
         
         {/* Navigation Items */}
-        <div className="relative h-full flex items-end justify-around px-6 pb-3">
+        <div className="relative h-full flex items-center justify-around px-6">
           {routes.map((route) => {
             const isActive = activeRoute === route.id;
             const isCenter = route.isCenter;
@@ -54,51 +58,41 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
               <button
                 key={route.id}
                 onClick={() => onNavigate(route.id)}
-                className={`
-                  flex flex-col items-center justify-center gap-1 h-12 flex-1 
-                  transition-all duration-500 ease-out relative group
-                  ${isCenter ? '-mb-6' : ''}
-                  ${isActive && !isCenter ? 'text-wedding-navy scale-110' : 'text-muted-foreground hover:text-wedding-navy-light'}
-                  hover:scale-105 active:scale-95
-                `}
+                className={`flex flex-col items-center justify-center gap-1 transition-all duration-300 relative ${
+                  isCenter ? 'mt-[-16px]' : 'mt-2'
+                }`}
               >
-                {/* Enhanced Center Button with Glass Effect */}
-                {isCenter && isActive && (
-                  <>
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-16 h-16 bg-wedding-navy rounded-full shadow-glass-lg animate-scale-in" />
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-16 h-16 bg-gradient-to-t from-wedding-navy to-wedding-navy-light rounded-full opacity-90" />
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-16 h-16 border border-white/20 rounded-full" />
-                  </>
-                )}
-                
-                {/* Hover Effect for Non-Center Items */}
-                {!isCenter && (
-                  <div className="absolute inset-0 bg-white/5 rounded-glass opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                )}
-                
-                {/* Icon */}
-                <div className={`relative z-10 transition-all duration-300 ${
-                  isActive && isCenter ? 'text-white transform scale-110' : ''
-                }`}>
-                  {route.icon === 'custom' ? (
+                {/* Center Button Background */}
+                {isCenter && (
+                  <div className="absolute w-14 h-14 bg-wedding-navy rounded-full shadow-lg -top-2 left-1/2 transform -translate-x-1/2 flex items-center justify-center">
                     <DashboardIcon isActive={isActive} />
-                  ) : IconComponent ? (
-                    <IconComponent size={24} strokeWidth={isActive ? 2 : 1.5} />
-                  ) : null}
-                </div>
+                  </div>
+                )}
                 
-                {/* Enhanced Label with Glass Background */}
-                {(!isActive || !isCenter) && (
-                  <span className={`text-xs font-medium tracking-wide transition-all duration-300 ${
-                    isActive ? 'opacity-100 font-semibold' : 'opacity-70 group-hover:opacity-100'
+                {/* Regular Icons */}
+                {!isCenter && IconComponent && (
+                  <IconComponent 
+                    size={24} 
+                    className={`transition-colors duration-300 ${
+                      isActive ? 'text-wedding-navy' : 'text-muted-foreground'
+                    }`}
+                  />
+                )}
+                
+                {/* Labels */}
+                {!isCenter && (
+                  <span className={`text-xs font-medium transition-colors duration-300 ${
+                    isActive ? 'text-wedding-navy' : 'text-muted-foreground'
                   }`}>
                     {route.label}
                   </span>
                 )}
                 
-                {/* Active Indicator */}
-                {isActive && !isCenter && (
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-wedding-navy rounded-full animate-scale-in" />
+                {/* Center Label */}
+                {isCenter && (
+                  <span className="text-xs font-medium text-muted-foreground mt-8">
+                    {route.label}
+                  </span>
                 )}
               </button>
             );
