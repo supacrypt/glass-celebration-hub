@@ -14,6 +14,9 @@ import RSVP from "./pages/RSVP";
 import FAQ from "./pages/FAQ";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import Help from "./pages/Help";
 import BenEan from "./pages/venues/BenEan";
 import PrinceOfMereweather from "./pages/venues/PrinceOfMereweather";
 import NewcastleBeach from "./pages/venues/NewcastleBeach";
@@ -81,6 +84,9 @@ const AppContent = () => {
         <Route path="/rsvp" element={<RSVP />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/help" element={<Help />} />
         
         {/* Dashboard Admin Routes */}
         <Route path="/dashboard/users" element={<AdminUsers />} />

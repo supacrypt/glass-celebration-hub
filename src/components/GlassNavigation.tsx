@@ -14,28 +14,28 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
     { id: 'home', label: 'Home' },
     { id: 'venue', label: 'Venue' },
     { id: 'dashboard', label: 'Dashboard', isCenter: true },
-    { id: 'social', label: 'Social' },
+    { id: 'social', label: 'Messages' },
     { id: 'gallery', label: 'Gallery' },
   ];
 
-  return (
+return (
     <nav 
       className="fixed left-1/2 transform -translate-x-1/2 flex items-end z-50"
       style={{
-        bottom: '20px',
+        bottom: '30px',
         background: 'linear-gradient(145deg, #f5ede4, #e8e0d7)',
-        borderRadius: window.innerWidth < 768 ? '25px' : '30px',
-        padding: window.innerWidth < 768 ? '4px 20px 5px 20px' : '5px 40px 6px 40px',
+        borderRadius: '40px',
+        padding: '5px 20px 6px 20px',
         boxShadow: `
           12px 12px 24px rgba(163, 155, 146, 0.4),
           -12px -12px 24px rgba(255, 255, 255, 0.7),
           inset 2px 2px 5px rgba(255, 255, 255, 0.6),
           inset -2px -2px 5px rgba(163, 155, 146, 0.2)
         `,
-        gap: window.innerWidth < 768 ? '25px' : '55px',
+        gap: '25px',
         border: '1px solid rgba(255, 255, 255, 0.3)',
         width: 'max-content',
-        maxWidth: window.innerWidth < 768 ? '90vw' : 'auto'
+        transition: 'all 0.3s ease'
       }}
     >
       {routes.map((route) => {
@@ -46,11 +46,20 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
           <button
             key={route.id}
             onClick={() => route.id === 'dashboard' ? setIsDashboardOpen(true) : onNavigate(route.id)}
-            className="flex flex-col items-center text-decoration-none transition-all duration-300 cursor-pointer relative"
+            className={`nav-item ${isCenter ? 'dashboard' : ''} ${isActive ? 'active' : ''}`}
             style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textDecoration: 'none',
               color: '#7a736b',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer',
+              position: 'relative',
               padding: '4px 0',
-              margin: isCenter ? '0 8px' : '0'
+              background: 'none',
+              border: 'none',
+              fontFamily: 'inherit'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = '#5a5651';
@@ -58,183 +67,169 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
             onMouseLeave={(e) => {
               e.currentTarget.style.color = '#7a736b';
             }}
-            onMouseDown={(e) => {
-              e.currentTarget.style.transform = 'translateY(1px)';
-            }}
-            onMouseUp={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
           >
-            {/* Dashboard Center Button */}
-            {isCenter && (
-              <div 
-                className="flex items-center justify-center relative"
+            {/* Navigation Icon - All get glass bubble treatment */}
+            <div 
+              className="nav-icon"
+              style={{
+                background: isActive && isCenter 
+                  ? 'linear-gradient(135deg, #3d5f81 0%, #2e3b4a 100%)'
+                  : 'linear-gradient(135deg, #2d3f51 0%, #1e2b3a 100%)',
+                width: '50px',
+                height: '50px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                top: '-10px',
+                marginBottom: '-8px',
+                boxShadow: `
+                  0 0 25px rgba(45, 63, 81, 0.2),
+                  0 8px 20px rgba(45, 63, 81, 0.4),
+                  0 4px 8px rgba(45, 63, 81, 0.3),
+                  inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.1)
+                `,
+                overflow: 'hidden',
+                transition: 'all 0.2s ease',
+                transform: isActive && isCenter ? 'scale(0.95)' : 'scale(1)'
+              }}
+            >
+              {/* Glass bubble effect overlay */}
+              <div
                 style={{
-                  background: 'linear-gradient(135deg, #2d3f51 0%, #1e2b3a 100%)',
-                  width: '50px',
-                  height: '50px',
+                  position: 'absolute',
+                  top: '-25%',
+                  left: '-25%',
+                  width: '150%',
+                  height: '150%',
+                  background: `radial-gradient(
+                    ellipse at 30% 25%,
+                    rgba(255, 255, 255, 0.5) 0%,
+                    rgba(255, 255, 255, 0.3) 25%,
+                    rgba(255, 255, 255, 0.15) 45%,
+                    transparent 65%
+                  )`,
                   borderRadius: '50%',
-                  top: '-10px',
-                  marginBottom: '-8px',
-                  boxShadow: `
-                    0 0 25px rgba(45, 63, 81, 0.2),
-                    0 8px 20px rgba(45, 63, 81, 0.4),
-                    0 4px 8px rgba(45, 63, 81, 0.3),
-                    inset 0 -2px 4px rgba(0, 0, 0, 0.3),
-                    inset 0 2px 4px rgba(255, 255, 255, 0.1)
-                  `,
-                  overflow: 'hidden',
-                  transition: 'all 0.2s ease'
+                  transform: 'rotate(-20deg)',
+                  pointerEvents: 'none'
                 }}
-              >
-                {/* Glass bubble effect overlay */}
-                <div
+              />
+              
+              {/* Glass reflection highlight */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '3px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '65%',
+                  height: '35%',
+                  background: `linear-gradient(
+                    to bottom,
+                    rgba(255, 255, 255, 0.6) 0%,
+                    rgba(255, 255, 255, 0.3) 40%,
+                    rgba(255, 255, 255, 0.1) 70%,
+                    transparent 100%
+                  )`,
+                  borderRadius: '50% 50% 50% 50% / 100% 100% 0% 0%',
+                  filter: 'blur(2px)',
+                  pointerEvents: 'none'
+                }}
+              />
+
+              {/* Icon Content */}
+              {isCenter ? (
+                /* Dashboard 4-dot grid */
+                <div 
+                  className="icon-dashboard"
                   style={{
-                    position: 'absolute',
-                    top: '-25%',
-                    left: '-25%',
-                    width: '150%',
-                    height: '150%',
-                    background: `radial-gradient(
-                      ellipse at 30% 25%,
-                      rgba(255, 255, 255, 0.5) 0%,
-                      rgba(255, 255, 255, 0.3) 25%,
-                      rgba(255, 255, 255, 0.15) 45%,
-                      transparent 65%
-                    )`,
-                    borderRadius: '50%',
-                    transform: 'rotate(-20deg)',
-                    pointerEvents: 'none'
+                    display: 'grid',
+                    gridTemplateColumns: '8px 8px',
+                    gridTemplateRows: '8px 8px',
+                    gap: '4px',
+                    position: 'relative',
+                    zIndex: 1,
+                    filter: isActive ? 'none' : 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))'
                   }}
-                />
-                
-                {/* Glass reflection highlight */}
-                <div
+                >
+                  {[...Array(4)].map((_, i) => (
+                    <span 
+                      key={i}
+                      style={{
+                        backgroundColor: isActive 
+                          ? '#ffffff'
+                          : 'rgba(255, 255, 255, 0.9)',
+                        borderRadius: '2px',
+                        display: 'block',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        transition: 'all 0.3s ease',
+                        boxShadow: isActive 
+                          ? `
+                            0 1px 2px rgba(0, 0, 0, 0.2),
+                            inset 0 0 8px rgba(255, 255, 255, 1),
+                            inset 0 0 4px rgba(255, 255, 255, 0.9)
+                          `
+                          : `
+                            0 2px 3px rgba(0, 0, 0, 0.3),
+                            inset 0 1px 2px rgba(255, 255, 255, 0.6)
+                          `,
+                        backgroundImage: isActive 
+                          ? `radial-gradient(
+                              circle at center,
+                              rgba(255, 255, 255, 1) 0%,
+                              rgba(255, 255, 255, 0.95) 40%,
+                              rgba(255, 255, 255, 0.9) 100%
+                            )`
+                          : 'none'
+                      }}
+                    />
+                  ))}
+                </div>
+              ) : (
+                /* SVG Icons */
+                <svg 
+                  className="svg-icon" 
                   style={{
-                    position: 'absolute',
-                    top: '3px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '65%',
-                    height: '35%',
-                    background: `linear-gradient(
-                      to bottom,
-                      rgba(255, 255, 255, 0.6) 0%,
-                      rgba(255, 255, 255, 0.3) 40%,
-                      rgba(255, 255, 255, 0.1) 70%,
-                      transparent 100%
-                    )`,
-                    borderRadius: '50% 50% 50% 50% / 100% 100% 0% 0%',
-                    filter: 'blur(2px)',
-                    pointerEvents: 'none'
+                    width: '22px',
+                    height: '22px',
+                    fill: route.id === 'venue' ? 'rgba(255, 255, 255, 0.9)' : 'none',
+                    stroke: 'rgba(255, 255, 255, 0.9)',
+                    strokeWidth: route.id === 'venue' ? '0' : '1.8',
+                    filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))',
+                    position: 'relative',
+                    zIndex: 1
                   }}
-                />
-                
-                 {/* 4-dot grid - raised through the glass */}
-                 <div 
-                   style={{
-                     display: 'grid',
-                     gridTemplateColumns: '8px 8px',
-                     gridTemplateRows: '8px 8px',
-                     gap: '4px',
-                     position: 'relative',
-                     zIndex: 1,
-                     filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))'
-                   }}
-                 >
-                   {[...Array(4)].map((_, i) => (
-                     <span 
-                       key={i}
-                       style={{
-                         backgroundColor: isDashboardOpen 
-                           ? 'rgba(255, 255, 255, 1)' 
-                           : 'rgba(255, 255, 255, 0.9)',
-                         borderRadius: '2px',
-                         display: 'block',
-                         boxShadow: isDashboardOpen 
-                           ? `
-                             0 2px 3px rgba(0, 0, 0, 0.3),
-                             inset 0 1px 2px rgba(255, 255, 255, 0.6),
-                             inset 0 0 8px rgba(255, 255, 255, 0.8)
-                           `
-                           : `
-                             0 2px 3px rgba(0, 0, 0, 0.3),
-                             inset 0 1px 2px rgba(255, 255, 255, 0.6)
-                           `
-                       }}
-                     />
-                   ))}
-                 </div>
-              </div>
-            )}
-
-            {/* Home Icon */}
-            {route.id === 'home' && !isCenter && (
-              <div 
-                className="w-6 h-6 mb-1 flex items-center justify-center" 
-                style={{
-                  filter: 'drop-shadow(1px 1px 2px rgba(163, 155, 146, 0.3))'
-                }}
-              >
-                <svg className="w-5.5 h-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                  viewBox="0 0 24 24"
+                >
+                  {route.id === 'home' && (
+                    <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                  )}
+                  {route.id === 'venue' && (
+                    <path d="M12 2L2 7v1h20V7L12 2zM4 18v-7h2v7H4zm5 0v-7h2v7H9zm4 0v-7h2v7h-2zm5 0v-7h2v7h-2zM3 21h18v-2H3v2z"/>
+                  )}
+                  {route.id === 'social' && (
+                    <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                  )}
+                  {route.id === 'gallery' && (
+                    <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  )}
                 </svg>
-              </div>
-            )}
-
-            {/* Venue Icon */}
-            {route.id === 'venue' && !isCenter && (
-              <div 
-                className="w-6 h-6 mb-1 flex items-center justify-center" 
-                style={{
-                  filter: 'drop-shadow(1px 1px 2px rgba(163, 155, 146, 0.3))'
-                }}
-              >
-                <svg className="w-5.5 h-5.5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L2 7v1h20V7L12 2zM4 18v-7h2v7H4zm5 0v-7h2v7H9zm4 0v-7h2v7h-2zm5 0v-7h2v7h-2zM3 21h18v-2H3v2z"/>
-                </svg>
-              </div>
-            )}
-
-            {/* Social Icon */}
-            {route.id === 'social' && !isCenter && (
-              <div 
-                className="w-6 h-6 mb-1 flex items-center justify-center" 
-                style={{
-                  filter: 'drop-shadow(1px 1px 2px rgba(163, 155, 146, 0.3))'
-                }}
-              >
-                <svg className="w-5.5 h-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                </svg>
-              </div>
-            )}
-
-            {/* Gallery Icon */}
-            {route.id === 'gallery' && !isCenter && (
-              <div 
-                className="w-6 h-6 mb-1 flex items-center justify-center" 
-                style={{
-                  filter: 'drop-shadow(1px 1px 2px rgba(163, 155, 146, 0.3))'
-                }}
-              >
-                <svg className="w-5.5 h-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-              </div>
-            )}
+              )}
+            </div>
             
             {/* Label */}
             <span 
-              className="text-xs sm:text-sm md:text-base"
+              className="nav-label"
               style={{
-                fontSize: window.innerWidth < 768 ? '8px' : '9.5px',
-                marginTop: isCenter ? '6px' : '2px',
+                fontSize: '9.5px',
+                marginTop: '6px',
                 fontWeight: '500',
                 letterSpacing: '0.3px',
-                color: '#7a736b',
                 textShadow: '1px 1px 2px rgba(255, 255, 255, 0.8)',
-                display: window.innerWidth < 480 && !isCenter ? 'none' : 'block'
+                color: '#7a736b'
               }}
             >
               {route.label}

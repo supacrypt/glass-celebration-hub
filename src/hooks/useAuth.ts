@@ -118,8 +118,13 @@ export const useAuth = () => {
     
     const { error } = await supabase
       .from('profiles')
-      .update(updates)
-      .eq('user_id', user.id);
+      .upsert({
+        user_id: user.id,
+        email: user.email,
+        ...updates
+      }, {
+        onConflict: 'user_id'
+      });
     
     if (!error) {
       await fetchUserData(user.id);
