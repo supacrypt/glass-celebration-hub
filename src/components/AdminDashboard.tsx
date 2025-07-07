@@ -11,9 +11,6 @@ import PhotoModeration from '@/components/admin/PhotoModeration';
 import RSVPManagement from '@/components/admin/RSVPManagement';
 import AdminOverview from '@/components/admin/AdminOverview';
 import GiftManagement from '@/components/admin/GiftManagement';
-import BackgroundManager from '@/components/admin/BackgroundManager';
-import EventManagement from '@/components/admin/EventManagement';
-import SettingsManager from '@/components/admin/SettingsManager';
 
 interface AdminStats {
   totalUsers: number;
@@ -219,23 +216,16 @@ const AdminDashboard: React.FC = () => {
 
       {/* Admin Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 mb-6">
+        <TabsList className="grid w-full grid-cols-5 mb-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="events">Events</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="photos">Photos</TabsTrigger>
           <TabsTrigger value="gifts">Gifts</TabsTrigger>
-          <TabsTrigger value="backgrounds">Backgrounds</TabsTrigger>
           <TabsTrigger value="rsvps">RSVPs</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
           <AdminOverview stats={stats} />
-        </TabsContent>
-
-        <TabsContent value="events" className="space-y-4">
-          <EventManagement />
         </TabsContent>
 
         <TabsContent value="users" className="space-y-4">
@@ -250,16 +240,8 @@ const AdminDashboard: React.FC = () => {
           <GiftManagement />
         </TabsContent>
 
-        <TabsContent value="backgrounds" className="space-y-4">
-          <BackgroundManager />
-        </TabsContent>
-
         <TabsContent value="rsvps" className="space-y-4">
           <RSVPManagement rsvps={rsvps} />
-        </TabsContent>
-
-        <TabsContent value="settings" className="space-y-4">
-          <SettingsManager />
         </TabsContent>
       </Tabs>
     </div>

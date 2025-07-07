@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardModal from './DashboardModal';
+import DashboardPopup from './DashboardPopup';
 import { useAuth } from '@/hooks/useAuth';
 
 interface NavigationProps {
@@ -238,9 +238,10 @@ return (
         );
       })}
       
-      <DashboardModal
+      <DashboardPopup
         isOpen={isDashboardOpen}
         onClose={() => setIsDashboardOpen(false)}
+        userRole={userRole?.role || 'guest'}
       />
     </nav>
   );

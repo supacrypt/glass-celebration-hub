@@ -28,7 +28,7 @@ const VenueMap: React.FC<VenueMapProps> = ({ venue, className = '' }) => {
       
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/supabasecrypt/cmcspsqaf000p01sq2x73ewym',
+        style: 'mapbox://styles/mapbox/light-v11',
         center: venue.coordinates,
         zoom: 15,
         pitch: 45,

@@ -123,17 +123,16 @@
     @apply border-border;
   }
 
-  html, body {
+  body {
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    min-height: 100vh;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  body {
+    background-image: url('/src/assets/wedding-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     position: relative;
+    min-height: 100vh;
   }
 
   body::before {
