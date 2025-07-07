@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import CompactStats from '@/components/admin/CompactStats';
 import CompactUserManagement from '@/components/admin/CompactUserManagement';
+import CompactGuestManagement from '@/components/admin/CompactGuestManagement';
 import CompactPhotoModeration from '@/components/admin/CompactPhotoModeration';
 import CompactRSVPManagement from '@/components/admin/CompactRSVPManagement';
 import CompactGiftManagement from '@/components/admin/CompactGiftManagement';
@@ -8,6 +9,7 @@ import CompactSystemSettings from '@/components/admin/CompactSystemSettings';
 import AnalyticsInsights from '@/components/admin/AnalyticsInsights';
 import CommunicationCenter from '@/components/admin/CommunicationCenter';
 import EventTimeline from '@/components/admin/EventTimeline';
+import NotificationCenter from '@/components/admin/NotificationCenter';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface AdminDashboardContentProps {
@@ -30,11 +32,13 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
   const adminTabs = [
     { id: 'stats', label: 'Stats' },
     { id: 'users', label: 'Users' },
+    { id: 'guests', label: 'Guests' },
     { id: 'photos', label: 'Photos' },
     { id: 'gifts', label: 'Gifts' },
     { id: 'rsvps', label: 'RSVPs' },
     { id: 'analytics', label: 'Analytics' },
     { id: 'comms', label: 'Messages' },
+    { id: 'notifications', label: 'Alerts' },
     { id: 'timeline', label: 'Timeline' },
     { id: 'settings', label: 'Settings' },
   ];
@@ -66,11 +70,13 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
         <div className="space-y-4">
           {activeTab === 'stats' && <CompactStats stats={stats} />}
           {activeTab === 'users' && <CompactUserManagement users={users} onRefresh={onRefresh} />}
+          {activeTab === 'guests' && <CompactGuestManagement users={users} onRefresh={onRefresh} />}
           {activeTab === 'photos' && <CompactPhotoModeration photos={photos} onRefresh={onRefresh} />}
           {activeTab === 'gifts' && <CompactGiftManagement />}
           {activeTab === 'rsvps' && <CompactRSVPManagement rsvps={rsvps} />}
           {activeTab === 'analytics' && <AnalyticsInsights />}
           {activeTab === 'comms' && <CommunicationCenter />}
+          {activeTab === 'notifications' && <NotificationCenter />}
           {activeTab === 'timeline' && <EventTimeline />}
           {activeTab === 'settings' && <CompactSystemSettings />}
         </div>

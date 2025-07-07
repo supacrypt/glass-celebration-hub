@@ -128,7 +128,7 @@ const AnalyticsInsights: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-h-80 overflow-y-auto">
       {/* Key Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {insights.map((insight, index) => {
