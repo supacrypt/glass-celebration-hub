@@ -250,17 +250,23 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Enhanced Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[998] transition-opacity duration-300"
+        className="fixed inset-0 bg-black/70 backdrop-blur-md z-[900] transition-all duration-500 ease-out"
         onClick={onClose}
       />
       
-      {/* Full-Screen Modal */}
-      <div className="fixed inset-0 z-[999] flex items-center justify-center p-2 sm:p-4">
+      {/* Large Dashboard Modal - Positioned above bottom navigation */}
+      <div className="fixed inset-x-0 bottom-0 z-[950] flex justify-center px-3 sm:px-6">
         <div 
-          className="glass-popup w-full h-full sm:w-[95vw] sm:h-[90vh] sm:max-w-7xl overflow-hidden flex flex-col animate-scale-in"
+          className="glass-popup w-full max-w-7xl h-[70vh] sm:h-[75vh] mb-20 sm:mb-24 overflow-hidden flex flex-col 
+                     animate-[slide-up_0.4s_ease-out] 
+                     shadow-2xl shadow-black/30"
           onClick={(e) => e.stopPropagation()}
+          style={{
+            minHeight: 'min(60vh, 500px)',
+            maxHeight: '85vh'
+          }}
         >
           {/* Header */}
           <div className="flex-shrink-0 flex justify-between items-center p-4 sm:p-6 border-b border-white/10">
