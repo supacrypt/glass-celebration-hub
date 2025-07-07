@@ -40,6 +40,61 @@ const Home: React.FC = () => {
   return (
     <div style={{ minHeight: '100vh', padding: '40px 20px', position: 'relative', overflow: 'hidden' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+        {/* Hero Section */}
+        <div className="glass-card" style={{
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
+          backdropFilter: 'blur(15px)',
+          WebkitBackdropFilter: 'blur(15px)',
+          borderRadius: '30px',
+          padding: '60px 40px',
+          marginBottom: '40px',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          boxShadow: '20px 20px 40px rgba(163, 155, 146, 0.3), -20px -20px 40px rgba(255, 255, 255, 0.8), inset 1px 1px 3px rgba(255, 255, 255, 0.6), inset -1px -1px 3px rgba(163, 155, 146, 0.15)',
+          border: '1px solid rgba(255, 255, 255, 0.4)',
+          animation: 'fadeIn 0.6s ease-out'
+        }}>
+          <div style={{
+            fontSize: '64px',
+            marginBottom: '20px',
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '10px'
+          }}>
+            💕
+          </div>
+          <h1 style={{
+            fontSize: '48px',
+            fontWeight: '700',
+            color: '#2d3f51',
+            marginBottom: '15px',
+            letterSpacing: '-1px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}>
+            Tim & Kirsten
+          </h1>
+          <p style={{
+            fontSize: '20px',
+            color: '#667eea',
+            marginBottom: '15px',
+            fontWeight: '500'
+          }}>
+            October 5, 2025
+          </p>
+          <p style={{
+            fontSize: '16px',
+            color: '#7a736b',
+            maxWidth: '600px',
+            margin: '0 auto',
+            lineHeight: '1.6'
+          }}>
+            Join us as we celebrate our love and commitment surrounded by family and friends
+          </p>
+        </div>
         {/* Countdown Section */}
         <div className="glass-card" style={{
           background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
