@@ -126,7 +126,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-image: url('/src/assets/wedding-background.jpg');
+    background-image: url('https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/background/background-image.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
