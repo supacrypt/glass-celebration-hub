@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, Save, Eye, EyeOff, Key, Bell, Shield } from 'lucide-react';
+import { Settings, Save, Eye, EyeOff, Key, Bell, Shield, Palette, Type, Image } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import ThemeManager from './ThemeManager';
+import FontManager from './FontManager';
+import BackgroundManager from './BackgroundManager';
 
 interface AppSetting {
   id: string;
@@ -115,102 +119,142 @@ const CompactSystemSettings: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      {/* System Stats */}
-      <div className="grid grid-cols-2 gap-2">
-        <div className="glass-card p-3 text-center">
+      {/* System Status */}
+      <div className="grid grid-cols-3 gap-2">
+        <div className="glass-card p-2 text-center">
           <Shield className="w-4 h-4 mx-auto text-glass-blue mb-1" />
-          <div className="text-sm font-semibold">System</div>
-          <div className="text-xs text-muted-foreground">Operational</div>
+          <div className="text-xs font-semibold">System</div>
+          <div className="text-xs text-muted-foreground">Online</div>
         </div>
-        <div className="glass-card p-3 text-center">
+        <div className="glass-card p-2 text-center">
           <Settings className="w-4 h-4 mx-auto text-glass-purple mb-1" />
-          <div className="text-sm font-semibold">{settings.length}</div>
+          <div className="text-xs font-semibold">{settings.length}</div>
           <div className="text-xs text-muted-foreground">Settings</div>
         </div>
-      </div>
-
-      {/* Settings List */}
-      <div className="space-y-3 h-72 overflow-y-auto">
-        {defaultSettings.map((setting) => {
-          const currentValue = getSettingValue(setting.key);
-          
-          return (
-            <div key={setting.key} className="glass-card p-3 space-y-2">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="text-sm font-medium text-wedding-navy">
-                    {setting.label}
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {setting.key}
-                  </div>
-                </div>
-                
-                <Badge variant="outline" className="text-xs">
-                  {setting.type}
-                </Badge>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                {setting.type === 'boolean' ? (
-                  <div className="flex items-center space-x-2 flex-1">
-                    <Switch
-                      checked={currentValue === 'true'}
-                      onCheckedChange={(checked) => {
-                        const newValue = checked.toString();
-                        handleInputChange(setting.key, newValue);
-                        updateSetting(setting.key, newValue);
-                      }}
-                      disabled={saving === setting.key}
-                    />
-                    <span className="text-sm text-muted-foreground">
-                      {currentValue === 'true' ? 'Enabled' : 'Disabled'}
-                    </span>
-                  </div>
-                ) : (
-                  <>
-                    <Input
-                      type={setting.type === 'number' ? 'number' : 'text'}
-                      value={currentValue}
-                      onChange={(e) => handleInputChange(setting.key, e.target.value)}
-                      className="flex-1 text-sm"
-                      placeholder={setting.defaultValue}
-                    />
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => updateSetting(setting.key, currentValue)}
-                      disabled={saving === setting.key}
-                      className="text-xs px-2 py-1 h-8"
-                    >
-                      {saving === setting.key ? (
-                        <div className="w-3 h-3 animate-spin rounded-full border border-current border-t-transparent" />
-                      ) : (
-                        <Save className="w-3 h-3" />
-                      )}
-                    </Button>
-                  </>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* System Actions */}
-      <div className="glass-card p-3 space-y-2">
-        <h4 className="text-sm font-medium text-wedding-navy">System Actions</h4>
-        <div className="grid grid-cols-2 gap-2">
-          <Button size="sm" variant="outline" className="text-xs">
-            <Settings className="w-3 h-3 mr-1" />
-            Export Data
-          </Button>
-          <Button size="sm" variant="outline" className="text-xs">
-            <Shield className="w-3 h-3 mr-1" />
-            Backup
-          </Button>
+        <div className="glass-card p-2 text-center">
+          <Palette className="w-4 h-4 mx-auto text-glass-pink mb-1" />
+          <div className="text-xs font-semibold">Sprint 2</div>
+          <div className="text-xs text-muted-foreground">Active</div>
         </div>
       </div>
+
+      {/* Settings Tabs */}
+      <Tabs defaultValue="general" className="w-full">
+        <TabsList className="grid w-full grid-cols-4 mb-3">
+          <TabsTrigger value="general" className="text-xs">
+            <Settings className="w-3 h-3 mr-1" />
+            General
+          </TabsTrigger>
+          <TabsTrigger value="theme" className="text-xs">
+            <Palette className="w-3 h-3 mr-1" />
+            Theme
+          </TabsTrigger>
+          <TabsTrigger value="fonts" className="text-xs">
+            <Type className="w-3 h-3 mr-1" />
+            Fonts
+          </TabsTrigger>
+          <TabsTrigger value="background" className="text-xs">
+            <Image className="w-3 h-3 mr-1" />
+            Background
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="general" className="space-y-3">
+          <div className="h-80 overflow-y-auto space-y-3">
+            {defaultSettings.map((setting) => {
+              const currentValue = getSettingValue(setting.key);
+              
+              return (
+                <div key={setting.key} className="glass-card p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="text-sm font-medium text-wedding-navy">
+                        {setting.label}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {setting.key}
+                      </div>
+                    </div>
+                    
+                    <Badge variant="outline" className="text-xs">
+                      {setting.type}
+                    </Badge>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    {setting.type === 'boolean' ? (
+                      <div className="flex items-center space-x-2 flex-1">
+                        <Switch
+                          checked={currentValue === 'true'}
+                          onCheckedChange={(checked) => {
+                            const newValue = checked.toString();
+                            handleInputChange(setting.key, newValue);
+                            updateSetting(setting.key, newValue);
+                          }}
+                          disabled={saving === setting.key}
+                        />
+                        <span className="text-sm text-muted-foreground">
+                          {currentValue === 'true' ? 'Enabled' : 'Disabled'}
+                        </span>
+                      </div>
+                    ) : (
+                      <>
+                        <Input
+                          type={setting.type === 'number' ? 'number' : 'text'}
+                          value={currentValue}
+                          onChange={(e) => handleInputChange(setting.key, e.target.value)}
+                          className="flex-1 text-sm"
+                          placeholder={setting.defaultValue}
+                        />
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => updateSetting(setting.key, currentValue)}
+                          disabled={saving === setting.key}
+                          className="text-xs px-2 py-1 h-8"
+                        >
+                          {saving === setting.key ? (
+                            <div className="w-3 h-3 animate-spin rounded-full border border-current border-t-transparent" />
+                          ) : (
+                            <Save className="w-3 h-3" />
+                          )}
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* System Actions */}
+            <div className="glass-card p-3 space-y-2">
+              <h4 className="text-sm font-medium text-wedding-navy">System Actions</h4>
+              <div className="grid grid-cols-2 gap-2">
+                <Button size="sm" variant="outline" className="text-xs">
+                  <Settings className="w-3 h-3 mr-1" />
+                  Export Data
+                </Button>
+                <Button size="sm" variant="outline" className="text-xs">
+                  <Shield className="w-3 h-3 mr-1" />
+                  Backup
+                </Button>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="theme" className="h-80 overflow-y-auto">
+          <ThemeManager />
+        </TabsContent>
+
+        <TabsContent value="fonts" className="h-80 overflow-y-auto">
+          <FontManager />
+        </TabsContent>
+
+        <TabsContent value="background" className="h-80 overflow-y-auto">
+          <BackgroundManager />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
