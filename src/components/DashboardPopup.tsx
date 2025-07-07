@@ -68,15 +68,7 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
       {/* Popup */}
       <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-[999] w-[90vw] max-w-2xl max-h-[80vh] overflow-y-auto">
         <div 
-          className="bg-gradient-to-br from-[#f5ede4] to-[#e8e0d7] rounded-3xl p-6 shadow-2xl border border-white/30"
-          style={{
-            boxShadow: `
-              12px 12px 24px rgba(163, 155, 146, 0.4),
-              -12px -12px 24px rgba(255, 255, 255, 0.7),
-              inset 2px 2px 5px rgba(255, 255, 255, 0.6),
-              inset -2px -2px 5px rgba(163, 155, 146, 0.2)
-            `
-          }}
+          className="glass-popup p-6 relative"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -86,9 +78,9 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
             </h2>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+              className="glass-button w-10 h-10 rounded-full flex items-center justify-center relative z-10"
             >
-              <X className="w-5 h-5 text-[#7a736b]" />
+              <X className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
 
@@ -127,13 +119,7 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
                     return (
                       <div
                         key={index}
-                        className="bg-gradient-to-br from-[#e8e0d7] to-[#f5ede4] rounded-2xl p-4 flex items-center gap-3"
-                        style={{
-                          boxShadow: `
-                            5px 5px 10px rgba(163, 155, 146, 0.3),
-                            -5px -5px 10px rgba(255, 255, 255, 0.6)
-                          `
-                        }}
+                        className="glass-card p-4 flex items-center gap-3"
                       >
                         <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                           userRole === 'admin' 
@@ -160,13 +146,13 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
                 </div>
 
                 {/* Recent Activity */}
-                <div className="bg-white/30 rounded-2xl p-4">
-                  <h3 className="text-base font-semibold text-[#2d3f51] mb-3">Recent Activity</h3>
+                <div className="glass-card p-4">
+                  <h3 className="text-base font-semibold text-foreground mb-3">Recent Activity</h3>
                   <div className="space-y-2">
                     {recentActivity.map((activity, index) => (
                       <div
                         key={index}
-                        className="flex items-center gap-3 p-2 bg-white/50 rounded-lg text-sm hover:bg-white/70 transition-colors cursor-pointer"
+                        className="flex items-center gap-3 p-2 glass-button text-sm cursor-pointer"
                       >
                         <span className="text-base">{activity.icon}</span>
                         <span className="flex-1 text-[#5a5651]">{activity.text}</span>
@@ -184,30 +170,18 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     onClick={() => handleNavigate('/dashboard/users')}
-                    className="p-3 bg-gradient-to-br from-[#e8e0d7] to-[#f5ede4] rounded-xl text-sm font-medium text-[#5a5651] hover:scale-105 transition-transform"
-                    style={{
-                      boxShadow: `
-                        5px 5px 10px rgba(163, 155, 146, 0.3),
-                        -5px -5px 10px rgba(255, 255, 255, 0.6)
-                      `
-                    }}
+                    className="glass-button p-3 text-sm font-medium text-foreground"
                   >
                     View All Users
                   </button>
                   <button
                     onClick={() => handleNavigate('/dashboard/users/roles')}
-                    className="p-3 bg-gradient-to-br from-[#e8e0d7] to-[#f5ede4] rounded-xl text-sm font-medium text-[#5a5651] hover:scale-105 transition-transform"
-                    style={{
-                      boxShadow: `
-                        5px 5px 10px rgba(163, 155, 146, 0.3),
-                        -5px -5px 10px rgba(255, 255, 255, 0.6)
-                      `
-                    }}
+                    className="glass-button p-3 text-sm font-medium text-foreground"
                   >
                     Manage Roles
                   </button>
                 </div>
-                <div className="text-xs text-[#7a736b] bg-white/30 p-3 rounded-xl">
+                <div className="text-xs text-muted-foreground glass-card p-3">
                   Manage user roles (guest, admin, couple), track user activity, and handle account management functions.
                 </div>
               </div>
