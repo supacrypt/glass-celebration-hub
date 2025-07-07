@@ -250,18 +250,18 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
 
   return (
     <>
-      {/* Enhanced Backdrop */}
+      {/* Invisible Backdrop - Maintains functionality without visual tint */}
       <div 
-        className="fixed inset-0 bg-black/70 backdrop-blur-md z-[900] transition-all duration-500 ease-out"
+        className="fixed inset-0 z-[900] transition-all duration-300 ease-out"
         onClick={onClose}
       />
       
       {/* Large Dashboard Modal - Positioned above bottom navigation */}
       <div className="fixed inset-x-0 bottom-0 z-[950] flex justify-center px-3 sm:px-6">
         <div 
-          className="glass-popup w-full max-w-7xl h-[70vh] sm:h-[75vh] mb-20 sm:mb-24 overflow-hidden flex flex-col 
-                     animate-[slide-up_0.4s_ease-out] 
-                     shadow-2xl shadow-black/30"
+          className="w-full max-w-7xl h-[70vh] sm:h-[75vh] mb-20 sm:mb-24 overflow-hidden flex flex-col 
+                     animate-[slide-up_0.4s_ease-out] glass-primary rounded-glass-lg
+                     shadow-glass-lg border border-glass-border"
           onClick={(e) => e.stopPropagation()}
           style={{
             minHeight: 'min(60vh, 500px)',
@@ -269,16 +269,16 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
           }}
         >
           {/* Header */}
-          <div className="flex-shrink-0 flex justify-between items-center p-4 sm:p-6 border-b border-white/10">
+          <div className="flex-shrink-0 flex justify-between items-center p-4 sm:p-6 border-b border-glass-border/50">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-wedding-navy flex items-center justify-center">
                 <Shield className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-xl sm:text-2xl font-semibold text-wedding-navy">
+                <h2 className="wedding-heading text-wedding-navy">
                   {authUserRole?.role === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
                 </h2>
-                <p className="text-sm text-muted-foreground">
+                <p className="wedding-body text-muted-foreground">
                   {authUserRole?.role === 'admin' ? 'Comprehensive wedding management' : 'Your wedding dashboard'}
                 </p>
               </div>
@@ -304,16 +304,16 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
               {authUserRole?.role === 'admin' ? (
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
                   <div className="flex-shrink-0 px-4 sm:px-6 pt-4">
-                    <TabsList className="grid w-full grid-cols-5">
-                      <TabsTrigger value="overview">Overview</TabsTrigger>
-                      <TabsTrigger value="users">Users</TabsTrigger>
-                      <TabsTrigger value="photos">Photos</TabsTrigger>
-                      <TabsTrigger value="gifts">Gifts</TabsTrigger>
-                      <TabsTrigger value="rsvps">RSVPs</TabsTrigger>
+                    <TabsList className="grid w-full grid-cols-5 glass-secondary">
+                      <TabsTrigger value="overview" className="wedding-body">Overview</TabsTrigger>
+                      <TabsTrigger value="users" className="wedding-body">Users</TabsTrigger>
+                      <TabsTrigger value="photos" className="wedding-body">Photos</TabsTrigger>
+                      <TabsTrigger value="gifts" className="wedding-body">Gifts</TabsTrigger>
+                      <TabsTrigger value="rsvps" className="wedding-body">RSVPs</TabsTrigger>
                     </TabsList>
                   </div>
 
-                  <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4">
+                  <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-6">
                     <TabsContent value="overview" className="space-y-6 mt-0">
                       <AdminStatsComponent stats={stats} />
                       <AdminOverview stats={stats} />
@@ -337,73 +337,71 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose, userRo
                   </div>
                 </Tabs>
               ) : (
-                // Guest Dashboard - Simple version
-                <div className="p-4 sm:p-6 h-full overflow-y-auto">
-                  <div className="space-y-6">
-                    <div className="text-center">
-                      <h3 className="text-lg font-semibold text-wedding-navy mb-2">Welcome to Your Dashboard</h3>
-                      <p className="text-muted-foreground">Access your wedding information and features</p>
+                // Guest Dashboard - Consistent with app styling
+                <div className="p-4 sm:p-6 h-full overflow-y-auto space-y-6">
+                  <div className="text-center space-y-2">
+                    <h3 className="wedding-heading text-wedding-navy">Welcome to Your Dashboard</h3>
+                    <p className="wedding-body text-muted-foreground">Access your wedding information and features</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div className="glass-card p-4 text-center space-y-2">
+                      <Calendar className="w-8 h-8 mx-auto text-glass-blue" />
+                      <div className="text-lg font-semibold text-wedding-navy">42</div>
+                      <div className="text-xs text-muted-foreground">Days Left</div>
                     </div>
-                    
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      <div className="glass-card p-4 text-center">
-                        <Calendar className="w-8 h-8 mx-auto mb-2 text-glass-blue" />
-                        <div className="text-lg font-semibold text-wedding-navy">42</div>
-                        <div className="text-xs text-muted-foreground">Days Left</div>
-                      </div>
-                      <div className="glass-card p-4 text-center">
-                        <Users className="w-8 h-8 mx-auto mb-2 text-glass-green" />
-                        <div className="text-lg font-semibold text-wedding-navy">67/85</div>
-                        <div className="text-xs text-muted-foreground">RSVPs</div>
-                      </div>
-                      <div className="glass-card p-4 text-center">
-                        <Image className="w-8 h-8 mx-auto mb-2 text-glass-purple" />
-                        <div className="text-lg font-semibold text-wedding-navy">134</div>
-                        <div className="text-xs text-muted-foreground">Photos</div>
-                      </div>
-                      <div className="glass-card p-4 text-center">
-                        <MessageSquare className="w-8 h-8 mx-auto mb-2 text-glass-pink" />
-                        <div className="text-lg font-semibold text-wedding-navy">23</div>
-                        <div className="text-xs text-muted-foreground">Messages</div>
-                      </div>
+                    <div className="glass-card p-4 text-center space-y-2">
+                      <Users className="w-8 h-8 mx-auto text-glass-green" />
+                      <div className="text-lg font-semibold text-wedding-navy">67/85</div>
+                      <div className="text-xs text-muted-foreground">RSVPs</div>
                     </div>
+                    <div className="glass-card p-4 text-center space-y-2">
+                      <Image className="w-8 h-8 mx-auto text-glass-purple" />
+                      <div className="text-lg font-semibold text-wedding-navy">134</div>
+                      <div className="text-xs text-muted-foreground">Photos</div>
+                    </div>
+                    <div className="glass-card p-4 text-center space-y-2">
+                      <MessageSquare className="w-8 h-8 mx-auto text-glass-pink" />
+                      <div className="text-lg font-semibold text-wedding-navy">23</div>
+                      <div className="text-xs text-muted-foreground">Messages</div>
+                    </div>
+                  </div>
 
-                    <div className="glass-card p-4">
-                      <h3 className="text-base font-semibold text-wedding-navy mb-3">Quick Actions</h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <button
-                          onClick={onClose}
-                          className="glass-button p-3 text-left hover:scale-105 transition-transform"
-                        >
-                          <Calendar className="w-5 h-5 mb-2 text-glass-blue" />
-                          <div className="font-medium">Update RSVP</div>
-                          <div className="text-xs text-muted-foreground">Confirm your attendance</div>
-                        </button>
-                        <button
-                          onClick={onClose}
-                          className="glass-button p-3 text-left hover:scale-105 transition-transform"
-                        >
-                          <Image className="w-5 h-5 mb-2 text-glass-green" />
-                          <div className="font-medium">View Gallery</div>
-                          <div className="text-xs text-muted-foreground">Browse wedding photos</div>
-                        </button>
-                        <button
-                          onClick={onClose}
-                          className="glass-button p-3 text-left hover:scale-105 transition-transform"
-                        >
-                          <Gift className="w-5 h-5 mb-2 text-glass-purple" />
-                          <div className="font-medium">Gift Registry</div>
-                          <div className="text-xs text-muted-foreground">View gift options</div>
-                        </button>
-                        <button
-                          onClick={onClose}
-                          className="glass-button p-3 text-left hover:scale-105 transition-transform"
-                        >
-                          <MessageSquare className="w-5 h-5 mb-2 text-glass-pink" />
-                          <div className="font-medium">Send Message</div>
-                          <div className="text-xs text-muted-foreground">Connect with others</div>
-                        </button>
-                      </div>
+                  <div className="glass-card p-6 space-y-4">
+                    <h3 className="wedding-heading text-wedding-navy">Quick Actions</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <button
+                        onClick={onClose}
+                        className="glass-button p-4 text-left hover:scale-105 transition-transform space-y-2"
+                      >
+                        <Calendar className="w-5 h-5 text-glass-blue" />
+                        <div className="font-medium text-wedding-navy">Update RSVP</div>
+                        <div className="text-xs text-muted-foreground">Confirm your attendance</div>
+                      </button>
+                      <button
+                        onClick={onClose}
+                        className="glass-button p-4 text-left hover:scale-105 transition-transform space-y-2"
+                      >
+                        <Image className="w-5 h-5 text-glass-green" />
+                        <div className="font-medium text-wedding-navy">View Gallery</div>
+                        <div className="text-xs text-muted-foreground">Browse wedding photos</div>
+                      </button>
+                      <button
+                        onClick={onClose}
+                        className="glass-button p-4 text-left hover:scale-105 transition-transform space-y-2"
+                      >
+                        <Gift className="w-5 h-5 text-glass-purple" />
+                        <div className="font-medium text-wedding-navy">Gift Registry</div>
+                        <div className="text-xs text-muted-foreground">View gift options</div>
+                      </button>
+                      <button
+                        onClick={onClose}
+                        className="glass-button p-4 text-left hover:scale-105 transition-transform space-y-2"
+                      >
+                        <MessageSquare className="w-5 h-5 text-glass-pink" />
+                        <div className="font-medium text-wedding-navy">Send Message</div>
+                        <div className="text-xs text-muted-foreground">Connect with others</div>
+                      </button>
                     </div>
                   </div>
                 </div>
