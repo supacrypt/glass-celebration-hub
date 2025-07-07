@@ -597,5 +597,58 @@
 
   .venue-page .location-title {
     font-size: 20px !important;
+}
+
+/* Wedding Home Page Animations */
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@media (max-width: 768px) {
+  .home-countdown-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px !important;
+  }
+
+  .home-info-grid {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: 0 10px !important;
+  }
+
+  .home-countdown-section,
+  .home-events-card,
+  .home-welcome-section {
+    padding: 20px !important;
+    border-radius: 20px !important;
+  }
+
+  .home-countdown-title {
+    font-size: 24px !important;
+  }
+
+  .home-countdown-number {
+    font-size: 36px !important;
+  }
+
+  .home-event-name {
+    font-size: 16px !important;
+  }
+
+  .home-footer {
+    flex-direction: column !important;
+    gap: 15px !important;
+    align-items: center !important;
   }
 }
