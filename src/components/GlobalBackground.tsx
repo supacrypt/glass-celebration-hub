@@ -90,25 +90,22 @@ const GlobalBackground: React.FC = () => {
 
   console.log('GlobalBackground: Rendering with URL:', backgroundUrl);
 
-  // Add image load testing
-  const testImageLoad = (url: string) => {
-    if (!url) return;
+  // Test image loading when URL changes - using proper useEffect
+  useEffect(() => {
+    if (!backgroundUrl) return;
     
-    const img = new Image();
-    img.onload = () => {
-      console.log('GlobalBackground: Image loaded successfully:', url);
+    const testImageLoad = (url: string) => {
+      const img = new Image();
+      img.onload = () => {
+        console.log('GlobalBackground: Image loaded successfully:', url);
+      };
+      img.onerror = (error) => {
+        console.error('GlobalBackground: Image failed to load:', url, error);
+      };
+      img.src = url;
     };
-    img.onerror = (error) => {
-      console.error('GlobalBackground: Image failed to load:', url, error);
-    };
-    img.src = url;
-  };
 
-  // Test image loading when URL changes
-  React.useEffect(() => {
-    if (backgroundUrl) {
-      testImageLoad(backgroundUrl);
-    }
+    testImageLoad(backgroundUrl);
   }, [backgroundUrl]);
   
   return (
