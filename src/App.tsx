@@ -10,6 +10,8 @@ import Venue from "./pages/Venue";
 import Dashboard from "./pages/Dashboard";
 import Social from "./pages/Social";
 import Gallery from "./pages/Gallery";
+import RSVP from "./pages/RSVP";
+import FAQ from "./pages/FAQ";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "./hooks/useAuth";
@@ -61,6 +63,8 @@ const AppContent = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/social" element={<Social />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/rsvp" element={<RSVP />} />
+        <Route path="/faq" element={<FAQ />} />
         <Route path="/auth" element={<Auth />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />

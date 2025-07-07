@@ -11,8 +11,8 @@ const Home: React.FC = () => {
     seconds: 0
   });
 
-  // Wedding date - you can change this
-  const weddingDate = new Date('2024-09-15T16:00:00');
+  // Tim & Kirsten's Wedding Date - October 5th, 2025
+  const weddingDate = new Date('2025-10-05T15:00:00');
 
   useEffect(() => {
     const updateCountdown = () => {
@@ -47,13 +47,13 @@ const Home: React.FC = () => {
         {/* Hero Content */}
         <div className="relative z-10 text-center animate-fade-up">
           <h1 className="wedding-display text-white mb-4 animate-glass-float drop-shadow-lg">
-            Sarah & James
+            Tim & Kirsten
           </h1>
           <p className="wedding-subheading text-white/90 mb-6 drop-shadow-md">
-            September 15, 2024
+            October 5, 2025
           </p>
           <p className="wedding-body text-white/80 max-w-md mx-auto drop-shadow-md">
-            Join us as we celebrate our love story and begin this beautiful journey together
+            Yes, we are that couple stuffing up your long weekend plans!
           </p>
         </div>
       </div>
@@ -110,8 +110,8 @@ const Home: React.FC = () => {
             <Calendar className="w-8 h-8 mx-auto mb-3 text-glass-blue" />
             <h3 className="font-semibold mb-2 text-wedding-navy">When</h3>
             <p className="text-sm text-muted-foreground">
-              September 15, 2024<br />
-              4:00 PM
+              October 5, 2025<br />
+              Arrive 2:30 PM
             </p>
           </GlassCard>
           
@@ -122,8 +122,8 @@ const Home: React.FC = () => {
             <MapPin className="w-8 h-8 mx-auto mb-3 text-glass-pink" />
             <h3 className="font-semibold mb-2 text-wedding-navy">Where</h3>
             <p className="text-sm text-muted-foreground">
-              Sunset Garden<br />
-              Venue
+              Ben Ean<br />
+              Pokolbin, NSW
             </p>
           </GlassCard>
         </div>
@@ -138,12 +138,11 @@ const Home: React.FC = () => {
             Welcome to Our Wedding
           </h3>
           <p className="text-muted-foreground leading-relaxed mb-4">
-            We're so excited to share this special day with you! This app contains 
-            everything you need to know about our wedding celebration.
+            Why spend your long weekend somewhere relaxing when you can watch two people who have been together for well over a decade tell you that they still love each other? There'll be top-shelf bevies, good tunes, and more love than you can poke a stick at!
           </p>
           <div className="flex items-center gap-2 text-sm text-glass-green">
             <Clock className="w-4 h-4" />
-            <span>RSVP by August 1st, 2024</span>
+            <span>Don't forget to RSVP!</span>
           </div>
         </GlassCard>
       </div>

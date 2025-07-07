@@ -70,7 +70,7 @@ const Auth: React.FC = () => {
           <div className="flex items-center justify-center mb-4">
             <Heart className="w-8 h-8 text-glass-pink mr-2" />
             <h1 className="wedding-heading text-wedding-navy">
-              Sarah & James
+              Tim & Kirsten
             </h1>
           </div>
           <h2 className="text-xl font-semibold text-wedding-navy mb-2">
