@@ -267,14 +267,38 @@ const Venue: React.FC = () => {
         </div>
 
         {/* Dress Code Card */}
-        <div className="venue-card" style={{ animationDelay: '0.4s' }}>
-          <div className="card-header">
-            <div className="card-content">
-              <div className="venue-name">
-                💗 Dress Code
-              </div>
-              <div className="event-type">What to Wear</div>
+        <div className="glass-card" style={{ 
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
+          backdropFilter: 'blur(15px)',
+          WebkitBackdropFilter: 'blur(15px)',
+          borderRadius: '30px',
+          padding: '30px',
+          position: 'relative' as const,
+          overflow: 'hidden',
+          boxShadow: '20px 20px 40px rgba(163, 155, 146, 0.3), -20px -20px 40px rgba(255, 255, 255, 0.8), inset 1px 1px 3px rgba(255, 255, 255, 0.6), inset -1px -1px 3px rgba(163, 155, 146, 0.15)',
+          border: '1px solid rgba(255, 255, 255, 0.4)',
+          transition: 'all 0.3s ease',
+          animation: 'fadeIn 0.6s ease-out 0.1s backwards'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '25px' }}>
+            <div style={{
+              width: '50px',
+              height: '50px',
+              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              borderRadius: '15px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '24px',
+              boxShadow: '5px 5px 10px rgba(240, 87, 108, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.7), inset 2px 2px 5px rgba(255, 255, 255, 0.3)',
+              position: 'relative' as const,
+              overflow: 'hidden'
+            }}>
+              💗
             </div>
+            <h2 style={{ fontSize: '22px', fontWeight: '600', color: '#2d3f51', letterSpacing: '-0.5px' }}>
+              Dress Code
+            </h2>
           </div>
 
           <div style={{ 
@@ -283,42 +307,82 @@ const Venue: React.FC = () => {
             gap: '20px', 
             marginBottom: '25px' 
           }}>
-            <div className="schedule-item" style={{ 
-              flexDirection: 'column', 
-              alignItems: 'flex-start',
-              padding: '20px'
+            <div style={{
+              background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)',
+              borderRadius: '20px',
+              padding: '20px',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              boxShadow: '8px 8px 16px rgba(163, 155, 146, 0.25), -8px -8px 16px rgba(255, 255, 255, 0.7), inset 1px 1px 2px rgba(255, 255, 255, 0.5)',
+              transition: 'all 0.3s ease',
+              position: 'relative' as const,
+              overflow: 'hidden'
             }}>
               <div style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
                 gap: '10px', 
-                marginBottom: '12px' 
+                marginBottom: '12px',
+                fontWeight: '600',
+                color: '#2d3f51',
+                fontSize: '16px'
               }}>
-                <div className="info-icon">👔</div>
-                <span style={{ fontWeight: '600', color: '#2d3f51', fontSize: '16px' }}>
-                  For Him:
+                <span style={{
+                  display: 'inline-block',
+                  width: '30px',
+                  height: '30px',
+                  background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
+                  borderRadius: '50%',
+                  textAlign: 'center' as const,
+                  lineHeight: '30px',
+                  fontSize: '16px',
+                  marginBottom: '12px',
+                  boxShadow: '3px 3px 6px rgba(163, 155, 146, 0.3), -3px -3px 6px rgba(255, 255, 255, 0.8)'
+                }}>
+                  👔
                 </span>
+                For Him:
               </div>
               <p style={{ fontSize: '14px', color: '#5a5651', lineHeight: '1.6' }}>
                 Suits, dress chinos, button up shirt and optional tie. We love a pocket kerchief!
               </p>
             </div>
 
-            <div className="schedule-item" style={{ 
-              flexDirection: 'column', 
-              alignItems: 'flex-start',
-              padding: '20px'
+            <div style={{
+              background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)',
+              borderRadius: '20px',
+              padding: '20px',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              boxShadow: '8px 8px 16px rgba(163, 155, 146, 0.25), -8px -8px 16px rgba(255, 255, 255, 0.7), inset 1px 1px 2px rgba(255, 255, 255, 0.5)',
+              transition: 'all 0.3s ease',
+              position: 'relative' as const,
+              overflow: 'hidden'
             }}>
               <div style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
                 gap: '10px', 
-                marginBottom: '12px' 
+                marginBottom: '12px',
+                fontWeight: '600',
+                color: '#2d3f51',
+                fontSize: '16px'
               }}>
-                <div className="info-icon">👗</div>
-                <span style={{ fontWeight: '600', color: '#2d3f51', fontSize: '16px' }}>
-                  For Her:
+                <span style={{
+                  display: 'inline-block',
+                  width: '30px',
+                  height: '30px',
+                  background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
+                  borderRadius: '50%',
+                  textAlign: 'center' as const,
+                  lineHeight: '30px',
+                  fontSize: '16px',
+                  marginBottom: '12px',
+                  boxShadow: '3px 3px 6px rgba(163, 155, 146, 0.3), -3px -3px 6px rgba(255, 255, 255, 0.8)'
+                }}>
+                  👗
                 </span>
+                For Her:
               </div>
               <p style={{ fontSize: '14px', color: '#5a5651', lineHeight: '1.6' }}>
                 Classy dress, pantsuit or jumpsuit.
@@ -330,7 +394,7 @@ const Venue: React.FC = () => {
             background: 'linear-gradient(135deg, rgba(255, 220, 235, 0.4) 0%, rgba(255, 220, 235, 0.2) 100%)',
             borderRadius: '20px',
             padding: '15px',
-            textAlign: 'center',
+            textAlign: 'center' as const,
             fontWeight: '600',
             color: '#f5576c',
             fontSize: '16px',
@@ -346,14 +410,38 @@ const Venue: React.FC = () => {
         </div>
 
         {/* Accommodation Card */}
-        <div className="venue-card" style={{ animationDelay: '0.5s' }}>
-          <div className="card-header">
-            <div className="card-content">
-              <div className="venue-name">
-                📍 Accommodation Recommendations
-              </div>
-              <div className="event-type">Where to Stay</div>
+        <div className="glass-card" style={{ 
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
+          backdropFilter: 'blur(15px)',
+          WebkitBackdropFilter: 'blur(15px)',
+          borderRadius: '30px',
+          padding: '30px',
+          position: 'relative' as const,
+          overflow: 'hidden',
+          boxShadow: '20px 20px 40px rgba(163, 155, 146, 0.3), -20px -20px 40px rgba(255, 255, 255, 0.8), inset 1px 1px 3px rgba(255, 255, 255, 0.6), inset -1px -1px 3px rgba(163, 155, 146, 0.15)',
+          border: '1px solid rgba(255, 255, 255, 0.4)',
+          transition: 'all 0.3s ease',
+          animation: 'fadeIn 0.6s ease-out 0.3s backwards'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '25px' }}>
+            <div style={{
+              width: '50px',
+              height: '50px',
+              background: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+              borderRadius: '15px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '24px',
+              boxShadow: '5px 5px 10px rgba(17, 153, 142, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.7), inset 2px 2px 5px rgba(255, 255, 255, 0.3)',
+              position: 'relative' as const,
+              overflow: 'hidden'
+            }}>
+              📍
             </div>
+            <h2 style={{ fontSize: '22px', fontWeight: '600', color: '#2d3f51', letterSpacing: '-0.5px' }}>
+              Accommodation Recommendations
+            </h2>
           </div>
 
           {/* Newcastle Area */}
@@ -394,17 +482,18 @@ const Venue: React.FC = () => {
               gap: '15px' 
             }}>
               {['Ibis Newcastle', 'Holiday Inn Newcastle', 'Kingsley Crystalbrook', 'QT Newcastle'].map((hotel, index) => (
-                <div key={index} className="info-row" style={{
+                <div key={index} style={{
                   background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
                   borderRadius: '15px',
                   padding: '15px',
+                  display: 'flex',
+                  alignItems: 'center',
                   justifyContent: 'space-between',
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(255, 255, 255, 0.3)',
                   boxShadow: '5px 5px 10px rgba(163, 155, 146, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.6)',
                   transition: 'all 0.3s ease',
-                  cursor: 'pointer',
-                  marginBottom: '0'
+                  cursor: 'pointer'
                 }}>
                   <span style={{ fontSize: '14px', color: '#2d3f51', fontWeight: '500' }}>
                     {hotel}
@@ -415,8 +504,20 @@ const Venue: React.FC = () => {
                     borderRadius: '50%',
                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     boxShadow: '0 2px 4px rgba(102, 126, 234, 0.3)',
-                    display: 'block'
-                  }}></span>
+                    position: 'relative' as const
+                  }}>
+                    <span style={{
+                      position: 'absolute' as const,
+                      top: '-3px',
+                      left: '-3px',
+                      right: '-3px',
+                      bottom: '-3px',
+                      borderRadius: '50%',
+                      background: 'inherit',
+                      opacity: '0.3',
+                      animation: 'pulse 2s infinite'
+                    }}></span>
+                  </span>
                 </div>
               ))}
             </div>
@@ -452,17 +553,18 @@ const Venue: React.FC = () => {
               gap: '15px' 
             }}>
               {['Elfin Hill Vineyard Accommodation', 'Oaks Cypress Lakes Resort'].map((hotel, index) => (
-                <div key={index} className="info-row" style={{
+                <div key={index} style={{
                   background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
                   borderRadius: '15px',
                   padding: '15px',
+                  display: 'flex',
+                  alignItems: 'center',
                   justifyContent: 'space-between',
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(255, 255, 255, 0.3)',
                   boxShadow: '5px 5px 10px rgba(163, 155, 146, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.6)',
                   transition: 'all 0.3s ease',
-                  cursor: 'pointer',
-                  marginBottom: '0'
+                  cursor: 'pointer'
                 }}>
                   <span style={{ fontSize: '14px', color: '#2d3f51', fontWeight: '500' }}>
                     {hotel}
@@ -473,21 +575,34 @@ const Venue: React.FC = () => {
                     borderRadius: '50%',
                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     boxShadow: '0 2px 4px rgba(102, 126, 234, 0.3)',
-                    display: 'block'
-                  }}></span>
+                    position: 'relative' as const
+                  }}>
+                    <span style={{
+                      position: 'absolute' as const,
+                      top: '-3px',
+                      left: '-3px',
+                      right: '-3px',
+                      bottom: '-3px',
+                      borderRadius: '50%',
+                      background: 'inherit',
+                      opacity: '0.3',
+                      animation: 'pulse 2s infinite'
+                    }}></span>
+                  </span>
                 </div>
               ))}
-              <div className="info-row" style={{
+              <div style={{
                 background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
                 borderRadius: '15px',
                 padding: '15px',
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'space-between',
                 backdropFilter: 'blur(10px)',
                 border: '1px solid rgba(255, 255, 255, 0.3)',
                 boxShadow: '5px 5px 10px rgba(163, 155, 146, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.6)',
                 transition: 'all 0.3s ease',
                 cursor: 'pointer',
-                marginBottom: '0',
                 gridColumn: 'span 2'
               }}>
                 <span style={{ fontSize: '14px', color: '#2d3f51', fontWeight: '500' }}>
@@ -499,8 +614,20 @@ const Venue: React.FC = () => {
                   borderRadius: '50%',
                   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                   boxShadow: '0 2px 4px rgba(102, 126, 234, 0.3)',
-                  display: 'block'
-                }}></span>
+                  position: 'relative' as const
+                }}>
+                  <span style={{
+                    position: 'absolute' as const,
+                    top: '-3px',
+                    left: '-3px',
+                    right: '-3px',
+                    bottom: '-3px',
+                    borderRadius: '50%',
+                    background: 'inherit',
+                    opacity: '0.3',
+                    animation: 'pulse 2s infinite'
+                  }}></span>
+                </span>
               </div>
             </div>
           </div>
