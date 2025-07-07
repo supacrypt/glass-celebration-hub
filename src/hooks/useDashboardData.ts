@@ -72,6 +72,7 @@ export const useDashboardData = () => {
       // Format RSVPs with profiles
       const formattedRSVPs: RSVP[] = rsvpsData?.map(rsvp => ({
         ...rsvp,
+        status: rsvp.status as 'attending' | 'declined' | 'pending' | 'maybe',
         profiles: profilesData?.find(p => p.user_id === rsvp.user_id) || { 
           first_name: '', 
           last_name: '', 

@@ -20,9 +20,10 @@ export interface RSVP {
   id: string;
   user_id: string;
   event_id: string;
-  status: string;
+  status: 'attending' | 'declined' | 'pending' | 'maybe';
   guest_count: number;
   created_at: string;
+  updated_at: string;
   profiles: {
     first_name?: string;
     last_name?: string;
