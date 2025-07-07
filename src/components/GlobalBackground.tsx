@@ -7,11 +7,14 @@ const GlobalBackground: React.FC = () => {
 
   const fetchActiveBackground = async () => {
     try {
+      console.log('GlobalBackground: Fetching active background...');
       const { data, error } = await supabase
         .from('app_settings')
         .select('setting_value')
         .eq('setting_key', 'active_background')
         .single();
+
+      console.log('GlobalBackground: Database query result:', { data, error });
 
       if (error && error.code !== 'PGRST116') {
         console.error('Error fetching active background:', error);
@@ -19,15 +22,19 @@ const GlobalBackground: React.FC = () => {
       }
 
       if (data?.setting_value) {
+        console.log('GlobalBackground: Using background from database:', data.setting_value);
         const publicUrl = supabase.storage
           .from('backgrounds')
           .getPublicUrl(data.setting_value).data.publicUrl;
+        console.log('GlobalBackground: Generated URL:', publicUrl);
         setBackgroundUrl(publicUrl);
       } else {
+        console.log('GlobalBackground: No active background found, using fallback');
         // Fallback to the existing background in the 'background' bucket
         const fallbackUrl = supabase.storage
           .from('background')
           .getPublicUrl('background-image.jpg').data.publicUrl;
+        console.log('GlobalBackground: Fallback URL:', fallbackUrl);
         setBackgroundUrl(fallbackUrl);
       }
     } catch (error) {
@@ -87,6 +94,8 @@ const GlobalBackground: React.FC = () => {
     return null;
   }
 
+  console.log('GlobalBackground: Rendering with URL:', backgroundUrl);
+  
   return (
     <div
       className="fixed inset-0 z-[-2] transition-all duration-1000 ease-in-out"
