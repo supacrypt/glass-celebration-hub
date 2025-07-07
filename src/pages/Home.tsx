@@ -38,60 +38,29 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ minHeight: '100vh', padding: '40px 20px', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+    <div className="min-h-screen p-4 sm:p-6 lg:p-8 xl:p-10 relative overflow-hidden">
+      <div className="max-w-4xl mx-auto">
         {/* Hero Section */}
-        <div className="glass-card" style={{
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
-          backdropFilter: 'blur(15px)',
-          WebkitBackdropFilter: 'blur(15px)',
-          borderRadius: '30px',
-          padding: '60px 40px',
-          marginBottom: '40px',
-          textAlign: 'center',
-          position: 'relative',
-          overflow: 'hidden',
-          boxShadow: '20px 20px 40px rgba(163, 155, 146, 0.3), -20px -20px 40px rgba(255, 255, 255, 0.8), inset 1px 1px 3px rgba(255, 255, 255, 0.6), inset -1px -1px 3px rgba(163, 155, 146, 0.15)',
-          border: '1px solid rgba(255, 255, 255, 0.4)',
-          animation: 'fadeIn 0.6s ease-out'
-        }}>
-          <div style={{
-            fontSize: '64px',
-            marginBottom: '20px',
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '10px'
+        <div className="glass-card mb-6 sm:mb-8 lg:mb-10 text-center relative overflow-hidden animate-fade-up"
+          style={{
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
+            backdropFilter: 'blur(15px)',
+            WebkitBackdropFilter: 'blur(15px)',
+            borderRadius: '20px',
+            padding: '40px 20px',
+            boxShadow: '20px 20px 40px rgba(163, 155, 146, 0.3), -20px -20px 40px rgba(255, 255, 255, 0.8)',
+            border: '1px solid rgba(255, 255, 255, 0.4)'
           }}>
+          <div className="text-4xl sm:text-5xl lg:text-6xl mb-4 sm:mb-5 flex justify-center gap-2">
             💕
           </div>
-          <h1 style={{
-            fontSize: '48px',
-            fontWeight: '700',
-            color: '#2d3f51',
-            marginBottom: '15px',
-            letterSpacing: '-1px',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
-          }}>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-wedding-navy mb-3 sm:mb-4 tracking-tight bg-gradient-to-r from-glass-blue to-glass-purple bg-clip-text text-transparent">
             Tim & Kirsten
           </h1>
-          <p style={{
-            fontSize: '20px',
-            color: '#667eea',
-            marginBottom: '15px',
-            fontWeight: '500'
-          }}>
+          <p className="text-base sm:text-lg lg:text-xl text-glass-blue mb-3 sm:mb-4 font-medium">
             October 5, 2025
           </p>
-          <p style={{
-            fontSize: '16px',
-            color: '#7a736b',
-            maxWidth: '600px',
-            margin: '0 auto',
-            lineHeight: '1.6'
-          }}>
+          <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto leading-relaxed">
             Join us as we celebrate our love and commitment surrounded by family and friends
           </p>
         </div>

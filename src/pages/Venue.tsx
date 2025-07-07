@@ -36,24 +36,14 @@ const Venue: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen venue-page" style={{ padding: '40px 20px', position: 'relative' }}>
-      <div className="container" style={{ maxWidth: '600px', margin: '0 auto' }}>
+    <div className="min-h-screen px-3 sm:px-5 pt-8 sm:pt-12 pb-6 relative">
+      <div className="container max-w-3xl mx-auto">
         {/* Page Header */}
-        <div className="page-header" style={{ textAlign: 'center', marginBottom: '50px' }}>
-          <h1 className="page-title" style={{ 
-            fontSize: '36px', 
-            fontWeight: '700', 
-            color: '#2d3f51', 
-            marginBottom: '10px', 
-            letterSpacing: '-1px' 
-          }}>
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-wedding-navy mb-2 sm:mb-3 tracking-tight">
             Venues & Locations
           </h1>
-          <p className="page-subtitle" style={{ 
-            fontSize: '16px', 
-            color: '#7a736b', 
-            fontWeight: '400' 
-          }}>
+          <p className="text-sm sm:text-base text-muted-foreground font-normal">
             All the places where we'll be celebrating
           </p>
         </div>
