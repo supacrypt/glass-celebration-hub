@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import CompactStats from '@/components/admin/CompactStats';
 import CompactUserManagement from '@/components/admin/CompactUserManagement';
-import CompactGuestManagement from '@/components/admin/CompactGuestManagement';
+import EnhancedGuestManagement from '@/components/admin/EnhancedGuestManagement';
 import CompactPhotoModeration from '@/components/admin/CompactPhotoModeration';
-import CompactRSVPManagement from '@/components/admin/CompactRSVPManagement';
+import EnhancedRSVPManagement from '@/components/admin/EnhancedRSVPManagement';
 import CompactGiftManagement from '@/components/admin/CompactGiftManagement';
 import CompactSystemSettings from '@/components/admin/CompactSystemSettings';
 import AnalyticsInsights from '@/components/admin/AnalyticsInsights';
@@ -71,10 +71,10 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
           <div className="space-y-4">
             {activeTab === 'stats' && <CompactStats stats={stats} />}
             {activeTab === 'users' && <CompactUserManagement users={users} onRefresh={onRefresh} />}
-            {activeTab === 'guests' && <CompactGuestManagement users={users} onRefresh={onRefresh} />}
+            {activeTab === 'guests' && <EnhancedGuestManagement users={users} onRefresh={onRefresh} />}
             {activeTab === 'photos' && <CompactPhotoModeration photos={photos} onRefresh={onRefresh} />}
             {activeTab === 'gifts' && <CompactGiftManagement />}
-            {activeTab === 'rsvps' && <CompactRSVPManagement rsvps={rsvps} />}
+            {activeTab === 'rsvps' && <EnhancedRSVPManagement rsvps={rsvps} onRefresh={onRefresh} />}
             {activeTab === 'analytics' && <AnalyticsInsights />}
             {activeTab === 'comms' && <CommunicationCenter />}
             {activeTab === 'notifications' && <NotificationCenter />}
