@@ -1,0 +1,169 @@
+import React from 'react';
+import NavigationIcon from './NavigationIcon';
+import { NavigationRoute } from './types';
+
+interface ResponsiveNavigationProps {
+  routes: NavigationRoute[];
+  activeRoute: string;
+  onRouteClick: (routeId: string) => void;
+}
+
+const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
+  routes,
+  activeRoute,
+  onRouteClick
+}) => {
+  return (
+    <nav 
+      className="fixed left-1/2 transform -translate-x-1/2 items-end z-50"
+      style={{
+        bottom: '20px',
+        background: 'linear-gradient(145deg, hsl(var(--wedding-cream)), hsl(var(--wedding-cream-dark)))',
+        borderRadius: 'clamp(20px, 4vw, 32px)',
+        padding: 'clamp(3px, 1vw, 5px) clamp(8px, 2vw, 12px)',
+        boxShadow: `
+          clamp(6px, 1.5vw, 8px) clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 16px) hsl(var(--wedding-navy) / 0.15),
+          clamp(-6px, -1.5vw, -8px) clamp(-6px, -1.5vw, -8px) clamp(12px, 3vw, 16px) hsl(var(--glass-white) / 0.7),
+          inset clamp(1px, 0.25vw, 2px) clamp(1px, 0.25vw, 2px) clamp(3px, 0.75vw, 5px) hsl(var(--glass-white) / 0.6),
+          inset clamp(-1px, -0.25vw, -2px) clamp(-1px, -0.25vw, -2px) clamp(3px, 0.75vw, 5px) hsl(var(--wedding-navy) / 0.08)
+        `,
+        display: 'flex',
+        gap: 'clamp(10px, 2.5vw, 16px)',
+        border: '1px solid hsl(var(--glass-white) / 0.3)',
+        width: 'max-content',
+        maxWidth: 'calc(100vw - 2rem)',
+        transition: 'all 0.3s ease'
+      }}
+    >
+      {routes.map((route) => {
+        const isActive = activeRoute === route.id;
+        const isCenter = route.isCenter;
+        
+        return (
+          <button
+            key={route.id}
+            onClick={() => onRouteClick(route.id)}
+            className={`nav-item ${isCenter ? 'dashboard' : ''} ${isActive ? 'active' : ''} touch-target`}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textDecoration: 'none',
+              color: 'hsl(var(--wedding-navy) / 0.7)',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer',
+              position: 'relative',
+              padding: 'clamp(3px, 0.75vw, 4px) 0',
+              background: 'none',
+              border: 'none',
+              fontFamily: 'inherit',
+              minWidth: '44px',
+              minHeight: '44px'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'hsl(var(--wedding-navy) / 0.9)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'hsl(var(--wedding-navy) / 0.7)';
+            }}
+          >
+            {/* Responsive Neumorphic Icon with Glass Bubble */}
+            <div 
+              className="nav-icon"
+              style={{
+                background: isActive && isCenter 
+                  ? 'linear-gradient(135deg, hsl(var(--wedding-navy)) 0%, hsl(var(--wedding-navy-light)) 100%)'
+                  : 'linear-gradient(135deg, hsl(var(--wedding-navy)) 0%, hsl(var(--wedding-navy-light)) 100%)',
+                width: 'clamp(36px, 8vw, 50px)',
+                height: 'clamp(36px, 8vw, 50px)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                top: 'clamp(-6px, -1.5vw, -10px)',
+                marginBottom: 'clamp(-4px, -1vw, -8px)',
+                boxShadow: `
+                  0 0 clamp(15px, 4vw, 25px) hsl(var(--wedding-navy) / 0.2),
+                  0 clamp(4px, 1vw, 8px) clamp(12px, 3vw, 20px) hsl(var(--wedding-navy) / 0.4),
+                  0 clamp(2px, 0.5vw, 4px) clamp(4px, 1vw, 8px) hsl(var(--wedding-navy) / 0.3),
+                  inset 0 -2px 4px hsl(var(--glass-black) / 0.3),
+                  inset 0 2px 4px hsl(var(--glass-white) / 0.1)
+                `,
+                overflow: 'hidden',
+                transition: 'all 0.2s ease',
+                transform: isActive && isCenter ? 'scale(0.95)' : 'scale(1)'
+              }}
+            >
+              {/* Glass bubble effect overlay */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '-25%',
+                  left: '-25%',
+                  width: '150%',
+                  height: '150%',
+                  background: `radial-gradient(
+                    ellipse at 30% 25%,
+                    hsl(var(--glass-white) / 0.5) 0%,
+                    hsl(var(--glass-white) / 0.3) 25%,
+                    hsl(var(--glass-white) / 0.15) 45%,
+                    transparent 65%
+                  )`,
+                  borderRadius: '50%',
+                  transform: 'rotate(-20deg)',
+                  pointerEvents: 'none'
+                }}
+              />
+              
+              {/* Glass reflection highlight */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 'clamp(2px, 0.5vw, 3px)',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '65%',
+                  height: '35%',
+                  background: `linear-gradient(
+                    to bottom,
+                    hsl(var(--glass-white) / 0.6) 0%,
+                    hsl(var(--glass-white) / 0.3) 40%,
+                    hsl(var(--glass-white) / 0.1) 70%,
+                    transparent 100%
+                  )`,
+                  borderRadius: '50% 50% 50% 50% / 100% 100% 0% 0%',
+                  filter: 'blur(clamp(1px, 0.25vw, 2px))',
+                  pointerEvents: 'none'
+                }}
+              />
+
+              <NavigationIcon 
+                route={route} 
+                isActive={isActive} 
+                size={window.innerWidth < 768 ? 'small' : 'medium'} 
+              />
+            </div>
+            
+            {/* Responsive Label */}
+            <span 
+              className="nav-label"
+              style={{
+                fontSize: 'clamp(8px, 2vw, 9.5px)',
+                marginTop: 'clamp(2px, 1vw, 6px)',
+                fontWeight: '500',
+                letterSpacing: '0.3px',
+                textShadow: '1px 1px 2px hsl(var(--glass-white) / 0.8)',
+                color: 'hsl(var(--wedding-navy) / 0.7)'
+              }}
+            >
+              {route.label}
+            </span>
+          </button>
+        );
+      })}
+    </nav>
+  );
+};
+
+export default ResponsiveNavigation;

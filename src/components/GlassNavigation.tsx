@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import DashboardPopup from './DashboardPopup';
-import DesktopNavigation from './navigation/DesktopNavigation';
-import MobileNavigation from './navigation/MobileNavigation';
+import ResponsiveNavigation from './navigation/ResponsiveNavigation';
 import { useAuth } from '@/hooks/useAuth';
 import { NAVIGATION_ROUTES } from './navigation/constants';
 import type { NavigationProps } from './navigation/types';
@@ -20,13 +19,7 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
 
   return (
     <>
-      <DesktopNavigation 
-        routes={NAVIGATION_ROUTES}
-        activeRoute={activeRoute}
-        onRouteClick={handleRouteClick}
-      />
-      
-      <MobileNavigation 
+      <ResponsiveNavigation 
         routes={NAVIGATION_ROUTES}
         activeRoute={activeRoute}
         onRouteClick={handleRouteClick}
