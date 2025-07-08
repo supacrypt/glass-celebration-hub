@@ -1,5 +1,6 @@
 import React from 'react';
 import NavigationIcon from './NavigationIcon';
+import { HapticFeedback } from '@/components/mobile/HapticFeedback';
 import { NavigationRoute } from './types';
 
 interface ResponsiveNavigationProps {
@@ -40,33 +41,33 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
         const isCenter = route.isCenter;
         
         return (
-          <button
-            key={route.id}
-            onClick={() => onRouteClick(route.id)}
-            className={`nav-item ${isCenter ? 'dashboard' : ''} ${isActive ? 'active' : ''} touch-target`}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              textDecoration: 'none',
-              color: 'hsl(var(--wedding-navy) / 0.7)',
-              transition: 'all 0.3s ease',
-              cursor: 'pointer',
-              position: 'relative',
-              padding: 'clamp(3px, 0.75vw, 4px) 0',
-              background: 'none',
-              border: 'none',
-              fontFamily: 'inherit',
-              minWidth: '44px',
-              minHeight: '44px'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = 'hsl(var(--wedding-navy) / 0.9)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'hsl(var(--wedding-navy) / 0.7)';
-            }}
-          >
+          <HapticFeedback key={route.id} type="light">
+            <button
+              onClick={() => onRouteClick(route.id)}
+              className={`nav-item ${isCenter ? 'dashboard' : ''} ${isActive ? 'active' : ''} touch-target`}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textDecoration: 'none',
+                color: 'hsl(var(--wedding-navy) / 0.7)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer',
+                position: 'relative',
+                padding: 'clamp(4px, 1vw, 6px) 0',
+                background: 'none',
+                border: 'none',
+                fontFamily: 'inherit',
+                minWidth: '48px',
+                minHeight: '48px'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'hsl(var(--wedding-navy) / 0.9)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'hsl(var(--wedding-navy) / 0.7)';
+              }}
+            >
             {/* Responsive Neumorphic Icon with Glass Bubble */}
             <div 
               className="nav-icon"
@@ -74,25 +75,25 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
                 background: isActive && isCenter 
                   ? 'linear-gradient(135deg, hsl(var(--wedding-navy)) 0%, hsl(var(--wedding-navy-light)) 100%)'
                   : 'linear-gradient(135deg, hsl(var(--wedding-navy)) 0%, hsl(var(--wedding-navy-light)) 100%)',
-                width: 'clamp(36px, 8vw, 50px)',
-                height: 'clamp(36px, 8vw, 50px)',
+                width: 'clamp(40px, 9vw, 56px)',
+                height: 'clamp(40px, 9vw, 56px)',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 position: 'relative',
-                top: 'clamp(-6px, -1.5vw, -10px)',
-                marginBottom: 'clamp(-4px, -1vw, -8px)',
+                top: 'clamp(-8px, -2vw, -12px)',
+                marginBottom: 'clamp(-6px, -1.5vw, -10px)',
                 boxShadow: `
-                  0 0 clamp(15px, 4vw, 25px) hsl(var(--wedding-navy) / 0.2),
-                  0 clamp(4px, 1vw, 8px) clamp(12px, 3vw, 20px) hsl(var(--wedding-navy) / 0.4),
-                  0 clamp(2px, 0.5vw, 4px) clamp(4px, 1vw, 8px) hsl(var(--wedding-navy) / 0.3),
-                  inset 0 -2px 4px hsl(var(--glass-black) / 0.3),
-                  inset 0 2px 4px hsl(var(--glass-white) / 0.1)
+                  0 0 clamp(20px, 5vw, 30px) hsl(var(--wedding-navy) / 0.25),
+                  0 clamp(6px, 1.5vw, 10px) clamp(16px, 4vw, 24px) hsl(var(--wedding-navy) / 0.5),
+                  0 clamp(3px, 0.75vw, 5px) clamp(6px, 1.5vw, 10px) hsl(var(--wedding-navy) / 0.4),
+                  inset 0 -3px 6px hsl(var(--glass-black) / 0.4),
+                  inset 0 3px 6px hsl(var(--glass-white) / 0.15)
                 `,
                 overflow: 'hidden',
                 transition: 'all 0.2s ease',
-                transform: isActive && isCenter ? 'scale(0.95)' : 'scale(1)'
+                transform: isActive && isCenter ? 'scale(0.98)' : 'scale(1)'
               }}
             >
               {/* Glass bubble effect overlay */}
@@ -149,17 +150,19 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
             <span 
               className="nav-label"
               style={{
-                fontSize: 'clamp(8px, 2vw, 9.5px)',
-                marginTop: 'clamp(2px, 1vw, 6px)',
+                fontSize: 'clamp(9px, 2.2vw, 10px)',
+                marginTop: 'clamp(3px, 1.2vw, 7px)',
                 fontWeight: '500',
                 letterSpacing: '0.3px',
                 textShadow: '1px 1px 2px hsl(var(--glass-white) / 0.8)',
-                color: 'hsl(var(--wedding-navy) / 0.7)'
+                color: 'hsl(var(--wedding-navy) / 0.7)',
+                fontFamily: "'Playfair Display', serif"
               }}
             >
               {route.label}
             </span>
           </button>
+        </HapticFeedback>
         );
       })}
     </nav>

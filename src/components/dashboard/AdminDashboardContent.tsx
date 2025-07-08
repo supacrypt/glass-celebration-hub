@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SwipeableTabsNavigation } from '@/components/mobile/SwipeableTabsNavigation';
 import CompactStats from '@/components/admin/CompactStats';
 import CompactUserManagement from '@/components/admin/CompactUserManagement';
 import EnhancedGuestManagement from '@/components/admin/EnhancedGuestManagement';
@@ -31,63 +32,75 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
   const [activeTab, setActiveTab] = useState('stats');
 
   const adminTabs = [
-    { id: 'stats', label: 'Stats' },
-    { id: 'users', label: 'Users' },
-    { id: 'guest-list', label: 'Guest List' },
-    { id: 'accounts', label: 'Accounts' },
-    { id: 'photos', label: 'Photos' },
-    { id: 'gifts', label: 'Gifts' },
-    { id: 'rsvps', label: 'RSVPs' },
-    { id: 'analytics', label: 'Analytics' },
-    { id: 'comms', label: 'Messages' },
-    { id: 'notifications', label: 'Alerts' },
-    { id: 'timeline', label: 'Timeline' },
-    { id: 'settings', label: 'Settings' },
+    { 
+      id: 'stats', 
+      label: 'Stats',
+      component: <CompactStats stats={stats} />
+    },
+    { 
+      id: 'users', 
+      label: 'Users',
+      component: <CompactUserManagement users={users} onRefresh={onRefresh} />
+    },
+    { 
+      id: 'guest-list', 
+      label: 'Guest List',
+      component: <WeddingGuestManagement onRefresh={onRefresh} />
+    },
+    { 
+      id: 'accounts', 
+      label: 'Accounts',
+      component: <EnhancedGuestManagement users={users} onRefresh={onRefresh} />
+    },
+    { 
+      id: 'photos', 
+      label: 'Photos',
+      component: <EnhancedPhotoModeration photos={photos as any} onRefresh={onRefresh} />
+    },
+    { 
+      id: 'gifts', 
+      label: 'Gifts',
+      component: <CompactGiftManagement />
+    },
+    { 
+      id: 'rsvps', 
+      label: 'RSVPs',
+      component: <EnhancedRSVPManagement rsvps={rsvps} onRefresh={onRefresh} />
+    },
+    { 
+      id: 'analytics', 
+      label: 'Analytics',
+      component: <AnalyticsInsights />
+    },
+    { 
+      id: 'comms', 
+      label: 'Messages',
+      component: <EnhancedCommunicationCenter />
+    },
+    { 
+      id: 'notifications', 
+      label: 'Alerts',
+      component: <NotificationCenter />
+    },
+    { 
+      id: 'timeline', 
+      label: 'Timeline',
+      component: <EventTimeline />
+    },
+    { 
+      id: 'settings', 
+      label: 'Settings',
+      component: <CompactSystemSettings />
+    },
   ];
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Enhanced Mobile Tab Navigation */}
-      <div className="px-2 sm:px-4 pt-3 pb-2 flex-shrink-0">
-        <div className="overflow-x-auto">
-          <div className="flex gap-1 sm:gap-2 min-w-max pb-2">
-            {adminTabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap flex-shrink-0 min-w-[80px] sm:min-w-[90px] ${
-                  activeTab === tab.id
-                    ? 'bg-wedding-navy text-white shadow-md scale-105'
-                    : 'text-wedding-navy hover:bg-wedding-navy/10 glass-secondary'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Tab Content with Mobile-Optimized Scrolling */}
-      <div className="flex-1 overflow-hidden">
-        <div className="h-full overflow-y-auto px-2 sm:px-4 pb-4" style={{ maxHeight: 'calc(80vh - 120px)' }}>
-          {/* Dynamic Content Rendering */}
-          <div className="space-y-4">
-            {activeTab === 'stats' && <CompactStats stats={stats} />}
-            {activeTab === 'users' && <CompactUserManagement users={users} onRefresh={onRefresh} />}
-            {activeTab === 'guest-list' && <WeddingGuestManagement onRefresh={onRefresh} />}
-            {activeTab === 'accounts' && <EnhancedGuestManagement users={users} onRefresh={onRefresh} />}
-            {activeTab === 'photos' && <EnhancedPhotoModeration photos={photos as any} onRefresh={onRefresh} />}
-            {activeTab === 'gifts' && <CompactGiftManagement />}
-            {activeTab === 'rsvps' && <EnhancedRSVPManagement rsvps={rsvps} onRefresh={onRefresh} />}
-            {activeTab === 'analytics' && <AnalyticsInsights />}
-            {activeTab === 'comms' && <EnhancedCommunicationCenter />}
-            {activeTab === 'notifications' && <NotificationCenter />}
-            {activeTab === 'timeline' && <EventTimeline />}
-            {activeTab === 'settings' && <CompactSystemSettings />}
-          </div>
-        </div>
-      </div>
+    <div className="h-full">
+      <SwipeableTabsNavigation
+        tabs={adminTabs}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
     </div>
   );
 };

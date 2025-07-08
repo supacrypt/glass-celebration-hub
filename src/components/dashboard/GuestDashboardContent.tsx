@@ -1,6 +1,9 @@
 import React from 'react';
 import { Calendar, MapPin, Camera, Gift, Users, Clock, Heart, MessageSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { HapticFeedback } from '@/components/mobile/HapticFeedback';
+import { QuickActionButton } from '@/components/mobile/QuickActionButton';
+import { CollapsibleSection } from '@/components/mobile/CollapsibleSection';
 import type { AdminStats } from './types';
 
 interface GuestDashboardContentProps {
@@ -122,55 +125,57 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
         })}
       </div>
 
-      {/* Quick Actions */}
-      <div>
-        <h4 className="responsive-text-base font-medium text-wedding-navy mb-3">Quick Actions</h4>
-        <div className="responsive-grid-2">
+      {/* Quick Actions with Haptic Feedback */}
+      <CollapsibleSection 
+        title="Quick Actions" 
+        icon={<Heart className="w-5 h-5" />}
+        defaultOpen={true}
+      >
+        <div className="responsive-grid-2 gap-3">
           {guestActions.map((action, index) => {
             const Icon = action.icon;
             return (
-              <button
-                key={index}
-                onClick={() => handleNavigation(action.path)}
-                className="glass-card responsive-card-padding text-center space-y-2 hover:scale-105 transition-all duration-200"
-              >
-                <Icon className={`w-5 h-5 sm:w-6 sm:h-6 mx-auto text-${action.color}`} />
-                <div className="responsive-text-base font-medium text-wedding-navy">
-                  {action.title}
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  {action.description}
-                </div>
-              </button>
+              <HapticFeedback key={index} type="light">
+                <QuickActionButton
+                  icon={<Icon className="w-5 h-5" />}
+                  label={action.title}
+                  onClick={() => handleNavigation(action.path)}
+                  variant="secondary"
+                  size="medium"
+                  className="w-full justify-start space-y-1 h-auto py-4"
+                />
+              </HapticFeedback>
             );
           })}
         </div>
-      </div>
+      </CollapsibleSection>
 
-      {/* Wedding Timeline Preview */}
-      <div className="glass-card p-3 sm:p-4 space-y-3">
-        <div className="flex items-center space-x-2">
-          <Clock className="w-4 h-4 text-glass-blue" />
-          <h4 className="text-sm font-medium text-wedding-navy">Upcoming Events</h4>
-        </div>
-        <div className="space-y-2">
+      {/* Wedding Timeline Preview with Mobile Optimization */}
+      <CollapsibleSection 
+        title="Upcoming Events" 
+        icon={<Clock className="w-5 h-5" />}
+        defaultOpen={true}
+      >
+        <div className="space-y-3">
           {[
             { time: '3:00 PM', event: 'Ceremony', location: 'Main Chapel' },
             { time: '4:30 PM', event: 'Cocktail Hour', location: 'Garden Terrace' },
             { time: '6:00 PM', event: 'Reception', location: 'Grand Ballroom' },
           ].map((item, i) => (
-            <div key={i} className="flex items-center space-x-3 text-sm">
-              <div className="w-16 text-wedding-navy font-medium">
-                {item.time}
+            <HapticFeedback key={i} type="light">
+              <div className="glass-card p-3 flex items-center space-x-4 hover:scale-102 transition-transform">
+                <div className="w-16 text-wedding-navy font-dolly font-semibold text-sm">
+                  {item.time}
+                </div>
+                <div className="flex-1">
+                  <div className="text-wedding-navy font-dolly font-semibold">{item.event}</div>
+                  <div className="text-xs text-muted-foreground">{item.location}</div>
+                </div>
               </div>
-              <div className="flex-1">
-                <div className="text-wedding-navy font-medium">{item.event}</div>
-                <div className="text-xs text-muted-foreground">{item.location}</div>
-              </div>
-            </div>
+            </HapticFeedback>
           ))}
         </div>
-      </div>
+      </CollapsibleSection>
     </div>
   );
 };
