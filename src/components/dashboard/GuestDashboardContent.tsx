@@ -92,9 +92,9 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
   ];
 
   return (
-    <div className="p-4 space-y-6 h-full overflow-y-auto">
+    <div className="p-2 sm:p-4 space-y-4 sm:space-y-6 h-full overflow-y-auto">
       {/* Welcome Message */}
-      <div className="glass-card p-4 text-center space-y-2">
+      <div className="glass-card p-3 sm:p-4 text-center space-y-2">
         <Heart className="w-6 h-6 mx-auto text-glass-pink" />
         <h3 className="text-lg font-semibold text-wedding-navy">
           Welcome to Our Wedding
@@ -148,7 +148,7 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
       </div>
 
       {/* Wedding Timeline Preview */}
-      <div className="glass-card p-4 space-y-3">
+      <div className="glass-card p-3 sm:p-4 space-y-3">
         <div className="flex items-center space-x-2">
           <Clock className="w-4 h-4 text-glass-blue" />
           <h4 className="text-sm font-medium text-wedding-navy">Upcoming Events</h4>

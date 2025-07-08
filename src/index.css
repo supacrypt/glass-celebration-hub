@@ -518,8 +518,10 @@
     .glass-popup {
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
-      margin: 1rem;
+      margin: 0.5rem;
       border-radius: 20px;
+      min-height: auto;
+      max-height: 95vh;
       padding: 1.5rem;
     }
     
@@ -602,9 +604,45 @@
 
     /* Mobile container spacing */
     .glass-popup {
-      margin: 0.75rem;
+      margin: 0.5rem;
       border-radius: 16px;
       padding: 1rem;
+      min-height: auto;
+      max-height: 95vh;
+    }
+    
+    /* Ensure touch-friendly interactions */
+    .glass-button {
+      min-height: 44px;
+      min-width: 44px;
+      touch-action: manipulation;
+    }
+    
+    /* Mobile dashboard optimizations */
+    .responsive-grid-2 {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    
+    .responsive-grid-4 {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+    }
+  }
+  
+  /* Tablet optimizations */
+  @media (min-width: 769px) and (max-width: 1023px) {
+    .glass-popup {
+      max-width: 85vw;
+      max-height: 85vh;
+    }
+    
+    .responsive-grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .responsive-grid-4 {
+      grid-template-columns: repeat(4, 1fr);
     }
 
     .glass-card {

@@ -46,13 +46,13 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
   return (
     <div className="h-full flex flex-col">
       {/* Enhanced Tab Navigation */}
-      <div className="px-4 pt-3 pb-2 flex-shrink-0">
-        <div className="flex flex-wrap gap-1">
+      <div className="px-2 sm:px-4 pt-3 pb-2 flex-shrink-0">
+        <div className="flex flex-wrap gap-1 sm:gap-2">
           {adminTabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-3 py-2 text-xs font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
+              className={`px-2 sm:px-3 py-2 text-xs font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
                 activeTab === tab.id
                   ? 'bg-wedding-navy text-white shadow-md'
                   : 'text-wedding-navy hover:bg-wedding-navy/10 glass-secondary'
@@ -66,7 +66,7 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
 
       {/* Tab Content with Proper Scrolling */}
       <div className="flex-1 overflow-hidden">
-        <div className="h-full overflow-y-auto px-4 pb-4" style={{ maxHeight: 'calc(750px - 120px)' }}>
+        <div className="h-full overflow-y-auto px-2 sm:px-4 pb-4" style={{ maxHeight: 'calc(100vh - 200px)' }}>
           {/* Dynamic Content Rendering */}
           <div className="space-y-4">
             {activeTab === 'stats' && <CompactStats stats={stats} />}

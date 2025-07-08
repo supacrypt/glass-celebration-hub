@@ -34,37 +34,28 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Invisible Backdrop */}
+      {/* Enhanced Backdrop with proper blur */}
       <div 
-        className="fixed inset-0 z-[100] transition-all duration-300 ease-out"
+        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[100] transition-all duration-300 ease-out"
         onClick={onClose}
+        style={{ backdropFilter: 'blur(8px)' }}
       />
       
       {/* Enhanced Dashboard Modal - Fully Responsive */}
-      <div className="fixed inset-x-2 sm:inset-x-4 lg:left-1/2 lg:transform lg:-translate-x-1/2 z-[110]" 
-           style={{ 
-             bottom: 'calc(20px + 80px + 10px)',
-             top: '20px'
-           }}>
+      <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 lg:p-6">
         <div 
-          className="glass-popup animate-scale-in shadow-2xl flex flex-col h-full lg:h-auto"
+          className="glass-popup animate-scale-in shadow-2xl flex flex-col w-full max-w-[95vw] max-h-[95vh] sm:max-w-[90vw] sm:max-h-[90vh] lg:max-w-[700px] lg:max-h-[80vh] overflow-hidden"
           onClick={(e) => e.stopPropagation()}
-          style={{
-            width: '100%',
-            maxWidth: '700px',
-            height: '100%',
-            maxHeight: 'calc(100vh - 140px)'
-          }}
         >
           <DashboardHeader userRole={authUserRole?.role} onClose={onClose} />
 
           {/* Content Container with Proper Scrolling */}
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 overflow-hidden">
             {loading ? (
-              <div className="flex items-center justify-center h-40">
+              <div className="flex items-center justify-center h-40 p-4">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-wedding-navy" />
               </div>
-            ) : authUserRole?.role === 'admin' ? (
+            ) : authUserRole?.role === 'admin' || authUserRole?.role === 'couple' ? (
               <AdminDashboardContent
                 stats={stats}
                 users={users}
