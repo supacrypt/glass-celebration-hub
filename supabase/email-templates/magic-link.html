@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Nuptul – Magic-Link Sign-In</title>
+
+<style>
+/* ===== Reset ===== */
+body, table, td { margin:0; padding:0; }
+img { border:0; line-height:100%; text-decoration:none; }
+table { border-collapse:collapse !important; }
+
+/* ===== Typography ===== */
+h1 {
+  font-family:"Helvetica Neue",Arial,sans-serif;
+  font-size:24px; line-height:30px; margin:0;
+  color:#123458;
+}
+p  {
+  font-family:"Helvetica Neue",Arial,sans-serif;
+  font-size:16px; line-height:24px; margin:0 0 16px 0;
+  color:#333333;
+}
+
+/* ===== CTA Button ===== */
+.btn {
+  background:#123458;
+  border-radius:6px;
+  color:#ffffff !important;
+  display:inline-block;
+  font-size:16px;
+  padding:12px 24px;
+  text-decoration:none;
+}
+
+/* ===== Mobile ===== */
+@media (max-width:600px){
+  .container { width:100% !important; padding:0 16px !important; }
+}
+
+/* ===== Dark-mode ===== */
+@media (prefers-color-scheme:dark){
+  body, #wrapper   { background:#0b0f1a !important; }
+  h1, p, td        { color:#F1EFEC !important; }
+  .panel           { background:#161b2b !important; }
+  .btn             { background:#123458 !important; color:#ffffff !important; }
+}
+</style>
+</head>
+
+<body style="background:#F1EFEC;">
+  <table id="wrapper" width="100%" bgcolor="#F1EFEC" role="presentation">
+    <tr>
+      <td align="center">
+
+        <!--[if (gte mso 9)|(IE)]><table width="600" align="center"><tr><td><![endif]-->
+        <table class="container" width="600" role="presentation" style="max-width:600px;">
+
+          <!-- Logo -->
+          <tr>
+            <td align="center" style="padding:32px 0;">
+              <img
+                src="https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/home-hero/logo.png"
+                width="120"
+                height="120"
+                alt="Nuptul logo"
+                style="display:block;"
+              />
+            </td>
+          </tr>
+
+          <!-- Content Panel -->
+          <tr>
+            <td class="panel" bgcolor="#ffffff" style="border-radius:12px; padding:32px;">
+
+              <h1>Your one-click sign-in link</h1>
+
+              <p>Hello {{ .UserMetadata.first_name | default "there" }},</p>
+
+              <p>Click the button below within the next&nbsp;15&nbsp;minutes to log in to
+                 <strong>Nuptul</strong> — no password required.</p>
+
+              <p style="text-align:center; margin:32px 0;">
+                <a href="{{ .ConfirmationURL }}" class="btn">Log me in</a>
+              </p>
+
+              <p>If the button doesn't work, copy and paste this link into your browser:</p>
+
+              <p style="word-break:break-all;">
+                <a href="{{ .ConfirmationURL }}" style="color:#123458;">{{ .ConfirmationURL }}</a>
+              </p>
+
+              <hr style="border:none; border-top:1px solid #e0e0e0; margin:24px 0;" />
+
+              <p style="font-size:14px; color:#666666;">
+                Didn't request this? You can safely ignore the email and your account will remain secure.
+              </p>
+
+              <p style="font-size:14px; color:#666666; margin-bottom:0;">
+                Need help? Email&nbsp;<a href="mailto:support@nuptul.com" style="color:#123458;">support@nuptul.com</a>.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center"
+                style="font-family:Helvetica,Arial,sans-serif;
+                       font-size:12px; line-height:18px;
+                       color:#666666; padding:24px 0;">
+              © {{ .Year }} Nuptul · Hunter Valley, NSW ·
+              <a href="https://nuptul.com" style="color:#123458;">nuptul.com</a><br />
+              <a href="{{ .UnsubscribeURL | default "#" }}" style="color:#666666;">Unsubscribe</a>
+            </td>
+          </tr>
+
+        </table>
+        <!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
