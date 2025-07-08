@@ -94,6 +94,54 @@ export type Database = {
           },
         ]
       }
+      guests: {
+        Row: {
+          category: string
+          created_at: string
+          guest_count: number
+          guest_names: string
+          id: string
+          invite_sent: boolean | null
+          location: string | null
+          mobile: string | null
+          notes: string | null
+          rsvp_count: number | null
+          rsvp_status: string | null
+          save_the_date_sent: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          guest_count?: number
+          guest_names: string
+          id?: string
+          invite_sent?: boolean | null
+          location?: string | null
+          mobile?: string | null
+          notes?: string | null
+          rsvp_count?: number | null
+          rsvp_status?: string | null
+          save_the_date_sent?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          guest_count?: number
+          guest_names?: string
+          id?: string
+          invite_sent?: boolean | null
+          location?: string | null
+          mobile?: string | null
+          notes?: string | null
+          rsvp_count?: number | null
+          rsvp_status?: string | null
+          save_the_date_sent?: boolean | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       message_likes: {
         Row: {
           created_at: string
