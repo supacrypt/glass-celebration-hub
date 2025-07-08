@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Settings } from 'lucide-react';
 
@@ -73,7 +74,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({ isAdmin, events, eventsLo
               )}
             </div>
             <div className="responsive-text-base text-glass-blue font-medium mb-2">
-              Sunday 5 October 2025 at 04:00 pm
+              Sunday 5 October 2025 at 03:00 pm
             </div>
             <p className="responsive-text-base text-muted-foreground leading-relaxed mb-3">
               Tim & Kirsten exchange vows on the Garden Terrace Lawn
