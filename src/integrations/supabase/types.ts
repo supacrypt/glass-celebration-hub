@@ -38,6 +38,42 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_photos: {
+        Row: {
+          backstory: string | null
+          created_at: string
+          display_order: number
+          id: string
+          image_path: string
+          image_url: string
+          is_published: boolean
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          backstory?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_path: string
+          image_url: string
+          is_published?: boolean
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          backstory?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_path?: string
+          image_url?: string
+          is_published?: boolean
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gift_registry: {
         Row: {
           category: string
@@ -411,6 +447,45 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      venues: {
+        Row: {
+          address: string | null
+          caption: string | null
+          created_at: string
+          display_order: number
+          id: string
+          image_path: string
+          image_url: string
+          name: string
+          quick_facts: Json | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          caption?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_path: string
+          image_url: string
+          name: string
+          quick_facts?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          caption?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_path?: string
+          image_url?: string
+          name?: string
+          quick_facts?: Json | null
+          updated_at?: string
         }
         Relationships: []
       }
