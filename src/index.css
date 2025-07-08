@@ -165,7 +165,7 @@
 }
 
 @layer components {
-  /* Enhanced Glass-Polished Effect Classes - Combining Glassmorphism + Neumorphism */
+  /* Enhanced Glass-Polished Effect Classes - Mobile Optimized */
   .glass-primary {
     background: hsl(var(--glass-white) / var(--glass-opacity-primary));
     backdrop-filter: blur(var(--glass-blur-primary));
@@ -174,6 +174,28 @@
     box-shadow: 
       0 8px 32px hsl(var(--glass-black) / 0.08),
       inset 0 0 0 1px hsl(var(--glass-white) / 0.2);
+    
+    /* Performance optimizations */
+    will-change: backdrop-filter;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    
+    /* Mobile blur reduction */
+    @media (max-width: 768px) {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    
+    /* Motion sensitivity */
+    @media (prefers-reduced-motion: reduce) {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    
+    /* Fallback for unsupported browsers */
+    @supports not (backdrop-filter: blur(20px)) {
+      background: hsl(var(--glass-white) / 0.95);
+    }
   }
 
   /* Glass-Polished Popup - Premium Combined Effect */
@@ -269,6 +291,18 @@
     border-radius: 16px;
     position: relative;
     
+    /* Performance optimizations */
+    will-change: backdrop-filter, transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 12px;
+    }
+    
     /* Subtle neumorphic card shadows */
     box-shadow: 
       6px 6px 12px hsl(var(--glass-black) / 0.08),
@@ -277,6 +311,13 @@
       inset -0.5px -0.5px 1px hsl(var(--glass-black) / 0.04);
     
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
   }
 
   /* Mobile-first Dashboard Interface */
@@ -453,6 +494,40 @@
   /* Responsive Typography Scale */
   .responsive-text-base {
     @apply text-xs sm:text-sm lg:text-base;
+  }
+
+  /* Accessibility Utilities */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  /* Focus Management */
+  .focus-trap {
+    @apply outline-none ring-2 ring-accent ring-opacity-50;
+  }
+
+  /* High Contrast Mode Support */
+  @media (prefers-contrast: high) {
+    .glass-primary,
+    .glass-secondary,
+    .glass-card {
+      border-width: 2px;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: hsl(var(--background));
+    }
+  }
+
+  /* Motion Preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
