@@ -52,16 +52,22 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
                 minWidth: '48px',
                 minHeight: '48px'
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'hsl(var(--wedding-navy) / 0.9)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'hsl(var(--wedding-navy) / 0.7)';
-              }}
             >
             {/* Responsive Neumorphic Icon with Glass Bubble */}
             <div 
               className="nav-icon"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(135deg, hsl(210 30% 15%) 0%, hsl(210 30% 25%) 100%)';
+                e.currentTarget.style.transform = isActive && isCenter ? 'scale(1.05)' : 'scale(1.05)';
+                const icon = e.currentTarget.querySelector('svg');
+                if (icon) icon.style.color = 'hsl(0 0% 100%)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(135deg, hsl(var(--wedding-navy)) 0%, hsl(var(--wedding-navy-light)) 100%)';
+                e.currentTarget.style.transform = isActive && isCenter ? 'scale(0.98)' : 'scale(1)';
+                const icon = e.currentTarget.querySelector('svg');
+                if (icon) icon.style.color = 'hsl(0 0% 95%)';
+              }}
               style={{
                 background: isActive && isCenter 
                   ? 'linear-gradient(135deg, hsl(var(--wedding-navy)) 0%, hsl(var(--wedding-navy-light)) 100%)'
@@ -83,8 +89,9 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
                   inset 0 3px 6px hsl(var(--glass-white) / 0.15)
                 `,
                 overflow: 'hidden',
-                transition: 'all 0.2s ease',
-                transform: isActive && isCenter ? 'scale(0.98)' : 'scale(1)'
+                transition: 'all 0.3s ease',
+                transform: isActive && isCenter ? 'scale(0.98)' : 'scale(1)',
+                cursor: 'pointer'
               }}
             >
               {/* Glass bubble effect overlay */}
