@@ -205,6 +205,13 @@ export type Database = {
             referencedRelation: "messages"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "message_likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
       messages: {
@@ -232,7 +239,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "messages_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       photo_comments: {
         Row: {
@@ -267,6 +282,13 @@ export type Database = {
             referencedRelation: "photos"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "photo_comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
       photo_likes: {
@@ -295,6 +317,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "photos"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "photo_likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -344,7 +373,15 @@ export type Database = {
           user_id?: string
           width?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "photos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -456,6 +493,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "wedding_events"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rsvps_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
