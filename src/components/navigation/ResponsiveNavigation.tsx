@@ -141,12 +141,12 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
             <span 
               className="nav-label"
               style={{
-                fontSize: 'clamp(9px, 2.2vw, 10px)',
+                fontSize: 'clamp(11px, 2.5vw, 12px)',
                 marginTop: 'clamp(3px, 1.2vw, 7px)',
-                fontWeight: '500',
+                fontWeight: 'bold',
                 letterSpacing: '0.3px',
                 textShadow: '1px 1px 2px hsl(var(--glass-white) / 0.8)',
-                color: 'hsl(var(--wedding-navy) / 0.7)',
+                color: 'hsl(0 0% 0%)',
                 fontFamily: "'Playfair Display', serif"
               }}
             >
