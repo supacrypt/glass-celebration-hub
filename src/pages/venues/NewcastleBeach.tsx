@@ -1,10 +1,12 @@
 import React from 'react';
 import GlassCard from '@/components/GlassCard';
 import VenueMap from '@/components/VenueMap';
+import VenueHeroImage from '@/components/venue/VenueHeroImage';
 import { MapPin, Clock, Coffee, Waves, Sun, Users } from 'lucide-react';
 
 const NewcastleBeach: React.FC = () => {
   const venueData = {
+    id: 'b3e0b587-46ea-4bf1-9ce1-9455ff61a9bf', // Newcastle Beach venue ID
     name: 'Newcastle Beach',
     address: 'Newcastle Beach, Newcastle NSW 2300',
     coordinates: [151.7789, -32.9292] as [number, number], // Newcastle Beach coordinates
@@ -23,14 +25,13 @@ const NewcastleBeach: React.FC = () => {
         </p>
       </div>
 
-      {/* Hero Image Placeholder */}
+      {/* Hero Image */}
       <GlassCard className="mb-8 p-6 animate-fade-up" style={{ animationDelay: '0.1s' }}>
-        <div className="w-full h-48 bg-gradient-to-br from-glass-blue/20 to-glass-green/20 rounded-glass flex items-center justify-center mb-4">
-          <div className="text-center">
-            <Waves className="w-12 h-12 mx-auto mb-2 text-glass-blue" />
-            <p className="text-wedding-navy font-medium">Beach Photo Coming Soon</p>
-          </div>
-        </div>
+        <VenueHeroImage 
+          venueId={venueData.id}
+          venueName={venueData.name}
+          className="mb-4"
+        />
       </GlassCard>
 
       {/* Event Details */}

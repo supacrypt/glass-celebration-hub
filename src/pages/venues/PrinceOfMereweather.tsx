@@ -1,11 +1,13 @@
 import React from 'react';
 import GlassCard from '@/components/GlassCard';
 import VenueMap from '@/components/VenueMap';
+import VenueHeroImage from '@/components/venue/VenueHeroImage';
 import { MapPin, Clock, Users, Utensils, Phone, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const PrinceOfMereweather: React.FC = () => {
   const venueData = {
+    id: 'dac9fa6a-6c86-4b3b-b1cc-12f99c0eade7', // Prince of Mereweather venue ID
     name: 'Prince of Mereweather',
     address: 'Mereweather, NSW 2291',
     coordinates: [151.7467, -32.9408] as [number, number], // Prince of Mereweather coordinates
@@ -24,14 +26,13 @@ const PrinceOfMereweather: React.FC = () => {
         </p>
       </div>
 
-      {/* Hero Image Placeholder */}
+      {/* Hero Image */}
       <GlassCard className="mb-8 p-6 animate-fade-up" style={{ animationDelay: '0.1s' }}>
-        <div className="w-full h-48 bg-gradient-to-br from-glass-blue/20 to-glass-purple/20 rounded-glass flex items-center justify-center mb-4">
-          <div className="text-center">
-            <Utensils className="w-12 h-12 mx-auto mb-2 text-glass-blue" />
-            <p className="text-wedding-navy font-medium">Pub Photo Coming Soon</p>
-          </div>
-        </div>
+        <VenueHeroImage 
+          venueId={venueData.id}
+          venueName={venueData.name}
+          className="mb-4"
+        />
       </GlassCard>
 
       {/* Event Details */}
