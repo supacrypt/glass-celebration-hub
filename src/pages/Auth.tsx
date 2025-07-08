@@ -1,56 +1,60 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '@/hooks/useAuth';
 import GlassCard from '@/components/GlassCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { Eye, EyeOff, Heart } from 'lucide-react';
+import { Eye, EyeOff, Heart, Mail, Lock } from 'lucide-react';
+import { PasswordStrengthMeter } from '@/components/auth/PasswordStrengthMeter';
+import { MagicLinkForm } from '@/components/auth/MagicLinkForm';
+import { ForgotPasswordForm } from '@/components/auth/ForgotPasswordForm';
+import { 
+  SignUpFormData, 
+  SignInFormData, 
+  signUpSchema, 
+  signInSchema 
+} from '@/lib/auth-validation';
+
+type AuthMode = 'signin' | 'signup' | 'magic-link' | 'forgot-password';
 
 const Auth: React.FC = () => {
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [mode, setMode] = useState<AuthMode>('signin');
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   
   const { signUp, signIn } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  // Sign up form
+  const signUpForm = useForm<SignUpFormData>({
+    resolver: zodResolver(signUpSchema)
+  });
 
+  // Sign in form  
+  const signInForm = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema)
+  });
+
+  const onSignUpSubmit = async (data: SignUpFormData) => {
     try {
-      if (isSignUp) {
-        const { error } = await signUp(email, password, firstName, lastName);
-        if (error) {
-          toast({
-            title: "Sign Up Error",
-            description: error.message,
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title: "Success!",
-            description: "Please check your email to confirm your account.",
-          });
-        }
+      const { error } = await signUp(data.email, data.password, data.firstName, data.lastName);
+      if (error) {
+        toast({
+          title: "Sign Up Error",
+          description: error.message,
+          variant: "destructive",
+        });
       } else {
-        const { error } = await signIn(email, password);
-        if (error) {
-          toast({
-            title: "Sign In Error",
-            description: error.message,
-            variant: "destructive",
-          });
-        } else {
-          navigate('/');
-        }
+        toast({
+          title: "Success!",
+          description: "Please check your email to confirm your account.",
+        });
       }
     } catch (error) {
       toast({
@@ -58,10 +62,49 @@ const Auth: React.FC = () => {
         description: "An unexpected error occurred.",
         variant: "destructive",
       });
-    } finally {
-      setLoading(false);
     }
   };
+
+  const onSignInSubmit = async (data: SignInFormData) => {
+    try {
+      const { error } = await signIn(data.email, data.password);
+      if (error) {
+        toast({
+          title: "Sign In Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        navigate('/');
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  if (mode === 'magic-link') {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-3 sm:px-5 py-6 sm:py-12">
+        <GlassCard className="w-full max-w-md p-4 sm:p-8">
+          <MagicLinkForm onBack={() => setMode('signin')} />
+        </GlassCard>
+      </div>
+    );
+  }
+
+  if (mode === 'forgot-password') {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-3 sm:px-5 py-6 sm:py-12">
+        <GlassCard className="w-full max-w-md p-4 sm:p-8">
+          <ForgotPasswordForm onBack={() => setMode('signin')} />
+        </GlassCard>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-3 sm:px-5 py-6 sm:py-12">
@@ -74,93 +117,198 @@ const Auth: React.FC = () => {
             </h1>
           </div>
           <h2 className="text-lg sm:text-xl font-semibold text-wedding-navy mb-2">
-            {isSignUp ? 'Join Our Celebration' : 'Welcome Back'}
+            {mode === 'signup' ? 'Join Our Celebration' : 'Welcome Back'}
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground">
-            {isSignUp 
+            {mode === 'signup' 
               ? 'Create an account to share in our special day' 
               : 'Sign in to access the wedding experience'
             }
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-          {isSignUp && (
+        {mode === 'signup' ? (
+          <form onSubmit={signUpForm.handleSubmit(onSignUpSubmit)} className="space-y-4 sm:space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name</Label>
                 <Input
                   id="firstName"
                   type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
                   className="glass-input"
-                  required={isSignUp}
+                  {...signUpForm.register('firstName')}
                 />
+                {signUpForm.formState.errors.firstName && (
+                  <p className="text-sm text-destructive">
+                    {signUpForm.formState.errors.firstName.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName">Last Name</Label>
                 <Input
                   id="lastName"
                   type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
                   className="glass-input"
-                  required={isSignUp}
+                  {...signUpForm.register('lastName')}
                 />
+                {signUpForm.formState.errors.lastName && (
+                  <p className="text-sm text-destructive">
+                    {signUpForm.formState.errors.lastName.message}
+                  </p>
+                )}
               </div>
             </div>
-          )}
 
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="glass-input"
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <div className="relative">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
               <Input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="glass-input pr-10"
-                required
+                id="email"
+                type="email"
+                className="glass-input"
+                {...signUpForm.register('email')}
               />
+              {signUpForm.formState.errors.email && (
+                <p className="text-sm text-destructive">
+                  {signUpForm.formState.errors.email.message}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  className="glass-input pr-10"
+                  {...signUpForm.register('password')}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground min-w-[44px] min-h-[44px] flex items-center justify-center"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              {signUpForm.formState.errors.password && (
+                <p className="text-sm text-destructive">
+                  {signUpForm.formState.errors.password.message}
+                </p>
+              )}
+              <PasswordStrengthMeter password={signUpForm.watch('password') || ''} />
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full bg-wedding-navy hover:bg-wedding-navy-light min-h-[44px]"
+              disabled={signUpForm.formState.isSubmitting}
+            >
+              {signUpForm.formState.isSubmitting ? 'Creating Account...' : 'Create Account'}
+            </Button>
+          </form>
+        ) : (
+          <form onSubmit={signInForm.handleSubmit(onSignInSubmit)} className="space-y-4 sm:space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  className="glass-input pl-10"
+                  placeholder="Enter your email"
+                  {...signInForm.register('email')}
+                />
+              </div>
+              {signInForm.formState.errors.email && (
+                <p className="text-sm text-destructive">
+                  {signInForm.formState.errors.email.message}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  className="glass-input pl-10 pr-10"
+                  placeholder="Enter your password"
+                  {...signInForm.register('password')}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground min-w-[44px] min-h-[44px] flex items-center justify-center"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              {signInForm.formState.errors.password && (
+                <p className="text-sm text-destructive">
+                  {signInForm.formState.errors.password.message}
+                </p>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="remember" 
+                  checked={rememberMe}
+                  onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                />
+                <Label htmlFor="remember" className="text-sm">Remember me</Label>
+              </div>
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground min-w-[44px] min-h-[44px] flex items-center justify-center"
+                onClick={() => setMode('forgot-password')}
+                className="text-sm text-glass-blue hover:text-glass-blue/80"
               >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                Forgot password?
               </button>
             </div>
-          </div>
 
-          <Button
-            type="submit"
-            className="w-full bg-wedding-navy hover:bg-wedding-navy-light min-h-[44px] text-sm sm:text-base"
-            disabled={loading}
-          >
-            {loading ? 'Please wait...' : (isSignUp ? 'Create Account' : 'Sign In')}
-          </Button>
-        </form>
+            <Button
+              type="submit"
+              className="w-full bg-wedding-navy hover:bg-wedding-navy-light min-h-[44px]"
+              disabled={signInForm.formState.isSubmitting}
+            >
+              {signInForm.formState.isSubmitting ? 'Signing In...' : 'Sign In'}
+            </Button>
 
-        <div className="mt-4 sm:mt-6 text-center">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">Or</span>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => setMode('magic-link')}
+            >
+              <Mail className="w-4 h-4 mr-2" />
+              Sign in with Magic Link
+            </Button>
+          </form>
+        )}
+
+        <div className="mt-6 text-center">
           <button
             type="button"
-            onClick={() => setIsSignUp(!isSignUp)}
-            className="text-glass-blue hover:text-glass-blue/80 transition-colors min-h-[44px] text-sm sm:text-base px-2 py-2"
+            onClick={() => setMode(mode === 'signup' ? 'signin' : 'signup')}
+            className="text-glass-blue hover:text-glass-blue/80 transition-colors min-h-[44px] text-sm px-2 py-2"
           >
-            {isSignUp 
+            {mode === 'signup' 
               ? 'Already have an account? Sign in' 
               : "Don't have an account? Sign up"
             }

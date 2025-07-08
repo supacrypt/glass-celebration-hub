@@ -1,0 +1,57 @@
+import { z } from "zod";
+
+export const passwordSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number");
+
+export const signUpSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: passwordSchema,
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+});
+
+export const signInSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+export const magicLinkSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+});
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+});
+
+export type SignUpFormData = z.infer<typeof signUpSchema>;
+export type SignInFormData = z.infer<typeof signInSchema>;
+export type MagicLinkFormData = z.infer<typeof magicLinkSchema>;
+export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
+
+export const getPasswordStrength = (password: string): {
+  score: number;
+  feedback: string;
+  color: string;
+} => {
+  let score = 0;
+  const checks = [
+    { test: /.{8,}/, weight: 1, label: "8+ characters" },
+    { test: /[A-Z]/, weight: 1, label: "uppercase letter" },
+    { test: /[a-z]/, weight: 1, label: "lowercase letter" },
+    { test: /[0-9]/, weight: 1, label: "number" },
+    { test: /[^A-Za-z0-9]/, weight: 1, label: "special character" },
+    { test: /.{12,}/, weight: 1, label: "12+ characters" },
+  ];
+
+  checks.forEach((check) => {
+    if (check.test.test(password)) score += check.weight;
+  });
+
+  if (score <= 2) return { score, feedback: "Weak", color: "hsl(var(--destructive))" };
+  if (score <= 4) return { score, feedback: "Good", color: "hsl(var(--warning))" };
+  return { score, feedback: "Strong", color: "hsl(var(--success))" };
+};

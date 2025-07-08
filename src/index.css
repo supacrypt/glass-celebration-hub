@@ -50,6 +50,13 @@
     --accent: 220 68% 50%;                 /* Glass blue accent */
     --accent-foreground: 0 0% 100%;
 
+    /* Status Colors for Password Strength */
+    --success: 142 76% 47%;                /* Green for strong passwords */
+    --warning: 48 96% 53%;                 /* Yellow for medium passwords */
+    --destructive: 0 84% 60%;              /* Red for weak passwords */
+    --destructive-foreground: 0 0% 98%;
+    --accent-foreground: 0 0% 100%;
+
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
