@@ -17,9 +17,9 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
 }) => {
   return (
     <nav 
-      className="fixed left-1/2 transform -translate-x-1/2 items-end z-50"
+      className="fixed left-1/2 transform -translate-x-1/2 items-end"
       style={{
-        bottom: '20px',
+        bottom: 'max(20px, env(safe-area-inset-bottom, 0px))', // Safe area support
         background: 'transparent', // Keep invisible
         display: 'flex',
         gap: 'clamp(12px, 3vw, 20px)', // Better spacing for icons
@@ -29,7 +29,9 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
         overflowX: 'visible', // Allow icons to be fully visible
         transition: 'all 0.3s ease',
         padding: '8px 12px', // Add padding for better touch targets
-        height: 'auto' // Auto height to accommodate icons
+        height: 'auto', // Auto height to accommodate icons
+        zIndex: 9999, // Ensure it stays above all content
+        pointerEvents: 'none', // Allow clicks to pass through container
       }}
     >
       {routes.map((route) => {
@@ -56,7 +58,8 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
                 fontFamily: 'inherit',
                 minWidth: '56px', // Increased for better touch target
                 minHeight: '56px', // Increased for better touch target
-                borderRadius: '12px' // Add border radius for better touch feel
+                borderRadius: '12px', // Add border radius for better touch feel
+                pointerEvents: 'all' // Re-enable pointer events for buttons
               }}
             >
             {/* Responsive Neumorphic Icon with Glass Bubble */}
