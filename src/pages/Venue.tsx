@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ChevronLeft, ChevronRight, MapPin, ExternalLink, Edit, Upload, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import VenueCard from '@/components/venue/VenueCard';
 
 interface Venue {
   id: string;
@@ -31,6 +33,7 @@ interface VenueFormData {
 
 const Venue: React.FC = () => {
   const { userRole } = useAuth();
+  const navigate = useNavigate();
   const [venues, setVenues] = useState<Venue[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -46,6 +49,10 @@ const Venue: React.FC = () => {
   const [uploading, setUploading] = useState(false);
 
   const isAdmin = userRole?.role === 'admin';
+
+  const handleVenueClick = (venueId: string) => {
+    navigate(`/venue/detail/${venueId}`);
+  };
 
   useEffect(() => {
     fetchVenues();
@@ -367,31 +374,21 @@ const Venue: React.FC = () => {
           </div>
         </div>
 
-        {/* Venue Thumbnails */}
-        {venues.length > 1 && (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {venues.map((venue, index) => (
-              <Card
+        {/* Venue Cards Grid */}
+        <div className="glass-card p-6">
+          <h2 className="text-2xl font-bold text-foreground font-dolly mb-6">
+            All Venues
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {venues.map((venue) => (
+              <VenueCard
                 key={venue.id}
-                className={`glass-card cursor-pointer transition-all duration-300 hover:shadow-lg ${
-                  index === currentIndex ? 'ring-2 ring-primary' : ''
-                }`}
-                onClick={() => setCurrentIndex(index)}
-              >
-                <div className="aspect-video relative rounded-t-lg overflow-hidden">
-                  <img
-                    src={venue.image_url}
-                    alt={venue.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <CardContent className="p-3">
-                  <h3 className="font-medium text-sm line-clamp-1">{venue.name}</h3>
-                </CardContent>
-              </Card>
+                venue={venue}
+                onClick={handleVenueClick}
+              />
             ))}
           </div>
-        )}
+        </div>
 
         {/* Edit Venue Dialog */}
         {isAdmin && editingVenue && (

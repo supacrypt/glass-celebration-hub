@@ -137,6 +137,8 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     min-height: 100vh;
     font-size: clamp(15px, 3vw, 18px);
+    width: 100vw;
+    overflow-x: hidden;
     
     /* Safe area handling for notches and rounded corners */
     padding: env(safe-area-inset-top, 0) 

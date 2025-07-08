@@ -24,6 +24,7 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
         gap: 'clamp(10px, 2.5vw, 16px)',
         width: 'max-content',
         maxWidth: 'calc(100vw - 2rem)',
+        overflowX: 'hidden',
         transition: 'all 0.3s ease'
       }}
     >

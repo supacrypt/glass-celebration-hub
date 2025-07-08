@@ -450,6 +450,68 @@ export type Database = {
         }
         Relationships: []
       }
+      venue_images: {
+        Row: {
+          created_at: string
+          description: string | null
+          file_size: number | null
+          height: number | null
+          id: string
+          image_order: number
+          image_path: string
+          image_type: string
+          image_url: string
+          is_published: boolean
+          mime_type: string | null
+          title: string | null
+          updated_at: string
+          venue_id: string
+          width: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          file_size?: number | null
+          height?: number | null
+          id?: string
+          image_order?: number
+          image_path: string
+          image_type?: string
+          image_url: string
+          is_published?: boolean
+          mime_type?: string | null
+          title?: string | null
+          updated_at?: string
+          venue_id: string
+          width?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          file_size?: number | null
+          height?: number | null
+          id?: string
+          image_order?: number
+          image_path?: string
+          image_type?: string
+          image_url?: string
+          is_published?: boolean
+          mime_type?: string | null
+          title?: string | null
+          updated_at?: string
+          venue_id?: string
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venue_images_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       venues: {
         Row: {
           address: string | null
