@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CompactStats from '@/components/admin/CompactStats';
 import CompactUserManagement from '@/components/admin/CompactUserManagement';
 import EnhancedGuestManagement from '@/components/admin/EnhancedGuestManagement';
+import WeddingGuestManagement from '@/components/admin/WeddingGuestManagement';
 import EnhancedPhotoModeration from '@/components/admin/EnhancedPhotoModeration';
 import EnhancedRSVPManagement from '@/components/admin/EnhancedRSVPManagement';
 import CompactGiftManagement from '@/components/admin/CompactGiftManagement';
@@ -32,7 +33,8 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
   const adminTabs = [
     { id: 'stats', label: 'Stats' },
     { id: 'users', label: 'Users' },
-    { id: 'guests', label: 'Guests' },
+    { id: 'guest-list', label: 'Guest List' },
+    { id: 'accounts', label: 'Accounts' },
     { id: 'photos', label: 'Photos' },
     { id: 'gifts', label: 'Gifts' },
     { id: 'rsvps', label: 'RSVPs' },
@@ -73,7 +75,8 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
           <div className="space-y-4">
             {activeTab === 'stats' && <CompactStats stats={stats} />}
             {activeTab === 'users' && <CompactUserManagement users={users} onRefresh={onRefresh} />}
-            {activeTab === 'guests' && <EnhancedGuestManagement users={users} onRefresh={onRefresh} />}
+            {activeTab === 'guest-list' && <WeddingGuestManagement onRefresh={onRefresh} />}
+            {activeTab === 'accounts' && <EnhancedGuestManagement users={users} onRefresh={onRefresh} />}
             {activeTab === 'photos' && <EnhancedPhotoModeration photos={photos as any} onRefresh={onRefresh} />}
             {activeTab === 'gifts' && <CompactGiftManagement />}
             {activeTab === 'rsvps' && <EnhancedRSVPManagement rsvps={rsvps} onRefresh={onRefresh} />}
