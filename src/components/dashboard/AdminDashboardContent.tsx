@@ -45,28 +45,30 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
 
   return (
     <div className="h-full flex flex-col">
-      {/* Enhanced Tab Navigation */}
+      {/* Enhanced Mobile Tab Navigation */}
       <div className="px-2 sm:px-4 pt-3 pb-2 flex-shrink-0">
-        <div className="flex flex-wrap gap-1 sm:gap-2">
-          {adminTabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-2 sm:px-3 py-2 text-xs font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
-                activeTab === tab.id
-                  ? 'bg-wedding-navy text-white shadow-md'
-                  : 'text-wedding-navy hover:bg-wedding-navy/10 glass-secondary'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+        <div className="overflow-x-auto">
+          <div className="flex gap-1 sm:gap-2 min-w-max pb-2">
+            {adminTabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap flex-shrink-0 min-w-[80px] sm:min-w-[90px] ${
+                  activeTab === tab.id
+                    ? 'bg-wedding-navy text-white shadow-md scale-105'
+                    : 'text-wedding-navy hover:bg-wedding-navy/10 glass-secondary'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Tab Content with Proper Scrolling */}
+      {/* Tab Content with Mobile-Optimized Scrolling */}
       <div className="flex-1 overflow-hidden">
-        <div className="h-full overflow-y-auto px-2 sm:px-4 pb-4" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+        <div className="h-full overflow-y-auto px-2 sm:px-4 pb-4" style={{ maxHeight: 'calc(80vh - 120px)' }}>
           {/* Dynamic Content Rendering */}
           <div className="space-y-4">
             {activeTab === 'stats' && <CompactStats stats={stats} />}

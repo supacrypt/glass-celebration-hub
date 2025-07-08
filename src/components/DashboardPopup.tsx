@@ -53,13 +53,13 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
       {/* Mobile-first Dashboard Popup */}
       <div className="dashboard-popup">
         <div 
-          className="dashboard-popup-content flex flex-col"
+          className="dashboard-popup-content flex flex-col max-w-[95vw] w-full sm:max-w-[90vw] lg:max-w-[800px]"
           onClick={(e) => e.stopPropagation()}
         >
           <DashboardHeader userRole={authUserRole?.role} onClose={onClose} />
 
           {/* Content Container with Mobile-optimized Scrolling */}
-          <div className="flex-1 overflow-y-auto" style={{ maxHeight: 'calc(70vh - 60px)' }}>
+          <div className="flex-1 overflow-hidden" style={{ maxHeight: 'calc(80vh - 60px)' }}>
             {loading ? (
               <div className="flex items-center justify-center h-40 p-4">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-wedding-navy" />
