@@ -105,13 +105,13 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="responsive-grid-4">
         {quickStats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className="glass-card p-3 text-center space-y-2">
-              <Icon className={`w-5 h-5 mx-auto text-${stat.color}`} />
-              <div className="text-lg font-semibold text-wedding-navy">
+            <div key={index} className="glass-card responsive-card-padding-sm text-center space-y-2">
+              <Icon className={`w-4 h-4 sm:w-5 sm:h-5 mx-auto text-${stat.color}`} />
+              <div className="text-base sm:text-lg font-semibold text-wedding-navy">
                 {stat.value}
               </div>
               <div className="text-xs text-muted-foreground">
@@ -124,18 +124,18 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
 
       {/* Quick Actions */}
       <div>
-        <h4 className="text-sm font-medium text-wedding-navy mb-3">Quick Actions</h4>
-        <div className="grid grid-cols-2 gap-3">
+        <h4 className="responsive-text-base font-medium text-wedding-navy mb-3">Quick Actions</h4>
+        <div className="responsive-grid-2">
           {guestActions.map((action, index) => {
             const Icon = action.icon;
             return (
               <button
                 key={index}
                 onClick={() => handleNavigation(action.path)}
-                className="glass-card p-4 text-center space-y-2 hover:scale-105 transition-all duration-200"
+                className="glass-card responsive-card-padding text-center space-y-2 hover:scale-105 transition-all duration-200"
               >
-                <Icon className={`w-6 h-6 mx-auto text-${action.color}`} />
-                <div className="text-sm font-medium text-wedding-navy">
+                <Icon className={`w-5 h-5 sm:w-6 sm:h-6 mx-auto text-${action.color}`} />
+                <div className="responsive-text-base font-medium text-wedding-navy">
                   {action.title}
                 </div>
                 <div className="text-xs text-muted-foreground">

@@ -49,51 +49,16 @@ const Venue: React.FC = () => {
         </div>
 
         {/* Venue Cards */}
-        <div className="venues-container" style={{ display: 'flex', flexDirection: 'column', gap: '25px', marginBottom: '40px' }}>
+        <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8 lg:mb-10">
           {venues.map((venue, index) => (
             <Link 
               key={venue.id}
               to={venue.path}
-              className="venue-card"
+              className="glass-card responsive-card-padding block transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 animate-fade-up"
               style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
-                backdropFilter: 'blur(15px)',
-                WebkitBackdropFilter: 'blur(15px)',
-                borderRadius: '25px',
-                padding: '28px',
-                position: 'relative',
-                overflow: 'hidden',
-                boxShadow: `
-                  20px 20px 40px rgba(163, 155, 146, 0.3),
-                  -20px -20px 40px rgba(255, 255, 255, 0.8),
-                  inset 1px 1px 3px rgba(255, 255, 255, 0.6),
-                  inset -1px -1px 3px rgba(163, 155, 146, 0.15)
-                `,
-                border: '1px solid rgba(255, 255, 255, 0.4)',
-                transition: 'all 0.3s ease',
-                cursor: 'pointer',
                 textDecoration: 'none',
                 color: 'inherit',
-                display: 'block',
-                animation: `fadeIn 0.6s ease-out ${0.1 + index * 0.1}s backwards`
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-5px) scale(1.02)';
-                e.currentTarget.style.boxShadow = `
-                  25px 25px 50px rgba(163, 155, 146, 0.35),
-                  -25px -25px 50px rgba(255, 255, 255, 0.85),
-                  inset 1px 1px 3px rgba(255, 255, 255, 0.7),
-                  inset -1px -1px 3px rgba(163, 155, 146, 0.2)
-                `;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.boxShadow = `
-                  20px 20px 40px rgba(163, 155, 146, 0.3),
-                  -20px -20px 40px rgba(255, 255, 255, 0.8),
-                  inset 1px 1px 3px rgba(255, 255, 255, 0.6),
-                  inset -1px -1px 3px rgba(163, 155, 146, 0.15)
-                `;
+                animationDelay: `${0.1 + index * 0.1}s`
               }}
             >
               {/* Glass shine effect */}
@@ -114,26 +79,12 @@ const Venue: React.FC = () => {
                 }}
               />
               
-              <div className="card-header" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <div className="card-content" style={{ flex: 1 }}>
-                  <div className="venue-name" style={{ 
-                    fontSize: '20px', 
-                    fontWeight: '600', 
-                    color: '#2d3f51', 
-                    marginBottom: '8px', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '10px' 
-                  }}>
-                    <span 
-                      className={`venue-dot ${venue.dotColor}`}
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 sm:gap-6 mb-4 sm:mb-6">
+                <div className="flex-1 space-y-3 sm:space-y-4">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div 
+                      className="w-3 h-3 sm:w-4 sm:h-4 rounded-full relative flex-shrink-0"
                       style={{
-                        width: '14px',
-                        height: '14px',
-                        borderRadius: '50%',
-                        display: 'inline-block',
-                        position: 'relative',
-                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
                         background: venue.dotColor === 'dot-pink' 
                           ? 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
                           : venue.dotColor === 'dot-blue'
@@ -141,276 +92,101 @@ const Venue: React.FC = () => {
                           : 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)'
                       }}
                     />
-                    {venue.title}
+                    <h3 className="responsive-heading-md font-semibold text-wedding-navy">
+                      {venue.title}
+                    </h3>
                   </div>
-                  <div className="event-type" style={{ 
-                    fontSize: '15px', 
-                    color: '#667eea', 
-                    fontWeight: '500', 
-                    marginBottom: '15px' 
-                  }}>
+                  <p className="responsive-text-lg text-glass-blue font-medium">
                     {venue.subtitle}
-                  </div>
+                  </p>
                   
-                  <div className="info-row" style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '12px', 
-                    marginBottom: '12px', 
-                    fontSize: '14px', 
-                    color: '#5a5651' 
-                  }}>
-                    <div className="info-icon" style={{
-                      width: '32px',
-                      height: '32px',
-                      background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
-                      borderRadius: '10px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: 'inset 2px 2px 4px rgba(163, 155, 146, 0.2), inset -2px -2px 4px rgba(255, 255, 255, 0.8)',
-                      fontSize: '16px'
-                    }}>
-                      📅
+                  <div className="space-y-2 sm:space-y-3">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="glass-secondary w-6 h-6 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-sm sm:text-base flex-shrink-0">
+                        📅
+                      </div>
+                      <span className="responsive-text-base text-muted-foreground">{venue.date}</span>
                     </div>
-                    <span>{venue.date}</span>
-                  </div>
-                  
-                  <div className="info-row" style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '12px', 
-                    marginBottom: '12px', 
-                    fontSize: '14px', 
-                    color: '#5a5651' 
-                  }}>
-                    <div className="info-icon" style={{
-                      width: '32px',
-                      height: '32px',
-                      background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
-                      borderRadius: '10px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: 'inset 2px 2px 4px rgba(163, 155, 146, 0.2), inset -2px -2px 4px rgba(255, 255, 255, 0.8)',
-                      fontSize: '16px'
-                    }}>
-                      🕐
+                    
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="glass-secondary w-6 h-6 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-sm sm:text-base flex-shrink-0">
+                        🕐
+                      </div>
+                      <span className="responsive-text-base text-muted-foreground">{venue.time}</span>
                     </div>
-                    <span>{venue.time}</span>
                   </div>
                 </div>
                 
-                <div className="arrow-btn" style={{
-                  width: '40px',
-                  height: '40px',
-                  background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '5px 5px 10px rgba(163, 155, 146, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.7)',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  flexShrink: 0
-                }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#667eea">
-                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                <div className="glass-secondary w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 hover:scale-110 hover:translate-x-1">
+                  <svg width="16" height="16" viewBox="0 0 24 24" className="text-glass-blue">
+                    <path fill="currentColor" d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
                   </svg>
                 </div>
               </div>
               
-              <div className="description" style={{
-                marginTop: '20px',
-                padding: '15px',
-                background: 'linear-gradient(135deg, rgba(230, 222, 214, 0.3) 0%, rgba(245, 237, 228, 0.3) 100%)',
-                borderRadius: '15px',
-                fontSize: '14px',
-                color: '#5a5651',
-                lineHeight: '1.6',
-                boxShadow: 'inset 3px 3px 6px rgba(163, 155, 146, 0.15), inset -3px -3px 6px rgba(255, 255, 255, 0.6)',
-                backdropFilter: 'blur(5px)'
-              }}>
-                {venue.description}
+              <div className="glass-secondary responsive-card-padding-sm rounded-xl">
+                <p className="responsive-text-base text-muted-foreground leading-relaxed">
+                  {venue.description}
+                </p>
               </div>
             </Link>
           ))}
         </div>
 
         {/* Dress Code Card */}
-        <div className="glass-card" style={{ 
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
-          backdropFilter: 'blur(15px)',
-          WebkitBackdropFilter: 'blur(15px)',
-          borderRadius: '30px',
-          padding: '30px',
-          position: 'relative' as const,
-          overflow: 'hidden',
-          boxShadow: '20px 20px 40px rgba(163, 155, 146, 0.3), -20px -20px 40px rgba(255, 255, 255, 0.8), inset 1px 1px 3px rgba(255, 255, 255, 0.6), inset -1px -1px 3px rgba(163, 155, 146, 0.15)',
-          border: '1px solid rgba(255, 255, 255, 0.4)',
-          transition: 'all 0.3s ease',
-          animation: 'fadeIn 0.6s ease-out 0.1s backwards'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '25px' }}>
-            <div style={{
-              width: '50px',
-              height: '50px',
-              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-              borderRadius: '15px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '24px',
-              boxShadow: '5px 5px 10px rgba(240, 87, 108, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.7), inset 2px 2px 5px rgba(255, 255, 255, 0.3)',
-              position: 'relative' as const,
-              overflow: 'hidden'
-            }}>
+        <div className="glass-card responsive-card-padding mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
+          <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-glass-pink to-glass-purple rounded-xl flex items-center justify-center text-xl sm:text-2xl flex-shrink-0">
               💗
             </div>
-            <h2 style={{ fontSize: '22px', fontWeight: '600', color: '#2d3f51', letterSpacing: '-0.5px' }}>
+            <h2 className="responsive-heading-lg font-semibold text-wedding-navy tracking-tight">
               Dress Code
             </h2>
           </div>
 
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: '1fr 1fr', 
-            gap: '20px', 
-            marginBottom: '25px' 
-          }}>
-            <div style={{
-              background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)',
-              borderRadius: '20px',
-              padding: '20px',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              boxShadow: '8px 8px 16px rgba(163, 155, 146, 0.25), -8px -8px 16px rgba(255, 255, 255, 0.7), inset 1px 1px 2px rgba(255, 255, 255, 0.5)',
-              transition: 'all 0.3s ease',
-              position: 'relative' as const,
-              overflow: 'hidden'
-            }}>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '10px', 
-                marginBottom: '12px',
-                fontWeight: '600',
-                color: '#2d3f51',
-                fontSize: '16px'
-              }}>
-                <span style={{
-                  display: 'inline-block',
-                  width: '30px',
-                  height: '30px',
-                  background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
-                  borderRadius: '50%',
-                  textAlign: 'center' as const,
-                  lineHeight: '30px',
-                  fontSize: '16px',
-                  marginBottom: '12px',
-                  boxShadow: '3px 3px 6px rgba(163, 155, 146, 0.3), -3px -3px 6px rgba(255, 255, 255, 0.8)'
-                }}>
-                  👔
-                </span>
-                For Him:
+          <div className="responsive-grid-2 mb-4 sm:mb-6">
+            {[
+              {
+                icon: '👔',
+                title: 'For Him:',
+                description: 'Suits, dress chinos, button up shirt and optional tie. We love a pocket kerchief!'
+              },
+              {
+                icon: '👗', 
+                title: 'For Her:',
+                description: 'Classy dress, pantsuit or jumpsuit.'
+              }
+            ].map((item, index) => (
+              <div key={index} className="glass-secondary responsive-card-padding rounded-xl transition-all duration-300 hover:scale-105">
+                <div className="flex items-center gap-2 sm:gap-3 mb-3">
+                  <div className="glass-primary w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-sm sm:text-base flex-shrink-0">
+                    {item.icon}
+                  </div>
+                  <h3 className="responsive-text-lg font-semibold text-wedding-navy">
+                    {item.title}
+                  </h3>
+                </div>
+                <p className="responsive-text-base text-muted-foreground leading-relaxed">
+                  {item.description}
+                </p>
               </div>
-              <p style={{ fontSize: '14px', color: '#5a5651', lineHeight: '1.6' }}>
-                Suits, dress chinos, button up shirt and optional tie. We love a pocket kerchief!
-              </p>
-            </div>
-
-            <div style={{
-              background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)',
-              borderRadius: '20px',
-              padding: '20px',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              boxShadow: '8px 8px 16px rgba(163, 155, 146, 0.25), -8px -8px 16px rgba(255, 255, 255, 0.7), inset 1px 1px 2px rgba(255, 255, 255, 0.5)',
-              transition: 'all 0.3s ease',
-              position: 'relative' as const,
-              overflow: 'hidden'
-            }}>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '10px', 
-                marginBottom: '12px',
-                fontWeight: '600',
-                color: '#2d3f51',
-                fontSize: '16px'
-              }}>
-                <span style={{
-                  display: 'inline-block',
-                  width: '30px',
-                  height: '30px',
-                  background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
-                  borderRadius: '50%',
-                  textAlign: 'center' as const,
-                  lineHeight: '30px',
-                  fontSize: '16px',
-                  marginBottom: '12px',
-                  boxShadow: '3px 3px 6px rgba(163, 155, 146, 0.3), -3px -3px 6px rgba(255, 255, 255, 0.8)'
-                }}>
-                  👗
-                </span>
-                For Her:
-              </div>
-              <p style={{ fontSize: '14px', color: '#5a5651', lineHeight: '1.6' }}>
-                Classy dress, pantsuit or jumpsuit.
-              </p>
-            </div>
+            ))}
           </div>
 
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(255, 220, 235, 0.4) 0%, rgba(255, 220, 235, 0.2) 100%)',
-            borderRadius: '20px',
-            padding: '15px',
-            textAlign: 'center' as const,
-            fontWeight: '600',
-            color: '#f5576c',
-            fontSize: '16px',
-            letterSpacing: '0.5px',
-            boxShadow: 'inset 3px 3px 6px rgba(245, 87, 108, 0.1), inset -3px -3px 6px rgba(255, 255, 255, 0.8)',
-            backdropFilter: 'blur(5px)',
-            border: '1px solid rgba(245, 87, 108, 0.2)',
-            position: 'relative' as const,
-            overflow: 'hidden'
-          }}>
-            ✨ Dapper/Cocktail Attire ✨
+          <div className="glass-secondary responsive-card-padding-sm rounded-xl text-center bg-gradient-to-r from-glass-pink/10 to-glass-purple/10 border border-glass-pink/20">
+            <p className="responsive-text-lg font-semibold text-glass-pink tracking-wide">
+              ✨ Dapper/Cocktail Attire ✨
+            </p>
           </div>
         </div>
 
         {/* Accommodation Card */}
-        <div className="glass-card" style={{ 
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
-          backdropFilter: 'blur(15px)',
-          WebkitBackdropFilter: 'blur(15px)',
-          borderRadius: '30px',
-          padding: '30px',
-          position: 'relative' as const,
-          overflow: 'hidden',
-          boxShadow: '20px 20px 40px rgba(163, 155, 146, 0.3), -20px -20px 40px rgba(255, 255, 255, 0.8), inset 1px 1px 3px rgba(255, 255, 255, 0.6), inset -1px -1px 3px rgba(163, 155, 146, 0.15)',
-          border: '1px solid rgba(255, 255, 255, 0.4)',
-          transition: 'all 0.3s ease',
-          animation: 'fadeIn 0.6s ease-out 0.3s backwards'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '25px' }}>
-            <div style={{
-              width: '50px',
-              height: '50px',
-              background: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
-              borderRadius: '15px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '24px',
-              boxShadow: '5px 5px 10px rgba(17, 153, 142, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.7), inset 2px 2px 5px rgba(255, 255, 255, 0.3)',
-              position: 'relative' as const,
-              overflow: 'hidden'
-            }}>
+        <div className="glass-card responsive-card-padding mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
+          <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-glass-green to-glass-blue rounded-xl flex items-center justify-center text-xl sm:text-2xl flex-shrink-0">
               📍
             </div>
-            <h2 style={{ fontSize: '22px', fontWeight: '600', color: '#2d3f51', letterSpacing: '-0.5px' }}>
+            <h2 className="responsive-heading-lg font-semibold text-wedding-navy tracking-tight">
               Accommodation Recommendations
             </h2>
           </div>

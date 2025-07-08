@@ -65,189 +65,40 @@ const Home: React.FC = () => {
           </p>
         </div>
         {/* Countdown Section */}
-        <div className="glass-card" style={{
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
-          backdropFilter: 'blur(15px)',
-          WebkitBackdropFilter: 'blur(15px)',
-          borderRadius: '30px',
-          padding: '40px',
-          marginBottom: '40px',
-          position: 'relative' as const,
-          overflow: 'hidden',
-          boxShadow: '20px 20px 40px rgba(163, 155, 146, 0.3), -20px -20px 40px rgba(255, 255, 255, 0.8), inset 1px 1px 3px rgba(255, 255, 255, 0.6), inset -1px -1px 3px rgba(163, 155, 146, 0.15)',
-          border: '1px solid rgba(255, 255, 255, 0.4)',
-          textAlign: 'center' as const,
-          animation: 'fadeIn 0.6s ease-out'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', marginBottom: '10px' }}>
-            <span style={{ fontSize: '28px', animation: 'rotate 3s linear infinite' }}>⏰</span>
-            <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#2d3f51', letterSpacing: '-0.5px' }}>
+        <div className="glass-card responsive-card-padding mb-6 sm:mb-8 lg:mb-10 text-center animate-fade-up">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 mb-2 sm:mb-3">
+            <span className="text-xl sm:text-2xl lg:text-3xl animate-glass-float">⏰</span>
+            <h1 className="responsive-heading-lg font-bold text-wedding-navy tracking-tight">
               Countdown to Forever
             </h1>
           </div>
-          <p style={{ fontSize: '16px', color: '#7a736b', marginBottom: '30px' }}>
+          <p className="responsive-text-lg text-muted-foreground mb-6 sm:mb-8">
             Every second brings us closer to celebrating with you!
           </p>
           
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(4, 1fr)', 
-            gap: '20px', 
-            marginBottom: '20px' 
-          }}>
-            <div style={{
-              background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)',
-              borderRadius: '20px',
-              padding: '25px 15px',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              boxShadow: '8px 8px 16px rgba(163, 155, 146, 0.25), -8px -8px 16px rgba(255, 255, 255, 0.7), inset 1px 1px 2px rgba(255, 255, 255, 0.5)',
-              transition: 'all 0.3s ease'
-            }}>
-              <div style={{
-                fontSize: '48px',
-                fontWeight: '700',
-                color: '#2d3f51',
-                lineHeight: '1',
-                marginBottom: '8px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>
-                {timeToWedding.days}
+          <div className="responsive-grid-4 force-mobile-single-col mb-6">
+            {[
+              { value: timeToWedding.days, label: 'DAYS' },
+              { value: timeToWedding.hours, label: 'HOURS' },
+              { value: timeToWedding.minutes, label: 'MINUTES' },
+              { value: timeToWedding.seconds, label: 'SECONDS' }
+            ].map((item, index) => (
+              <div 
+                key={item.label}
+                className="glass-secondary responsive-card-padding-sm mobile-countdown-card text-center transition-all duration-300 hover:scale-105"
+              >
+                <div className="text-3xl sm:text-4xl lg:text-5xl mobile-countdown-number font-bold text-wedding-navy leading-none mb-2 bg-gradient-to-r from-glass-blue to-glass-purple bg-clip-text text-transparent">
+                  {item.value}
+                </div>
+                <div className="text-xs sm:text-sm mobile-countdown-label text-muted-foreground uppercase tracking-wider font-medium">
+                  {item.label}
+                </div>
               </div>
-              <div style={{
-                fontSize: '13px',
-                color: '#7a736b',
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                fontWeight: '500'
-              }}>
-                DAYS
-              </div>
-            </div>
-
-            <div style={{
-              background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)',
-              borderRadius: '20px',
-              padding: '25px 15px',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              boxShadow: '8px 8px 16px rgba(163, 155, 146, 0.25), -8px -8px 16px rgba(255, 255, 255, 0.7), inset 1px 1px 2px rgba(255, 255, 255, 0.5)',
-              transition: 'all 0.3s ease'
-            }}>
-              <div style={{
-                fontSize: '48px',
-                fontWeight: '700',
-                color: '#2d3f51',
-                lineHeight: '1',
-                marginBottom: '8px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>
-                {timeToWedding.hours}
-              </div>
-              <div style={{
-                fontSize: '13px',
-                color: '#7a736b',
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                fontWeight: '500'
-              }}>
-                HOURS
-              </div>
-            </div>
-
-            <div style={{
-              background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)',
-              borderRadius: '20px',
-              padding: '25px 15px',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              boxShadow: '8px 8px 16px rgba(163, 155, 146, 0.25), -8px -8px 16px rgba(255, 255, 255, 0.7), inset 1px 1px 2px rgba(255, 255, 255, 0.5)',
-              transition: 'all 0.3s ease'
-            }}>
-              <div style={{
-                fontSize: '48px',
-                fontWeight: '700',
-                color: '#2d3f51',
-                lineHeight: '1',
-                marginBottom: '8px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>
-                {timeToWedding.minutes}
-              </div>
-              <div style={{
-                fontSize: '13px',
-                color: '#7a736b',
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                fontWeight: '500'
-              }}>
-                MINUTES
-              </div>
-            </div>
-
-            <div style={{
-              background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)',
-              borderRadius: '20px',
-              padding: '25px 15px',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              boxShadow: '8px 8px 16px rgba(163, 155, 146, 0.25), -8px -8px 16px rgba(255, 255, 255, 0.7), inset 1px 1px 2px rgba(255, 255, 255, 0.5)',
-              transition: 'all 0.3s ease'
-            }}>
-              <div style={{
-                fontSize: '48px',
-                fontWeight: '700',
-                color: '#2d3f51',
-                lineHeight: '1',
-                marginBottom: '8px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>
-                {timeToWedding.seconds}
-              </div>
-              <div style={{
-                fontSize: '13px',
-                color: '#7a736b',
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                fontWeight: '500'
-              }}>
-                SECONDS
-              </div>
-            </div>
+            ))}
           </div>
           
-          <div style={{
-            fontSize: '14px',
-            color: '#11998e',
-            fontWeight: '600',
-            textTransform: 'uppercase',
-            letterSpacing: '2px',
-            position: 'relative' as const,
-            display: 'inline-block'
-          }}>
-            <span style={{
-              position: 'absolute' as const,
-              left: '-20px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              width: '8px',
-              height: '8px',
-              background: '#38ef7d',
-              borderRadius: '50%',
-              animation: 'pulse 2s infinite'
-            }}></span>
+          <div className="inline-flex items-center gap-2 text-xs sm:text-sm text-glass-green font-semibold uppercase tracking-wider">
+            <div className="w-2 h-2 bg-glass-green rounded-full animate-pulse"></div>
             Live
           </div>
         </div>
@@ -530,122 +381,44 @@ const Home: React.FC = () => {
         </div>
 
         {/* Info Cards */}
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(3, 1fr)', 
-          gap: '20px', 
-          marginBottom: '40px' 
-        }}>
-          <div className="glass-card" style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
-            backdropFilter: 'blur(15px)',
-            WebkitBackdropFilter: 'blur(15px)',
-            borderRadius: '25px',
-            padding: '30px',
-            textAlign: 'center' as const,
-            position: 'relative' as const,
-            overflow: 'hidden',
-            boxShadow: '15px 15px 30px rgba(163, 155, 146, 0.3), -15px -15px 30px rgba(255, 255, 255, 0.8), inset 1px 1px 3px rgba(255, 255, 255, 0.6), inset -1px -1px 3px rgba(163, 155, 146, 0.15)',
-            border: '1px solid rgba(255, 255, 255, 0.4)',
-            transition: 'all 0.3s ease',
-            animation: 'fadeIn 0.6s ease-out 0.3s backwards'
-          }}>
-            <div style={{
-              width: '60px',
-              height: '60px',
-              margin: '0 auto 15px',
-              background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
-              borderRadius: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '5px 5px 10px rgba(163, 155, 146, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.7), inset 2px 2px 4px rgba(255, 255, 255, 0.6)',
-              fontSize: '28px'
-            }}>
-              📅
+        <div className="responsive-grid-3 mb-6 sm:mb-8 lg:mb-10">
+          {[
+            {
+              icon: '📅',
+              title: 'When',
+              primary: 'October 5, 2025',
+              secondary: 'Arrive 2:30 PM'
+            },
+            {
+              icon: '📍',
+              title: 'Where',
+              primary: 'Ben Ean',
+              secondary: 'Pokolbin, NSW'
+            },
+            {
+              icon: '👫',
+              title: 'Who',
+              primary: 'Family & Friends',
+              secondary: isAdmin ? 'You have admin access' : 'You\'re invited!'
+            }
+          ].map((card, index) => (
+            <div key={card.title} className="glass-card responsive-card-padding text-center transition-all duration-300 hover:scale-105 animate-fade-up">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 mx-auto mb-3 sm:mb-4 glass-secondary rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl lg:text-3xl">
+                {card.icon}
+              </div>
+              <h3 className="responsive-text-lg font-semibold text-wedding-navy mb-2">
+                {card.title}
+              </h3>
+              <div className="space-y-1">
+                <div className="responsive-text-base text-glass-blue font-medium">
+                  {card.primary}
+                </div>
+                <div className="responsive-text-base text-muted-foreground">
+                  {card.secondary}
+                </div>
+              </div>
             </div>
-            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#2d3f51', marginBottom: '8px' }}>
-              When
-            </h3>
-            <div style={{ fontSize: '14px', color: '#7a736b', lineHeight: '1.5' }}>
-              <div style={{ color: '#667eea', fontWeight: '500' }}>October 5, 2025</div>
-              <div>Arrive 2:30 PM</div>
-            </div>
-          </div>
-
-          <div className="glass-card" style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
-            backdropFilter: 'blur(15px)',
-            WebkitBackdropFilter: 'blur(15px)',
-            borderRadius: '25px',
-            padding: '30px',
-            textAlign: 'center' as const,
-            position: 'relative' as const,
-            overflow: 'hidden',
-            boxShadow: '15px 15px 30px rgba(163, 155, 146, 0.3), -15px -15px 30px rgba(255, 255, 255, 0.8), inset 1px 1px 3px rgba(255, 255, 255, 0.6), inset -1px -1px 3px rgba(163, 155, 146, 0.15)',
-            border: '1px solid rgba(255, 255, 255, 0.4)',
-            transition: 'all 0.3s ease',
-            animation: 'fadeIn 0.6s ease-out 0.4s backwards'
-          }}>
-            <div style={{
-              width: '60px',
-              height: '60px',
-              margin: '0 auto 15px',
-              background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
-              borderRadius: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '5px 5px 10px rgba(163, 155, 146, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.7), inset 2px 2px 4px rgba(255, 255, 255, 0.6)',
-              fontSize: '28px'
-            }}>
-              📍
-            </div>
-            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#2d3f51', marginBottom: '8px' }}>
-              Where
-            </h3>
-            <div style={{ fontSize: '14px', color: '#7a736b', lineHeight: '1.5' }}>
-              <div style={{ color: '#667eea', fontWeight: '500' }}>Ben Ean</div>
-              <div>Pokolbin, NSW</div>
-            </div>
-          </div>
-
-          <div className="glass-card" style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
-            backdropFilter: 'blur(15px)',
-            WebkitBackdropFilter: 'blur(15px)',
-            borderRadius: '25px',
-            padding: '30px',
-            textAlign: 'center' as const,
-            position: 'relative' as const,
-            overflow: 'hidden',
-            boxShadow: '15px 15px 30px rgba(163, 155, 146, 0.3), -15px -15px 30px rgba(255, 255, 255, 0.8), inset 1px 1px 3px rgba(255, 255, 255, 0.6), inset -1px -1px 3px rgba(163, 155, 146, 0.15)',
-            border: '1px solid rgba(255, 255, 255, 0.4)',
-            transition: 'all 0.3s ease',
-            animation: 'fadeIn 0.6s ease-out 0.5s backwards'
-          }}>
-            <div style={{
-              width: '60px',
-              height: '60px',
-              margin: '0 auto 15px',
-              background: 'linear-gradient(145deg, #e8e0d7, #f5ede4)',
-              borderRadius: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '5px 5px 10px rgba(163, 155, 146, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.7), inset 2px 2px 4px rgba(255, 255, 255, 0.6)',
-              fontSize: '28px'
-            }}>
-              👫
-            </div>
-            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#2d3f51', marginBottom: '8px' }}>
-              Who
-            </h3>
-            <div style={{ fontSize: '14px', color: '#7a736b', lineHeight: '1.5' }}>
-              <div style={{ color: '#667eea', fontWeight: '500' }}>Family & Friends</div>
-              <div>{isAdmin ? 'You have admin access' : 'You\'re invited!'}</div>
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* Welcome Section */}

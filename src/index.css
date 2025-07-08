@@ -547,6 +547,49 @@
     }
   }
 
+  /* Responsive Grid Utilities */
+  .responsive-grid-4 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5;
+  }
+
+  .responsive-grid-3 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5;
+  }
+
+  .responsive-grid-2 {
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4;
+  }
+
+  /* Responsive Card Padding */
+  .responsive-card-padding {
+    @apply p-3 sm:p-4 lg:p-6;
+  }
+
+  .responsive-card-padding-sm {
+    @apply p-2 sm:p-3 lg:p-4;
+  }
+
+  /* Responsive Typography Scale */
+  .responsive-heading-xl {
+    @apply text-xl sm:text-2xl lg:text-3xl xl:text-4xl;
+  }
+
+  .responsive-heading-lg {
+    @apply text-lg sm:text-xl lg:text-2xl xl:text-3xl;
+  }
+
+  .responsive-heading-md {
+    @apply text-base sm:text-lg lg:text-xl xl:text-2xl;
+  }
+
+  .responsive-text-lg {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+
+  .responsive-text-base {
+    @apply text-xs sm:text-sm lg:text-base;
+  }
+
   /* Mobile-specific adjustments */
   @media (max-width: 480px) {
     .glass-animated {
@@ -569,38 +612,24 @@
       padding: 1rem;
     }
 
-    /* Mobile Typography */
-    .wedding-display {
-      @apply text-3xl;
-    }
-
-    .wedding-heading {
-      @apply text-xl;
-    }
-
-    .wedding-subheading {
-      @apply text-base;
-    }
-
-    /* Mobile grid adjustments */
-    .home-countdown-grid {
-      grid-template-columns: repeat(2, 1fr) !important;
-      gap: 12px !important;
-    }
-
-    .venue-grid {
+    /* Force single column on very small screens */
+    .force-mobile-single-col {
       grid-template-columns: 1fr !important;
-      gap: 1rem !important;
     }
 
-    /* Mobile padding and spacing */
-    .mobile-container {
-      padding: 0.75rem !important;
+    /* Mobile countdown specific */
+    .mobile-countdown-card {
+      padding: 15px 10px !important;
     }
 
-    .mobile-card {
-      padding: 1rem !important;
-      border-radius: 16px !important;
+    .mobile-countdown-number {
+      font-size: 32px !important;
+      line-height: 1 !important;
+    }
+
+    .mobile-countdown-label {
+      font-size: 10px !important;
+      letter-spacing: 0.5px !important;
     }
 
     /* Mobile navigation adjustments */
