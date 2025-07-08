@@ -1,3 +1,4 @@
+
 import React from 'react';
 import NavigationIcon from './NavigationIcon';
 import { HapticFeedback } from '@/components/mobile/HapticFeedback';
@@ -19,13 +20,16 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
       className="fixed left-1/2 transform -translate-x-1/2 items-end z-50"
       style={{
         bottom: '20px',
-        background: 'transparent',
+        background: 'transparent', // Keep invisible
         display: 'flex',
-        gap: 'clamp(10px, 2.5vw, 16px)',
-        width: 'max-content',
+        gap: 'clamp(12px, 3vw, 20px)', // Better spacing for icons
+        width: 'auto', // Auto width to fit content
+        minWidth: 'max-content',
         maxWidth: 'calc(100vw - 2rem)',
-        overflowX: 'hidden',
-        transition: 'all 0.3s ease'
+        overflowX: 'visible', // Allow icons to be fully visible
+        transition: 'all 0.3s ease',
+        padding: '8px 12px', // Add padding for better touch targets
+        height: 'auto' // Auto height to accommodate icons
       }}
     >
       {routes.map((route) => {
@@ -46,12 +50,13 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
                 transition: 'all 0.3s ease',
                 cursor: 'pointer',
                 position: 'relative',
-                padding: 'clamp(4px, 1vw, 6px) 0',
+                padding: 'clamp(6px, 1.5vw, 8px)',
                 background: 'none',
                 border: 'none',
                 fontFamily: 'inherit',
-                minWidth: '48px',
-                minHeight: '48px'
+                minWidth: '56px', // Increased for better touch target
+                minHeight: '56px', // Increased for better touch target
+                borderRadius: '12px' // Add border radius for better touch feel
               }}
             >
             {/* Responsive Neumorphic Icon with Glass Bubble */}
@@ -73,21 +78,21 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
                 background: isActive && isCenter 
                   ? 'linear-gradient(135deg, hsl(var(--wedding-navy)) 0%, hsl(var(--wedding-navy-light)) 100%)'
                   : 'linear-gradient(135deg, hsl(var(--wedding-navy)) 0%, hsl(var(--wedding-navy-light)) 100%)',
-                width: 'clamp(40px, 9vw, 56px)',
-                height: 'clamp(40px, 9vw, 56px)',
+                width: 'clamp(44px, 10vw, 56px)', // Better sizing for all devices
+                height: 'clamp(44px, 10vw, 56px)', // Maintain aspect ratio
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 position: 'relative',
-                top: 'clamp(-8px, -2vw, -12px)',
-                marginBottom: 'clamp(-6px, -1.5vw, -10px)',
+                top: 'clamp(-6px, -1.5vw, -8px)',
+                marginBottom: 'clamp(-4px, -1vw, -6px)',
                 boxShadow: `
-                  0 0 clamp(20px, 5vw, 30px) hsl(var(--wedding-navy) / 0.25),
-                  0 clamp(6px, 1.5vw, 10px) clamp(16px, 4vw, 24px) hsl(var(--wedding-navy) / 0.5),
-                  0 clamp(3px, 0.75vw, 5px) clamp(6px, 1.5vw, 10px) hsl(var(--wedding-navy) / 0.4),
-                  inset 0 -3px 6px hsl(var(--glass-black) / 0.4),
-                  inset 0 3px 6px hsl(var(--glass-white) / 0.15)
+                  0 0 clamp(16px, 4vw, 24px) hsl(var(--wedding-navy) / 0.25),
+                  0 clamp(4px, 1vw, 8px) clamp(12px, 3vw, 20px) hsl(var(--wedding-navy) / 0.5),
+                  0 clamp(2px, 0.5vw, 4px) clamp(4px, 1vw, 8px) hsl(var(--wedding-navy) / 0.4),
+                  inset 0 -2px 4px hsl(var(--glass-black) / 0.4),
+                  inset 0 2px 4px hsl(var(--glass-white) / 0.15)
                 `,
                 overflow: 'hidden',
                 transition: 'all 0.3s ease',
@@ -120,7 +125,7 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
               <div
                 style={{
                   position: 'absolute',
-                  top: 'clamp(2px, 0.5vw, 3px)',
+                  top: 'clamp(1px, 0.25vw, 2px)',
                   left: '50%',
                   transform: 'translateX(-50%)',
                   width: '65%',
@@ -133,7 +138,7 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
                     transparent 100%
                   )`,
                   borderRadius: '50% 50% 50% 50% / 100% 100% 0% 0%',
-                  filter: 'blur(clamp(1px, 0.25vw, 2px))',
+                  filter: 'blur(clamp(0.5px, 0.125vw, 1px))',
                   pointerEvents: 'none'
                 }}
               />
@@ -149,13 +154,19 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
             <span 
               className="nav-label"
               style={{
-                fontSize: 'clamp(11px, 2.5vw, 12px)',
-                marginTop: 'clamp(3px, 1.2vw, 7px)',
+                fontSize: 'clamp(10px, 2.2vw, 11px)',
+                marginTop: 'clamp(2px, 0.8vw, 4px)',
                 fontWeight: 'bold',
                 letterSpacing: '0.3px',
                 textShadow: '1px 1px 2px hsl(var(--glass-white) / 0.8)',
                 color: 'hsl(0 0% 0%)',
-                fontFamily: "'Playfair Display', serif"
+                fontFamily: "'Playfair Display', serif",
+                textAlign: 'center',
+                lineHeight: '1.2',
+                maxWidth: '48px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
               }}
             >
               {route.label}
