@@ -256,7 +256,7 @@ export const RSVPIntegratedWizard: React.FC = () => {
           </div>
         )}
 
-        {(currentStep === 3) || (currentStep === 2 && rsvpData.status !== 'attending') ? (
+        {((currentStep === 3) || (currentStep === 2 && rsvpData.status !== 'attending')) && (
           <div className="space-y-6">
             <div className="text-center">
               <MessageSquare className="w-12 h-12 mx-auto mb-4 text-wedding-navy" />
