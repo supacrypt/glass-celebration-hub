@@ -83,6 +83,7 @@ export default {
 			},
 			fontFamily: {
 				inter: ['Inter', 'sans-serif'],
+				dolly: ['Playfair Display', 'serif'],
 			},
 			fontSize: {
 				'wedding-display': ['4rem', {

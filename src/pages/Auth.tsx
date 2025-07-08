@@ -25,6 +25,7 @@ type AuthMode = 'signin' | 'signup' | 'magic-link' | 'forgot-password';
 const Auth: React.FC = () => {
   const [mode, setMode] = useState<AuthMode>('signin');
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   
   const { signUp, signIn } = useAuth();
@@ -111,12 +112,16 @@ const Auth: React.FC = () => {
       <GlassCard className="w-full max-w-md p-4 sm:p-8">
         <div className="text-center mb-6 sm:mb-8">
           <div className="flex items-center justify-center mb-3 sm:mb-4">
-            <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-glass-pink mr-2" />
-            <h1 className="text-xl sm:text-2xl lg:wedding-heading font-semibold text-wedding-navy">
-              Tim & Kirsten
+            <img 
+              src="https://iwmfxcrzzwpmxomydmuq.storage.supabase.co/v1/object/public/home-hero//logo.png" 
+              alt="Nuptul Logo" 
+              className="w-8 h-8 sm:w-10 sm:h-10 mr-3 object-contain"
+            />
+            <h1 className="text-xl sm:text-2xl lg:wedding-heading font-dolly font-semibold text-wedding-navy">
+              Nuptul
             </h1>
           </div>
-          <h2 className="text-lg sm:text-xl font-semibold text-wedding-navy mb-2">
+          <h2 className="text-lg sm:text-xl font-dolly font-semibold text-wedding-navy mb-2">
             {mode === 'signup' ? 'Join Our Celebration' : 'Welcome Back'}
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground">
@@ -200,10 +205,34 @@ const Auth: React.FC = () => {
               <PasswordStrengthMeter password={signUpForm.watch('password') || ''} />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  className="glass-input pr-10"
+                  {...signUpForm.register('confirmPassword')}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground min-w-[44px] min-h-[44px] flex items-center justify-center"
+                >
+                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              {signUpForm.formState.errors.confirmPassword && (
+                <p className="text-sm text-destructive">
+                  {signUpForm.formState.errors.confirmPassword.message}
+                </p>
+              )}
+            </div>
+
             <Button
               type="submit"
-              className="w-full bg-wedding-navy hover:bg-wedding-navy-light min-h-[44px]"
-              disabled={signUpForm.formState.isSubmitting}
+              className="w-full bg-wedding-navy hover:bg-wedding-navy-light min-h-[44px] font-dolly"
+              disabled={signUpForm.formState.isSubmitting || !signUpForm.formState.isValid}
             >
               {signUpForm.formState.isSubmitting ? 'Creating Account...' : 'Create Account'}
             </Button>
@@ -211,13 +240,13 @@ const Auth: React.FC = () => {
         ) : (
           <form onSubmit={signInForm.handleSubmit(onSignInSubmit)} className="space-y-4 sm:space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="font-dolly">Email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
-                  className="glass-input pl-10"
+                  className="glass-input pl-10 font-dolly"
                   placeholder="Enter your email"
                   {...signInForm.register('email')}
                 />
@@ -230,13 +259,13 @@ const Auth: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="font-dolly">Password</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
-                  className="glass-input pl-10 pr-10"
+                  className="glass-input pl-10 pr-10 font-dolly"
                   placeholder="Enter your password"
                   {...signInForm.register('password')}
                 />
@@ -262,7 +291,7 @@ const Auth: React.FC = () => {
                   checked={rememberMe}
                   onCheckedChange={(checked) => setRememberMe(checked as boolean)}
                 />
-                <Label htmlFor="remember" className="text-sm">Remember me</Label>
+                <Label htmlFor="remember" className="text-sm font-dolly">Remember me</Label>
               </div>
               <button
                 type="button"
@@ -275,7 +304,7 @@ const Auth: React.FC = () => {
 
             <Button
               type="submit"
-              className="w-full bg-wedding-navy hover:bg-wedding-navy-light min-h-[44px]"
+              className="w-full bg-wedding-navy hover:bg-wedding-navy-light min-h-[44px] font-dolly"
               disabled={signInForm.formState.isSubmitting}
             >
               {signInForm.formState.isSubmitting ? 'Signing In...' : 'Sign In'}
@@ -293,7 +322,7 @@ const Auth: React.FC = () => {
             <Button
               type="button"
               variant="outline"
-              className="w-full"
+              className="w-full font-dolly"
               onClick={() => setMode('magic-link')}
             >
               <Mail className="w-4 h-4 mr-2" />
@@ -306,7 +335,7 @@ const Auth: React.FC = () => {
           <button
             type="button"
             onClick={() => setMode(mode === 'signup' ? 'signin' : 'signup')}
-            className="text-glass-blue hover:text-glass-blue/80 transition-colors min-h-[44px] text-sm px-2 py-2"
+            className="text-glass-blue hover:text-glass-blue/80 transition-colors min-h-[44px] text-sm px-2 py-2 font-dolly"
           >
             {mode === 'signup' 
               ? 'Already have an account? Sign in' 
