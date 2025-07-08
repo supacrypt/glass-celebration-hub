@@ -55,10 +55,10 @@ const ProfileDropdown: React.FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         style={{
           position: 'fixed',
-          top: '30px',
-          right: '30px',
-          width: '45px',
-          height: '45px',
+          top: '20px',
+          right: '20px',
+          width: '44px',
+          height: '44px',
           borderRadius: '50%',
           background: 'linear-gradient(145deg, #f5ede4, #e8e0d7)',
           border: 'none',
@@ -68,7 +68,7 @@ const ProfileDropdown: React.FC = () => {
           justifyContent: 'center',
           boxShadow: isOpen
             ? 'inset 2px 2px 5px rgba(163, 155, 146, 0.4), inset -2px -2px 5px rgba(255, 255, 255, 0.7)'
-            : '8px 8px 16px rgba(163, 155, 146, 0.4), -8px -8px 16px rgba(255, 255, 255, 0.7), inset 1px 1px 3px rgba(255, 255, 255, 0.6), inset -1px -1px 3px rgba(163, 155, 146, 0.2)',
+            : '6px 6px 12px rgba(163, 155, 146, 0.4), -6px -6px 12px rgba(255, 255, 255, 0.7), inset 1px 1px 3px rgba(255, 255, 255, 0.6), inset -1px -1px 3px rgba(163, 155, 146, 0.2)',
           transition: 'all 0.2s ease',
           zIndex: 1001,
           transform: isOpen ? 'scale(0.95)' : 'scale(1)'
@@ -83,8 +83,8 @@ const ProfileDropdown: React.FC = () => {
         <div
           className="profile-avatar"
           style={{
-            width: '35px',
-            height: '35px',
+            width: '32px',
+            height: '32px',
             borderRadius: '50%',
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             display: 'flex',
@@ -92,7 +92,7 @@ const ProfileDropdown: React.FC = () => {
             justifyContent: 'center',
             color: 'white',
             fontWeight: '600',
-            fontSize: '16px'
+            fontSize: '14px'
           }}
         >
           {getInitials()}
@@ -120,20 +120,21 @@ const ProfileDropdown: React.FC = () => {
             className="profile-dropdown"
             style={{
               position: 'fixed',
-              top: '85px',
-              right: '30px',
+              top: '70px',
+              right: '20px',
               background: 'linear-gradient(145deg, #f5ede4, #e8e0d7)',
-              borderRadius: '20px',
-              padding: '8px',
+              borderRadius: '16px',
+              padding: '6px',
               boxShadow: `
-                12px 12px 24px rgba(163, 155, 146, 0.4),
-                -12px -12px 24px rgba(255, 255, 255, 0.7),
-                inset 2px 2px 5px rgba(255, 255, 255, 0.6),
-                inset -2px -2px 5px rgba(163, 155, 146, 0.2)
+                8px 8px 16px rgba(163, 155, 146, 0.4),
+                -8px -8px 16px rgba(255, 255, 255, 0.7),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.6),
+                inset -1px -1px 2px rgba(163, 155, 146, 0.2)
               `,
               border: '1px solid rgba(255, 255, 255, 0.3)',
               zIndex: 1000,
-              minWidth: '200px',
+              minWidth: '180px',
+              maxWidth: 'calc(100vw - 40px)',
               animation: 'fadeIn 0.2s ease'
             }}
           >
@@ -141,10 +142,10 @@ const ProfileDropdown: React.FC = () => {
             <div
               style={{
                 position: 'absolute',
-                top: '-8px',
-                right: '20px',
-                width: '16px',
-                height: '16px',
+                top: '-6px',
+                right: '18px',
+                width: '12px',
+                height: '12px',
                 background: 'linear-gradient(135deg, #f5ede4 0%, #e8e0d7 50%)',
                 transform: 'rotate(45deg)',
                 borderTop: '1px solid rgba(255, 255, 255, 0.3)',
@@ -156,7 +157,7 @@ const ProfileDropdown: React.FC = () => {
             <div
               className="profile-info"
               style={{
-                padding: '12px',
+                padding: '10px 12px',
                 borderBottom: '1px solid rgba(163, 155, 146, 0.2)',
                 textAlign: 'center'
               }}
@@ -166,8 +167,9 @@ const ProfileDropdown: React.FC = () => {
                 style={{
                   fontWeight: '600',
                   color: '#2d3f51',
-                  fontSize: '16px',
-                  marginBottom: '4px'
+                  fontSize: '14px',
+                  marginBottom: '4px',
+                  lineHeight: '1.2'
                 }}
               >
                 {getDisplayName()}
@@ -175,8 +177,9 @@ const ProfileDropdown: React.FC = () => {
               <div
                 className="profile-email"
                 style={{
-                  fontSize: '12px',
-                  color: '#7a736b'
+                  fontSize: '11px',
+                  color: '#7a736b',
+                  wordBreak: 'break-all'
                 }}
               >
                 {user?.email}
@@ -186,23 +189,24 @@ const ProfileDropdown: React.FC = () => {
             {/* Menu Items */}
             <div className="profile-menu" style={{ padding: '4px 0' }}>
               <button
-                className="profile-menu-item"
+                className="profile-menu-item touch-target"
                 onClick={() => handleMenuClick('profile')}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '12px',
-                  padding: '10px 16px',
+                  gap: '10px',
+                  padding: '10px 12px',
                   background: 'none',
                   border: 'none',
                   width: '100%',
                   textAlign: 'left',
                   cursor: 'pointer',
-                  borderRadius: '12px',
+                  borderRadius: '10px',
                   transition: 'all 0.2s ease',
                   color: '#5a5651',
-                  fontSize: '14px',
-                  fontFamily: 'inherit'
+                  fontSize: '13px',
+                  fontFamily: 'inherit',
+                  minHeight: '44px'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';

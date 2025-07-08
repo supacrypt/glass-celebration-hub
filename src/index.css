@@ -288,8 +288,8 @@
     height: 64px;
     min-height: 64px;
     background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -301,6 +301,20 @@
     padding-bottom: env(safe-area-inset-bottom, 0);
     
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* Performance optimization for mobile */
+    will-change: backdrop-filter;
+    
+    /* Reduce blur on scroll for performance */
+    @media (max-width: 600px) and (prefers-reduced-motion: no-preference) {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    
+    /* Fallback for older browsers */
+    @supports not (backdrop-filter: blur(10px)) {
+      background: rgba(0, 0, 0, 0.95);
+    }
   }
 
   .nav-bottom .nav-item {
