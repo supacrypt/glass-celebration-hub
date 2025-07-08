@@ -15,10 +15,10 @@ const HeroSection: React.FC = () => {
       <div className="text-4xl sm:text-5xl lg:text-6xl mb-4 sm:mb-5 flex justify-center gap-2">
         💕
       </div>
-      <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-wedding-navy mb-3 sm:mb-4 tracking-tight bg-gradient-to-r from-glass-blue to-glass-purple bg-clip-text text-transparent">
+      <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-dolly font-bold text-wedding-navy mb-3 sm:mb-4 tracking-tight bg-gradient-to-r from-glass-blue to-glass-purple bg-clip-text text-transparent">
         Tim & Kirsten
       </h1>
-      <p className="text-base sm:text-lg lg:text-xl text-glass-blue mb-3 sm:mb-4 font-medium">
+      <p className="text-base sm:text-lg lg:text-xl text-glass-blue mb-3 sm:mb-4 font-dolly font-medium">
         October 5, 2025
       </p>
       <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto leading-relaxed">

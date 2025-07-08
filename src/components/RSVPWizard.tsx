@@ -128,7 +128,7 @@ const RSVPWizard: React.FC = () => {
     <div className="min-h-screen px-3 sm:px-5 pt-6 sm:pt-8 pb-6">
       {/* Header */}
       <div className="text-center mb-6 sm:mb-8 animate-fade-up">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-medium tracking-tight text-wedding-navy mb-3">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-dolly font-medium tracking-tight text-wedding-navy mb-3">
           RSVP
         </h1>
         <p className="text-sm sm:text-base font-normal leading-relaxed text-muted-foreground max-w-2xl mx-auto">
@@ -140,7 +140,7 @@ const RSVPWizard: React.FC = () => {
         {/* Progress Indicator */}
         <div className="p-4 sm:p-6 border-b border-border/20">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-wedding-navy">
+            <h2 className="text-lg font-dolly font-semibold text-wedding-navy">
               Step {currentStep} of {totalSteps}
             </h2>
             <span className="text-sm text-muted-foreground">

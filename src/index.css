@@ -429,17 +429,27 @@
     transition: opacity 0.25s ease;
   }
 
-  /* Typography Classes */
+  /* Typography Classes with Dolly Font for Headings */
   .wedding-display {
-    @apply text-6xl md:text-7xl font-light tracking-tight;
+    @apply text-6xl md:text-7xl font-light tracking-tight font-dolly;
   }
 
   .wedding-heading {
-    @apply text-3xl md:text-4xl font-medium tracking-tight;
+    @apply text-3xl md:text-4xl font-medium tracking-tight font-dolly;
   }
 
   .wedding-subheading {
-    @apply text-xl md:text-2xl font-normal;
+    @apply text-xl md:text-2xl font-normal font-dolly;
+  }
+
+  /* Apply Dolly font to all headings globally */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* Apply Dolly font to form elements */
+  label, .form-label {
+    font-family: 'Playfair Display', serif;
   }
 
   /* Animation Classes */

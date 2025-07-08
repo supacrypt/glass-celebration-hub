@@ -49,7 +49,7 @@ const CountdownSection: React.FC = () => {
     <div className="glass-card responsive-card-padding mb-6 sm:mb-8 lg:mb-10 text-center animate-fade-up">
       <div className="flex items-center justify-center gap-3 sm:gap-4 mb-2 sm:mb-3">
         <span className="text-xl sm:text-2xl lg:text-3xl animate-glass-float">⏰</span>
-        <h1 className="responsive-heading-lg font-bold text-wedding-navy tracking-tight">
+        <h1 className="responsive-heading-lg font-dolly font-bold text-wedding-navy tracking-tight">
           Countdown to Forever
         </h1>
       </div>

@@ -33,7 +33,7 @@ const InfoCards: React.FC<InfoCardsProps> = ({ isAdmin }) => {
           <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 mx-auto mb-3 sm:mb-4 glass-secondary rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl lg:text-3xl">
             {card.icon}
           </div>
-          <h3 className="responsive-text-lg font-semibold text-wedding-navy mb-2">
+          <h3 className="responsive-text-lg font-dolly font-semibold text-wedding-navy mb-2">
             {card.title}
           </h3>
           <div className="space-y-1">
