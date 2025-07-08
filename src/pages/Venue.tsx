@@ -356,7 +356,7 @@ const Venue: React.FC = () => {
                       {Object.entries(currentVenue.quick_facts).map(([key, value]) => (
                         <div key={key} className="flex justify-between py-2 border-b border-border/50 last:border-0">
                           <span className="text-sm font-medium text-muted-foreground">{key}</span>
-                          <span className="text-sm text-foreground">{value}</span>
+                          <span className="text-sm text-foreground">{String(value)}</span>
                         </div>
                       ))}
                     </div>
