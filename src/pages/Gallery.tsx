@@ -192,17 +192,17 @@ const Gallery: React.FC = () => {
             </p>
           </div>
         ) : (
-          <div className={`mb-10 ${viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5' : 'space-y-4'}`}>
+          <div className={`mb-10 ${viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5' : 'space-y-3 sm:space-y-4'}`}>
             {filteredPhotos.map((photo, index) => (
-              <div 
-                key={photo.id}
-                className={`glass-card overflow-hidden cursor-pointer transition-all duration-300 animate-fade-up ${
-                  viewMode === 'grid' ? 'hover:scale-[1.03] hover:translate-y-[-5px]' : 'flex gap-4 items-center p-4'
-                }`}
-                style={{ 
-                  animationDelay: `${0.8 + (index * 0.1)}s`,
-                  ...(viewMode === 'grid' ? { aspectRatio: '1' } : {})
-                }}
+                <div 
+                  key={photo.id}
+                  className={`glass-card overflow-hidden cursor-pointer transition-all duration-300 animate-fade-up ${
+                    viewMode === 'grid' ? 'hover:scale-[1.02] hover:translate-y-[-3px] min-h-[280px] sm:min-h-[320px]' : 'flex gap-3 sm:gap-4 items-center p-3 sm:p-4 min-h-[88px]'
+                  }`}
+                  style={{ 
+                    animationDelay: `${0.8 + (index * 0.1)}s`,
+                    ...(viewMode === 'grid' ? { aspectRatio: '1' } : {})
+                  }}
               >
                 {viewMode === 'grid' ? (
                   <>
@@ -218,28 +218,28 @@ const Gallery: React.FC = () => {
                         <div className="text-6xl opacity-20">📸</div>
                       )}
                     </div>
-                    <div className="p-4 h-1/4 flex flex-col justify-between">
-                      {photo.title && (
-                        <h3 className="font-medium text-[#2d3f51] mb-2 text-sm">{photo.title}</h3>
-                      )}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <button className="flex items-center gap-1 text-[#EC4899] hover:text-[#EC4899]/80 transition-colors">
-                            <Heart className="w-4 h-4" />
-                            <span className="text-sm">{photo.photo_likes?.length || 0}</span>
-                          </button>
-                          <button className="text-[#7a736b] hover:text-[#2d3f51] transition-colors">
-                            <Download className="w-4 h-4" />
-                          </button>
-                          <button className="text-[#7a736b] hover:text-[#2d3f51] transition-colors">
-                            <Share2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                        <span className="text-xs text-[#7a736b]">
-                          {new Date(photo.created_at).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
+                     <div className="p-3 sm:p-4 h-1/4 flex flex-col justify-between">
+                       {photo.title && (
+                         <h3 className="font-medium text-[#2d3f51] mb-2 text-sm sm:text-base truncate">{photo.title}</h3>
+                       )}
+                       <div className="flex items-center justify-between">
+                         <div className="flex items-center gap-2 sm:gap-3">
+                           <button className="flex items-center gap-1 text-[#EC4899] hover:text-[#EC4899]/80 transition-colors min-w-[44px] min-h-[44px] justify-center">
+                             <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
+                             <span className="text-sm">{photo.photo_likes?.length || 0}</span>
+                           </button>
+                           <button className="text-[#7a736b] hover:text-[#2d3f51] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center">
+                             <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+                           </button>
+                           <button className="text-[#7a736b] hover:text-[#2d3f51] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center">
+                             <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                           </button>
+                         </div>
+                         <span className="text-xs text-[#7a736b] hidden sm:block">
+                           {new Date(photo.created_at).toLocaleDateString()}
+                         </span>
+                       </div>
+                     </div>
                   </>
                 ) : (
                   <>

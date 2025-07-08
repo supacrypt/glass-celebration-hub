@@ -415,6 +415,18 @@
     @apply grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4;
   }
 
+  /* Mobile Touch Targets */
+  .touch-target {
+    @apply min-w-[44px] min-h-[44px] flex items-center justify-center;
+  }
+
+  /* Mobile Optimized Breakpoints */
+  @media (max-width: 360px) {
+    .force-single-col {
+      @apply grid-cols-1 !important;
+    }
+  }
+
   /* Responsive Card Padding */
   .responsive-card-padding {
     @apply p-3 sm:p-4 lg:p-6;

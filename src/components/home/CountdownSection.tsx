@@ -57,16 +57,16 @@ const CountdownSection: React.FC = () => {
         Every second brings us closer to celebrating with you!
       </p>
       
-      <div className="responsive-grid-4 force-mobile-single-col mb-6">
+      <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5 mb-6">
         {countdownItems.map((item) => (
           <div 
             key={item.label}
-            className="glass-secondary responsive-card-padding-sm mobile-countdown-card text-center transition-all duration-300 hover:scale-105"
+            className="glass-secondary p-4 sm:p-6 text-center transition-all duration-300 hover:scale-105 min-h-[120px] sm:min-h-[140px] flex flex-col justify-center"
           >
-            <div className="text-3xl sm:text-4xl lg:text-5xl mobile-countdown-number font-bold text-wedding-navy leading-none mb-2 bg-gradient-to-r from-glass-blue to-glass-purple bg-clip-text text-transparent">
+            <div className="text-4xl sm:text-5xl lg:text-6xl font-bold text-wedding-navy leading-none mb-2 bg-gradient-to-r from-glass-blue to-glass-purple bg-clip-text text-transparent">
               {item.value}
             </div>
-            <div className="text-xs sm:text-sm mobile-countdown-label text-muted-foreground uppercase tracking-wider font-medium">
+            <div className="text-sm sm:text-base text-muted-foreground uppercase tracking-wider font-medium">
               {item.label}
             </div>
           </div>
