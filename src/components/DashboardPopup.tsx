@@ -22,7 +22,17 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       fetchDashboardData();
+      // Prevent body scroll when dashboard opens
+      document.body.classList.add('dashboard-open');
+    } else {
+      // Re-enable body scroll when dashboard closes
+      document.body.classList.remove('dashboard-open');
     }
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.classList.remove('dashboard-open');
+    };
   }, [isOpen, fetchDashboardData]);
 
   if (!isOpen) return null;
@@ -34,23 +44,22 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Enhanced Backdrop with proper blur */}
+      {/* Mobile-optimized backdrop overlay */}
       <div 
-        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[100] transition-all duration-300 ease-out"
+        className="dashboard-overlay"
         onClick={onClose}
-        style={{ backdropFilter: 'blur(8px)' }}
       />
       
-      {/* Enhanced Dashboard Modal - Fully Responsive */}
-      <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 lg:p-6">
+      {/* Mobile-first Dashboard Popup */}
+      <div className="dashboard-popup">
         <div 
-          className="glass-popup animate-scale-in shadow-2xl flex flex-col w-full max-w-[95vw] max-h-[95vh] sm:max-w-[90vw] sm:max-h-[90vh] lg:max-w-[700px] lg:max-h-[80vh] overflow-hidden"
+          className="dashboard-popup-content flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
           <DashboardHeader userRole={authUserRole?.role} onClose={onClose} />
 
-          {/* Content Container with Proper Scrolling */}
-          <div className="flex-1 overflow-hidden">
+          {/* Content Container with Mobile-optimized Scrolling */}
+          <div className="flex-1 overflow-y-auto" style={{ maxHeight: 'calc(70vh - 60px)' }}>
             {loading ? (
               <div className="flex items-center justify-center h-40 p-4">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-wedding-navy" />
