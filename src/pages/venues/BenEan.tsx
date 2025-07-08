@@ -1,11 +1,13 @@
 import React from 'react';
 import GlassCard from '@/components/GlassCard';
 import VenueMap from '@/components/VenueMap';
+import VenueHeroImage from '@/components/venue/VenueHeroImage';
 import { MapPin, Clock, Car, Phone, Globe, Users, Utensils } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const BenEan: React.FC = () => {
   const venueData = {
+    id: 'deee0f2e-6b57-469c-aac3-fd7c7ee9ef68', // Ben Ean venue ID
     name: 'Ben Ean',
     address: '119 McDonalds Rd, Pokolbin NSW 2320',
     coordinates: [151.3167, -32.7833] as [number, number], // Ben Ean coordinates
@@ -24,14 +26,13 @@ const BenEan: React.FC = () => {
         </p>
       </div>
 
-      {/* Hero Image Placeholder */}
+      {/* Hero Image */}
       <GlassCard className="mb-6 sm:mb-8 p-4 sm:p-6 animate-fade-up" style={{ animationDelay: '0.1s' }}>
-        <div className="w-full h-32 sm:h-48 bg-gradient-to-br from-glass-green/20 to-glass-blue/20 rounded-glass flex items-center justify-center mb-4">
-          <div className="text-center">
-            <MapPin className="w-8 sm:w-12 h-8 sm:h-12 mx-auto mb-2 text-glass-green" />
-            <p className="text-sm sm:text-base text-wedding-navy font-medium">Venue Photo Coming Soon</p>
-          </div>
-        </div>
+        <VenueHeroImage 
+          venueId={venueData.id}
+          venueName={venueData.name}
+          className="mb-4"
+        />
       </GlassCard>
 
       {/* Venue Details */}
