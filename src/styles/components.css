@@ -1,0 +1,125 @@
+/* Component-specific styles */
+
+@layer components {
+  /* Mobile-first Dashboard Interface */
+  .nav-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    min-height: 64px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+    
+    /* Safe area padding */
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* Performance optimization for mobile */
+    will-change: backdrop-filter;
+    
+    /* Reduce blur on scroll for performance */
+    @media (max-width: 600px) and (prefers-reduced-motion: no-preference) {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    
+    /* Fallback for older browsers */
+    @supports not (backdrop-filter: blur(10px)) {
+      background: rgba(0, 0, 0, 0.95);
+    }
+  }
+
+  .nav-bottom .nav-item {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    touch-action: manipulation;
+  }
+
+  .dashboard-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    
+    /* Safe area insets */
+    padding-top: max(16px, env(safe-area-inset-top, 0));
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 0));
+    padding-left: max(16px, env(safe-area-inset-left, 0));
+    padding-right: max(16px, env(safe-area-inset-right, 0));
+  }
+
+  .dashboard-popup-content {
+    width: clamp(300px, 90vw, 430px);
+    max-height: 70vh;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    
+    /* Glassmorphism shadow */
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.1),
+      0 10px 25px rgba(0, 0, 0, 0.05),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    
+    /* Fade-slide-up animation */
+    animation: dashboard-slide-up 0.25s ease-out;
+  }
+
+  .dashboard-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 150;
+    transition: opacity 0.25s ease;
+  }
+
+  /* Typography Classes */
+  .wedding-display {
+    @apply text-6xl md:text-7xl font-light tracking-tight;
+  }
+
+  .wedding-heading {
+    @apply text-3xl md:text-4xl font-medium tracking-tight;
+  }
+
+  .wedding-subheading {
+    @apply text-xl md:text-2xl font-normal;
+  }
+
+  /* Animation Classes */
+  .animate-scale-in {
+    animation: scale-in 0.5s var(--ease-bounce) forwards;
+  }
+}
