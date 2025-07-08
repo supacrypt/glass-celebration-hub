@@ -19,18 +19,9 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
       className="fixed left-1/2 transform -translate-x-1/2 items-end z-50"
       style={{
         bottom: '20px',
-        background: 'linear-gradient(145deg, hsl(var(--wedding-cream)), hsl(var(--wedding-cream-dark)))',
-        borderRadius: 'clamp(20px, 4vw, 32px)',
-        padding: 'clamp(3px, 1vw, 5px) clamp(8px, 2vw, 12px)',
-        boxShadow: `
-          clamp(6px, 1.5vw, 8px) clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 16px) hsl(var(--wedding-navy) / 0.15),
-          clamp(-6px, -1.5vw, -8px) clamp(-6px, -1.5vw, -8px) clamp(12px, 3vw, 16px) hsl(var(--glass-white) / 0.7),
-          inset clamp(1px, 0.25vw, 2px) clamp(1px, 0.25vw, 2px) clamp(3px, 0.75vw, 5px) hsl(var(--glass-white) / 0.6),
-          inset clamp(-1px, -0.25vw, -2px) clamp(-1px, -0.25vw, -2px) clamp(3px, 0.75vw, 5px) hsl(var(--wedding-navy) / 0.08)
-        `,
+        background: 'transparent',
         display: 'flex',
         gap: 'clamp(10px, 2.5vw, 16px)',
-        border: '1px solid hsl(var(--glass-white) / 0.3)',
         width: 'max-content',
         maxWidth: 'calc(100vw - 2rem)',
         transition: 'all 0.3s ease'
