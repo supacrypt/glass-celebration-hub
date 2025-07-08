@@ -13,9 +13,33 @@ export const signUpSchema = z.object({
   confirmPassword: z.string().min(1, "Please confirm your password"),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
+  mobile: z.string().min(10, "Please enter a valid mobile number"),
+  address: z.string().min(5, "Please enter a valid address"),
+  state: z.string().min(2, "Please enter your state/province"),
+  country: z.string().min(2, "Please enter your country"),
+  postcode: z.string().min(3, "Please enter a valid postcode/zip code"),
+  hasPlusOne: z.boolean().default(false),
+  plusOneName: z.string().optional(),
+  plusOneEmail: z.string().email("Please enter a valid email").optional().or(z.literal("")),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
+}).refine((data) => {
+  if (data.hasPlusOne && (!data.plusOneName || data.plusOneName.trim().length === 0)) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Plus one name is required when bringing a guest",
+  path: ["plusOneName"],
+}).refine((data) => {
+  if (data.hasPlusOne && (!data.plusOneEmail || data.plusOneEmail.trim().length === 0)) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Plus one email is required when bringing a guest",
+  path: ["plusOneEmail"],
 });
 
 export const signInSchema = z.object({

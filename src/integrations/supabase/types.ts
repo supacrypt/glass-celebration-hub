@@ -348,38 +348,68 @@ export type Database = {
       }
       profiles: {
         Row: {
+          address: string | null
           avatar_url: string | null
+          country: string | null
           created_at: string
           display_name: string | null
           email: string
           first_name: string | null
+          has_plus_one: boolean | null
           id: string
           last_name: string | null
+          mobile: string | null
           phone: string | null
+          plus_one_email: string | null
+          plus_one_invited: boolean | null
+          plus_one_name: string | null
+          postcode: string | null
+          rsvp_completed: boolean | null
+          state: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          address?: string | null
           avatar_url?: string | null
+          country?: string | null
           created_at?: string
           display_name?: string | null
           email: string
           first_name?: string | null
+          has_plus_one?: boolean | null
           id?: string
           last_name?: string | null
+          mobile?: string | null
           phone?: string | null
+          plus_one_email?: string | null
+          plus_one_invited?: boolean | null
+          plus_one_name?: string | null
+          postcode?: string | null
+          rsvp_completed?: boolean | null
+          state?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          address?: string | null
           avatar_url?: string | null
+          country?: string | null
           created_at?: string
           display_name?: string | null
           email?: string
           first_name?: string | null
+          has_plus_one?: boolean | null
           id?: string
           last_name?: string | null
+          mobile?: string | null
           phone?: string | null
+          plus_one_email?: string | null
+          plus_one_invited?: boolean | null
+          plus_one_name?: string | null
+          postcode?: string | null
+          rsvp_completed?: boolean | null
+          state?: string | null
           updated_at?: string
           user_id?: string
         }

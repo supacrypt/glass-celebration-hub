@@ -11,6 +11,16 @@ interface Profile {
   display_name?: string;
   avatar_url?: string;
   phone?: string;
+  mobile?: string;
+  address?: string;
+  state?: string;
+  country?: string;
+  postcode?: string;
+  has_plus_one?: boolean;
+  plus_one_name?: string;
+  plus_one_email?: string;
+  plus_one_invited?: boolean;
+  rsvp_completed?: boolean;
 }
 
 interface UserRole {
@@ -83,7 +93,7 @@ export const useAuth = () => {
     }
   };
 
-  const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
+  const signUp = async (email: string, password: string, firstName?: string, lastName?: string, profileData?: any) => {
     const redirectUrl = `${window.location.origin}/`;
     
     const { error } = await supabase.auth.signUp({
@@ -94,6 +104,14 @@ export const useAuth = () => {
         data: {
           first_name: firstName,
           last_name: lastName,
+          mobile: profileData?.mobile,
+          address: profileData?.address,
+          state: profileData?.state,
+          country: profileData?.country,
+          postcode: profileData?.postcode,
+          has_plus_one: profileData?.hasPlusOne || false,
+          plus_one_name: profileData?.plusOneName,
+          plus_one_email: profileData?.plusOneEmail,
         }
       }
     });
