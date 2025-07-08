@@ -57,24 +57,24 @@ const FAQ: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen px-5 pt-12 pb-6">
+    <div className="min-h-screen px-3 sm:px-5 pt-8 sm:pt-12 pb-20">
       {/* Header */}
-      <div className="text-center mb-8 animate-fade-up">
-        <h1 className="wedding-heading text-wedding-navy mb-3">
+      <div className="text-center mb-6 sm:mb-8 animate-fade-up">
+        <h1 className="text-2xl sm:text-3xl lg:wedding-heading font-semibold text-wedding-navy mb-2 sm:mb-3">
           Frequently Asked Questions
         </h1>
-        <p className="wedding-body text-muted-foreground">
+        <p className="text-sm sm:text-base text-muted-foreground">
           Everything you need to know about Tim & Kirsten's wedding
         </p>
       </div>
 
       {/* Important Notice */}
-      <GlassCard className="mb-8 p-6 animate-fade-up border-l-4 border-amber-400" style={{ animationDelay: '0.1s' }}>
+      <GlassCard className="mb-6 sm:mb-8 p-4 sm:p-6 animate-fade-up border-l-4 border-amber-400" style={{ animationDelay: '0.1s' }}>
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
+          <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600 flex-shrink-0 mt-1" />
           <div>
-            <h3 className="font-semibold text-wedding-navy mb-2">Important Venue Update</h3>
-            <p className="text-muted-foreground text-sm">
+            <h3 className="font-semibold text-wedding-navy mb-2 text-sm sm:text-base">Important Venue Update</h3>
+            <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
               Please note the venue has changed from The Edwards to Ben Ean due to the original venue going into liquidation. 
               We've arranged coach transport to help with the change. Thank you for your understanding!
             </p>
@@ -83,22 +83,22 @@ const FAQ: React.FC = () => {
       </GlassCard>
 
       {/* FAQ List */}
-      <div className="space-y-4 max-w-4xl mx-auto">
+      <div className="space-y-3 sm:space-y-4 max-w-4xl mx-auto">
         {faqs.map((faq, index) => (
           <GlassCard 
             key={index}
-            className="p-6 animate-fade-up"
+            className="p-4 sm:p-6 animate-fade-up"
             style={{ animationDelay: `${0.2 + (index * 0.1)}s` }}
           >
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-glass-blue/20 flex items-center justify-center flex-shrink-0">
-                <faq.icon className="w-5 h-5 text-glass-blue" />
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-glass-blue/20 flex items-center justify-center flex-shrink-0">
+                <faq.icon className="w-4 h-4 sm:w-5 sm:h-5 text-glass-blue" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-wedding-navy mb-3 leading-relaxed">
+                <h3 className="font-semibold text-wedding-navy mb-2 sm:mb-3 leading-relaxed text-sm sm:text-base">
                   {faq.question}
                 </h3>
-                <p className="text-muted-foreground leading-relaxed">
+                <p className="text-muted-foreground leading-relaxed text-xs sm:text-sm">
                   {faq.answer}
                 </p>
               </div>
@@ -109,31 +109,31 @@ const FAQ: React.FC = () => {
 
       {/* Additional Events */}
       <GlassCard 
-        className="mt-8 p-6 animate-fade-up max-w-4xl mx-auto" 
+        className="mt-6 sm:mt-8 p-4 sm:p-6 animate-fade-up max-w-4xl mx-auto" 
         variant="secondary"
         style={{ animationDelay: '1.0s' }}
       >
-        <h3 className="text-lg font-semibold mb-4 text-wedding-navy flex items-center gap-2">
-          <Calendar className="w-5 h-5" />
+        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-wedding-navy flex items-center gap-2">
+          <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
           Weekend Events
         </h3>
-        <div className="space-y-4 text-sm">
-          <div className="p-4 bg-glass-green/10 rounded-lg">
-            <p className="font-medium text-wedding-navy mb-1">Saturday, October 4th</p>
+        <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm">
+          <div className="p-3 sm:p-4 bg-glass-green/10 rounded-lg">
+            <p className="font-medium text-wedding-navy mb-1 text-sm sm:text-base">Saturday, October 4th</p>
             <p className="text-muted-foreground">
               <strong>Pre-wedding drinks:</strong> Prince of Mereweather pub, 4-8 PM
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
               Come have a drink and grab a meal if you're hungry!
             </p>
           </div>
           
-          <div className="p-4 bg-glass-blue/10 rounded-lg">
-            <p className="font-medium text-wedding-navy mb-1">Monday, October 6th</p>
+          <div className="p-3 sm:p-4 bg-glass-blue/10 rounded-lg">
+            <p className="font-medium text-wedding-navy mb-1 text-sm sm:text-base">Monday, October 6th</p>
             <p className="text-muted-foreground">
               <strong>Recovery hangout:</strong> Newcastle Beach, from 11 AM
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
               Kiosk with good coffee and food - perfect for recovery!
             </p>
           </div>
@@ -142,13 +142,13 @@ const FAQ: React.FC = () => {
 
       {/* Contact Card */}
       <GlassCard 
-        className="mt-6 p-6 text-center animate-fade-up max-w-md mx-auto" 
+        className="mt-4 sm:mt-6 p-4 sm:p-6 text-center animate-fade-up max-w-md mx-auto" 
         variant="frosted"
         style={{ animationDelay: '1.2s' }}
       >
-        <HelpCircle className="w-8 h-8 mx-auto mb-3 text-glass-purple" />
-        <h3 className="font-semibold mb-2 text-wedding-navy">Still have questions?</h3>
-        <p className="text-muted-foreground text-sm">
+        <HelpCircle className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 sm:mb-3 text-glass-purple" />
+        <h3 className="font-semibold mb-2 text-wedding-navy text-sm sm:text-base">Still have questions?</h3>
+        <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
           Don't hesitate to reach out to Tim & Kirsten directly if you need any clarification!
         </p>
       </GlassCard>

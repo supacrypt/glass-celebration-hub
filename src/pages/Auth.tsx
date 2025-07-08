@@ -64,19 +64,19 @@ const Auth: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-5 py-12">
-      <GlassCard className="w-full max-w-md p-8">
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <Heart className="w-8 h-8 text-glass-pink mr-2" />
-            <h1 className="wedding-heading text-wedding-navy">
+    <div className="min-h-screen flex items-center justify-center px-3 sm:px-5 py-6 sm:py-12">
+      <GlassCard className="w-full max-w-md p-4 sm:p-8">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="flex items-center justify-center mb-3 sm:mb-4">
+            <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-glass-pink mr-2" />
+            <h1 className="text-xl sm:text-2xl lg:wedding-heading font-semibold text-wedding-navy">
               Tim & Kirsten
             </h1>
           </div>
-          <h2 className="text-xl font-semibold text-wedding-navy mb-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-wedding-navy mb-2">
             {isSignUp ? 'Join Our Celebration' : 'Welcome Back'}
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-sm sm:text-base text-muted-foreground">
             {isSignUp 
               ? 'Create an account to share in our special day' 
               : 'Sign in to access the wedding experience'
@@ -84,9 +84,9 @@ const Auth: React.FC = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {isSignUp && (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name</Label>
                 <Input
@@ -138,7 +138,7 @@ const Auth: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground min-w-[44px] min-h-[44px] flex items-center justify-center"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -147,18 +147,18 @@ const Auth: React.FC = () => {
 
           <Button
             type="submit"
-            className="w-full bg-wedding-navy hover:bg-wedding-navy-light"
+            className="w-full bg-wedding-navy hover:bg-wedding-navy-light min-h-[44px] text-sm sm:text-base"
             disabled={loading}
           >
             {loading ? 'Please wait...' : (isSignUp ? 'Create Account' : 'Sign In')}
           </Button>
         </form>
 
-        <div className="mt-6 text-center">
+        <div className="mt-4 sm:mt-6 text-center">
           <button
             type="button"
             onClick={() => setIsSignUp(!isSignUp)}
-            className="text-glass-blue hover:text-glass-blue/80 transition-colors"
+            className="text-glass-blue hover:text-glass-blue/80 transition-colors min-h-[44px] text-sm sm:text-base px-2 py-2"
           >
             {isSignUp 
               ? 'Already have an account? Sign in' 

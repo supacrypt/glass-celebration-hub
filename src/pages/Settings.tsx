@@ -47,24 +47,24 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen p-6 pt-20">
-      <div className="max-w-2xl mx-auto space-y-6">
+    <div className="min-h-screen p-3 sm:p-6 pt-16 sm:pt-20 pb-20">
+      <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
         <Card className="glass-card">
-          <CardHeader>
-            <CardTitle className="wedding-heading">Settings</CardTitle>
-            <CardDescription>
+          <CardHeader className="pb-4 sm:pb-6">
+            <CardTitle className="text-xl sm:text-2xl lg:wedding-heading font-semibold">Settings</CardTitle>
+            <CardDescription className="text-sm sm:text-base">
               Customize your wedding app experience
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-4 sm:space-y-6">
             {/* Notifications Section */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Notifications</h3>
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-base sm:text-lg font-semibold">Notifications</h3>
               
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="email-notifications">Email Notifications</Label>
-                  <p className="text-sm text-muted-foreground">
+              <div className="flex items-start sm:items-center justify-between gap-3">
+                <div className="space-y-0.5 flex-1">
+                  <Label htmlFor="email-notifications" className="text-sm sm:text-base">Email Notifications</Label>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                     Receive updates about the wedding via email
                   </p>
                 </div>
@@ -75,10 +75,10 @@ const Settings: React.FC = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="push-notifications">Push Notifications</Label>
-                  <p className="text-sm text-muted-foreground">
+              <div className="flex items-start sm:items-center justify-between gap-3">
+                <div className="space-y-0.5 flex-1">
+                  <Label htmlFor="push-notifications" className="text-sm sm:text-base">Push Notifications</Label>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                     Get instant notifications on your device
                   </p>
                 </div>
@@ -89,10 +89,10 @@ const Settings: React.FC = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="weekly-digest">Weekly Digest</Label>
-                  <p className="text-sm text-muted-foreground">
+              <div className="flex items-start sm:items-center justify-between gap-3">
+                <div className="space-y-0.5 flex-1">
+                  <Label htmlFor="weekly-digest" className="text-sm sm:text-base">Weekly Digest</Label>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                     Receive a weekly summary of activity
                   </p>
                 </div>
@@ -107,13 +107,13 @@ const Settings: React.FC = () => {
             <Separator />
 
             {/* Privacy Section */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Privacy</h3>
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-base sm:text-lg font-semibold">Privacy</h3>
               
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="photo-auto-approval">Photo Auto-Approval</Label>
-                  <p className="text-sm text-muted-foreground">
+              <div className="flex items-start sm:items-center justify-between gap-3">
+                <div className="space-y-0.5 flex-1">
+                  <Label htmlFor="photo-auto-approval" className="text-sm sm:text-base">Photo Auto-Approval</Label>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                     Automatically approve your uploaded photos
                   </p>
                 </div>
@@ -128,13 +128,13 @@ const Settings: React.FC = () => {
             <Separator />
 
             {/* Appearance Section */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Appearance</h3>
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-base sm:text-lg font-semibold">Appearance</h3>
               
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="dark-mode">Dark Mode</Label>
-                  <p className="text-sm text-muted-foreground">
+              <div className="flex items-start sm:items-center justify-between gap-3">
+                <div className="space-y-0.5 flex-1">
+                  <Label htmlFor="dark-mode" className="text-sm sm:text-base">Dark Mode</Label>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                     Switch to a darker theme
                   </p>
                 </div>
@@ -145,10 +145,10 @@ const Settings: React.FC = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="sound-effects">Sound Effects</Label>
-                  <p className="text-sm text-muted-foreground">
+              <div className="flex items-start sm:items-center justify-between gap-3">
+                <div className="space-y-0.5 flex-1">
+                  <Label htmlFor="sound-effects" className="text-sm sm:text-base">Sound Effects</Label>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                     Play sounds for interactions
                   </p>
                 </div>
@@ -163,11 +163,11 @@ const Settings: React.FC = () => {
             <Separator />
 
             {/* Action Buttons */}
-            <div className="flex gap-3 pt-4">
-              <Button onClick={handleSave} className="glass-button">
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <Button onClick={handleSave} className="glass-button min-h-[44px] text-sm sm:text-base">
                 Save Settings
               </Button>
-              <Button onClick={handleReset} variant="outline">
+              <Button onClick={handleReset} variant="outline" className="min-h-[44px] text-sm sm:text-base">
                 Reset to Defaults
               </Button>
             </div>

@@ -61,13 +61,13 @@ const Help: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen p-6 pt-20">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="min-h-screen p-3 sm:p-6 pt-16 sm:pt-20 pb-20">
+      <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
         {/* FAQ Section */}
         <Card className="glass-card">
-          <CardHeader>
-            <CardTitle className="wedding-heading">Frequently Asked Questions</CardTitle>
-            <CardDescription>
+          <CardHeader className="pb-4 sm:pb-6">
+            <CardTitle className="text-xl sm:text-2xl lg:wedding-heading font-semibold">Frequently Asked Questions</CardTitle>
+            <CardDescription className="text-sm sm:text-base">
               Find answers to common questions about using the wedding app
             </CardDescription>
           </CardHeader>
@@ -75,10 +75,10 @@ const Help: React.FC = () => {
             <Accordion type="single" collapsible className="w-full">
               {faqs.map((faq, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left">
+                  <AccordionTrigger className="text-left text-sm sm:text-base min-h-[44px] py-3">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
+                  <AccordionContent className="text-muted-foreground text-sm sm:text-base leading-relaxed">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -89,38 +89,40 @@ const Help: React.FC = () => {
 
         {/* Contact Support */}
         <Card className="glass-card">
-          <CardHeader>
-            <CardTitle className="wedding-heading">Contact Support</CardTitle>
-            <CardDescription>
+          <CardHeader className="pb-4 sm:pb-6">
+            <CardTitle className="text-xl sm:text-2xl lg:wedding-heading font-semibold">Contact Support</CardTitle>
+            <CardDescription className="text-sm sm:text-base">
               Can't find what you're looking for? Send us a message
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleContactSubmit} className="space-y-4">
+            <form onSubmit={handleContactSubmit} className="space-y-3 sm:space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="subject">Subject</Label>
+                <Label htmlFor="subject" className="text-sm sm:text-base">Subject</Label>
                 <Input
                   id="subject"
                   value={contactForm.subject}
                   onChange={(e) => setContactForm(prev => ({ ...prev, subject: e.target.value }))}
                   placeholder="What do you need help with?"
+                  className="min-h-[44px] text-sm sm:text-base"
                   required
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="message">Message</Label>
+                <Label htmlFor="message" className="text-sm sm:text-base">Message</Label>
                 <Textarea
                   id="message"
                   value={contactForm.message}
                   onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
                   placeholder="Please describe your issue or question in detail..."
-                  rows={5}
+                  rows={4}
+                  className="min-h-[120px] text-sm sm:text-base"
                   required
                 />
               </div>
               
-              <Button type="submit" className="glass-button">
+              <Button type="submit" className="glass-button w-full sm:w-auto min-h-[44px] text-sm sm:text-base">
                 Send Message
               </Button>
             </form>
@@ -129,29 +131,29 @@ const Help: React.FC = () => {
 
         {/* App Info */}
         <Card className="glass-card">
-          <CardHeader>
-            <CardTitle className="wedding-heading">App Information</CardTitle>
-            <CardDescription>
+          <CardHeader className="pb-4 sm:pb-6">
+            <CardTitle className="text-xl sm:text-2xl lg:wedding-heading font-semibold">App Information</CardTitle>
+            <CardDescription className="text-sm sm:text-base">
               Technical details and app version
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          <CardContent className="space-y-3 sm:space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <Label className="font-semibold">Version</Label>
-                <p className="text-sm text-muted-foreground">1.0.0</p>
+                <Label className="font-semibold text-sm sm:text-base">Version</Label>
+                <p className="text-xs sm:text-sm text-muted-foreground">1.0.0</p>
               </div>
               <div>
-                <Label className="font-semibold">Last Updated</Label>
-                <p className="text-sm text-muted-foreground">January 2025</p>
+                <Label className="font-semibold text-sm sm:text-base">Last Updated</Label>
+                <p className="text-xs sm:text-sm text-muted-foreground">January 2025</p>
               </div>
               <div>
-                <Label className="font-semibold">Support Email</Label>
-                <p className="text-sm text-muted-foreground">support@weddingapp.com</p>
+                <Label className="font-semibold text-sm sm:text-base">Support Email</Label>
+                <p className="text-xs sm:text-sm text-muted-foreground">support@weddingapp.com</p>
               </div>
               <div>
-                <Label className="font-semibold">Emergency Contact</Label>
-                <p className="text-sm text-muted-foreground">+1 (555) 123-4567</p>
+                <Label className="font-semibold text-sm sm:text-base">Emergency Contact</Label>
+                <p className="text-xs sm:text-sm text-muted-foreground">+1 (555) 123-4567</p>
               </div>
             </div>
           </CardContent>
