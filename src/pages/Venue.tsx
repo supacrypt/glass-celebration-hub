@@ -390,28 +390,60 @@ const Venue: React.FC = () => {
           </div>
         </div>
 
-        {/* Venue Thumbnails */}
+        {/* Venue Thumbnails - Mobile Responsive Grid */}
         {venues.length > 1 && (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {venues.map((venue, index) => (
-              <Card
+              <div
                 key={venue.id}
-                className={`glass-card cursor-pointer transition-all duration-300 hover:shadow-lg ${
-                  index === currentIndex ? 'ring-2 ring-primary' : ''
+                className={`transition-all duration-300 ${
+                  index === currentIndex ? 'ring-2 ring-primary shadow-lg' : ''
                 }`}
-                onClick={() => setCurrentIndex(index)}
               >
-                <div className="aspect-video relative rounded-t-lg overflow-hidden">
-                  <img
-                    src={venue.image_url}
-                    alt={venue.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <CardContent className="p-3">
-                  <h3 className="font-medium text-sm line-clamp-1">{venue.name}</h3>
-                </CardContent>
-              </Card>
+                <Card
+                  className={`glass-card cursor-pointer transition-all duration-300 hover:shadow-xl transform hover:scale-[1.02] ${
+                    index === currentIndex ? 'ring-2 ring-primary' : ''
+                  }`}
+                  onClick={() => setCurrentIndex(index)}
+                >
+                  <div className="aspect-[4/3] sm:aspect-video relative rounded-t-lg overflow-hidden">
+                    <img
+                      src={venue.image_url}
+                      alt={venue.name}
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                      loading="lazy"
+                    />
+                    
+                    {/* Active Indicator */}
+                    {index === currentIndex && (
+                      <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
+                        <div className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
+                          Currently Viewing
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <CardContent className="p-3 sm:p-4 text-center">
+                    <h3 className="font-semibold text-sm sm:text-base line-clamp-2 mb-2 font-dolly">
+                      {venue.name}
+                    </h3>
+                    
+                    {venue.caption && (
+                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 mb-2">
+                        {venue.caption}
+                      </p>
+                    )}
+                    
+                    {venue.address && (
+                      <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
+                        <MapPin className="w-3 h-3 flex-shrink-0" />
+                        <span className="line-clamp-1">{venue.address}</span>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
             ))}
           </div>
         )}
