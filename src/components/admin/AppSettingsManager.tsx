@@ -5,9 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Save, RefreshCw, Settings, Calendar, MessageCircle, Heart, Image } from 'lucide-react';
+import { Save, RefreshCw, Settings, Calendar, MessageCircle, Heart } from 'lucide-react';
 import GlassCard from '@/components/GlassCard';
-import HeroBackgroundManager from '@/components/admin/HeroBackgroundManager';
 
 const AppSettingsManager: React.FC = () => {
   const { settings, loading, updateSetting, loadSettings } = useAppSettings();
@@ -154,9 +153,6 @@ const AppSettingsManager: React.FC = () => {
           />
         </div>
       </GlassCard>
-
-      {/* Hero Background Manager */}
-      <HeroBackgroundManager />
     </div>
   );
 };

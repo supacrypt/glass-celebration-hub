@@ -20,14 +20,6 @@ interface AppSettings {
   bride_name: string;
   groom_name: string;
   external_gift_registry_url: string;
-  hero_background_type: string;
-  hero_background_url: string;
-  hero_background_mobile_url: string;
-  hero_overlay_opacity: string;
-  hero_overlay_position: string;
-  hero_video_autoplay: string;
-  hero_video_muted: string;
-  hero_video_loop: string;
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
@@ -47,15 +39,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   arrival_time: '2:30 PM',
   bride_name: 'Kirsten',
   groom_name: 'Tim',
-  external_gift_registry_url: 'https://mygiftregistry.com.au/id/tim-and-kirsten/',
-  hero_background_type: 'image',
-  hero_background_url: 'https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80',
-  hero_background_mobile_url: '',
-  hero_overlay_opacity: '0.7',
-  hero_overlay_position: 'center',
-  hero_video_autoplay: 'true',
-  hero_video_muted: 'true',
-  hero_video_loop: 'true'
+  external_gift_registry_url: 'https://mygiftregistry.com.au/id/tim-and-kirsten/'
 };
 
 export const useAppSettings = () => {
@@ -94,14 +78,6 @@ export const useAppSettings = () => {
         bride_name: settingsMap.bride_name || DEFAULT_SETTINGS.bride_name,
         groom_name: settingsMap.groom_name || DEFAULT_SETTINGS.groom_name,
         external_gift_registry_url: settingsMap.external_gift_registry_url || DEFAULT_SETTINGS.external_gift_registry_url,
-        hero_background_type: settingsMap.hero_background_type || DEFAULT_SETTINGS.hero_background_type,
-        hero_background_url: settingsMap.hero_background_url || DEFAULT_SETTINGS.hero_background_url,
-        hero_background_mobile_url: settingsMap.hero_background_mobile_url || DEFAULT_SETTINGS.hero_background_mobile_url,
-        hero_overlay_opacity: settingsMap.hero_overlay_opacity || DEFAULT_SETTINGS.hero_overlay_opacity,
-        hero_overlay_position: settingsMap.hero_overlay_position || DEFAULT_SETTINGS.hero_overlay_position,
-        hero_video_autoplay: settingsMap.hero_video_autoplay || DEFAULT_SETTINGS.hero_video_autoplay,
-        hero_video_muted: settingsMap.hero_video_muted || DEFAULT_SETTINGS.hero_video_muted,
-        hero_video_loop: settingsMap.hero_video_loop || DEFAULT_SETTINGS.hero_video_loop,
       });
     } catch (error) {
       console.error('Error loading app settings:', error);
