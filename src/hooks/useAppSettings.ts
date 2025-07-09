@@ -6,7 +6,17 @@ interface AppSettings {
   app_name: string;
   wedding_date: string;
   welcome_message: string;
+  welcome_subtitle: string;
+  hero_subtitle: string;
+  countdown_message: string;
+  gallery_title: string;
+  gallery_description: string;
+  rsvp_instructions: string;
   footer_message: string;
+  about_section: string;
+  contact_message: string;
+  ceremony_time: string;
+  arrival_time: string;
   bride_name: string;
   groom_name: string;
   external_gift_registry_url: string;
@@ -15,8 +25,18 @@ interface AppSettings {
 const DEFAULT_SETTINGS: AppSettings = {
   app_name: 'Tim & Kirsten',
   wedding_date: '2025-10-05T16:00:00',
-  welcome_message: 'Yes, we are that couple stuffing up your long weekend plans! Why spend it somewhere relaxing when you can watch two people who have been together for well over a decade tell you that they still love each other and are going to continue living pretty much as they have but under a legally binding contract?',
-  footer_message: 'We can\'t wait to celebrate with you!',
+  welcome_message: 'We Can\'t Wait to Celebrate With You!',
+  welcome_subtitle: 'Your presence is the greatest gift we could ask for. Join us for a day filled with love, laughter, and unforgettable memories as we begin our new chapter together.',
+  hero_subtitle: 'Join us as we begin our new chapter together',
+  countdown_message: 'Until our special day',
+  gallery_title: 'Our Wedding Gallery',
+  gallery_description: 'Capturing our most precious moments',
+  rsvp_instructions: 'Please RSVP by clicking the button below. We can\'t wait to celebrate with you!',
+  footer_message: 'With love, Tim & Kirsten',
+  about_section: 'Tim and Kirsten are excited to share their special day with family and friends at Ben Ean Winery in the beautiful Hunter Valley.',
+  contact_message: 'For any questions about the wedding, please don\'t hesitate to reach out to us.',
+  ceremony_time: '3:00 PM',
+  arrival_time: '2:30 PM',
   bride_name: 'Kirsten',
   groom_name: 'Tim',
   external_gift_registry_url: 'https://mygiftregistry.com.au/id/tim-and-kirsten/'
@@ -44,7 +64,17 @@ export const useAppSettings = () => {
         app_name: settingsMap.app_name || DEFAULT_SETTINGS.app_name,
         wedding_date: settingsMap.wedding_date || DEFAULT_SETTINGS.wedding_date,
         welcome_message: settingsMap.welcome_message || DEFAULT_SETTINGS.welcome_message,
+        welcome_subtitle: settingsMap.welcome_subtitle || DEFAULT_SETTINGS.welcome_subtitle,
+        hero_subtitle: settingsMap.hero_subtitle || DEFAULT_SETTINGS.hero_subtitle,
+        countdown_message: settingsMap.countdown_message || DEFAULT_SETTINGS.countdown_message,
+        gallery_title: settingsMap.gallery_title || DEFAULT_SETTINGS.gallery_title,
+        gallery_description: settingsMap.gallery_description || DEFAULT_SETTINGS.gallery_description,
+        rsvp_instructions: settingsMap.rsvp_instructions || DEFAULT_SETTINGS.rsvp_instructions,
         footer_message: settingsMap.footer_message || DEFAULT_SETTINGS.footer_message,
+        about_section: settingsMap.about_section || DEFAULT_SETTINGS.about_section,
+        contact_message: settingsMap.contact_message || DEFAULT_SETTINGS.contact_message,
+        ceremony_time: settingsMap.ceremony_time || DEFAULT_SETTINGS.ceremony_time,
+        arrival_time: settingsMap.arrival_time || DEFAULT_SETTINGS.arrival_time,
         bride_name: settingsMap.bride_name || DEFAULT_SETTINGS.bride_name,
         groom_name: settingsMap.groom_name || DEFAULT_SETTINGS.groom_name,
         external_gift_registry_url: settingsMap.external_gift_registry_url || DEFAULT_SETTINGS.external_gift_registry_url,

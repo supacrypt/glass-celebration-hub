@@ -53,10 +53,7 @@ const DynamicHeroSection: React.FC = () => {
         {formattedDate}
       </p>
       <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-        {settings.welcome_message}
-      </p>
-      <p className="text-xs sm:text-sm text-muted-foreground/80 max-w-lg mx-auto leading-relaxed mt-3">
-        There'll be top-shelf bevies, good tunes, and more love than you can poke a stick at.
+        {settings.hero_subtitle}
       </p>
     </div>
   );

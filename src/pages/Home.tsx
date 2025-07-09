@@ -58,11 +58,10 @@ const Home: React.FC = () => {
             💕
           </div>
           <h2 className="responsive-heading-lg font-bold text-wedding-navy mb-3 sm:mb-4 tracking-tight">
-            We Can't Wait to Celebrate With You!
+            {settings.welcome_message}
           </h2>
           <p className="responsive-text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Your presence is the greatest gift we could ask for. Join us for a day filled with love, 
-            laughter, and unforgettable memories as we begin our new chapter together.
+            {settings.welcome_subtitle}
           </p>
         </div>
 
@@ -74,10 +73,14 @@ const Home: React.FC = () => {
         {/* Footer */}
         <div className="flex flex-col sm:flex-row justify-between items-center pt-4 sm:pt-6 mt-6 sm:mt-8 border-t border-glass-border">
           <div className="responsive-text-base text-muted-foreground mb-2 sm:mb-0">
-            With love, Tim & Kirsten
+            {settings.footer_message}
           </div>
           <div className="responsive-text-base text-muted-foreground">
-            October 5, 2025
+            {new Date(settings.wedding_date).toLocaleDateString('en-AU', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}
           </div>
         </div>
       </div>

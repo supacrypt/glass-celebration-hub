@@ -71,7 +71,7 @@ const DynamicCountdownSection: React.FC = () => {
       <div className="flex items-center justify-center gap-3 sm:gap-4 mb-2 sm:mb-3">
         <span className="text-xl sm:text-2xl lg:text-3xl animate-glass-float">⏰</span>
         <h1 className="responsive-heading-lg font-dolly font-bold text-wedding-navy tracking-tight">
-          Countdown to Forever
+          {settings.countdown_message}
         </h1>
       </div>
       <p className="responsive-text-lg text-muted-foreground mb-6 sm:mb-8">

@@ -110,34 +110,159 @@ const AppSettingsManager: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Welcome Message */}
+      {/* Content Management */}
       <Card className="glass-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <MessageSquare className="w-5 h-5" />
-            Welcome Message
+            Content Management
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="welcome_message">Hero Section Message</Label>
-            <Textarea
-              id="welcome_message"
-              value={localSettings.welcome_message}
-              onChange={(e) => setLocalSettings(prev => ({ ...prev, welcome_message: e.target.value }))}
-              rows={4}
-              placeholder="Main welcome message displayed on the home page"
-            />
+        <CardContent className="space-y-6">
+          {/* Welcome Section */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-wedding-navy">Home Page Content</h4>
+            <div>
+              <Label htmlFor="welcome_message">Welcome Title</Label>
+              <Input
+                id="welcome_message"
+                value={localSettings.welcome_message}
+                onChange={(e) => setLocalSettings(prev => ({ ...prev, welcome_message: e.target.value }))}
+                placeholder="e.g., We Can't Wait to Celebrate With You!"
+              />
+            </div>
+            <div>
+              <Label htmlFor="welcome_subtitle">Welcome Subtitle</Label>
+              <Textarea
+                id="welcome_subtitle"
+                value={localSettings.welcome_subtitle}
+                onChange={(e) => setLocalSettings(prev => ({ ...prev, welcome_subtitle: e.target.value }))}
+                rows={3}
+                placeholder="Detailed welcome message for guests"
+              />
+            </div>
+            <div>
+              <Label htmlFor="hero_subtitle">Hero Section Subtitle</Label>
+              <Input
+                id="hero_subtitle"
+                value={localSettings.hero_subtitle}
+                onChange={(e) => setLocalSettings(prev => ({ ...prev, hero_subtitle: e.target.value }))}
+                placeholder="e.g., Join us as we begin our new chapter together"
+              />
+            </div>
           </div>
-          
-          <div>
-            <Label htmlFor="footer_message">Footer Message</Label>
-            <Input
-              id="footer_message"
-              value={localSettings.footer_message}
-              onChange={(e) => setLocalSettings(prev => ({ ...prev, footer_message: e.target.value }))}
-              placeholder="Short message displayed at the bottom"
-            />
+
+          <Separator />
+
+          {/* Event Information */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-wedding-navy">Event Details</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="ceremony_time">Ceremony Time</Label>
+                <Input
+                  id="ceremony_time"
+                  value={localSettings.ceremony_time}
+                  onChange={(e) => setLocalSettings(prev => ({ ...prev, ceremony_time: e.target.value }))}
+                  placeholder="e.g., 3:00 PM"
+                />
+              </div>
+              <div>
+                <Label htmlFor="arrival_time">Arrival Time</Label>
+                <Input
+                  id="arrival_time"
+                  value={localSettings.arrival_time}
+                  onChange={(e) => setLocalSettings(prev => ({ ...prev, arrival_time: e.target.value }))}
+                  placeholder="e.g., 2:30 PM"
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="countdown_message">Countdown Message</Label>
+              <Input
+                id="countdown_message"
+                value={localSettings.countdown_message}
+                onChange={(e) => setLocalSettings(prev => ({ ...prev, countdown_message: e.target.value }))}
+                placeholder="e.g., Until our special day"
+              />
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Gallery Content */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-wedding-navy">Gallery Settings</h4>
+            <div>
+              <Label htmlFor="gallery_title">Gallery Title</Label>
+              <Input
+                id="gallery_title"
+                value={localSettings.gallery_title}
+                onChange={(e) => setLocalSettings(prev => ({ ...prev, gallery_title: e.target.value }))}
+                placeholder="e.g., Our Wedding Gallery"
+              />
+            </div>
+            <div>
+              <Label htmlFor="gallery_description">Gallery Description</Label>
+              <Input
+                id="gallery_description"
+                value={localSettings.gallery_description}
+                onChange={(e) => setLocalSettings(prev => ({ ...prev, gallery_description: e.target.value }))}
+                placeholder="e.g., Capturing our most precious moments"
+              />
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* RSVP Instructions */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-wedding-navy">RSVP Settings</h4>
+            <div>
+              <Label htmlFor="rsvp_instructions">RSVP Instructions</Label>
+              <Textarea
+                id="rsvp_instructions"
+                value={localSettings.rsvp_instructions}
+                onChange={(e) => setLocalSettings(prev => ({ ...prev, rsvp_instructions: e.target.value }))}
+                rows={3}
+                placeholder="Instructions for guests on how to RSVP"
+              />
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* About & Contact */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-wedding-navy">About & Contact</h4>
+            <div>
+              <Label htmlFor="about_section">About Section</Label>
+              <Textarea
+                id="about_section"
+                value={localSettings.about_section}
+                onChange={(e) => setLocalSettings(prev => ({ ...prev, about_section: e.target.value }))}
+                rows={3}
+                placeholder="Tell your guests about yourselves and the wedding"
+              />
+            </div>
+            <div>
+              <Label htmlFor="contact_message">Contact Message</Label>
+              <Input
+                id="contact_message"
+                value={localSettings.contact_message}
+                onChange={(e) => setLocalSettings(prev => ({ ...prev, contact_message: e.target.value }))}
+                placeholder="e.g., For any questions about the wedding, please don't hesitate to reach out to us."
+              />
+            </div>
+            <div>
+              <Label htmlFor="footer_message">Footer Message</Label>
+              <Input
+                id="footer_message"
+                value={localSettings.footer_message}
+                onChange={(e) => setLocalSettings(prev => ({ ...prev, footer_message: e.target.value }))}
+                placeholder="e.g., With love, Tim & Kirsten"
+              />
+            </div>
           </div>
         </CardContent>
       </Card>
