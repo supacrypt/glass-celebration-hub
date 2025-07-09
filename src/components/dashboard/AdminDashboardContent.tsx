@@ -27,6 +27,7 @@ import { PerformanceMonitor } from '@/components/monitoring/PerformanceMonitor';
 import AdvancedCommunicationCenter from '@/components/admin/AdvancedCommunicationCenter';
 import { SEOOptimizer } from '@/components/optimization/SEOOptimizer';
 import { SystemTest } from '@/components/test/SystemTest';
+import { ProductionLaunch } from '@/components/deployment/ProductionLaunch';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface AdminDashboardContentProps {
@@ -163,6 +164,12 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
       id: 'system-test', 
       label: 'Test Suite',
       component: <SystemTest />
+    },
+    // Phase 10: Production Launch & Live Deployment
+    { 
+      id: 'production-launch', 
+      label: 'Launch',
+      component: <ProductionLaunch />
     },
   ];
 
