@@ -37,7 +37,9 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
 
   const currentBackgroundUrl = isMobile && mobileBackgroundUrl ? mobileBackgroundUrl : backgroundUrl;
 
-  const handleVideoError = () => {
+  const handleVideoError = (e: any) => {
+    console.error('Video failed to load:', e);
+    console.error('Video URL was:', currentBackgroundUrl);
     setVideoError(true);
   };
 
@@ -47,14 +49,17 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
       {backgroundType === 'video' && !videoError && !isMobile ? (
         <video
           className="absolute inset-0 w-full h-full object-cover"
-          autoPlay={videoAutoplay}
-          muted={videoMuted}
-          loop={videoLoop}
+          autoPlay
+          muted
+          loop
           playsInline
+          controls={false}
+          preload="auto"
           onError={handleVideoError}
+          onLoadedData={() => console.log('Video loaded successfully')}
         >
           <source src={currentBackgroundUrl} type="video/mp4" />
-          <source src={currentBackgroundUrl.replace('.mp4', '.webm')} type="video/webm" />
+          Your browser does not support the video tag.
         </video>
       ) : (
         <div
