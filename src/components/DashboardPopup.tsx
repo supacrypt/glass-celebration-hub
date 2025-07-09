@@ -54,17 +54,17 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
         onClick={onClose}
       />
       
-      {/* Centered Dashboard Popup with Enhanced Glass Effect */}
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+      {/* Dashboard Popup positioned above bottom navigation */}
+      <div className="fixed left-0 right-0 bottom-[120px] z-[9999] flex items-end justify-center p-4">
         <div 
           className={`glass-popup flex flex-col w-full ${
             device.isSmallMobile 
-              ? 'max-w-[95vw] max-h-[90vh]' 
+              ? 'max-w-[95vw] max-h-[70vh]' 
               : device.isTinyMobile 
-                ? 'max-w-[92vw] max-h-[88vh]'
+                ? 'max-w-[92vw] max-h-[68vh]'
                 : device.isMobile 
-                  ? 'max-w-[90vw] max-h-[85vh]'
-                  : 'max-w-[800px] max-h-[80vh]'
+                  ? 'max-w-[90vw] max-h-[65vh]'
+                  : 'max-w-[800px] max-h-[60vh]'
           }`}
           onClick={(e) => e.stopPropagation()}
         >
