@@ -11,6 +11,8 @@ import VenueDetail from "./pages/VenueDetail";
 import Social from "./pages/Social";
 import Gallery from "./pages/Gallery";
 import GiftRegistry from "./pages/GiftRegistry";
+import Accommodation from "./pages/Accommodation";
+import Transport from "./pages/Transport";
 import RSVP from "./pages/RSVP";
 import FAQ from "./pages/FAQ";
 import Auth from "./pages/Auth";
@@ -85,6 +87,8 @@ const AppContent = () => {
         <Route path="/social" element={<Social />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/gifts" element={<GiftRegistry />} />
+        <Route path="/accommodation" element={<Accommodation />} />
+        <Route path="/transport" element={<Transport />} />
         <Route path="/rsvp" element={<RSVP />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/auth" element={<Auth />} />

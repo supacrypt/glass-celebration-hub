@@ -74,21 +74,31 @@ const EventsSection: React.FC<EventsSectionProps> = ({ isAdmin, events, eventsLo
               )}
             </div>
             <div className="responsive-text-base text-glass-blue font-medium mb-2">
-              Sunday 5 October 2025 at 03:00 pm
+              Sunday 5 October 2025 - Arrive 2:30 PM for 3:00 PM start
             </div>
             <p className="responsive-text-base text-muted-foreground leading-relaxed mb-3">
-              Tim & Kirsten exchange vows on the Garden Terrace Lawn
+              Ceremony on the Garden Terrace Lawn, followed by cocktail hour and reception (concludes at 12:00 AM)
             </p>
             <div className="flex items-center gap-2 responsive-text-base text-muted-foreground mb-3">
               <div className="glass-primary w-6 h-6 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center text-sm">
                 📍
               </div>
-              <span>Ben Ean</span>
+              <span>Ben Ean, 119 McDonalds Rd, Pokolbin NSW</span>
             </div>
             <div className="glass-primary responsive-card-padding-sm rounded-lg text-center">
               <span className="text-xs sm:text-sm text-muted-foreground">
-                Dress Code: Cocktail Attire
+                Dress Code: Dapper/Cocktail
               </span>
+            </div>
+            
+            {/* Recovery Event */}
+            <div className="mt-4 pt-4 border-t border-glass-border/50">
+              <div className="text-sm font-medium text-wedding-navy mb-1">
+                Monday 6 October - Recovery at Newcastle Beach
+              </div>
+              <p className="text-xs text-muted-foreground">
+                From 11 AM onwards - kiosk with good coffee and food for recovery!
+              </p>
             </div>
           </div>
         </div>

@@ -21,8 +21,11 @@ const HeroSection: React.FC = () => {
       <p className="text-base sm:text-lg lg:text-xl text-glass-blue mb-3 sm:mb-4 font-dolly font-medium">
         October 5, 2025
       </p>
-      <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto leading-relaxed">
-        Join us as we celebrate our love and commitment surrounded by family and friends
+      <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+        Yes, we are that couple stuffing up your long weekend plans! Why spend it somewhere relaxing when you can watch two people who have been together for well over a decade tell you that they still love each other and are going to continue living pretty much as they have but under a legally binding contract?
+      </p>
+      <p className="text-xs sm:text-sm text-muted-foreground/80 max-w-lg mx-auto leading-relaxed mt-3">
+        There'll be top-shelf bevies, good tunes, and more love than you can poke a stick at.
       </p>
     </div>
   );

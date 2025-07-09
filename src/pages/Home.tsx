@@ -5,6 +5,8 @@ import HeroSection from '@/components/home/HeroSection';
 import CountdownSection from '@/components/home/CountdownSection';
 import InfoCards from '@/components/home/InfoCards';
 import EventsSection from '@/components/home/EventsSection';
+import DressCodeCard from '@/components/DressCodeCard';
+import ContactInfo from '@/components/ContactInfo';
 
 const Home: React.FC = () => {
   const { events, loading: eventsLoading } = useWeddingEvents();
@@ -23,6 +25,31 @@ const Home: React.FC = () => {
         />
         <InfoCards isAdmin={isAdmin} />
         
+        {/* Quick Links */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
+          <a href="/accommodation" className="glass-card p-4 text-center hover:scale-105 transition-transform duration-200">
+            <div className="text-2xl mb-2">🏨</div>
+            <span className="text-sm font-medium text-wedding-navy">Stay</span>
+          </a>
+          <a href="/transport" className="glass-card p-4 text-center hover:scale-105 transition-transform duration-200">
+            <div className="text-2xl mb-2">🚌</div>
+            <span className="text-sm font-medium text-wedding-navy">Transport</span>
+          </a>
+          <a href="/gifts" className="glass-card p-4 text-center hover:scale-105 transition-transform duration-200">
+            <div className="text-2xl mb-2">🎁</div>
+            <span className="text-sm font-medium text-wedding-navy">Gifts</span>
+          </a>
+          <a href="/faq" className="glass-card p-4 text-center hover:scale-105 transition-transform duration-200">
+            <div className="text-2xl mb-2">❓</div>
+            <span className="text-sm font-medium text-wedding-navy">FAQ</span>
+          </a>
+        </div>
+        
+        {/* Dress Code */}
+        <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
+          <DressCodeCard />
+        </div>
+        
         {/* Welcome Section */}
         <div className="glass-card responsive-card-padding mb-6 sm:mb-8 lg:mb-10 text-center animate-fade-up">
           <div className="text-3xl sm:text-4xl lg:text-5xl mb-4 sm:mb-5 animate-pulse">
@@ -35,6 +62,11 @@ const Home: React.FC = () => {
             Your presence is the greatest gift we could ask for. Join us for a day filled with love, 
             laughter, and unforgettable memories as we begin our new chapter together.
           </p>
+        </div>
+
+        {/* Contact Info */}
+        <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
+          <ContactInfo />
         </div>
 
         {/* Footer */}

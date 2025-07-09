@@ -117,9 +117,29 @@ const GiftRegistry: React.FC = () => {
           Gift Registry
         </h1>
         <p className="wedding-body text-muted-foreground max-w-2xl mx-auto">
-          Your presence is the greatest gift, but if you'd like to help us start our new life together, 
-          here are some things we'd love to have in our new home.
+          We are excited to have everyone we love gather together for an epic celebration - that is a gift on its own! There is no expectation for gifts from guests.
         </p>
+      </div>
+
+      {/* Honeymoon Fund - Primary Option */}
+      <div className="mb-8 animate-fade-up">
+        <div className="glass-card p-6 lg:p-8 text-center">
+          <div className="text-4xl lg:text-5xl mb-4">✈️💕</div>
+          <h2 className="text-xl lg:text-2xl font-semibold text-wedding-navy mb-4">
+            Honeymoon Fund
+          </h2>
+          <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
+            If you have the urge to give a gift, one option is to contribute towards our honeymoon adventure!
+          </p>
+          <a 
+            href="https://mygiftregistry.com.au/id/tim-and-kirsten/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-wedding-navy hover:bg-wedding-navy/90 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+          >
+            💝 Contribute to Honeymoon
+          </a>
+        </div>
       </div>
 
       {/* Stats */}

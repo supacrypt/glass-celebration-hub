@@ -10,13 +10,13 @@ const InfoCards: React.FC<InfoCardsProps> = ({ isAdmin }) => {
       icon: '📅',
       title: 'When',
       primary: 'October 5, 2025',
-      secondary: 'Arrive 2:30 PM'
+      secondary: 'Arrive 2:30 PM for 3:00 PM start'
     },
     {
       icon: '📍',
       title: 'Where',
       primary: 'Ben Ean',
-      secondary: 'Pokolbin, NSW'
+      secondary: '119 McDonalds Rd, Pokolbin NSW'
     },
     {
       icon: '👫',
