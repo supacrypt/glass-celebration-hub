@@ -60,47 +60,59 @@ const EventsSection: React.FC<EventsSectionProps> = ({ isAdmin, events, eventsLo
             </div>
           </div>
 
-          {/* Wedding Ceremony */}
-          <div className="glass-secondary responsive-card-padding rounded-xl transition-all duration-300 hover:scale-105">
-            <div className="flex justify-between items-start mb-3">
-              <h3 className="responsive-text-lg font-semibold text-wedding-navy flex items-center gap-2">
-                <span className="text-glass-pink text-sm">❤️</span>
-                Wedding Ceremony
-              </h3>
-              {isAdmin && (
-                <div className="text-xs text-muted-foreground">
-                  Event ID: a7e3722b...
+          {/* Dynamic Events from Database */}
+          {events && events.length > 0 ? (
+            events.map((event) => (
+              <div key={event.id} className="glass-secondary responsive-card-padding rounded-xl transition-all duration-300 hover:scale-105">
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="responsive-text-lg font-semibold text-wedding-navy flex items-center gap-2">
+                    {event.is_main_event && <span className="text-glass-pink text-sm">❤️</span>}
+                    {event.title}
+                  </h3>
+                  {isAdmin && (
+                    <div className="text-xs text-muted-foreground">
+                      Event ID: {event.id.slice(0, 8)}...
+                    </div>
+                  )}
                 </div>
+                <div className="responsive-text-base text-glass-blue font-medium mb-2">
+                  {new Date(event.event_date).toLocaleDateString('en-AU', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </div>
+                {event.description && (
+                  <p className="responsive-text-base text-muted-foreground leading-relaxed mb-3">
+                    {event.description}
+                  </p>
+                )}
+                {(event.venue_name || event.location || event.address) && (
+                  <div className="flex items-center gap-2 responsive-text-base text-muted-foreground mb-3">
+                    <div className="glass-primary w-6 h-6 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center text-sm">
+                      📍
+                    </div>
+                    <span>{event.venue_name || event.location}{event.address && `, ${event.address}`}</span>
+                  </div>
+                )}
+                {event.dress_code && (
+                  <div className="glass-primary responsive-card-padding-sm rounded-lg text-center">
+                    <span className="text-xs sm:text-sm text-muted-foreground">
+                      Dress Code: {event.dress_code}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-8 text-muted-foreground">
+              <p>No events configured yet.</p>
+              {isAdmin && (
+                <p className="text-xs mt-2">Add events through the admin panel.</p>
               )}
             </div>
-            <div className="responsive-text-base text-glass-blue font-medium mb-2">
-              Sunday 5 October 2025 - Arrive 2:30 PM for 3:00 PM start
-            </div>
-            <p className="responsive-text-base text-muted-foreground leading-relaxed mb-3">
-              Ceremony on the Garden Terrace Lawn, followed by cocktail hour and reception (concludes at 12:00 AM)
-            </p>
-            <div className="flex items-center gap-2 responsive-text-base text-muted-foreground mb-3">
-              <div className="glass-primary w-6 h-6 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center text-sm">
-                📍
-              </div>
-              <span>Ben Ean, 119 McDonalds Rd, Pokolbin NSW</span>
-            </div>
-            <div className="glass-primary responsive-card-padding-sm rounded-lg text-center">
-              <span className="text-xs sm:text-sm text-muted-foreground">
-                Dress Code: Dapper/Cocktail
-              </span>
-            </div>
-            
-            {/* Recovery Event */}
-            <div className="mt-4 pt-4 border-t border-glass-border/50">
-              <div className="text-sm font-medium text-wedding-navy mb-1">
-                Monday 6 October - Recovery at Newcastle Beach
-              </div>
-              <p className="text-xs text-muted-foreground">
-                From 11 AM onwards - kiosk with good coffee and food for recovery!
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       )}
     </div>
