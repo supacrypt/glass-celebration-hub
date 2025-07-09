@@ -16,6 +16,7 @@ import EnhancedMediaManagement from '@/components/admin/EnhancedMediaManagement'
 import SystemMonitoring from '@/components/admin/SystemMonitoring';
 import EmailSystemManagement from '@/components/admin/EmailSystemManagement';
 import ProductionReadinessTest from '@/components/admin/ProductionReadinessTest';
+import DeploymentOptimization from '@/components/admin/DeploymentOptimization';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface AdminDashboardContentProps {
@@ -91,6 +92,11 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
       id: 'testing', 
       label: 'Testing',
       component: <ProductionReadinessTest />
+    },
+    { 
+      id: 'deployment', 
+      label: 'Deploy',
+      component: <DeploymentOptimization />
     },
     { 
       id: 'settings', 

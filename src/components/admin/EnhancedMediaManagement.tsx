@@ -51,7 +51,9 @@ const EnhancedMediaManagement: React.FC = () => {
   const fetchMediaFiles = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      
+      // Fetch from database (photos table)
+      const { data: dbPhotos, error: dbError } = await supabase
         .from('photos')
         .select(`
           *,
@@ -63,8 +65,58 @@ const EnhancedMediaManagement: React.FC = () => {
         `)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setMediaFiles(data || []);
+      if (dbError) {
+        console.error('Database error:', dbError);
+      }
+
+      // Fetch directly from storage buckets
+      const buckets = ['wedding-photos', 'social-posts', 'stories', 'user-profiles', 'gift-images'];
+      const storageFiles: MediaFile[] = [];
+
+      for (const bucketName of buckets) {
+        try {
+          const { data: files, error: storageError } = await supabase.storage
+            .from(bucketName)
+            .list('', { 
+              limit: 1000,
+              sortBy: { column: 'created_at', order: 'desc' }
+            });
+
+          if (!storageError && files) {
+            for (const file of files) {
+              if (file.name && file.name !== '.emptyFolderPlaceholder') {
+                const { data: publicURL } = supabase.storage
+                  .from(bucketName)
+                  .getPublicUrl(file.name);
+
+                storageFiles.push({
+                  id: `${bucketName}-${file.name}`,
+                  file_url: publicURL.publicUrl,
+                  file_path: `${bucketName}/${file.name}`,
+                  title: file.name,
+                  description: `File from ${bucketName} bucket`,
+                  mime_type: file.metadata?.mimetype || 'unknown',
+                  file_size: file.metadata?.size || 0,
+                  is_approved: true, // Storage files are considered approved
+                  created_at: file.created_at || new Date().toISOString(),
+                  user_id: 'storage-file',
+                  profiles: {
+                    first_name: 'Storage',
+                    last_name: 'File',
+                    display_name: 'Storage File'
+                  }
+                });
+              }
+            }
+          }
+        } catch (error) {
+          console.warn(`Error fetching from bucket ${bucketName}:`, error);
+        }
+      }
+
+      // Combine database and storage files
+      const allFiles = [...(dbPhotos || []), ...storageFiles];
+      setMediaFiles(allFiles);
     } catch (error) {
       console.error('Error fetching media files:', error);
       toast({
@@ -79,8 +131,8 @@ const EnhancedMediaManagement: React.FC = () => {
 
   const fetchStorageStats = async () => {
     try {
-      // Get storage bucket usage
-      const buckets = ['wedding-photos', 'social-posts', 'stories', 'user-profiles'];
+      // Get storage bucket usage with better error handling
+      const buckets = ['wedding-photos', 'social-posts', 'stories', 'user-profiles', 'gift-images', 'direct-chats'];
       const stats: StorageStats = {
         totalFiles: 0,
         totalSize: 0,
@@ -88,23 +140,36 @@ const EnhancedMediaManagement: React.FC = () => {
         byBucket: {}
       };
 
-      for (const bucket of buckets) {
-        const { data: files, error } = await supabase.storage
-          .from(bucket)
-          .list('', { limit: 1000 });
+      const { data: bucketList } = await supabase.storage.listBuckets();
+      
+      if (bucketList) {
+        for (const bucket of bucketList) {
+          try {
+            const { data: files, error } = await supabase.storage
+              .from(bucket.name)
+              .list('', { limit: 1000 });
 
-        if (!error && files) {
-          const bucketSize = files.reduce((acc, file) => acc + (file.metadata?.size || 0), 0);
-          stats.byBucket[bucket] = {
-            count: files.length,
-            size: bucketSize
-          };
-          stats.totalFiles += files.length;
-          stats.totalSize += bucketSize;
+            if (!error && files) {
+              const bucketSize = files.reduce((acc, file) => acc + (file.metadata?.size || 0), 0);
+              stats.byBucket[bucket.name] = {
+                count: files.length,
+                size: bucketSize
+              };
+              stats.totalFiles += files.length;
+              stats.totalSize += bucketSize;
+            }
+          } catch (bucketError) {
+            console.warn(`Error accessing bucket ${bucket.name}:`, bucketError);
+            // Set default values for inaccessible buckets
+            stats.byBucket[bucket.name] = {
+              count: 0,
+              size: 0
+            };
+          }
         }
       }
 
-      // Get pending approval count
+      // Get pending approval count from database
       const { count } = await supabase
         .from('photos')
         .select('*', { count: 'exact', head: true })
@@ -114,6 +179,13 @@ const EnhancedMediaManagement: React.FC = () => {
       setStorageStats(stats);
     } catch (error) {
       console.error('Error fetching storage stats:', error);
+      // Set fallback stats
+      setStorageStats({
+        totalFiles: 0,
+        totalSize: 0,
+        pendingApproval: 0,
+        byBucket: {}
+      });
     }
   };
 
