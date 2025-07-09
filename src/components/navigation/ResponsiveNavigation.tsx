@@ -157,16 +157,16 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
             <span 
               className="nav-label"
               style={{
-                fontSize: 'clamp(10px, 2.2vw, 11px)',
+                fontSize: 'clamp(9px, 2.0vw, 10px)',
                 marginTop: 'clamp(2px, 0.8vw, 4px)',
                 fontWeight: 'bold',
-                letterSpacing: '0.3px',
+                letterSpacing: '0.2px',
                 textShadow: '1px 1px 2px hsl(var(--glass-white) / 0.8)',
                 color: 'hsl(0 0% 0%)',
                 fontFamily: "'Playfair Display', serif",
                 textAlign: 'center',
-                lineHeight: '1.2',
-                maxWidth: '48px',
+                lineHeight: '1.1',
+                maxWidth: isCenter ? '60px' : '54px', // Increased width for center item (Dashboard)
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap'
