@@ -340,7 +340,7 @@ const EnhancedCommunicationCenter: React.FC = () => {
           </div>
 
           {/* Messages List */}
-          <div className="space-y-2 h-64 overflow-y-auto">
+          <div className="space-y-2 max-h-64 overflow-y-auto">
             {filteredMessages.slice(0, 10).map((message) => (
               <div key={message.id} className="glass-card p-3">
                 <div className="flex items-start justify-between">
@@ -476,7 +476,7 @@ const EnhancedCommunicationCenter: React.FC = () => {
           </div>
 
           {/* Announcements List */}
-          <div className="space-y-2 h-64 overflow-y-auto">
+          <div className="space-y-2 max-h-64 overflow-y-auto">
             {announcements.map((announcement) => (
               <div key={announcement.id} className="glass-card p-3">
                 <div className="flex items-start justify-between">
