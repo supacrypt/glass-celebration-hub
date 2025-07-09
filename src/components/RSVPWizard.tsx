@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useWeddingEvents, useRSVPs } from '@/hooks/useWeddingData';
 import GlassCard from '@/components/GlassCard';
@@ -44,22 +44,22 @@ const RSVPWizard: React.FC = () => {
     }
   }, [mainEvent, selectedEventId]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
       // Auto-scroll to top of step
       document.querySelector('.wizard-content')?.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  };
+  }, [currentStep, totalSteps]);
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
       document.querySelector('.wizard-content')?.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  };
+  }, [currentStep]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     if (!selectedEventId) return;
 
     setSubmitting(true);
@@ -101,7 +101,7 @@ const RSVPWizard: React.FC = () => {
     }
     
     setSubmitting(false);
-  };
+  }, [selectedEventId, message, coachSeats, pickupLocation, accommodation, submitRSVP, status, guestCount, dietaryRestrictions, toast]);
 
   const existingRSVP = useMemo(() => 
     rsvps.find(r => r.event_id === selectedEventId), 
