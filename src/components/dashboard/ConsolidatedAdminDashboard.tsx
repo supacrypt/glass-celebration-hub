@@ -21,7 +21,7 @@ import UnifiedAccountsManagement from '@/components/admin/UnifiedAccountsManagem
 import WeddingGuestManagement from '@/components/admin/WeddingGuestManagement';
 import EnhancedRSVPManagement from '@/components/admin/EnhancedRSVPManagement';
 import ThemeCustomization from '@/components/admin/ThemeCustomization';
-import BackgroundManager from '@/components/admin/BackgroundManager';
+import MediaManager from '@/components/admin/MediaManager';
 import FontManager from '@/components/admin/FontManager';
 import AdvancedCommunicationCenter from '@/components/admin/AdvancedCommunicationCenter';
 import NotificationCenter from '@/components/admin/NotificationCenter';
@@ -85,7 +85,7 @@ const ConsolidatedAdminDashboard: React.FC<ConsolidatedAdminDashboardProps> = ({
   // Design & Themes Group
   const designTabs = [
     { id: 'themes', label: 'Theme Customization', component: <ThemeCustomization /> },
-    { id: 'backgrounds', label: 'Backgrounds', component: <BackgroundManager /> },
+    { id: 'media', label: 'Media Manager', component: <MediaManager /> },
     { id: 'fonts', label: 'Typography', component: <FontManager /> }
   ];
 

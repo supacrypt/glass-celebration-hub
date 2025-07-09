@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAppSettings } from '@/hooks/useAppSettings';
+import { getUrlWithFallback } from '@/utils/supabaseStorage';
 
 interface HeroBackgroundProps {
   backgroundType: string;
@@ -88,7 +89,10 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url(${mobileBackgroundUrl || 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80'})`,
+            backgroundImage: `url(${getUrlWithFallback(
+              mobileBackgroundUrl || currentBackgroundUrl,
+              'https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80'
+            )})`,
           }}
         />
       )}
