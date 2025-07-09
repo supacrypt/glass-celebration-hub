@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useWeddingEvents, useRSVPs } from '@/hooks/useWeddingData';
 import GlassCard from '@/components/GlassCard';
@@ -31,7 +31,12 @@ const RSVPWizard: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const totalSteps = 4;
-  const mainEvent = events.find(event => event.is_main_event);
+  
+  // Memoize expensive calculations
+  const mainEvent = useMemo(() => 
+    events.find(event => event.is_main_event), 
+    [events]
+  );
 
   useEffect(() => {
     if (mainEvent && !selectedEventId) {
@@ -98,7 +103,10 @@ const RSVPWizard: React.FC = () => {
     setSubmitting(false);
   };
 
-  const existingRSVP = rsvps.find(r => r.event_id === selectedEventId);
+  const existingRSVP = useMemo(() => 
+    rsvps.find(r => r.event_id === selectedEventId), 
+    [rsvps, selectedEventId]
+  );
 
   if (eventsLoading) {
     return (
@@ -108,7 +116,7 @@ const RSVPWizard: React.FC = () => {
     );
   }
 
-  const steps = [
+  const steps = useMemo(() => [
     {
       title: "Event & Response",
       description: "Which event and will you attend?"
@@ -125,7 +133,7 @@ const RSVPWizard: React.FC = () => {
       title: "Final Details",
       description: "Any message for us?"
     }
-  ];
+  ], []);
 
   return (
     <div className="min-h-screen px-3 sm:px-5 pt-6 sm:pt-8 pb-6">
