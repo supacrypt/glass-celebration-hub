@@ -32,7 +32,6 @@ import AdminPhotosDetail from "./pages/dashboard/AdminPhotosDetail";
 import AdminUserRoles from "./pages/dashboard/AdminUserRoles";
 import SocialCompose from "./pages/SocialCompose";
 import { SystemTest } from "./components/test/SystemTest";
-import ThemeTest from "./pages/ThemeTest";
 import { useAuth } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
@@ -110,9 +109,6 @@ const AppContent = () => {
         
         {/* System Test Route */}
         <Route path="/system-test" element={<SystemTest />} />
-        
-        {/* Theme Test Route */}
-        <Route path="/theme-test" element={<ThemeTest />} />
         
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />

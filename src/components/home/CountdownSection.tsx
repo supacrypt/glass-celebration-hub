@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface TimeToWedding {
   days: number;
@@ -7,7 +7,7 @@ interface TimeToWedding {
   seconds: number;
 }
 
-const CountdownSection: React.FC = memo(() => {
+const CountdownSection: React.FC = () => {
   const [timeToWedding, setTimeToWedding] = useState<TimeToWedding>({
     days: 0,
     hours: 0,
@@ -79,8 +79,6 @@ const CountdownSection: React.FC = memo(() => {
       </div>
     </div>
   );
-});
-
-CountdownSection.displayName = 'CountdownSection';
+};
 
 export default CountdownSection;

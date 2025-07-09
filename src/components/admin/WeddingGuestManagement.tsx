@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Users, Download, Search, Filter, Mail, Phone, CheckCircle, XCircle, Clock, MapPin, MessageSquare, Edit3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,7 +17,7 @@ interface WeddingGuestManagementProps {
   onRefresh: () => void;
 }
 
-const WeddingGuestManagement: React.FC<WeddingGuestManagementProps> = memo(({ onRefresh }) => {
+const WeddingGuestManagement: React.FC<WeddingGuestManagementProps> = ({ onRefresh }) => {
   const [guests, setGuests] = useState<WeddingGuest[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -29,9 +29,9 @@ const WeddingGuestManagement: React.FC<WeddingGuestManagementProps> = memo(({ on
 
   useEffect(() => {
     fetchGuests();
-  }, [fetchGuests]);
+  }, []);
 
-  const fetchGuests = useCallback(async () => {
+  const fetchGuests = async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -51,28 +51,22 @@ const WeddingGuestManagement: React.FC<WeddingGuestManagementProps> = memo(({ on
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  };
 
-  const categories = useMemo(() => 
-    Array.from(new Set(guests.map(g => g.category))), 
-    [guests]
-  );
+  const categories = Array.from(new Set(guests.map(g => g.category)));
   
-  const filteredGuests = useMemo(() => 
-    guests.filter(guest => {
-      const matchesSearch = guest.guest_names.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        guest.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        guest.mobile?.includes(searchTerm);
-      
-      const matchesCategory = categoryFilter === 'all' || guest.category === categoryFilter;
-      const matchesStatus = statusFilter === 'all' || guest.rsvp_status === statusFilter;
-      
-      return matchesSearch && matchesCategory && matchesStatus;
-    }),
-    [guests, searchTerm, categoryFilter, statusFilter]
-  );
+  const filteredGuests = guests.filter(guest => {
+    const matchesSearch = guest.guest_names.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      guest.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      guest.mobile?.includes(searchTerm);
+    
+    const matchesCategory = categoryFilter === 'all' || guest.category === categoryFilter;
+    const matchesStatus = statusFilter === 'all' || guest.rsvp_status === statusFilter;
+    
+    return matchesSearch && matchesCategory && matchesStatus;
+  });
 
-  const guestStats = useMemo(() => ({
+  const guestStats = {
     total: guests.length,
     totalCount: guests.reduce((sum, g) => sum + g.guest_count, 0),
     attending: guests.filter(g => g.rsvp_status === 'attending').length,
@@ -85,9 +79,9 @@ const WeddingGuestManagement: React.FC<WeddingGuestManagementProps> = memo(({ on
       ...acc,
       [cat]: guests.filter(g => g.category === cat).length
     }), {} as Record<string, number>)
-  }), [guests, categories]);
+  };
 
-  const updateGuest = useCallback(async (guestId: string, updates: Partial<WeddingGuest>) => {
+  const updateGuest = async (guestId: string, updates: Partial<WeddingGuest>) => {
     try {
       const { error } = await supabase
         .from('guests')
@@ -112,9 +106,9 @@ const WeddingGuestManagement: React.FC<WeddingGuestManagementProps> = memo(({ on
         variant: "destructive"
       });
     }
-  }, [toast, fetchGuests]);
+  };
 
-  const exportGuestList = useCallback(() => {
+  const exportGuestList = () => {
     const csvContent = [
       'Guest Names,Count,Mobile,Category,Location,Save the Date Sent,Invite Sent,RSVP Status,RSVP Count,Notes',
       ...filteredGuests.map(guest => 
@@ -129,25 +123,25 @@ const WeddingGuestManagement: React.FC<WeddingGuestManagementProps> = memo(({ on
     a.download = 'wedding-guest-list.csv';
     a.click();
     window.URL.revokeObjectURL(url);
-  }, [filteredGuests]);
+  };
 
-  const getStatusIcon = useCallback((status: string) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'attending': return CheckCircle;
       case 'declined': return XCircle;
       case 'cannot_contact': return Phone;
       default: return Clock;
     }
-  }, []);
+  };
 
-  const getStatusColor = useCallback((status: string) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'attending': return 'text-glass-green';
       case 'declined': return 'text-glass-pink';
       case 'cannot_contact': return 'text-glass-purple';
       default: return 'text-glass-blue';
     }
-  }, []);
+  };
 
   if (loading) {
     return (
@@ -370,9 +364,7 @@ const WeddingGuestManagement: React.FC<WeddingGuestManagementProps> = memo(({ on
       </div>
     </div>
   );
-});
-
-WeddingGuestManagement.displayName = 'WeddingGuestManagement';
+};
 
 // Edit Guest Form Component
 interface EditGuestFormProps {
@@ -381,7 +373,7 @@ interface EditGuestFormProps {
   onCancel: () => void;
 }
 
-const EditGuestForm: React.FC<EditGuestFormProps> = memo(({ guest, onSave, onCancel }) => {
+const EditGuestForm: React.FC<EditGuestFormProps> = ({ guest, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
     guest_names: guest.guest_names,
     guest_count: guest.guest_count,
@@ -487,8 +479,6 @@ const EditGuestForm: React.FC<EditGuestFormProps> = memo(({ guest, onSave, onCan
       </div>
     </form>
   );
-});
-
-EditGuestForm.displayName = 'EditGuestForm';
+};
 
 export default WeddingGuestManagement;

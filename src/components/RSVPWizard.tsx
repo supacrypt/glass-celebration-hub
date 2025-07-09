@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useWeddingEvents, useRSVPs } from '@/hooks/useWeddingData';
 import GlassCard from '@/components/GlassCard';
@@ -31,12 +31,7 @@ const RSVPWizard: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const totalSteps = 4;
-  
-  // Memoize expensive calculations
-  const mainEvent = useMemo(() => 
-    events.find(event => event.is_main_event), 
-    [events]
-  );
+  const mainEvent = events.find(event => event.is_main_event);
 
   useEffect(() => {
     if (mainEvent && !selectedEventId) {
@@ -44,22 +39,22 @@ const RSVPWizard: React.FC = () => {
     }
   }, [mainEvent, selectedEventId]);
 
-  const handleNext = useCallback(() => {
+  const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
       // Auto-scroll to top of step
       document.querySelector('.wizard-content')?.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [currentStep, totalSteps]);
+  };
 
-  const handlePrevious = useCallback(() => {
+  const handlePrevious = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
       document.querySelector('.wizard-content')?.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [currentStep]);
+  };
 
-  const handleSubmit = useCallback(async () => {
+  const handleSubmit = async () => {
     if (!selectedEventId) return;
 
     setSubmitting(true);
@@ -101,12 +96,9 @@ const RSVPWizard: React.FC = () => {
     }
     
     setSubmitting(false);
-  }, [selectedEventId, message, coachSeats, pickupLocation, accommodation, submitRSVP, status, guestCount, dietaryRestrictions, toast]);
+  };
 
-  const existingRSVP = useMemo(() => 
-    rsvps.find(r => r.event_id === selectedEventId), 
-    [rsvps, selectedEventId]
-  );
+  const existingRSVP = rsvps.find(r => r.event_id === selectedEventId);
 
   if (eventsLoading) {
     return (
@@ -116,7 +108,7 @@ const RSVPWizard: React.FC = () => {
     );
   }
 
-  const steps = useMemo(() => [
+  const steps = [
     {
       title: "Event & Response",
       description: "Which event and will you attend?"
@@ -133,7 +125,7 @@ const RSVPWizard: React.FC = () => {
       title: "Final Details",
       description: "Any message for us?"
     }
-  ], []);
+  ];
 
   return (
     <div className="min-h-screen px-3 sm:px-5 pt-6 sm:pt-8 pb-6">

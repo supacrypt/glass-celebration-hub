@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppSettings } from '@/hooks/useAppSettings';
 
 interface TimeToWedding {
@@ -18,7 +18,7 @@ interface PostWeddingState {
   secondsMarried: number;
 }
 
-const DynamicCountdownSection: React.FC = memo(() => {
+const DynamicCountdownSection: React.FC = () => {
   const { settings, loading } = useAppSettings();
   const [timeToWedding, setTimeToWedding] = useState<TimeToWedding>({
     days: 0,
@@ -225,8 +225,6 @@ const DynamicCountdownSection: React.FC = memo(() => {
       </div>
     </div>
   );
-});
-
-DynamicCountdownSection.displayName = 'DynamicCountdownSection';
+};
 
 export default DynamicCountdownSection;

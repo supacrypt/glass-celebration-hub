@@ -24,8 +24,8 @@ export const useDashboardData = () => {
     try {
       setLoading(true);
       
-      // Fetch users and roles separately (manual join)
-      const { data: profilesData } = await supabase
+      // Fetch users with roles
+      const { data: usersData } = await supabase
         .from('profiles')
         .select(`
           id,
@@ -33,12 +33,9 @@ export const useDashboardData = () => {
           email,
           first_name,
           last_name,
-          created_at
+          created_at,
+          user_roles (role)
         `);
-
-      const { data: userRolesData } = await supabase
-        .from('user_roles')
-        .select('user_id, role');
 
       // Fetch RSVPs
       const { data: rsvpsData } = await supabase
@@ -50,23 +47,27 @@ export const useDashboardData = () => {
         .from('photos')
         .select('*');
 
+      // Fetch all profiles for joining
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('user_id, first_name, last_name, email');
+
       // Fetch messages count
       const { count: messagesCount } = await supabase
         .from('messages')
         .select('*', { count: 'exact', head: true });
 
-      // Format users data with manual join
-      const formattedUsers: User[] = profilesData?.map(profile => {
-        const userRole = userRolesData?.find(role => role.user_id === profile.user_id);
-        return {
-          id: profile.user_id,
-          email: profile.email,
-          first_name: profile.first_name,
-          last_name: profile.last_name,
-          created_at: profile.created_at,
-          role: (userRole ? userRole.role : 'guest') as 'guest' | 'admin' | 'couple'
-        };
-      }) || [];
+      // Format users data
+      const formattedUsers: User[] = usersData?.map(user => ({
+        id: user.user_id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        created_at: user.created_at,
+        role: (Array.isArray(user.user_roles) && user.user_roles.length > 0 
+          ? user.user_roles[0].role 
+          : 'guest') as 'guest' | 'admin' | 'couple'
+      })) || [];
 
       // Format RSVPs with profiles
       const formattedRSVPs: RSVP[] = rsvpsData?.map(rsvp => ({
@@ -94,12 +95,12 @@ export const useDashboardData = () => {
       const totalRSVPs = rsvpsData?.reduce((sum, rsvp) => sum + (rsvp.guest_count || 1), 0) || 0;
 
       const stats: AdminStats = {
-        totalUsers: profilesData?.length || 0,
+        totalUsers: usersData?.length || 0,
         totalRSVPs,
         pendingPhotos,
         totalMessages: messagesCount || 0,
         approvedPhotos,
-        activeUsers: profilesData?.filter(u => 
+        activeUsers: usersData?.filter(u => 
           new Date(u.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
         ).length || 0
       };

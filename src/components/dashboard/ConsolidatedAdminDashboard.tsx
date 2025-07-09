@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState } from 'react';
 import { SwipeableTabsNavigation } from '@/components/mobile/SwipeableTabsNavigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,32 +13,32 @@ import {
   Zap 
 } from 'lucide-react';
 
-// Lazy load admin components
-const AppSettingsManager = lazy(() => import('@/components/admin/AppSettingsManager'));
-const CompactStats = lazy(() => import('@/components/admin/CompactStats'));
-const EventTimeline = lazy(() => import('@/components/admin/EventTimeline'));
-const UnifiedAccountsManagement = lazy(() => import('@/components/admin/UnifiedAccountsManagement'));
-const WeddingGuestManagement = lazy(() => import('@/components/admin/WeddingGuestManagement'));
-const EnhancedRSVPManagement = lazy(() => import('@/components/admin/EnhancedRSVPManagement'));
-const ThemeCustomization = lazy(() => import('@/components/admin/ThemeCustomization'));
-const BackgroundManager = lazy(() => import('@/components/admin/BackgroundManager'));
-const FontManager = lazy(() => import('@/components/admin/FontManager'));
-const AdvancedCommunicationCenter = lazy(() => import('@/components/admin/AdvancedCommunicationCenter'));
-const NotificationCenter = lazy(() => import('@/components/admin/NotificationCenter'));
-const EmailSystemManagement = lazy(() => import('@/components/admin/EmailSystemManagement'));
-const EnhancedAnalytics = lazy(() => import('@/components/admin/EnhancedAnalytics'));
-const AnalyticsInsights = lazy(() => import('@/components/admin/AnalyticsInsights'));
-const PerformanceAnalytics = lazy(() => import('@/components/admin/PerformanceAnalytics'));
-const CompactSystemSettings = lazy(() => import('@/components/admin/CompactSystemSettings'));
-const AdvancedSecurity = lazy(() => import('@/components/admin/AdvancedSecurity'));
-const BackupRecovery = lazy(() => import('@/components/admin/BackupRecovery'));
-const SystemMonitoring = lazy(() => import('@/components/admin/SystemMonitoring'));
-const ProductionReadinessTest = lazy(() => import('@/components/admin/ProductionReadinessTest'));
-const DeploymentOptimization = lazy(() => import('@/components/admin/DeploymentOptimization'));
-const RealTimeMonitoring = lazy(() => import('@/components/admin/RealTimeMonitoring'));
-const PerformanceMonitor = lazy(() => import('@/components/monitoring/PerformanceMonitor').then(m => ({ default: m.PerformanceMonitor })));
-const LiveMonitoring = lazy(() => import('@/components/monitoring/LiveMonitoring').then(m => ({ default: m.LiveMonitoring })));
-const AdminFunctionalityTester = lazy(() => import('@/components/admin/AdminFunctionalityTester'));
+// Import existing components
+import AppSettingsManager from '@/components/admin/AppSettingsManager';
+import CompactStats from '@/components/admin/CompactStats';
+import EventTimeline from '@/components/admin/EventTimeline';
+import UnifiedAccountsManagement from '@/components/admin/UnifiedAccountsManagement';
+import WeddingGuestManagement from '@/components/admin/WeddingGuestManagement';
+import EnhancedRSVPManagement from '@/components/admin/EnhancedRSVPManagement';
+import ThemeCustomization from '@/components/admin/ThemeCustomization';
+import BackgroundManager from '@/components/admin/BackgroundManager';
+import FontManager from '@/components/admin/FontManager';
+import AdvancedCommunicationCenter from '@/components/admin/AdvancedCommunicationCenter';
+import NotificationCenter from '@/components/admin/NotificationCenter';
+import EmailSystemManagement from '@/components/admin/EmailSystemManagement';
+import EnhancedAnalytics from '@/components/admin/EnhancedAnalytics';
+import AnalyticsInsights from '@/components/admin/AnalyticsInsights';
+import PerformanceAnalytics from '@/components/admin/PerformanceAnalytics';
+import CompactSystemSettings from '@/components/admin/CompactSystemSettings';
+import AdvancedSecurity from '@/components/admin/AdvancedSecurity';
+import BackupRecovery from '@/components/admin/BackupRecovery';
+import SystemMonitoring from '@/components/admin/SystemMonitoring';
+import ProductionReadinessTest from '@/components/admin/ProductionReadinessTest';
+import DeploymentOptimization from '@/components/admin/DeploymentOptimization';
+import RealTimeMonitoring from '@/components/admin/RealTimeMonitoring';
+import { PerformanceMonitor } from '@/components/monitoring/PerformanceMonitor';
+import { LiveMonitoring } from '@/components/monitoring/LiveMonitoring';
+import AdminFunctionalityTester from '@/components/admin/AdminFunctionalityTester';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface ConsolidatedAdminDashboardProps {
@@ -68,68 +68,61 @@ const ConsolidatedAdminDashboard: React.FC<ConsolidatedAdminDashboardProps> = ({
     advanced: 'monitoring'
   });
 
-  // Loading fallback component
-  const LoadingFallback = () => (
-    <div className="flex items-center justify-center h-64">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-wedding-navy"></div>
-    </div>
-  );
-
   // Content Management Group
   const contentTabs = [
-    { id: 'app-settings', label: 'App Settings', component: <Suspense fallback={<LoadingFallback />}><AppSettingsManager /></Suspense> },
-    { id: 'timeline', label: 'Events', component: <Suspense fallback={<LoadingFallback />}><EventTimeline /></Suspense> },
-    { id: 'stats', label: 'Overview', component: <Suspense fallback={<LoadingFallback />}><CompactStats stats={stats} /></Suspense> }
+    { id: 'app-settings', label: 'App Settings', component: <AppSettingsManager /> },
+    { id: 'timeline', label: 'Events', component: <EventTimeline /> },
+    { id: 'stats', label: 'Overview', component: <CompactStats stats={stats} /> }
   ];
 
   // User & RSVP Management Group
   const userTabs = [
-    { id: 'accounts', label: 'User Accounts', component: <Suspense fallback={<LoadingFallback />}><UnifiedAccountsManagement users={users} onRefresh={onRefresh} /></Suspense> },
-    { id: 'guests', label: 'Guest Management', component: <Suspense fallback={<LoadingFallback />}><WeddingGuestManagement onRefresh={onRefresh} /></Suspense> },
-    { id: 'rsvps', label: 'RSVPs', component: <Suspense fallback={<LoadingFallback />}><EnhancedRSVPManagement rsvps={rsvps} onRefresh={onRefresh} /></Suspense> }
+    { id: 'accounts', label: 'User Accounts', component: <UnifiedAccountsManagement users={users} onRefresh={onRefresh} /> },
+    { id: 'guests', label: 'Guest Management', component: <WeddingGuestManagement onRefresh={onRefresh} /> },
+    { id: 'rsvps', label: 'RSVPs', component: <EnhancedRSVPManagement rsvps={rsvps} onRefresh={onRefresh} /> }
   ];
 
   // Design & Themes Group
   const designTabs = [
-    { id: 'themes', label: 'Theme Customization', component: <Suspense fallback={<LoadingFallback />}><ThemeCustomization /></Suspense> },
-    { id: 'backgrounds', label: 'Backgrounds', component: <Suspense fallback={<LoadingFallback />}><BackgroundManager /></Suspense> },
-    { id: 'fonts', label: 'Typography', component: <Suspense fallback={<LoadingFallback />}><FontManager /></Suspense> }
+    { id: 'themes', label: 'Theme Customization', component: <ThemeCustomization /> },
+    { id: 'backgrounds', label: 'Backgrounds', component: <BackgroundManager /> },
+    { id: 'fonts', label: 'Typography', component: <FontManager /> }
   ];
 
   // Communication Group
   const communicationTabs = [
-    { id: 'messaging', label: 'Messages', component: <Suspense fallback={<LoadingFallback />}><AdvancedCommunicationCenter /></Suspense> },
-    { id: 'notifications', label: 'Notifications', component: <Suspense fallback={<LoadingFallback />}><NotificationCenter /></Suspense> },
-    { id: 'email', label: 'Email System', component: <Suspense fallback={<LoadingFallback />}><EmailSystemManagement /></Suspense> }
+    { id: 'messaging', label: 'Messages', component: <AdvancedCommunicationCenter /> },
+    { id: 'notifications', label: 'Notifications', component: <NotificationCenter /> },
+    { id: 'email', label: 'Email System', component: <EmailSystemManagement /> }
   ];
 
   // Analytics & Reports Group
   const analyticsTabs = [
-    { id: 'insights', label: 'Analytics', component: <Suspense fallback={<LoadingFallback />}><EnhancedAnalytics /></Suspense> },
-    { id: 'analytics-insights', label: 'Detailed Insights', component: <Suspense fallback={<LoadingFallback />}><AnalyticsInsights /></Suspense> },
-    { id: 'performance-analytics', label: 'Performance', component: <Suspense fallback={<LoadingFallback />}><PerformanceAnalytics /></Suspense> }
+    { id: 'insights', label: 'Analytics', component: <EnhancedAnalytics /> },
+    { id: 'analytics-insights', label: 'Detailed Insights', component: <AnalyticsInsights /> },
+    { id: 'performance-analytics', label: 'Performance', component: <PerformanceAnalytics /> }
   ];
 
   // System Management Group
   const systemTabs = [
-    { id: 'settings', label: 'System Settings', component: <Suspense fallback={<LoadingFallback />}><CompactSystemSettings /></Suspense> },
-    { id: 'security', label: 'Security', component: <Suspense fallback={<LoadingFallback />}><AdvancedSecurity /></Suspense> },
-    { id: 'backup', label: 'Backup & Recovery', component: <Suspense fallback={<LoadingFallback />}><BackupRecovery /></Suspense> }
+    { id: 'settings', label: 'System Settings', component: <CompactSystemSettings /> },
+    { id: 'security', label: 'Security', component: <AdvancedSecurity /> },
+    { id: 'backup', label: 'Backup & Recovery', component: <BackupRecovery /> }
   ];
 
   // Development & Testing Group
   const developmentTabs = [
-    { id: 'testing', label: 'Testing Suite', component: <Suspense fallback={<LoadingFallback />}><ProductionReadinessTest /></Suspense> },
-    { id: 'functionality-test', label: 'Admin Function Tests', component: <Suspense fallback={<LoadingFallback />}><AdminFunctionalityTester /></Suspense> },
-    { id: 'deployment', label: 'Deployment', component: <Suspense fallback={<LoadingFallback />}><DeploymentOptimization /></Suspense> },
-    { id: 'system-monitor', label: 'System Monitor', component: <Suspense fallback={<LoadingFallback />}><SystemMonitoring /></Suspense> }
+    { id: 'testing', label: 'Testing Suite', component: <ProductionReadinessTest /> },
+    { id: 'functionality-test', label: 'Admin Function Tests', component: <AdminFunctionalityTester /> },
+    { id: 'deployment', label: 'Deployment', component: <DeploymentOptimization /> },
+    { id: 'system-monitor', label: 'System Monitor', component: <SystemMonitoring /> }
   ];
 
   // Advanced Features Group
   const advancedTabs = [
-    { id: 'monitoring', label: 'Real-time Monitor', component: <Suspense fallback={<LoadingFallback />}><RealTimeMonitoring /></Suspense> },
-    { id: 'performance', label: 'Performance Monitor', component: <Suspense fallback={<LoadingFallback />}><PerformanceMonitor /></Suspense> },
-    { id: 'live-monitoring', label: 'Live Monitoring', component: <Suspense fallback={<LoadingFallback />}><LiveMonitoring /></Suspense> }
+    { id: 'monitoring', label: 'Real-time Monitor', component: <RealTimeMonitoring /> },
+    { id: 'performance', label: 'Performance Monitor', component: <PerformanceMonitor /> },
+    { id: 'live-monitoring', label: 'Live Monitoring', component: <LiveMonitoring /> }
   ];
 
   const getTabsForGroup = (groupId: string) => {

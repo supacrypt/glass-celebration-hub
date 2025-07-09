@@ -17,19 +17,7 @@ interface VenueMapProps {
 const VenueMap: React.FC<VenueMapProps> = ({ venue, className = '' }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const mapboxToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
-
-  // Early return if no token
-  if (!mapboxToken) {
-    console.error('Missing VITE_MAPBOX_ACCESS_TOKEN environment variable');
-    return (
-      <div className={`relative ${className}`}>
-        <div className="w-full h-80 rounded-glass shadow-lg border border-border/20 flex items-center justify-center bg-muted">
-          <p className="text-muted-foreground">Map not available - Missing API key</p>
-        </div>
-      </div>
-    );
-  }
+  const mapboxToken = 'pk.eyJ1Ijoic3VwYWJhc2VjcnlwdCIsImEiOiJjbWNzcG03N3kxNjFyMmlxMmQyb290cWhvIn0.VTVcx03Z6tAg5ZVzJoxjSA';
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -40,7 +28,7 @@ const VenueMap: React.FC<VenueMapProps> = ({ venue, className = '' }) => {
       
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/supabasecrypt/cmcspsqaf000p01sq2x73evz1',
+        style: 'mapbox://styles/supabasecrypt/cmcspsqaf000p01sq2x73ewym',
         center: venue.coordinates,
         zoom: 15,
         pitch: 45,
@@ -87,7 +75,7 @@ const VenueMap: React.FC<VenueMapProps> = ({ venue, className = '' }) => {
     } catch (error) {
       console.error('Error initializing map:', error);
     }
-  }, [venue, mapboxToken]);
+  }, [venue]);
 
   const openInGoogleMaps = () => {
     const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.address)}`;

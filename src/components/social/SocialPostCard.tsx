@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Heart, MessageCircle, Share2, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -59,8 +59,7 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
   const [showComments, setShowComments] = useState(false);
   const { toast } = useToast();
 
-  // Memoized display name calculation
-  const displayName = useMemo(() => {
+  const getDisplayName = () => {
     if (post.profiles?.display_name) {
       return post.profiles.display_name;
     }
@@ -68,16 +67,15 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
       return `${post.profiles.first_name} ${post.profiles.last_name}`;
     }
     return 'Anonymous User';
-  }, [post.profiles?.display_name, post.profiles?.first_name, post.profiles?.last_name]);
+  };
 
-  // Memoized initials calculation
-  const initials = useMemo(() => {
-    return displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-  }, [displayName]);
+  const getInitials = () => {
+    const name = getDisplayName();
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
 
-  // Memoized time formatting
-  const timeAgo = useMemo(() => {
-    const date = new Date(post.created_at);
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
     
@@ -88,7 +86,7 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
     const diffInDays = Math.floor(diffInHours / 24);
     if (diffInDays === 1) return '1 day ago';
     return `${diffInDays} days ago`;
-  }, [post.created_at]);
+  };
 
   const handleReaction = (reactionType: string) => {
     onReaction(post.id, reactionType);
@@ -118,18 +116,11 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
     });
   };
 
-  // Memoized user reaction lookup
-  const userReaction = useMemo(() => {
-    return post.post_reactions.find(r => r.user_id === currentUserId);
-  }, [post.post_reactions, currentUserId]);
-
-  // Memoized reaction counts aggregation
-  const reactionCounts = useMemo(() => {
-    return post.post_reactions.reduce((acc, reaction) => {
-      acc[reaction.reaction_type] = (acc[reaction.reaction_type] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-  }, [post.post_reactions]);
+  const userReaction = post.post_reactions.find(r => r.user_id === currentUserId);
+  const reactionCounts = post.post_reactions.reduce((acc, reaction) => {
+    acc[reaction.reaction_type] = (acc[reaction.reaction_type] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
 
   return (
     <Card className="glass-card mb-4 sm:mb-6 animate-fade-up">
@@ -139,15 +130,15 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({
             <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
               <AvatarImage src={post.profiles?.avatar_url} />
               <AvatarFallback className="bg-[#2d3f51] text-white text-sm font-medium">
-                {initials}
+                {getInitials()}
               </AvatarFallback>
             </Avatar>
             <div>
               <h4 className="font-semibold text-[#2d3f51] text-sm sm:text-base">
-                {displayName}
+                {getDisplayName()}
               </h4>
               <p className="text-xs text-[#7a736b]">
-                {timeAgo}
+                {formatTimeAgo(post.created_at)}
               </p>
             </div>
           </div>
