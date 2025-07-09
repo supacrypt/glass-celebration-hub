@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import DynamicHeroSection from '@/components/home/DynamicHeroSection';
 import DynamicCountdownSection from '@/components/home/DynamicCountdownSection';
-import InfoCards from '@/components/home/InfoCards';
+
 import EventsSection from '@/components/home/EventsSection';
 import DressCodeCard from '@/components/DressCodeCard';
 import ContactInfo from '@/components/ContactInfo';
@@ -25,7 +25,7 @@ const Home: React.FC = () => {
           events={events} 
           eventsLoading={eventsLoading} 
         />
-        <InfoCards isAdmin={isAdmin} />
+        
         
         {/* Quick Links */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
