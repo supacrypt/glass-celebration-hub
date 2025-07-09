@@ -24,6 +24,8 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
 }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [useImageFallback, setUseImageFallback] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -41,12 +43,32 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
     console.error('Video failed to load:', e);
     console.error('Video URL was:', currentBackgroundUrl);
     setVideoError(true);
+    setUseImageFallback(true);
   };
+
+  const handleVideoLoaded = () => {
+    console.log('Video loaded successfully');
+    setVideoLoaded(true);
+  };
+
+  // Timeout fallback: if video doesn't load within 3 seconds, use image
+  useEffect(() => {
+    if (backgroundType === 'video' && !isMobile) {
+      const timeout = setTimeout(() => {
+        if (!videoLoaded && !videoError) {
+          console.log('Video load timeout - falling back to image');
+          setUseImageFallback(true);
+        }
+      }, 3000);
+      
+      return () => clearTimeout(timeout);
+    }
+  }, [backgroundType, isMobile, videoLoaded, videoError]);
 
   return (
     <div className="relative w-full h-[500px] sm:h-[600px] lg:h-[700px] mb-6 sm:mb-8 lg:mb-10 rounded-[20px] overflow-hidden">
       {/* Background Media */}
-      {backgroundType === 'video' && !videoError && !isMobile ? (
+      {backgroundType === 'video' && !videoError && !isMobile && !useImageFallback ? (
         <video
           className="absolute inset-0 w-full h-full object-cover"
           autoPlay
@@ -56,7 +78,8 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
           controls={false}
           preload="auto"
           onError={handleVideoError}
-          onLoadedData={() => console.log('Video loaded successfully')}
+          onLoadedData={handleVideoLoaded}
+          onCanPlay={handleVideoLoaded}
         >
           <source src={currentBackgroundUrl} type="video/mp4" />
           Your browser does not support the video tag.
@@ -65,7 +88,7 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url(${currentBackgroundUrl})`,
+            backgroundImage: `url(${mobileBackgroundUrl || 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80'})`,
           }}
         />
       )}
