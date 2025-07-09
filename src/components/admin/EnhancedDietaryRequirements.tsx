@@ -23,7 +23,7 @@ export interface DietaryRequirement {
   rsvp_id: string;
   dietary_option_id?: string;
   custom_requirement?: string;
-  severity?: 'mild' | 'moderate' | 'severe';
+  severity?: string;
   notes?: string;
   created_at: string;
   updated_at: string;
@@ -80,16 +80,16 @@ const EnhancedDietaryRequirements: React.FC<EnhancedDietaryRequirementsProps> = 
 
       if (error) throw error;
       
-      setRequirements(data || []);
+      setRequirements(data as DietaryRequirement[] || []);
       
       // Pre-populate form with existing requirements
-      const existingOptions = data?.filter(r => r.dietary_option_id).map(r => r.dietary_option_id) || [];
+      const existingOptions = data?.filter(r => r.dietary_option_id).map(r => r.dietary_option_id!) || [];
       setSelectedOptions(existingOptions);
       
       const customReq = data?.find(r => r.custom_requirement);
       if (customReq) {
         setCustomRequirement(customReq.custom_requirement || '');
-        setSeverity(customReq.severity || 'moderate');
+        setSeverity((customReq.severity as 'mild' | 'moderate' | 'severe') || 'moderate');
         setNotes(customReq.notes || '');
       }
     } catch (error) {

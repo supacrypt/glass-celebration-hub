@@ -13,7 +13,7 @@ interface DietaryRequirement {
   rsvp_id: string;
   dietary_option_id?: string;
   custom_requirement?: string;
-  severity?: 'mild' | 'moderate' | 'severe';
+  severity?: string;
   notes?: string;
   created_at: string;
   rsvp: {
@@ -111,9 +111,9 @@ const DietaryRequirementsReport: React.FC = () => {
 
       if (eventsError) throw eventsError;
 
-      setRequirements(requirementsData || []);
+      setRequirements(requirementsData as DietaryRequirement[] || []);
       setEvents(eventsData || []);
-      calculateStats(requirementsData || []);
+      calculateStats(requirementsData as DietaryRequirement[] || []);
     } catch (error) {
       console.error('Error fetching dietary requirements:', error);
       toast({

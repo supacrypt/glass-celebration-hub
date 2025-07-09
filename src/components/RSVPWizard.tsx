@@ -8,7 +8,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Calendar, Users, Bus, MapPin, ArrowLeft, ArrowRight, Check } from 'lucide-react';
+import { Calendar, Users, Bus, MapPin, ArrowLeft, ArrowRight, Check, AlertCircle } from 'lucide-react';
+import RSVPFormValidation, { validateRSVPForm, RSVPFormData } from '@/components/RSVPFormValidation';
+import RSVPConfirmationDialog from '@/components/RSVPConfirmationDialog';
+import EnhancedDietaryRequirements from '@/components/admin/EnhancedDietaryRequirements';
 
 const RSVPWizard: React.FC = () => {
   const { user } = useAuth();

@@ -152,6 +152,47 @@ export type Database = {
           },
         ]
       }
+      dietary_requirements: {
+        Row: {
+          created_at: string
+          custom_requirement: string | null
+          dietary_option_id: string | null
+          id: string
+          notes: string | null
+          rsvp_id: string
+          severity: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          custom_requirement?: string | null
+          dietary_option_id?: string | null
+          id?: string
+          notes?: string | null
+          rsvp_id: string
+          severity?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          custom_requirement?: string | null
+          dietary_option_id?: string | null
+          id?: string
+          notes?: string | null
+          rsvp_id?: string
+          severity?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dietary_requirements_rsvp_id_fkey"
+            columns: ["rsvp_id"]
+            isOneToOne: false
+            referencedRelation: "rsvps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       direct_chats: {
         Row: {
           created_at: string
