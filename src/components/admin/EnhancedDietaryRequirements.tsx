@@ -72,29 +72,25 @@ const EnhancedDietaryRequirements: React.FC<EnhancedDietaryRequirementsProps> = 
   const fetchDietaryRequirements = async () => {
     try {
       setLoading(true);
+      const { data, error } = await supabase
+        .from('dietary_requirements')
+        .select('*')
+        .eq('rsvp_id', rsvpId)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
       
-      // Fetch existing dietary restrictions from rsvps table
-      const { data: rsvpData, error: rsvpError } = await supabase
-        .from('rsvps')
-        .select('dietary_restrictions')
-        .eq('id', rsvpId)
-        .maybeSingle();
-
-      if (rsvpError) throw rsvpError;
-
-      if (rsvpData?.dietary_restrictions) {
-        setCustomRequirement(rsvpData.dietary_restrictions);
-        setRequirements([{
-          id: 'fallback',
-          rsvp_id: rsvpId,
-          custom_requirement: rsvpData.dietary_restrictions,
-          severity: 'moderate',
-          notes: '',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }]);
-      } else {
-        setRequirements([]);
+      setRequirements(data || []);
+      
+      // Pre-populate form with existing requirements
+      const existingOptions = data?.filter(r => r.dietary_option_id).map(r => r.dietary_option_id!) || [];
+      setSelectedOptions(existingOptions);
+      
+      const customReq = data?.find(r => r.custom_requirement);
+      if (customReq) {
+        setCustomRequirement(customReq.custom_requirement || '');
+        setSeverity((customReq.severity as 'mild' | 'moderate' | 'severe') || 'moderate');
+        setNotes(customReq.notes || '');
       }
     } catch (error) {
       console.error('Error fetching dietary requirements:', error);
@@ -114,8 +110,41 @@ const EnhancedDietaryRequirements: React.FC<EnhancedDietaryRequirementsProps> = 
     try {
       setLoading(true);
 
-      // For now, just update the rsvps table directly
-      // When the dietary_requirements table is ready, we can enhance this
+      // Delete existing requirements for this RSVP
+      await supabase
+        .from('dietary_requirements')
+        .delete()
+        .eq('rsvp_id', rsvpId);
+
+      // Insert new requirements
+      const newRequirements = [];
+
+      // Add selected predefined options
+      for (const optionId of selectedOptions) {
+        newRequirements.push({
+          rsvp_id: rsvpId,
+          dietary_option_id: optionId,
+          severity: PREDEFINED_DIETARY_OPTIONS.find(o => o.id === optionId)?.is_allergy ? severity : null
+        });
+      }
+
+      // Add custom requirement if specified
+      if (customRequirement.trim()) {
+        newRequirements.push({
+          rsvp_id: rsvpId,
+          custom_requirement: customRequirement.trim(),
+          severity,
+          notes: notes.trim() || null
+        });
+      }
+
+      if (newRequirements.length > 0) {
+        const { error } = await supabase
+          .from('dietary_requirements')
+          .insert(newRequirements);
+
+        if (error) throw error;
+      }
 
       // Also update the RSVP table for backward compatibility
       const summaryText = [

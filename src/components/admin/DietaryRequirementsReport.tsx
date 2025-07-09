@@ -77,45 +77,31 @@ const DietaryRequirementsReport: React.FC = () => {
     try {
       setLoading(true);
       
-      // Fetch RSVPs with dietary restrictions
-      const { data: fallbackData, error: fallbackError } = await supabase
-        .from('rsvps')
+      // Fetch dietary requirements with related data
+      const { data: requirementsData, error: reqError } = await supabase
+        .from('dietary_requirements')
         .select(`
-          id,
-          status,
-          guest_count,
-          event_id,
-          dietary_restrictions,
-          profiles (
-            first_name,
-            last_name,
-            email,
-            mobile
-          ),
-          wedding_events (
-            title,
-            event_date
+          *,
+          rsvp:rsvps (
+            id,
+            status,
+            guest_count,
+            event_id,
+            profiles (
+              first_name,
+              last_name,
+              email,
+              mobile
+            ),
+            wedding_events (
+              title,
+              event_date
+            )
           )
         `)
-        .not('dietary_restrictions', 'is', null)
         .order('created_at', { ascending: false });
 
-      if (fallbackError) throw fallbackError;
-
-      // Transform data to match expected structure
-      const transformedData = fallbackData?.map(rsvp => ({
-        id: rsvp.id,
-        rsvp_id: rsvp.id,
-        dietary_option_id: null as string | null,
-        custom_requirement: rsvp.dietary_restrictions,
-        severity: null as string | null,
-        notes: null as string | null,
-        created_at: new Date().toISOString(),
-        rsvp: rsvp
-      })) || [];
-
-      setRequirements(transformedData);
-      calculateStats(transformedData);
+      if (reqError) throw reqError;
 
       // Fetch events for filter
       const { data: eventsData, error: eventsError } = await supabase
@@ -125,7 +111,9 @@ const DietaryRequirementsReport: React.FC = () => {
 
       if (eventsError) throw eventsError;
 
+      setRequirements(requirementsData || []);
       setEvents(eventsData || []);
+      calculateStats(requirementsData || []);
     } catch (error) {
       console.error('Error fetching dietary requirements:', error);
       toast({
