@@ -38,22 +38,32 @@ export const useChatMessages = (chatId: string | null) => {
 
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data: messagesData, error: messagesError } = await supabase
         .from('chat_messages')
-        .select(`
-          *,
-          profiles(
-            first_name,
-            last_name,
-            display_name,
-            avatar_url
-          )
-        `)
+        .select('*')
         .eq('chat_id', chatId)
         .order('created_at', { ascending: true });
 
-      if (error) throw error;
-      setMessages(data || []);
+      if (messagesError) throw messagesError;
+
+      // Get unique user IDs to fetch profiles
+      const userIds = [...new Set(messagesData?.map(m => m.user_id) || [])];
+      
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('user_id, first_name, last_name, display_name, avatar_url')
+        .in('user_id', userIds);
+
+      if (profilesError) throw profilesError;
+
+      // Map profiles to messages
+      const profilesMap = new Map(profilesData?.map(p => [p.user_id, p]) || []);
+      const messagesWithProfiles = messagesData?.map(message => ({
+        ...message,
+        profiles: profilesMap.get(message.user_id)
+      })) || [];
+
+      setMessages(messagesWithProfiles);
     } catch (err) {
       console.error('Error fetching messages:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch messages');

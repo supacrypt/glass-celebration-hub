@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import GlassCard from '@/components/GlassCard';
-import { MessageCircle, Heart, Share2, Users, Hash, Send, Plus, Image, Video } from 'lucide-react';
+import { MessageCircle, Heart, Share2, Users, Hash, Send, Plus, Image, Video, Mail } from 'lucide-react';
 import { useMessages } from '@/hooks/useWeddingData';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { SocialPostCard } from '@/components/social/SocialPostCard';
 import { useSocialFeed } from '@/hooks/useSocialFeed';
+import DirectChatContainer from '@/components/chat/DirectChatContainer';
 
 const Social: React.FC = () => {
   const { messages, loading: messagesLoading, postMessage, likeMessage } = useMessages();
@@ -14,6 +15,7 @@ const Social: React.FC = () => {
   const { toast } = useToast();
   const [newMessage, setNewMessage] = useState('');
   const [posting, setPosting] = useState(false);
+  const [showDirectChat, setShowDirectChat] = useState(false);
   
   // Social feed functionality
   const { 
@@ -247,6 +249,44 @@ const Social: React.FC = () => {
           <p className="text-sm text-[#7a736b] italic">
             Use these hashtags when sharing photos and posts about our wedding!
           </p>
+        </div>
+
+        {/* Direct Chat Section */}
+        <div className="glass-card p-8 mb-8 animate-fade-up" style={{ animationDelay: '0.45s' }}>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="flex items-center gap-3 text-xl font-semibold text-[#2d3f51]">
+              <Mail className="w-6 h-6 text-[#667eea]" />
+              Direct Messages
+            </h2>
+            <Button
+              onClick={() => setShowDirectChat(!showDirectChat)}
+              variant="outline"
+              className="bg-white/60 backdrop-blur-sm border-white/30 hover:bg-white/80 text-[#2d3f51]"
+            >
+              {showDirectChat ? 'Hide Messages' : 'Open Messages'}
+            </Button>
+          </div>
+          
+          {showDirectChat ? (
+            <div className="h-[500px] bg-white/20 backdrop-blur-sm rounded-xl border border-white/20">
+              <DirectChatContainer />
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#667eea]/20 to-[#764ba2]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="w-8 h-8 text-[#667eea]" />
+              </div>
+              <p className="text-[#7a736b] mb-4">
+                Start conversations with other wedding guests
+              </p>
+              <Button
+                onClick={() => setShowDirectChat(true)}
+                className="bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:from-[#667eea]/90 hover:to-[#764ba2]/90 text-white"
+              >
+                Open Direct Messages
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Create Post Button */}
