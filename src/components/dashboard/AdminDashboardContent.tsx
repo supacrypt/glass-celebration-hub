@@ -12,6 +12,8 @@ import EnhancedAnalytics from '@/components/admin/EnhancedAnalytics';
 import ThemeCustomization from '@/components/admin/ThemeCustomization';
 import EventTimeline from '@/components/admin/EventTimeline';
 import NotificationCenter from '@/components/admin/NotificationCenter';
+import EnhancedMediaManagement from '@/components/admin/EnhancedMediaManagement';
+import SystemMonitoring from '@/components/admin/SystemMonitoring';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface AdminDashboardContentProps {
@@ -43,9 +45,9 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
       component: <UnifiedAccountsManagement users={users} onRefresh={onRefresh} />
     },
     { 
-      id: 'photos', 
-      label: 'Photos',
-      component: <EnhancedPhotoModeration photos={photos as any} onRefresh={onRefresh} />
+      id: 'media', 
+      label: 'Media',
+      component: <EnhancedMediaManagement />
     },
     { 
       id: 'gifts', 
@@ -69,9 +71,19 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
       component: <EventTimeline />
     },
     { 
+      id: 'themes', 
+      label: 'Themes',
+      component: <ThemeCustomization />
+    },
+    { 
+      id: 'system', 
+      label: 'System',
+      component: <SystemMonitoring />
+    },
+    { 
       id: 'settings', 
       label: 'Settings',
-      component: <ThemeCustomization />
+      component: <CompactSystemSettings />
     },
   ];
 
