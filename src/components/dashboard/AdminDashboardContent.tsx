@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { SwipeableTabsNavigation } from '@/components/mobile/SwipeableTabsNavigation';
 import CompactStats from '@/components/admin/CompactStats';
-import CompactUserManagement from '@/components/admin/CompactUserManagement';
-import EnhancedGuestManagement from '@/components/admin/EnhancedGuestManagement';
+import UnifiedAccountsManagement from '@/components/admin/UnifiedAccountsManagement';
 import WeddingGuestManagement from '@/components/admin/WeddingGuestManagement';
 import EnhancedPhotoModeration from '@/components/admin/EnhancedPhotoModeration';
 import EnhancedRSVPManagement from '@/components/admin/EnhancedRSVPManagement';
 import CompactGiftManagement from '@/components/admin/CompactGiftManagement';
 import CompactSystemSettings from '@/components/admin/CompactSystemSettings';
 import AnalyticsInsights from '@/components/admin/AnalyticsInsights';
-import EnhancedCommunicationCenter from '@/components/admin/EnhancedCommunicationCenter';
+import EnhancedAnalytics from '@/components/admin/EnhancedAnalytics';
+import ThemeCustomization from '@/components/admin/ThemeCustomization';
 import EventTimeline from '@/components/admin/EventTimeline';
 import NotificationCenter from '@/components/admin/NotificationCenter';
 import type { AdminStats, User, RSVP, Photo } from './types';
@@ -38,19 +38,9 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
       component: <CompactStats stats={stats} />
     },
     { 
-      id: 'users', 
-      label: 'Users',
-      component: <CompactUserManagement users={users} onRefresh={onRefresh} />
-    },
-    { 
-      id: 'guest-list', 
-      label: 'Guest List',
-      component: <WeddingGuestManagement onRefresh={onRefresh} />
-    },
-    { 
       id: 'accounts', 
       label: 'Accounts',
-      component: <EnhancedGuestManagement users={users} onRefresh={onRefresh} />
+      component: <UnifiedAccountsManagement users={users} onRefresh={onRefresh} />
     },
     { 
       id: 'photos', 
@@ -70,7 +60,7 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
     { 
       id: 'analytics', 
       label: 'Analytics',
-      component: <AnalyticsInsights />
+      component: <EnhancedAnalytics />
     },
     // Messages and Alerts removed from dashboard popup - moved to notification bell
     { 
@@ -81,7 +71,7 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
     { 
       id: 'settings', 
       label: 'Settings',
-      component: <CompactSystemSettings />
+      component: <ThemeCustomization />
     },
   ];
 
