@@ -16,6 +16,7 @@ interface Story {
   };
   created_at: string;
   duration?: number;
+  view_count?: number;
 }
 
 interface StoryViewerProps {
