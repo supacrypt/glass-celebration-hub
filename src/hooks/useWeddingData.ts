@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface WeddingEvent {
@@ -66,11 +66,7 @@ export const useWeddingEvents = () => {
   const [events, setEvents] = useState<WeddingEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('wedding_events')
@@ -84,7 +80,11 @@ export const useWeddingEvents = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   return { events, loading, refetch: fetchEvents };
 };
@@ -93,11 +93,7 @@ export const useRSVPs = (userId?: string) => {
   const [rsvps, setRSVPs] = useState<RSVP[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchRSVPs();
-  }, [userId]);
-
-  const fetchRSVPs = async () => {
+  const fetchRSVPs = useCallback(async () => {
     try {
       let query = supabase.from('rsvps').select('*');
       
@@ -113,7 +109,11 @@ export const useRSVPs = (userId?: string) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    fetchRSVPs();
+  }, [fetchRSVPs]);
 
   const submitRSVP = async (eventId: string, status: RSVP['status'], guestCount = 1, dietaryRestrictions?: string, message?: string) => {
     try {
@@ -149,11 +149,7 @@ export const usePhotos = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchPhotos();
-  }, []);
-
-  const fetchPhotos = async () => {
+  const fetchPhotos = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('photos')
@@ -178,7 +174,11 @@ export const usePhotos = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchPhotos();
+  }, [fetchPhotos]);
 
   const likePhoto = async (photoId: string) => {
     try {
@@ -266,24 +266,7 @@ export const useMessages = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchMessages();
-    
-    // Set up real-time subscription
-    const channel = supabase
-      .channel('messages')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'messages' },
-        () => fetchMessages()
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
-
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('messages')
@@ -302,7 +285,24 @@ export const useMessages = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchMessages();
+    
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('messages')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'messages' },
+        () => fetchMessages()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [fetchMessages]);
 
   const postMessage = async (content: string) => {
     try {
