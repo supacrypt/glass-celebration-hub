@@ -54,17 +54,20 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
         onClick={onClose}
       />
       
-      {/* Dashboard Popup positioned above bottom navigation */}
-      <div className="fixed left-0 right-0 bottom-[120px] z-[9999] flex items-end justify-center p-4">
+      {/* Dashboard Popup anchored to center dashboard button */}
+      <div className="fixed left-1/2 -translate-x-1/2 bottom-[100px] z-[9999] flex flex-col items-center">
+        {/* Connection indicator - visual line from button to popup */}
+        <div className="w-0.5 h-6 bg-white/30 mb-2" />
+        
         <div 
-          className={`glass-popup flex flex-col w-full ${
+          className={`glass-popup flex flex-col ${
             device.isSmallMobile 
-              ? 'max-w-[95vw] max-h-[70vh]' 
+              ? 'w-[95vw] max-h-[70vh]' 
               : device.isTinyMobile 
-                ? 'max-w-[92vw] max-h-[68vh]'
+                ? 'w-[92vw] max-h-[68vh]'
                 : device.isMobile 
-                  ? 'max-w-[90vw] max-h-[65vh]'
-                  : 'max-w-[800px] max-h-[60vh]'
+                  ? 'w-[90vw] max-h-[65vh]'
+                  : 'w-[800px] max-h-[60vh]'
           }`}
           onClick={(e) => e.stopPropagation()}
         >
