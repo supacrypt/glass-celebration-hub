@@ -117,7 +117,9 @@ const GiftRegistry: React.FC = () => {
           Gift Registry
         </h1>
         <p className="wedding-body text-muted-foreground max-w-2xl mx-auto">
-          We are excited to have everyone we love gather together for an epic celebration - that is a gift on its own! There is no expectation for gifts from guests.
+          We are excited to have everyone we love gather together for an epic celebration - that is a gift on its own! 
+          There is no expectation for gifts from guests. If, however, you have the urge to give a gift, 
+          one option is to contribute towards our honeymoon.
         </p>
       </div>
 

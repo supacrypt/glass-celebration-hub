@@ -72,16 +72,7 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
       label: 'Analytics',
       component: <AnalyticsInsights />
     },
-    { 
-      id: 'comms', 
-      label: 'Messages',
-      component: <EnhancedCommunicationCenter />
-    },
-    { 
-      id: 'notifications', 
-      label: 'Alerts',
-      component: <NotificationCenter />
-    },
+    // Messages and Alerts removed from dashboard popup - moved to notification bell
     { 
       id: 'timeline', 
       label: 'Timeline',

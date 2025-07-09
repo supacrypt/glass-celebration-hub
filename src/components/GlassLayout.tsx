@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import GlassNavigation from './GlassNavigation';
 import ProfileDropdown from './ProfileDropdown';
+import NotificationBell from './NotificationBell';
 
 interface GlassLayoutProps {
   children: ReactNode;
@@ -21,6 +22,11 @@ const GlassLayout: React.FC<GlassLayoutProps> = ({
       
       {/* Profile Dropdown */}
       <ProfileDropdown />
+      
+      {/* Notification Bell - positioned in top-right */}
+      <div className="fixed top-4 right-14 z-50">
+        <NotificationBell />
+      </div>
       
       {/* Main Content Area */}
       <main className={`relative ${showNavigation ? 'pb-glass-nav' : ''}`}>
