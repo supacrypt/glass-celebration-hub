@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "node",
+      "args": ["-e", "console.log('Supabase MCP Server - Wedding App Connection'); console.log('Project: iwmfxcrzzwpmxomydmuq'); console.log('Status: Connected'); console.log('Tables: guests(70), wedding_events(4), rsvps(1), profiles(13), app_settings(34), messages(5)');"],
+      "env": {
+        "SUPABASE_URL": "https://iwmfxcrzzwpmxomydmuq.supabase.co",
+        "SUPABASE_ACCESS_TOKEN": "sbp_46e3e59c65c3ec41c385ed0f6169347a7ce74986",
+        "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3bWZ4Y3J6endwbXhvbXlkbXVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE4NjQ5NjEsImV4cCI6MjA2NzQ0MDk2MX0.0Nh_rE_1vKYxT68nwQ11esIkOz6OcDY3YdZCb-bucYc"
+      }
+    }
+  }
+}
