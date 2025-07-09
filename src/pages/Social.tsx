@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import GlassCard from '@/components/GlassCard';
-import { MessageCircle, Heart, Share2, Users, Hash, Send, Plus, Image, Video, Mail } from 'lucide-react';
+import { MessageCircle, Heart, Share2, Users, Hash, Send, Plus, Image, Video, Mail, BarChart3, Smile, MapPin, Tag, Camera, Paperclip } from 'lucide-react';
 import { useMessages } from '@/hooks/useWeddingData';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -8,6 +8,9 @@ import { Button } from '@/components/ui/button';
 import { SocialPostCard } from '@/components/social/SocialPostCard';
 import { useSocialFeed } from '@/hooks/useSocialFeed';
 import DirectChatContainer from '@/components/chat/DirectChatContainer';
+import PollCreator from '@/components/polls/PollCreator';
+import PollDisplay from '@/components/polls/PollDisplay';
+import { usePolls } from '@/hooks/usePolls';
 
 const Social: React.FC = () => {
   const { messages, loading: messagesLoading, postMessage, likeMessage } = useMessages();
@@ -16,6 +19,7 @@ const Social: React.FC = () => {
   const [newMessage, setNewMessage] = useState('');
   const [posting, setPosting] = useState(false);
   const [showDirectChat, setShowDirectChat] = useState(false);
+  const [showPollCreator, setShowPollCreator] = useState(false);
   
   // Social feed functionality
   const { 
@@ -28,6 +32,14 @@ const Social: React.FC = () => {
     addComment, 
     sharePost 
   } = useSocialFeed();
+  
+  // Polls functionality
+  const {
+    polls,
+    loading: pollsLoading,
+    createPoll,
+    votePoll
+  } = usePolls();
   
   // Create post state
   const [showCreatePost, setShowCreatePost] = useState(false);
@@ -426,47 +438,102 @@ const Social: React.FC = () => {
           )}
         </div>
 
-        {/* Share a Message Section */}
-        <div className="glass-card p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 animate-fade-up" style={{ animationDelay: '0.6s' }}>
-          <h2 className="text-lg sm:text-xl font-semibold text-[#2d3f51] mb-4 sm:mb-5">Share a Message</h2>
-          
-          <textarea 
-            className="w-full min-h-[100px] sm:min-h-[120px] bg-gradient-to-br from-[rgba(230,222,214,0.3)] to-[rgba(245,237,228,0.3)] border border-[rgba(255,255,255,0.5)] rounded-[16px] sm:rounded-[20px] p-4 sm:p-5 text-sm sm:text-base text-[#2d3f51] resize-y transition-all duration-300 focus:outline-none focus:border-[rgba(102,126,234,0.5)] font-[inherit]"
-            style={{
-              boxShadow: 'inset 3px 3px 6px rgba(163, 155, 146, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.7)'
-            }}
-            placeholder="Write a message for the happy couple..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-          />
-          
-          <div className="flex items-center justify-between mt-4 sm:mt-5">
-            <div className="flex gap-2 sm:gap-4">
-              <button className="w-10 h-10 sm:w-11 sm:h-11 bg-gradient-to-br from-[#e8e0d7] to-[#f5ede4] rounded-[8px] sm:rounded-[10px] flex items-center justify-center text-[#7a736b] text-base sm:text-lg border-none cursor-pointer transition-all duration-300 hover:translate-y-[-2px]"
-                style={{
-                  boxShadow: '3px 3px 6px rgba(163, 155, 146, 0.3), -3px -3px 6px rgba(255, 255, 255, 0.7)'
-                }}>
-                #
-              </button>
-              <button className="w-10 h-10 sm:w-11 sm:h-11 bg-gradient-to-br from-[#e8e0d7] to-[#f5ede4] rounded-[8px] sm:rounded-[10px] flex items-center justify-center text-[#7a736b] text-base sm:text-lg border-none cursor-pointer transition-all duration-300 hover:translate-y-[-2px]"
-                style={{
-                  boxShadow: '3px 3px 6px rgba(163, 155, 146, 0.3), -3px -3px 6px rgba(255, 255, 255, 0.7)'
-                }}>
-                📎
+        {/* Facebook-Style Post Creator */}
+        <div className="mb-6 animate-fade-up" style={{ animationDelay: '0.6s' }}>
+          <div className="bg-white rounded-2xl border border-[#dadde1] shadow-sm p-4">
+            {/* What's on your mind? */}
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1877f2] to-[#42a5f5] flex items-center justify-center">
+                <span className="text-white font-semibold text-sm">
+                  {user ? (user.email?.charAt(0).toUpperCase() || 'U') : 'G'}
+                </span>
+              </div>
+              <button
+                onClick={() => setShowCreatePost(true)}
+                className="flex-1 bg-[#f0f2f5] hover:bg-[#e4e6ea] rounded-full px-4 py-3 text-left text-[#65676b] transition-colors"
+              >
+                What's on your mind?
               </button>
             </div>
-            <button 
-              onClick={handlePostMessage}
-              disabled={posting || !newMessage.trim()}
-              className="bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white border-none px-6 sm:px-8 py-3 rounded-[20px] sm:rounded-[25px] font-semibold text-xs sm:text-sm cursor-pointer flex items-center gap-2 transition-all duration-300 hover:translate-y-[-2px] relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
-              style={{
-                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3), 5px 5px 10px rgba(163, 155, 146, 0.2)'
-              }}
-            >
-              ✈️ {posting ? 'Posting...' : 'Post'}
-            </button>
+
+            {/* Action Buttons */}
+            <div className="border-t border-[#dadde1] pt-3">
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  onClick={() => setShowCreatePost(true)}
+                  className="flex items-center justify-center space-x-2 p-2 hover:bg-[#f0f2f5] rounded-lg transition-colors"
+                >
+                  <Camera className="w-5 h-5 text-[#45bd62]" />
+                  <span className="text-[#65676b] font-medium text-sm">Photo/Video</span>
+                </button>
+                
+                <button
+                  onClick={() => setShowPollCreator(true)}
+                  className="flex items-center justify-center space-x-2 p-2 hover:bg-[#f0f2f5] rounded-lg transition-colors"
+                >
+                  <BarChart3 className="w-5 h-5 text-[#f3425f]" />
+                  <span className="text-[#65676b] font-medium text-sm">Poll</span>
+                </button>
+                
+                <button
+                  onClick={() => setShowCreatePost(true)}
+                  className="flex items-center justify-center space-x-2 p-2 hover:bg-[#f0f2f5] rounded-lg transition-colors"
+                >
+                  <Smile className="w-5 h-5 text-[#f7b928]" />
+                  <span className="text-[#65676b] font-medium text-sm">Feeling</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Poll Creator Modal */}
+        <PollCreator
+          isOpen={showPollCreator}
+          onClose={() => setShowPollCreator(false)}
+          onCreatePoll={async (pollData) => {
+            try {
+              await createPoll(pollData);
+              toast({
+                title: "Success!",
+                description: "Your poll has been created.",
+              });
+              setShowPollCreator(false);
+            } catch (error) {
+              toast({
+                title: "Error",
+                description: "Failed to create poll. Please try again.",
+                variant: "destructive"
+              });
+            }
+          }}
+        />
+
+        {/* Active Polls Section */}
+        {polls.length > 0 && (
+          <div className="mb-8 animate-fade-up" style={{ animationDelay: '0.6s' }}>
+            <h2 className="text-xl font-semibold text-[#2d3f51] mb-6 flex items-center space-x-2">
+              <BarChart3 className="w-6 h-6 text-[#1877f2]" />
+              <span>Active Polls</span>
+            </h2>
+            
+            {pollsLoading ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1877f2] mx-auto"></div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {polls.map((poll) => (
+                  <PollDisplay
+                    key={poll.id}
+                    poll={poll}
+                    onVote={votePoll}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Recent Messages Section */}
         <div className="glass-card p-8 animate-fade-up" style={{ animationDelay: '0.7s' }}>

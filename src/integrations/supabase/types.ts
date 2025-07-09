@@ -486,6 +486,44 @@ export type Database = {
           },
         ]
       }
+      poll_notifications: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          message: string | null
+          notification_type: string
+          poll_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string | null
+          notification_type: string
+          poll_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string | null
+          notification_type?: string
+          poll_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_notifications_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       poll_options: {
         Row: {
           created_at: string
@@ -549,25 +587,46 @@ export type Database = {
       }
       polls: {
         Row: {
+          allow_multiple_selections: boolean | null
+          anonymous_voting: boolean | null
           created_at: string
           expires_at: string | null
           id: string
+          poll_status: Database["public"]["Enums"]["poll_status"] | null
+          poll_type: Database["public"]["Enums"]["poll_type"] | null
           post_id: string
           question: string
+          settings: Json | null
+          updated_at: string | null
+          vote_count: number | null
         }
         Insert: {
+          allow_multiple_selections?: boolean | null
+          anonymous_voting?: boolean | null
           created_at?: string
           expires_at?: string | null
           id?: string
+          poll_status?: Database["public"]["Enums"]["poll_status"] | null
+          poll_type?: Database["public"]["Enums"]["poll_type"] | null
           post_id: string
           question: string
+          settings?: Json | null
+          updated_at?: string | null
+          vote_count?: number | null
         }
         Update: {
+          allow_multiple_selections?: boolean | null
+          anonymous_voting?: boolean | null
           created_at?: string
           expires_at?: string | null
           id?: string
+          poll_status?: Database["public"]["Enums"]["poll_status"] | null
+          poll_type?: Database["public"]["Enums"]["poll_type"] | null
           post_id?: string
           question?: string
+          settings?: Json | null
+          updated_at?: string | null
+          vote_count?: number | null
         }
         Relationships: [
           {
@@ -1027,6 +1086,8 @@ export type Database = {
     }
     Enums: {
       app_role: "guest" | "admin" | "couple"
+      poll_status: "active" | "closed" | "draft"
+      poll_type: "multiple_choice" | "yes_no" | "rating"
       reaction_type: "like" | "love" | "laugh" | "wow" | "sad" | "angry"
     }
     CompositeTypes: {
@@ -1156,6 +1217,8 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["guest", "admin", "couple"],
+      poll_status: ["active", "closed", "draft"],
+      poll_type: ["multiple_choice", "yes_no", "rating"],
       reaction_type: ["like", "love", "laugh", "wow", "sad", "angry"],
     },
   },
