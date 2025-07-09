@@ -1,4 +1,4 @@
-import React, { ReactNode, CSSProperties } from 'react';
+import React, { ReactNode, CSSProperties, memo } from 'react';
 import { cn } from '@/lib/utils';
 
 interface GlassCardProps {
@@ -10,7 +10,7 @@ interface GlassCardProps {
   style?: CSSProperties;
 }
 
-const GlassCard: React.FC<GlassCardProps> = ({ 
+const GlassCard: React.FC<GlassCardProps> = memo(({ 
   children, 
   variant = 'primary', 
   className, 
@@ -39,6 +39,9 @@ const GlassCard: React.FC<GlassCardProps> = ({
       {children}
     </div>
   );
-};
+});
+
+// Display name for better debugging
+GlassCard.displayName = 'GlassCard';
 
 export default GlassCard;
