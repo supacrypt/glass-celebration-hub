@@ -36,7 +36,7 @@ const HapticFeedbackComponent: React.FC<HapticFeedbackProps> = ({
   children,
   disabled = false
 }) => {
-  const triggerHaptic = () => {
+  const triggerHaptic = (event?: any) => {
     if (disabled) return;
     
     // Web Vibration API simulation for mobile devices
@@ -59,7 +59,7 @@ const HapticFeedbackComponent: React.FC<HapticFeedbackProps> = ({
     }
     
     // Visual feedback animation
-    const element = (event as any)?.currentTarget as HTMLElement;
+    const element = event?.currentTarget as HTMLElement;
     if (element) {
       element.style.transform = 'scale(0.98)';
       setTimeout(() => {
