@@ -17,6 +17,11 @@ import SystemMonitoring from '@/components/admin/SystemMonitoring';
 import EmailSystemManagement from '@/components/admin/EmailSystemManagement';
 import ProductionReadinessTest from '@/components/admin/ProductionReadinessTest';
 import DeploymentOptimization from '@/components/admin/DeploymentOptimization';
+import RealTimeMonitoring from '@/components/admin/RealTimeMonitoring';
+import AdvancedSecurity from '@/components/admin/AdvancedSecurity';
+import BackupRecovery from '@/components/admin/BackupRecovery';
+import PerformanceAnalytics from '@/components/admin/PerformanceAnalytics';
+import AdvancedCommunicationCenter from '@/components/admin/AdvancedCommunicationCenter';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface AdminDashboardContentProps {
@@ -102,6 +107,32 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
       id: 'settings', 
       label: 'Settings',
       component: <CompactSystemSettings />
+    },
+    // Phase 6: Advanced Admin Features
+    { 
+      id: 'monitoring', 
+      label: 'Monitor',
+      component: <RealTimeMonitoring />
+    },
+    { 
+      id: 'security', 
+      label: 'Security',
+      component: <AdvancedSecurity />
+    },
+    { 
+      id: 'backup', 
+      label: 'Backup',
+      component: <BackupRecovery />
+    },
+    { 
+      id: 'performance', 
+      label: 'Perf',
+      component: <PerformanceAnalytics />
+    },
+    { 
+      id: 'communication', 
+      label: 'Comm',
+      component: <AdvancedCommunicationCenter />
     },
   ];
 
