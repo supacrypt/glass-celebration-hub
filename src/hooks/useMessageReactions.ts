@@ -27,15 +27,12 @@ export const useMessageReactions = (messageId: string | null) => {
       setLoading(true);
       const { data, error } = await supabase
         .from('message_reactions')
-        .select(`
-          *,
-          profiles(first_name, last_name, display_name)
-        `)
+        .select('*')
         .eq('message_id', messageId)
         .order('created_at', { ascending: true });
 
       if (error) throw error;
-      setReactions(data || []);
+      setReactions(data as MessageReaction[] || []);
     } catch (err) {
       console.error('Error fetching reactions:', err);
     } finally {

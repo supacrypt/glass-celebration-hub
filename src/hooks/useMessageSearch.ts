@@ -51,14 +51,7 @@ export const useMessageSearch = () => {
       // Search messages with text matching query
       const { data: messageData, error: messageError } = await supabase
         .from('chat_messages')
-        .select(`
-          id,
-          chat_id,
-          user_id,
-          content,
-          created_at,
-          profiles(first_name, last_name, display_name)
-        `)
+        .select('id, chat_id, user_id, content, created_at')
         .in('chat_id', chatIds)
         .ilike('content', `%${query}%`)
         .not('content', 'is', null)
@@ -81,10 +74,7 @@ export const useMessageSearch = () => {
         ...message,
         chat_title: chatMap.get(message.chat_id)?.title || 
                    (chatMap.get(message.chat_id)?.is_group ? 'Group Chat' : 'Direct Chat'),
-        sender_name: message.user_id === user.id ? 'You' : 
-                    message.profiles?.display_name || 
-                    `${message.profiles?.first_name || ''} ${message.profiles?.last_name || ''}`.trim() || 
-                    'Guest'
+        sender_name: message.user_id === user.id ? 'You' : 'Guest'
       })) || [];
 
       setResults(searchResults);

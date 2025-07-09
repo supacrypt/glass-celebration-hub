@@ -26,15 +26,7 @@ export const useUserBlocking = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('user_blocks')
-        .select(`
-          *,
-          profiles!user_blocks_blocked_user_id_fkey(
-            first_name, 
-            last_name, 
-            display_name, 
-            avatar_url
-          )
-        `)
+        .select('*')
         .eq('user_id', user.id)
         .order('blocked_at', { ascending: false });
 

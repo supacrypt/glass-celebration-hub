@@ -30,10 +30,7 @@ export const useMessageReplies = (parentMessageId: string | null) => {
       setLoading(true);
       const { data, error } = await supabase
         .from('message_replies')
-        .select(`
-          *,
-          profiles(first_name, last_name, display_name, avatar_url)
-        `)
+        .select('*')
         .eq('parent_message_id', parentMessageId)
         .order('created_at', { ascending: true });
 

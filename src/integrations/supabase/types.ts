@@ -114,6 +114,44 @@ export type Database = {
           },
         ]
       }
+      conversation_settings: {
+        Row: {
+          chat_id: string
+          id: string
+          is_archived: boolean
+          is_important: boolean
+          is_muted: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chat_id: string
+          id?: string
+          is_archived?: boolean
+          is_important?: boolean
+          is_muted?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chat_id?: string
+          id?: string
+          is_archived?: boolean
+          is_important?: boolean
+          is_muted?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_settings_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "direct_chats"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       direct_chats: {
         Row: {
           created_at: string
@@ -314,6 +352,124 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      message_reactions: {
+        Row: {
+          created_at: string
+          id: string
+          message_id: string
+          reaction_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message_id: string
+          reaction_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message_id?: string
+          reaction_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_reactions_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_replies: {
+        Row: {
+          chat_id: string
+          content: string
+          created_at: string
+          id: string
+          parent_message_id: string
+          user_id: string
+        }
+        Insert: {
+          chat_id: string
+          content: string
+          created_at?: string
+          id?: string
+          parent_message_id: string
+          user_id: string
+        }
+        Update: {
+          chat_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          parent_message_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_replies_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "direct_chats"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_replies_parent_message_id_fkey"
+            columns: ["parent_message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_reports: {
+        Row: {
+          created_at: string
+          id: string
+          message_id: string
+          report_details: string | null
+          report_reason: string
+          reported_by: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message_id: string
+          report_details?: string | null
+          report_reason: string
+          reported_by: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message_id?: string
+          report_details?: string | null
+          report_reason?: string
+          reported_by?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_reports_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -908,6 +1064,27 @@ export type Database = {
           media_thumbnail?: string | null
           media_type?: string
           media_url?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_blocks: {
+        Row: {
+          blocked_at: string
+          blocked_user_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          blocked_at?: string
+          blocked_user_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          blocked_at?: string
+          blocked_user_id?: string
+          id?: string
           user_id?: string
         }
         Relationships: []
