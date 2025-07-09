@@ -6,8 +6,18 @@ import ChatWindow from './ChatWindow';
 import { useDirectChats } from '@/hooks/useDirectChats';
 import { useAuth } from '@/hooks/useAuth';
 
-const DirectChatContainer: React.FC = () => {
-  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+interface DirectChatContainerProps {
+  selectedChatId?: string | null;
+  onChatSelect?: (chatId: string) => void;
+  onBackToList?: () => void;
+}
+
+const DirectChatContainer: React.FC<DirectChatContainerProps> = ({ 
+  selectedChatId, 
+  onChatSelect, 
+  onBackToList 
+}) => {
+  const [internalSelectedChatId, setInternalSelectedChatId] = useState<string | null>(null);
   const { user } = useAuth();
   const {
     chats,
@@ -16,23 +26,28 @@ const DirectChatContainer: React.FC = () => {
     getChatDisplayName
   } = useDirectChats();
 
-  const selectedChat = chats.find(chat => chat.id === selectedChatId);
+  // Use external state if provided, otherwise internal state
+  const currentSelectedChatId = selectedChatId !== undefined ? selectedChatId : internalSelectedChatId;
+  const handleChatSelect = onChatSelect || setInternalSelectedChatId;
+  const handleBackToList = onBackToList || (() => setInternalSelectedChatId(null));
 
-  const handleChatSelect = (chatId: string) => {
-    setSelectedChatId(chatId);
+  const selectedChat = chats.find(chat => chat.id === currentSelectedChatId);
+
+  const handleChatSelectLocal = (chatId: string) => {
+    handleChatSelect(chatId);
   };
 
-  const handleBackToList = () => {
-    setSelectedChatId(null);
+  const handleBackToListLocal = () => {
+    handleBackToList();
   };
 
   // If a chat is selected, show the chat window
-  if (selectedChatId && selectedChat) {
+  if (currentSelectedChatId && selectedChat) {
     return (
       <ChatWindow
-        chatId={selectedChatId}
+        chatId={currentSelectedChatId}
         chatTitle={getChatDisplayName(selectedChat)}
-        onBack={handleBackToList}
+        onBack={handleBackToListLocal}
       />
     );
   }
@@ -108,7 +123,7 @@ const DirectChatContainer: React.FC = () => {
                 chat={chat}
                 displayName={getChatDisplayName(chat)}
                 currentUserId={user?.id}
-                onClick={() => handleChatSelect(chat.id)}
+                onClick={() => handleChatSelectLocal(chat.id)}
               />
             ))}
           </div>

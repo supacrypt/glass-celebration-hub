@@ -1091,6 +1091,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_chat_member: {
+        Args: { chat_uuid: string; user_uuid: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "guest" | "admin" | "couple"
