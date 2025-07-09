@@ -6,7 +6,32 @@ interface HapticFeedbackProps {
   disabled?: boolean;
 }
 
-export const HapticFeedback: React.FC<HapticFeedbackProps> = ({
+// Static methods for programmatic haptic feedback
+const HapticFeedbackAPI = {
+  impact: (intensity: 'light' | 'medium' | 'heavy' = 'light') => {
+    if ('vibrator' in navigator || 'vibrate' in navigator) {
+      const patterns: Record<string, number> = {
+        light: 10,
+        medium: 20,
+        heavy: 30
+      };
+      navigator.vibrate(patterns[intensity]);
+    }
+  },
+  
+  notification: (type: 'success' | 'warning' | 'error') => {
+    if ('vibrator' in navigator || 'vibrate' in navigator) {
+      const patterns: Record<string, number[]> = {
+        success: [10, 50, 10],
+        warning: [20, 100, 20],
+        error: [50, 100, 50, 100, 50]
+      };
+      navigator.vibrate(patterns[type]);
+    }
+  }
+};
+
+const HapticFeedbackComponent: React.FC<HapticFeedbackProps> = ({
   type = 'light',
   children,
   disabled = false
@@ -34,7 +59,7 @@ export const HapticFeedback: React.FC<HapticFeedbackProps> = ({
     }
     
     // Visual feedback animation
-    const element = event?.currentTarget as HTMLElement;
+    const element = (event as any)?.currentTarget as HTMLElement;
     if (element) {
       element.style.transform = 'scale(0.98)';
       setTimeout(() => {
@@ -53,3 +78,6 @@ export const HapticFeedback: React.FC<HapticFeedbackProps> = ({
     </div>
   );
 };
+
+// Combine component with static methods
+export const HapticFeedback = Object.assign(HapticFeedbackComponent, HapticFeedbackAPI);
