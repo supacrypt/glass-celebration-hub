@@ -1,0 +1,48 @@
+{
+  "backupInfo": {
+    "timestamp": "2025-07-09T17:26:05.354Z",
+    "duration": "2s",
+    "backupDirectory": "/home/lyoncrypt/Desktop/Lovable clone/temp-wedding-fix/backups/backup-2025-07-09T17-26-05-354Z"
+  },
+  "statistics": {
+    "totalTables": 32,
+    "processedTables": 32,
+    "totalRecords": 150,
+    "successRate": "100%"
+  },
+  "errors": [],
+  "tableBreakdown": {
+    "app_settings": 34,
+    "chat_members": 0,
+    "chat_messages": 0,
+    "conversation_settings": 0,
+    "dietary_requirements": 0,
+    "direct_chats": 0,
+    "gallery_photos": 0,
+    "gift_registry": 5,
+    "guests": 70,
+    "message_likes": 0,
+    "message_reactions": 0,
+    "message_replies": 0,
+    "message_reports": 0,
+    "messages": 5,
+    "photo_comments": 0,
+    "photo_likes": 0,
+    "photos": 0,
+    "poll_notifications": 0,
+    "poll_options": 0,
+    "poll_votes": 0,
+    "polls": 0,
+    "post_comments": 1,
+    "post_reactions": 1,
+    "profiles": 13,
+    "rsvps": 1,
+    "social_posts": 2,
+    "stories": 0,
+    "user_blocks": 0,
+    "user_roles": 8,
+    "venue_images": 3,
+    "venues": 3,
+    "wedding_events": 4
+  }
+}

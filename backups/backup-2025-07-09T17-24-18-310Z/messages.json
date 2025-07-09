@@ -1,0 +1,47 @@
+{
+  "table": "messages",
+  "timestamp": "2025-07-09T17:24:19.904Z",
+  "recordCount": 5,
+  "data": [
+    {
+      "id": "73f1500f-d128-42c3-84f4-16e4fc1857a3",
+      "user_id": "3c3a1bb8-c0f6-4865-b45d-04c79b1ea474",
+      "content": "So excited for Tim and Kirsten's wedding! The venue looks absolutely stunning. Can't wait to celebrate with everyone! 💕 #TimAndKirsten2025",
+      "is_public": true,
+      "created_at": "2025-07-07T12:03:15.294971+00:00",
+      "updated_at": "2025-07-07T14:03:15.294971+00:00"
+    },
+    {
+      "id": "3b3176e4-4d36-480b-8933-8ce766eeba7b",
+      "user_id": "3c3a1bb8-c0f6-4865-b45d-04c79b1ea474",
+      "content": "Just booked my stay at the Ben Ean Pokolbin! Looking forward to a weekend of love, laughter, and good wine. Congratulations to the happy couple! 🥂 #BenEan #WeddingBliss",
+      "is_public": true,
+      "created_at": "2025-07-06T14:03:15.294971+00:00",
+      "updated_at": "2025-07-07T14:03:15.294971+00:00"
+    },
+    {
+      "id": "449e495e-5ed9-40ca-9b85-c8fc3affad38",
+      "user_id": "3c3a1bb8-c0f6-4865-b45d-04c79b1ea474",
+      "content": "Tim and Kirsten, you two are absolutely perfect for each other! I've watched your love story unfold and it's been beautiful. Can't wait to see you say \"I do\"! #ForeverLove",
+      "is_public": true,
+      "created_at": "2025-07-07T11:03:15.294971+00:00",
+      "updated_at": "2025-07-07T14:03:15.294971+00:00"
+    },
+    {
+      "id": "f6b75f21-209b-4713-b5e8-c49c55afe7da",
+      "user_id": "3c3a1bb8-c0f6-4865-b45d-04c79b1ea474",
+      "content": "Hunter Valley weddings hit different! This is going to be such a magical celebration. Congratulations Tim & Kirsten! 🍾 #HunterValleyWedding",
+      "is_public": true,
+      "created_at": "2025-07-07T09:03:15.294971+00:00",
+      "updated_at": "2025-07-07T14:03:15.294971+00:00"
+    },
+    {
+      "id": "e231268f-e3b8-42e3-a97f-da163fb15698",
+      "user_id": "3c3a1bb8-c0f6-4865-b45d-04c79b1ea474",
+      "content": "Already planning my outfit for the big day! Tim and Kirsten, thank you for including us in your special moment. Love you both! ✨ #TimAndKirsten2025 #WeddingBliss",
+      "is_public": true,
+      "created_at": "2025-07-07T06:03:15.294971+00:00",
+      "updated_at": "2025-07-07T14:03:15.294971+00:00"
+    }
+  ]
+}

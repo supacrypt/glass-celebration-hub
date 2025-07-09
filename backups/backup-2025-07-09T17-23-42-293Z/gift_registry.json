@@ -1,0 +1,82 @@
+{
+  "table": "gift_registry",
+  "timestamp": "2025-07-09T17:23:43.633Z",
+  "recordCount": 5,
+  "data": [
+    {
+      "id": "ffb7a652-a158-4d5f-b70c-56b8f2d73f4d",
+      "title": "Kitchen Stand Mixer",
+      "description": "Professional stand mixer for baking enthusiasts",
+      "price": 399.99,
+      "image_url": null,
+      "store_url": "https://example.com/mixer",
+      "category": "kitchen",
+      "priority": 1,
+      "is_purchased": false,
+      "purchased_by": null,
+      "purchased_at": null,
+      "created_at": "2025-07-07T11:18:15.229286+00:00",
+      "updated_at": "2025-07-07T11:18:15.229286+00:00"
+    },
+    {
+      "id": "2c0be5f6-98ce-4c6c-b51a-174b80c37000",
+      "title": "Egyptian Cotton Sheets",
+      "description": "Luxurious 400 thread count sheet set",
+      "price": 149.99,
+      "image_url": null,
+      "store_url": "https://example.com/sheets",
+      "category": "bedroom",
+      "priority": 2,
+      "is_purchased": false,
+      "purchased_by": null,
+      "purchased_at": null,
+      "created_at": "2025-07-07T11:18:15.229286+00:00",
+      "updated_at": "2025-07-07T11:18:15.229286+00:00"
+    },
+    {
+      "id": "968f56f7-b245-466d-8255-368952a7d595",
+      "title": "Wine Decanter Set",
+      "description": "Crystal wine decanter with glasses",
+      "price": 89.99,
+      "image_url": null,
+      "store_url": "https://example.com/decanter",
+      "category": "entertaining",
+      "priority": 2,
+      "is_purchased": false,
+      "purchased_by": null,
+      "purchased_at": null,
+      "created_at": "2025-07-07T11:18:15.229286+00:00",
+      "updated_at": "2025-07-07T11:18:15.229286+00:00"
+    },
+    {
+      "id": "fbe6a0c9-ceb3-417d-854c-7d0b0f70550c",
+      "title": "Honeymoon Fund",
+      "description": "Contribution to our dream honeymoon",
+      "price": 100,
+      "image_url": null,
+      "store_url": null,
+      "category": "experiences",
+      "priority": 1,
+      "is_purchased": false,
+      "purchased_by": null,
+      "purchased_at": null,
+      "created_at": "2025-07-07T11:18:15.229286+00:00",
+      "updated_at": "2025-07-07T11:18:15.229286+00:00"
+    },
+    {
+      "id": "922bab62-b211-40fe-9c50-f72583efd588",
+      "title": "Garden Tool Set",
+      "description": "Complete set for our new garden",
+      "price": 199.99,
+      "image_url": null,
+      "store_url": "https://example.com/tools",
+      "category": "outdoor",
+      "priority": 3,
+      "is_purchased": false,
+      "purchased_by": null,
+      "purchased_at": null,
+      "created_at": "2025-07-07T11:18:15.229286+00:00",
+      "updated_at": "2025-07-07T11:18:15.229286+00:00"
+    }
+  ]
+}

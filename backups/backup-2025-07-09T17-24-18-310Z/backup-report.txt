@@ -1,0 +1,89 @@
+
+Wedding App Database Backup Report
+================================
+
+Backup Date: 2025-07-09T17:24:18.310Z
+Duration: 2 seconds
+Backup Directory: /home/lyoncrypt/Desktop/Lovable clone/temp-wedding-fix/backups/backup-2025-07-09T17-24-18-310Z
+
+SUMMARY:
+- Total Tables: 32
+- Successfully Backed Up: 32
+- Total Records: 150
+- Success Rate: 100%
+
+TABLE BREAKDOWN:
+- app_settings: 34 records
+- chat_members: 0 records
+- chat_messages: 0 records
+- conversation_settings: 0 records
+- dietary_requirements: 0 records
+- direct_chats: 0 records
+- gallery_photos: 0 records
+- gift_registry: 5 records
+- guests: 70 records
+- message_likes: 0 records
+- message_reactions: 0 records
+- message_replies: 0 records
+- message_reports: 0 records
+- messages: 5 records
+- photo_comments: 0 records
+- photo_likes: 0 records
+- photos: 0 records
+- poll_notifications: 0 records
+- poll_options: 0 records
+- poll_votes: 0 records
+- polls: 0 records
+- post_comments: 1 records
+- post_reactions: 1 records
+- profiles: 13 records
+- rsvps: 1 records
+- social_posts: 2 records
+- stories: 0 records
+- user_blocks: 0 records
+- user_roles: 8 records
+- venue_images: 3 records
+- venues: 3 records
+- wedding_events: 4 records
+
+
+No errors encountered during backup.
+
+BACKUP FILES:
+- app_settings.json
+- chat_members.json
+- chat_messages.json
+- conversation_settings.json
+- dietary_requirements.json
+- direct_chats.json
+- gallery_photos.json
+- gift_registry.json
+- guests.json
+- message_likes.json
+- message_reactions.json
+- message_replies.json
+- message_reports.json
+- messages.json
+- photo_comments.json
+- photo_likes.json
+- photos.json
+- poll_notifications.json
+- poll_options.json
+- poll_votes.json
+- polls.json
+- post_comments.json
+- post_reactions.json
+- profiles.json
+- rsvps.json
+- social_posts.json
+- stories.json
+- user_blocks.json
+- user_roles.json
+- venue_images.json
+- venues.json
+- wedding_events.json
+- backup-summary.json
+- backup-report.txt
+
+This backup is read-only and contains all user data from the wedding app database.
+Use these files for data recovery, migration, or analysis purposes.

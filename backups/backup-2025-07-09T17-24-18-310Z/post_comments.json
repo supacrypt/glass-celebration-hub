@@ -1,0 +1,16 @@
+{
+  "table": "post_comments",
+  "timestamp": "2025-07-09T17:24:20.125Z",
+  "recordCount": 1,
+  "data": [
+    {
+      "id": "67bc347d-ae7d-4cbf-a014-211ce97fc5d6",
+      "post_id": "a0ca73dd-979f-4a96-9166-a35625dc03c8",
+      "user_id": "3c3a1bb8-c0f6-4865-b45d-04c79b1ea474",
+      "parent_id": null,
+      "content": "test",
+      "created_at": "2025-07-09T11:44:51.167604+00:00",
+      "updated_at": "2025-07-09T11:44:51.167604+00:00"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "table": "wedding_events",
+  "timestamp": "2025-07-09T17:26:07.717Z",
+  "recordCount": 4,
+  "data": [
+    {
+      "id": "a7a3722b-ed12-4f88-91f6-65689900adcd",
+      "title": "Wedding Ceremony",
+      "description": "Tim & Kirsten exchange vows on the Garden Terrace Lawn",
+      "event_date": "2025-10-05T05:00:00+00:00",
+      "location": "Ben Ean",
+      "venue_name": "Ben Ean",
+      "address": "119 McDonalds Rd, Pokolbin NSW 2320",
+      "dress_code": "Dapper/Cocktail: Suits, dress chinos, button up shirt and optional tie. We love a pocket kerchief! Classy dress, pantsuit or jumpsuit.",
+      "notes": "Arrive at 2:30 PM for a 3:00 PM start. Ceremony on the Garden Terrace Lawn.",
+      "is_main_event": true,
+      "created_at": "2025-07-07T06:01:30.017679+00:00",
+      "updated_at": "2025-07-07T06:01:30.017679+00:00"
+    },
+    {
+      "id": "eaa5cb7a-2fed-43b7-acb4-d0a139cafafe",
+      "title": "Wedding Reception",
+      "description": "Join us for dinner, dancing, and celebration! Reception to conclude at 12:00 AM.",
+      "event_date": "2025-10-05T07:00:00+00:00",
+      "location": "Ben Ean",
+      "venue_name": "Ben Ean",
+      "address": "119 McDonalds Rd, Pokolbin NSW 2320",
+      "dress_code": "Dapper/Cocktail: Suits, dress chinos, button up shirt and optional tie. We love a pocket kerchief! Classy dress, pantsuit or jumpsuit.",
+      "notes": "Cocktail hour after ceremony followed by reception. Top-shelf bevies, good tunes, and more love than you can poke a stick at!",
+      "is_main_event": true,
+      "created_at": "2025-07-07T06:01:30.017679+00:00",
+      "updated_at": "2025-07-07T06:01:30.017679+00:00"
+    },
+    {
+      "id": "449f062c-8dca-4948-903e-5b0074c81b18",
+      "title": "Pre-Wedding Drinks",
+      "description": "Tim and Kirsten will be at the Prince of Mereweather pub. Stop in to have a drink and grab yourself a meal if you are hungry.",
+      "event_date": "2025-10-04T06:00:00+00:00",
+      "location": "Prince of Mereweather",
+      "venue_name": "Prince of Mereweather Pub",
+      "address": "Mereweather, NSW",
+      "dress_code": "Casual",
+      "notes": "Saturday 4th October, 4-8 PM. Casual drinks and food available.",
+      "is_main_event": false,
+      "created_at": "2025-07-07T06:01:30.017679+00:00",
+      "updated_at": "2025-07-07T06:01:30.017679+00:00"
+    },
+    {
+      "id": "309e0df2-0614-4beb-92c9-3268b0017988",
+      "title": "Recovery Beach Day",
+      "description": "While we do not have a formal recovery breakfast planned, we will be at Newcastle Beach from 11 am onwards. There is a kiosk that serves good coffee and excellent food. Good for soaking up the libations!",
+      "event_date": "2025-10-06T01:00:00+00:00",
+      "location": "Newcastle Beach",
+      "venue_name": "Newcastle Beach",
+      "address": "Newcastle Beach, NSW",
+      "dress_code": "Casual beach wear",
+      "notes": "Monday October 6th from 11 AM onwards. Kiosk available for coffee and food.",
+      "is_main_event": false,
+      "created_at": "2025-07-07T06:01:30.017679+00:00",
+      "updated_at": "2025-07-07T06:01:30.017679+00:00"
+    }
+  ]
+}
