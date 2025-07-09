@@ -44,25 +44,37 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Mobile-optimized backdrop overlay */}
+      {/* Enhanced backdrop overlay with proper z-index */}
       <div 
-        className="dashboard-overlay"
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[999] transition-opacity duration-300"
         onClick={onClose}
+        role="button"
+        aria-label="Close dashboard"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            onClose();
+          }
+        }}
       />
       
-      {/* Mobile-first Dashboard Popup */}
-      <div className="dashboard-popup">
+      {/* Fixed positioned dashboard popup - properly centered */}
+      <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
         <div 
-          className="dashboard-popup-content flex flex-col max-w-[95vw] w-full sm:max-w-[90vw] lg:max-w-[800px]"
+          className="w-full max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-4xl max-h-[90vh] bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/20 shadow-2xl overflow-hidden"
           onClick={(e) => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="dashboard-title"
         >
+          {/* Header with improved touch targets */}
           <DashboardHeader userRole={authUserRole?.role} onClose={onClose} />
 
-          {/* Content Container with Mobile-optimized Scrolling */}
-          <div className="flex-1 overflow-hidden" style={{ maxHeight: 'calc(80vh - 60px)' }}>
+          {/* Content container with proper scrolling */}
+          <div className="flex-1 overflow-y-auto overscroll-contain" style={{ maxHeight: 'calc(90vh - 60px)' }}>
             {loading ? (
               <div className="flex items-center justify-center h-40 p-4">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-wedding-navy" />
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-wedding-navy border-t-transparent" />
               </div>
             ) : authUserRole?.role === 'admin' || authUserRole?.role === 'couple' ? (
               <AdminDashboardContent
