@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Mobile Optimizations */
+@import url('./styles/mobile-optimizations.css');
+
 /* Glassmorphism Wedding App Design System
    All colors MUST be HSL. Glass effects optimized for 60fps performance.
 */

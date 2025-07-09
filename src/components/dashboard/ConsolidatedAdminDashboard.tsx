@@ -199,56 +199,62 @@ const ConsolidatedAdminDashboard: React.FC<ConsolidatedAdminDashboardProps> = ({
 
   return (
     <div className="h-full flex flex-col">
-      {/* Main Category Navigation */}
+      {/* Main Category Navigation - Mobile Optimized */}
       <div className="mb-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
           {mainTabs.map((tab) => (
             <Button
               key={tab.id}
               variant={activeTab === tab.id ? "default" : "outline"}
-              className={`h-auto p-3 flex flex-col items-center gap-1 text-xs ${
+              className={`h-auto min-h-[72px] min-w-[120px] p-2 sm:p-3 flex flex-col items-center justify-center gap-1 text-[10px] sm:text-xs leading-tight ${
                 activeTab === tab.id 
-                  ? 'bg-wedding-navy text-white' 
-                  : 'glass-card hover:bg-wedding-navy/10'
-              }`}
+                  ? 'bg-wedding-navy text-white shadow-md' 
+                  : 'glass-card hover:bg-wedding-navy/10 border-wedding-navy/20'
+              } transition-all duration-200`}
               onClick={() => setActiveTab(tab.id)}
             >
-              {tab.icon}
-              <span className="font-medium">{tab.label}</span>
+              <div className="flex-shrink-0 mb-1">
+                {tab.icon}
+              </div>
+              <span className="font-medium text-center max-w-full break-words hyphens-auto" style={{ hyphens: 'auto' }}>
+                {tab.label}
+              </span>
             </Button>
           ))}
         </div>
       </div>
 
-      {/* Sub-category Navigation */}
-      <div className="mb-4">
-        <Card className="glass-card">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              {mainTabs.find(tab => tab.id === activeTab)?.icon}
-              {mainTabs.find(tab => tab.id === activeTab)?.label} Management
-            </CardTitle>
-            <p className="text-sm text-muted-foreground">
-              {mainTabs.find(tab => tab.id === activeTab)?.description}
-            </p>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="flex flex-wrap gap-2">
-              {getTabsForGroup(activeTab).map((subTab) => (
-                <Button
-                  key={subTab.id}
-                  variant={activeSubTab[activeTab] === subTab.id ? "default" : "outline"}
-                  size="sm"
-                  className={activeSubTab[activeTab] === subTab.id ? 'bg-wedding-navy text-white' : 'glass-secondary'}
-                  onClick={() => setActiveSubTab(prev => ({ ...prev, [activeTab]: subTab.id }))}
-                >
-                  {subTab.label}
-                </Button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+          {/* Sub-category Navigation - Mobile Optimized */}
+          <div className="mb-4">
+            <Card className="glass-card">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                  {mainTabs.find(tab => tab.id === activeTab)?.icon}
+                  <span className="mobile-text-responsive">{mainTabs.find(tab => tab.id === activeTab)?.label} Management</span>
+                </CardTitle>
+                <p className="text-xs sm:text-sm text-muted-foreground mobile-text-responsive">
+                  {mainTabs.find(tab => tab.id === activeTab)?.description}
+                </p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="flex flex-wrap gap-2">
+                  {getTabsForGroup(activeTab).map((subTab) => (
+                    <Button
+                      key={subTab.id}
+                      variant={activeSubTab[activeTab] === subTab.id ? "default" : "outline"}
+                      size="sm"
+                      className={`mobile-touch-button text-xs sm:text-sm ${
+                        activeSubTab[activeTab] === subTab.id ? 'bg-wedding-navy text-white' : 'glass-secondary'
+                      }`}
+                      onClick={() => setActiveSubTab(prev => ({ ...prev, [activeTab]: subTab.id }))}
+                    >
+                      {subTab.label}
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
       {/* Content Area */}
       <div className="flex-1 overflow-auto max-h-[calc(100vh-200px)] pb-20">
