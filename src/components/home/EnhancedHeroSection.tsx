@@ -141,6 +141,50 @@ const EnhancedHeroSection: React.FC = () => {
 
   return (
     <div className="relative w-full">
+      {/* Welcome Message with Glass Effect - Moved above video */}
+      <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
+        <div 
+          className="glass-card p-8 sm:p-10 lg:p-12 text-center relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
+            backdropFilter: 'blur(15px)',
+            WebkitBackdropFilter: 'blur(15px)',
+            borderRadius: '20px',
+            boxShadow: '20px 20px 40px rgba(163, 155, 146, 0.3), -20px -20px 40px rgba(255, 255, 255, 0.8)',
+            border: '1px solid rgba(255, 255, 255, 0.4)',
+            textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+          }}
+        >
+          <div className="text-4xl sm:text-5xl lg:text-6xl mb-4 sm:mb-5 flex justify-center gap-2">
+            💕
+          </div>
+          <h1 
+            className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-dolly font-bold mb-3 sm:mb-4 tracking-tight"
+            style={{
+              color: '#000000',
+              textShadow: '0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.8), 2px 2px 4px rgba(255, 255, 255, 1)',
+              lineHeight: '1.6',
+              fontWeight: '800'
+            }}
+          >
+            {settings.app_name}
+          </h1>
+          <p className="text-base sm:text-lg lg:text-xl text-glass-blue mb-3 sm:mb-4 font-dolly font-medium">
+            {formattedDate}
+          </p>
+          <p 
+            className="text-sm sm:text-base max-w-2xl mx-auto leading-relaxed"
+            style={{
+              color: '#000000',
+              textShadow: '0 0 5px rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(255, 255, 255, 0.6)'
+            }}
+          >
+            {settings.hero_subtitle}
+          </p>
+        </div>
+      </div>
+
+      {/* Hero Background Video/Image */}
       <HeroBackground
         backgroundType={backgroundType}
         backgroundUrl={backgroundUrl}
@@ -150,36 +194,7 @@ const EnhancedHeroSection: React.FC = () => {
         videoLoop={videoLoop}
         overlayOpacity={overlayOpacity}
       >
-        <div className={`w-full h-full flex ${getPositionClasses()}`}>
-          <div className="text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Welcome Message with Glass Effect */}
-            <div 
-              className="glass-card p-8 sm:p-10 lg:p-12 text-center relative overflow-hidden animate-fade-up"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
-                backdropFilter: 'blur(15px)',
-                WebkitBackdropFilter: 'blur(15px)',
-                borderRadius: '20px',
-                boxShadow: '20px 20px 40px rgba(163, 155, 146, 0.3), -20px -20px 40px rgba(255, 255, 255, 0.8)',
-                border: '1px solid rgba(255, 255, 255, 0.4)',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-              }}
-            >
-              <div className="text-4xl sm:text-5xl lg:text-6xl mb-4 sm:mb-5 flex justify-center gap-2">
-                💕
-              </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-dolly font-bold text-wedding-navy mb-3 sm:mb-4 tracking-tight bg-gradient-to-r from-glass-blue to-glass-purple bg-clip-text text-transparent">
-                {settings.app_name}
-              </h1>
-              <p className="text-base sm:text-lg lg:text-xl text-glass-blue mb-3 sm:mb-4 font-dolly font-medium">
-                {formattedDate}
-              </p>
-              <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                {settings.hero_subtitle}
-              </p>
-            </div>
-          </div>
-        </div>
+        {/* Empty - no content overlay on video */}
       </HeroBackground>
     </div>
   );

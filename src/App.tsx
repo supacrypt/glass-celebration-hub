@@ -50,6 +50,13 @@ const AppContent = () => {
   };
 
   useEffect(() => {
+    // Temporarily bypass auth for local development
+    const isDevelopment = window.location.hostname === 'localhost';
+    if (isDevelopment) {
+      console.log('Auth bypassed for local development');
+      return;
+    }
+    
     if (!loading && !user && location.pathname !== '/auth') {
       navigate('/auth');
     } else if (!loading && user && location.pathname === '/auth') {
@@ -65,7 +72,9 @@ const AppContent = () => {
     );
   }
 
-  if (!user && location.pathname !== '/auth') {
+  // Bypass auth check for local development
+  const isDevelopment = window.location.hostname === 'localhost';
+  if (!isDevelopment && !user && location.pathname !== '/auth') {
     return null;
   }
 

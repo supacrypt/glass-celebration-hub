@@ -51,19 +51,6 @@ const Home: React.FC = () => {
         <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
           <DressCodeCard />
         </div>
-        
-        {/* Welcome Section */}
-        <div className="glass-card responsive-card-padding mb-6 sm:mb-8 lg:mb-10 text-center animate-fade-up">
-          <div className="text-3xl sm:text-4xl lg:text-5xl mb-4 sm:mb-5 animate-pulse">
-            💕
-          </div>
-          <h2 className="responsive-heading-lg font-bold text-wedding-navy mb-3 sm:mb-4 tracking-tight">
-            {settings.welcome_message}
-          </h2>
-          <p className="responsive-text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            {settings.welcome_subtitle}
-          </p>
-        </div>
 
         {/* Contact Info */}
         <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up">

@@ -28,11 +28,14 @@ interface UserRole {
 }
 
 export const useAuth = () => {
+  // Check if we're in development mode
+  const isDevelopment = window.location.hostname === 'localhost';
+  
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [userRole, setUserRole] = useState<UserRole | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState<UserRole | null>(isDevelopment ? { role: 'admin' } : null);
+  const [loading, setLoading] = useState(!isDevelopment);
 
   useEffect(() => {
     // Set up auth state listener
