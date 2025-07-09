@@ -14,6 +14,8 @@ import EventTimeline from '@/components/admin/EventTimeline';
 import NotificationCenter from '@/components/admin/NotificationCenter';
 import EnhancedMediaManagement from '@/components/admin/EnhancedMediaManagement';
 import SystemMonitoring from '@/components/admin/SystemMonitoring';
+import EmailSystemManagement from '@/components/admin/EmailSystemManagement';
+import ProductionReadinessTest from '@/components/admin/ProductionReadinessTest';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface AdminDashboardContentProps {
@@ -79,6 +81,16 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
       id: 'system', 
       label: 'System',
       component: <SystemMonitoring />
+    },
+    { 
+      id: 'email', 
+      label: 'Email',
+      component: <EmailSystemManagement />
+    },
+    { 
+      id: 'testing', 
+      label: 'Testing',
+      component: <ProductionReadinessTest />
     },
     { 
       id: 'settings', 
