@@ -3,6 +3,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDashboardData } from '@/hooks/useDashboardData';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useResponsiveDesign } from '@/hooks/useResponsiveDesign';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import AccessRestrictedView from './dashboard/AccessRestrictedView';
 import DashboardHeader from './dashboard/DashboardHeader';
 import AdminDashboardContent from './dashboard/AdminDashboardContent';
@@ -25,16 +26,16 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       fetchDashboardData();
-      // Prevent body scroll when dashboard opens
-      document.body.classList.add('dashboard-open');
+      // Prevent body scroll when dashboard opens - but allow dashboard content to scroll
+      document.body.style.overflow = 'hidden';
     } else {
       // Re-enable body scroll when dashboard closes
-      document.body.classList.remove('dashboard-open');
+      document.body.style.overflow = '';
     }
     
     // Cleanup on unmount
     return () => {
-      document.body.classList.remove('dashboard-open');
+      document.body.style.overflow = '';
     };
   }, [isOpen, fetchDashboardData]);
 
@@ -47,55 +48,48 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
 
   return (
     <MobileOptimizedComponent>
-      {/* Mobile-optimized backdrop overlay */}
+      {/* Enhanced backdrop overlay with improved blur */}
       <div 
-        className="dashboard-overlay"
+        className="fixed inset-0 bg-black/40 backdrop-blur-md z-[9998]"
         onClick={onClose}
       />
       
-      {/* Mobile-first Dashboard Popup */}
-      <div className="dashboard-popup">
+      {/* Centered Dashboard Popup with Enhanced Glass Effect */}
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
         <div 
-          className={`dashboard-popup-content flex flex-col w-full ${
+          className={`glass-popup flex flex-col w-full ${
             device.isSmallMobile 
-              ? 'max-w-[98vw] mx-1' 
+              ? 'max-w-[95vw] max-h-[90vh]' 
               : device.isTinyMobile 
-                ? 'max-w-[96vw] mx-2'
+                ? 'max-w-[92vw] max-h-[88vh]'
                 : device.isMobile 
-                  ? 'max-w-[94vw] mx-3'
-                  : 'max-w-[90vw] lg:max-w-[800px]'
+                  ? 'max-w-[90vw] max-h-[85vh]'
+                  : 'max-w-[800px] max-h-[80vh]'
           }`}
           onClick={(e) => e.stopPropagation()}
         >
           <DashboardHeader userRole={authUserRole?.role} onClose={onClose} />
 
-          {/* Content Container with Mobile-optimized Scrolling */}
-          <div 
-            className="flex-1 overflow-hidden mobile-scroll-container" 
-            style={{ 
-              maxHeight: device.isMobile 
-                ? device.orientation === 'landscape' 
-                  ? 'calc(85vh - 50px)' 
-                  : 'calc(80vh - 60px)'
-                : 'calc(80vh - 60px)' 
-            }}
-          >
-            {loading ? (
-              <div className="flex items-center justify-center h-40 p-4">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-wedding-navy mobile-loading-skeleton" />
-              </div>
-            ) : authUserRole?.role === 'admin' || authUserRole?.role === 'couple' ? (
-              <AdminDashboardContent
-                stats={stats}
-                users={users}
-                rsvps={rsvps}
-                photos={photos}
-                onRefresh={fetchDashboardData}
-              />
-            ) : (
-              <GuestDashboardContent stats={stats} onClose={onClose} />
-            )}
-          </div>
+          {/* Scrollable Content Container */}
+          <ScrollArea className="flex-1">
+            <div className="p-6">
+              {loading ? (
+                <div className="flex items-center justify-center h-40">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+                </div>
+              ) : authUserRole?.role === 'admin' || authUserRole?.role === 'couple' ? (
+                <AdminDashboardContent
+                  stats={stats}
+                  users={users}
+                  rsvps={rsvps}
+                  photos={photos}
+                  onRefresh={fetchDashboardData}
+                />
+              ) : (
+                <GuestDashboardContent stats={stats} onClose={onClose} />
+              )}
+            </div>
+          </ScrollArea>
         </div>
       </div>
     </MobileOptimizedComponent>
