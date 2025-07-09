@@ -49,8 +49,8 @@ const GlassBottomNavigation: React.FC<GlassBottomNavigationProps> = ({
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-6">
       <div className="relative mx-auto max-w-md">
-        {/* Glass Navigation Container with Curved Shape */}
-        <div className="glass-nav-container relative h-20 rounded-[32px] backdrop-blur-xl border border-white/20 min-w-[320px]">
+        {/* Glass Navigation Container with Curved Shape - 2024-2025 Optimized */}
+        <div className="glass-nav-container relative h-20 rounded-[32px] backdrop-blur-xl border border-white/20 min-w-[360px] max-w-[440px] w-full">
           {/* Background Gradient */}
           <div className="absolute inset-0 rounded-[32px] bg-gradient-to-r from-white/10 via-white/5 to-white/10" />
           
@@ -63,8 +63,8 @@ const GlassBottomNavigation: React.FC<GlassBottomNavigationProps> = ({
             </div>
           )}
           
-          {/* Navigation Items */}
-          <div className="relative flex items-center justify-around h-full px-2">
+          {/* Navigation Items - 2024-2025 Touch Standards */}
+          <div className="relative flex items-center justify-between h-full px-4">
             {routes.map((route) => {
               const isActive = route.isCenter ? isDashboardActive : activeRoute === route.id;
               const Icon = route.icon;
@@ -74,7 +74,7 @@ const GlassBottomNavigation: React.FC<GlassBottomNavigationProps> = ({
                   <button
                     key={route.id}
                     onClick={() => handleRouteClick(route.id)}
-                    className={`flex flex-col items-center justify-center min-w-[44px] min-h-[44px] transition-all duration-300 ${
+                    className={`flex flex-col items-center justify-center min-w-[60px] min-h-[60px] transition-all duration-300 ${
                       isDashboardActive ? '-mt-6' : 'mt-0'
                     }`}
                   >
@@ -83,7 +83,7 @@ const GlassBottomNavigation: React.FC<GlassBottomNavigationProps> = ({
                         <div className="w-12 h-12 rounded-full bg-wedding-navy/20 backdrop-blur flex items-center justify-center mb-1 transition-all duration-300 hover:bg-wedding-navy/30">
                           <Icon className="w-6 h-6 text-wedding-navy" />
                         </div>
-                        <span className="text-[10px] text-wedding-navy font-medium whitespace-nowrap">{route.label}</span>
+                        <span className="text-[9px] text-wedding-navy font-medium whitespace-nowrap max-w-[64px] overflow-hidden text-ellipsis">{route.label}</span>
                       </>
                     )}
                   </button>
@@ -94,7 +94,7 @@ const GlassBottomNavigation: React.FC<GlassBottomNavigationProps> = ({
                 <button
                   key={route.id}
                   onClick={() => handleRouteClick(route.id)}
-                  className="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] px-2 transition-all duration-300 hover:scale-105"
+                  className="flex flex-col items-center justify-center min-w-[60px] min-h-[60px] transition-all duration-300 hover:scale-105"
                 >
                   <div className={`transition-all duration-300 ${
                     isActive 
@@ -103,7 +103,7 @@ const GlassBottomNavigation: React.FC<GlassBottomNavigationProps> = ({
                   }`}>
                     <Icon className="w-6 h-6 mb-1" />
                   </div>
-                  <span className={`text-[10px] font-medium transition-all duration-300 whitespace-nowrap ${
+                  <span className={`text-[9px] font-medium transition-all duration-300 whitespace-nowrap max-w-[64px] overflow-hidden text-ellipsis ${
                     isActive 
                       ? 'text-wedding-navy opacity-100' 
                       : 'text-wedding-navy/60 opacity-70'
