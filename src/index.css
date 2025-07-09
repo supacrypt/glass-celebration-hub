@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import Mobile Optimizations */
-@import url('./styles/mobile-optimizations.css');
-
 /* Glassmorphism Wedding App Design System
    All colors MUST be HSL. Glass effects optimized for 60fps performance.
 */
@@ -157,9 +154,10 @@
     position: relative;
   }
 
-  /* Allow dashboard content scrolling while preventing body scroll */
-  body[style*="overflow: hidden"] {
-    overflow: hidden !important;
+  /* Prevent body scroll when dashboard is open */
+  body.dashboard-open {
+    overflow: hidden;
+    height: 100vh;
   }
 
   /* Live Reactions Animation */
@@ -283,29 +281,27 @@
     }
   }
 
-  /* Enhanced Glass-Polished Popup - Premium Combined Effect */
+  /* Glass-Polished Popup - Premium Combined Effect */
   .glass-popup {
     background: linear-gradient(135deg, 
-      hsl(var(--glass-white) / 0.95) 0%, 
-      hsl(var(--glass-white) / 0.85) 100%);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid hsl(var(--glass-white) / 0.4);
+      hsl(var(--glass-white) / 0.9) 0%, 
+      hsl(var(--glass-white) / 0.7) 100%);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid hsl(var(--glass-white) / 0.3);
     border-radius: 24px;
     position: relative;
     overflow: hidden;
     
-    /* Enhanced glassmorphism shadows */
+    /* Neumorphism shadows */
     box-shadow: 
-      0 25px 50px hsl(var(--glass-black) / 0.15),
-      0 12px 30px hsl(var(--glass-black) / 0.08),
-      inset 0 1px 0 hsl(var(--glass-white) / 0.6),
-      inset 0 -1px 0 hsl(var(--glass-black) / 0.05),
-      0 0 0 1px hsl(var(--glass-white) / 0.2);
+      12px 12px 24px hsl(var(--glass-black) / 0.12),
+      -8px -8px 16px hsl(var(--glass-white) / 0.8),
+      inset 1px 1px 2px hsl(var(--glass-white) / 0.6),
+      inset -1px -1px 2px hsl(var(--glass-black) / 0.08),
+      0 0 0 1px hsl(var(--glass-white) / 0.15);
     
-    transform: translateZ(0);
-    will-change: backdrop-filter, transform;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .glass-popup::before {
@@ -314,14 +310,13 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 60%;
+    height: 50%;
     background: linear-gradient(135deg,
-      hsl(var(--glass-white) / 0.4) 0%,
-      hsl(var(--glass-white) / 0.15) 50%,
+      hsl(var(--glass-white) / 0.3) 0%,
+      hsl(var(--glass-white) / 0.1) 50%,
       transparent 100%);
     border-radius: 24px 24px 0 0;
     pointer-events: none;
-    z-index: 1;
   }
 
   .glass-popup::after {
@@ -332,26 +327,11 @@
     right: 1px;
     bottom: 1px;
     background: linear-gradient(135deg,
-      hsl(var(--glass-white) / 0.08) 0%,
-      transparent 30%,
-      hsl(var(--glass-black) / 0.03) 100%);
+      hsl(var(--glass-white) / 0.05) 0%,
+      transparent 40%,
+      hsl(var(--glass-black) / 0.02) 100%);
     border-radius: 23px;
     pointer-events: none;
-    z-index: 1;
-  }
-
-  .dark .glass-popup {
-    background: linear-gradient(135deg, 
-      hsl(var(--glass-black) / 0.9) 0%, 
-      hsl(var(--glass-black) / 0.8) 100%);
-    border: 1px solid hsl(var(--glass-white) / 0.2);
-  }
-
-  .dark .glass-popup::before {
-    background: linear-gradient(135deg,
-      hsl(var(--glass-white) / 0.1) 0%,
-      hsl(var(--glass-white) / 0.03) 50%,
-      transparent 100%);
   }
 
   /* Mobile-first Dashboard Interface */
