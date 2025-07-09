@@ -38,6 +38,7 @@ import DeploymentOptimization from '@/components/admin/DeploymentOptimization';
 import RealTimeMonitoring from '@/components/admin/RealTimeMonitoring';
 import { PerformanceMonitor } from '@/components/monitoring/PerformanceMonitor';
 import { LiveMonitoring } from '@/components/monitoring/LiveMonitoring';
+import AdminFunctionalityTester from '@/components/admin/AdminFunctionalityTester';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface ConsolidatedAdminDashboardProps {
@@ -112,6 +113,7 @@ const ConsolidatedAdminDashboard: React.FC<ConsolidatedAdminDashboardProps> = ({
   // Development & Testing Group
   const developmentTabs = [
     { id: 'testing', label: 'Testing Suite', component: <ProductionReadinessTest /> },
+    { id: 'functionality-test', label: 'Admin Function Tests', component: <AdminFunctionalityTester /> },
     { id: 'deployment', label: 'Deployment', component: <DeploymentOptimization /> },
     { id: 'system-monitor', label: 'System Monitor', component: <SystemMonitoring /> }
   ];
@@ -249,8 +251,10 @@ const ConsolidatedAdminDashboard: React.FC<ConsolidatedAdminDashboardProps> = ({
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 overflow-auto">
-        {getCurrentComponent()}
+      <div className="flex-1 overflow-auto max-h-[calc(100vh-200px)] pb-20">
+        <div className="h-full">
+          {getCurrentComponent()}
+        </div>
       </div>
     </div>
   );
