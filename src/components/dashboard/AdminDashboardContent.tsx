@@ -28,6 +28,9 @@ import AdvancedCommunicationCenter from '@/components/admin/AdvancedCommunicatio
 import { SEOOptimizer } from '@/components/optimization/SEOOptimizer';
 import { SystemTest } from '@/components/test/SystemTest';
 import { ProductionLaunch } from '@/components/deployment/ProductionLaunch';
+import { LiveMonitoring } from '@/components/monitoring/LiveMonitoring';
+import { UserFeedbackSystem } from '@/components/feedback/UserFeedbackSystem';
+import { UserAnalytics } from '@/components/analytics/UserAnalytics';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface AdminDashboardContentProps {
@@ -170,6 +173,22 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
       id: 'production-launch', 
       label: 'Launch',
       component: <ProductionLaunch />
+    },
+    // Phase 11: Post-Launch Monitoring & Continuous Improvement
+    { 
+      id: 'live-monitoring', 
+      label: 'Live Monitor',
+      component: <LiveMonitoring />
+    },
+    { 
+      id: 'user-feedback', 
+      label: 'Feedback',
+      component: <UserFeedbackSystem />
+    },
+    { 
+      id: 'user-analytics', 
+      label: 'User Analytics',
+      component: <UserAnalytics />
     },
   ];
 
