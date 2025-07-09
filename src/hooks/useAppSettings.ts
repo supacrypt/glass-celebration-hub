@@ -9,6 +9,7 @@ interface AppSettings {
   footer_message: string;
   bride_name: string;
   groom_name: string;
+  external_gift_registry_url: string;
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
@@ -17,7 +18,8 @@ const DEFAULT_SETTINGS: AppSettings = {
   welcome_message: 'Yes, we are that couple stuffing up your long weekend plans! Why spend it somewhere relaxing when you can watch two people who have been together for well over a decade tell you that they still love each other and are going to continue living pretty much as they have but under a legally binding contract?',
   footer_message: 'We can\'t wait to celebrate with you!',
   bride_name: 'Kirsten',
-  groom_name: 'Tim'
+  groom_name: 'Tim',
+  external_gift_registry_url: 'https://mygiftregistry.com.au/id/tim-and-kirsten/'
 };
 
 export const useAppSettings = () => {
@@ -45,6 +47,7 @@ export const useAppSettings = () => {
         footer_message: settingsMap.footer_message || DEFAULT_SETTINGS.footer_message,
         bride_name: settingsMap.bride_name || DEFAULT_SETTINGS.bride_name,
         groom_name: settingsMap.groom_name || DEFAULT_SETTINGS.groom_name,
+        external_gift_registry_url: settingsMap.external_gift_registry_url || DEFAULT_SETTINGS.external_gift_registry_url,
       });
     } catch (error) {
       console.error('Error loading app settings:', error);

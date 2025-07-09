@@ -10,7 +10,7 @@ import Venue from "./pages/Venue";
 import VenueDetail from "./pages/VenueDetail";
 import Social from "./pages/Social";
 import Gallery from "./pages/Gallery";
-import GiftRegistry from "./pages/GiftRegistry";
+// GiftRegistry component removed - now redirects externally
 import Accommodation from "./pages/Accommodation";
 import Transport from "./pages/Transport";
 import RSVP from "./pages/RSVP";
@@ -26,8 +26,7 @@ import NewcastleBeach from "./pages/venues/NewcastleBeach";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsers from "./pages/dashboard/AdminUsers";
 import AdminPhotos from "./pages/dashboard/AdminPhotos";
-import AdminGifts from "./pages/dashboard/AdminGifts";
-import AdminGiftsAdd from "./pages/dashboard/AdminGiftsAdd";
+// AdminGifts components removed - now handled externally
 import AdminRSVPs from "./pages/dashboard/AdminRSVPs";
 import AdminPhotosDetail from "./pages/dashboard/AdminPhotosDetail";
 import AdminUserRoles from "./pages/dashboard/AdminUserRoles";
@@ -86,7 +85,7 @@ const AppContent = () => {
         
         <Route path="/social" element={<Social />} />
         <Route path="/gallery" element={<Gallery />} />
-        <Route path="/gifts" element={<GiftRegistry />} />
+        {/* Gift Registry route removed - now redirects externally */}
         <Route path="/accommodation" element={<Accommodation />} />
         <Route path="/transport" element={<Transport />} />
         <Route path="/rsvp" element={<RSVP />} />
@@ -102,8 +101,7 @@ const AppContent = () => {
         <Route path="/dashboard/users/roles" element={<AdminUserRoles />} />
         <Route path="/dashboard/photos" element={<AdminPhotos />} />
         <Route path="/dashboard/photos/:status" element={<AdminPhotosDetail />} />
-        <Route path="/dashboard/gifts" element={<AdminGifts />} />
-        <Route path="/dashboard/gifts/add" element={<AdminGiftsAdd />} />
+        {/* Gift management routes removed - now handled externally */}
         <Route path="/dashboard/rsvps" element={<AdminRSVPs />} />
         
         {/* Social Routes */}

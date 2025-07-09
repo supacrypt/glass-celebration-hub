@@ -1,6 +1,7 @@
 import React from 'react';
 import { useWeddingEvents } from '@/hooks/useWeddingData';
 import { useAuth } from '@/hooks/useAuth';
+import { useAppSettings } from '@/hooks/useAppSettings';
 import DynamicHeroSection from '@/components/home/DynamicHeroSection';
 import DynamicCountdownSection from '@/components/home/DynamicCountdownSection';
 import InfoCards from '@/components/home/InfoCards';
@@ -11,6 +12,7 @@ import ContactInfo from '@/components/ContactInfo';
 const Home: React.FC = () => {
   const { events, loading: eventsLoading } = useWeddingEvents();
   const { userRole } = useAuth();
+  const { settings } = useAppSettings();
   const isAdmin = userRole?.role === 'admin' || userRole?.role === 'couple';
 
   return (
@@ -35,7 +37,7 @@ const Home: React.FC = () => {
             <div className="text-2xl mb-2">🚌</div>
             <span className="text-sm font-medium text-wedding-navy">Transport</span>
           </a>
-          <a href="/gifts" className="glass-card p-4 text-center hover:scale-105 transition-transform duration-200">
+          <a href={settings.external_gift_registry_url} target="_blank" rel="noopener noreferrer" className="glass-card p-4 text-center hover:scale-105 transition-transform duration-200">
             <div className="text-2xl mb-2">🎁</div>
             <span className="text-sm font-medium text-wedding-navy">Gifts</span>
           </a>

@@ -142,6 +142,30 @@ const AppSettingsManager: React.FC = () => {
         </CardContent>
       </Card>
 
+      {/* Gift Registry Management */}
+      <Card className="glass-card">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            🎁 Gift Registry
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="external_gift_registry_url">External Gift Registry URL</Label>
+            <Input
+              id="external_gift_registry_url"
+              value={localSettings.external_gift_registry_url}
+              onChange={(e) => setLocalSettings(prev => ({ ...prev, external_gift_registry_url: e.target.value }))}
+              placeholder="https://mygiftregistry.com.au/id/tim-and-kirsten/"
+              className="font-mono text-sm"
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              The home page "Gifts" button will redirect to this URL
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Preview */}
       <Card className="glass-card">
         <CardHeader>
