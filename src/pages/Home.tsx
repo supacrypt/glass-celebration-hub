@@ -1,8 +1,8 @@
 import React from 'react';
 import { useWeddingEvents } from '@/hooks/useWeddingData';
 import { useAuth } from '@/hooks/useAuth';
-import HeroSection from '@/components/home/HeroSection';
-import CountdownSection from '@/components/home/CountdownSection';
+import DynamicHeroSection from '@/components/home/DynamicHeroSection';
+import DynamicCountdownSection from '@/components/home/DynamicCountdownSection';
 import InfoCards from '@/components/home/InfoCards';
 import EventsSection from '@/components/home/EventsSection';
 import DressCodeCard from '@/components/DressCodeCard';
@@ -16,8 +16,8 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8 xl:p-10 relative overflow-hidden">
       <div className="max-w-4xl mx-auto">
-        <HeroSection />
-        <CountdownSection />
+        <DynamicHeroSection />
+        <DynamicCountdownSection />
         <EventsSection 
           isAdmin={isAdmin} 
           events={events} 

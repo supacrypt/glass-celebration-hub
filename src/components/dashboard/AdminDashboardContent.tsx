@@ -31,6 +31,7 @@ import { ProductionLaunch } from '@/components/deployment/ProductionLaunch';
 import { LiveMonitoring } from '@/components/monitoring/LiveMonitoring';
 import { UserFeedbackSystem } from '@/components/feedback/UserFeedbackSystem';
 import { UserAnalytics } from '@/components/analytics/UserAnalytics';
+import AppSettingsManager from '@/components/admin/AppSettingsManager';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface AdminDashboardContentProps {
@@ -51,19 +52,32 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
   const [activeTab, setActiveTab] = useState('stats');
 
   const adminTabs = [
+    // Core Management
     { 
-      id: 'stats', 
-      label: 'Stats',
-      component: <CompactStats stats={stats} />
+      id: 'app-settings', 
+      label: 'App Settings',
+      component: <AppSettingsManager />
     },
     { 
+      id: 'stats', 
+      label: 'Overview',
+      component: <CompactStats stats={stats} />
+    },
+    
+    // Content Management
+    { 
       id: 'accounts', 
-      label: 'Accounts',
+      label: 'Users',
       component: <UnifiedAccountsManagement users={users} onRefresh={onRefresh} />
     },
     { 
+      id: 'rsvps', 
+      label: 'RSVPs',
+      component: <EnhancedRSVPManagement rsvps={rsvps} onRefresh={onRefresh} />
+    },
+    { 
       id: 'media', 
-      label: 'Media',
+      label: 'Photos',
       component: <EnhancedMediaManagement />
     },
     { 
@@ -72,30 +86,53 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
       component: <CompactGiftManagement />
     },
     { 
-      id: 'rsvps', 
-      label: 'RSVPs',
-      component: <EnhancedRSVPManagement rsvps={rsvps} onRefresh={onRefresh} />
+      id: 'timeline', 
+      label: 'Events',
+      component: <EventTimeline />
     },
+    
+    // Design & Themes
+    { 
+      id: 'themes', 
+      label: 'Design',
+      component: <ThemeCustomization />
+    },
+    
+    // Analytics & Insights
     { 
       id: 'analytics', 
       label: 'Analytics',
       component: <EnhancedAnalytics />
     },
     { 
+      id: 'user-analytics', 
+      label: 'User Data',
+      component: <UserAnalytics />
+    },
+    { 
       id: 'advanced-analytics', 
-      label: 'Analytics+',
+      label: 'Advanced',
       component: <AdvancedAnalytics />
     },
+    
+    // Communication
     { 
-      id: 'timeline', 
-      label: 'Timeline',
-      component: <EventTimeline />
+      id: 'communication', 
+      label: 'Messages',
+      component: <AdvancedCommunicationCenter />
     },
     { 
-      id: 'themes', 
-      label: 'Themes',
-      component: <ThemeCustomization />
+      id: 'email', 
+      label: 'Email',
+      component: <EmailSystemManagement />
     },
+    { 
+      id: 'user-feedback', 
+      label: 'Feedback',
+      component: <UserFeedbackSystem />
+    },
+    
+    // System & Performance
     { 
       id: 'system', 
       label: 'System',
@@ -103,14 +140,33 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
     },
     { 
       id: 'performance', 
-      label: 'Perf',
+      label: 'Performance',
       component: <PerformanceMonitor />
     },
     { 
-      id: 'email', 
-      label: 'Email',
-      component: <EmailSystemManagement />
+      id: 'monitoring', 
+      label: 'Monitoring',
+      component: <RealTimeMonitoring />
     },
+    { 
+      id: 'live-monitoring', 
+      label: 'Live Monitor',
+      component: <LiveMonitoring />
+    },
+    
+    // Security & Backup
+    { 
+      id: 'security', 
+      label: 'Security',
+      component: <AdvancedSecurity />
+    },
+    { 
+      id: 'backup', 
+      label: 'Backup',
+      component: <BackupRecovery />
+    },
+    
+    // Development & Testing
     { 
       id: 'testing', 
       label: 'Testing',
@@ -122,73 +178,33 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
       component: <ProductionReadinessCheck />
     },
     { 
+      id: 'system-test', 
+      label: 'Test Suite',
+      component: <SystemTest />
+    },
+    
+    // Deployment & SEO
+    { 
       id: 'deployment', 
       label: 'Deploy',
       component: <DeploymentOptimization />
+    },
+    { 
+      id: 'production-launch', 
+      label: 'Launch',
+      component: <ProductionLaunch />
     },
     { 
       id: 'seo', 
       label: 'SEO',
       component: <SEOOptimizer />
     },
+    
+    // System Settings
     { 
       id: 'settings', 
-      label: 'Settings',
+      label: 'System Config',
       component: <CompactSystemSettings />
-    },
-    // Phase 6: Advanced Admin Features
-    { 
-      id: 'monitoring', 
-      label: 'Monitor',
-      component: <RealTimeMonitoring />
-    },
-    { 
-      id: 'security', 
-      label: 'Security',
-      component: <AdvancedSecurity />
-    },
-    { 
-      id: 'backup', 
-      label: 'Backup',
-      component: <BackupRecovery />
-    },
-    { 
-      id: 'performance-analytics', 
-      label: 'Perf+',
-      component: <PerformanceAnalytics />
-    },
-    { 
-      id: 'communication', 
-      label: 'Comm',
-      component: <AdvancedCommunicationCenter />
-    },
-    // Phase 9: Final Integration, Testing & Deployment Readiness
-    { 
-      id: 'system-test', 
-      label: 'Test Suite',
-      component: <SystemTest />
-    },
-    // Phase 10: Production Launch & Live Deployment
-    { 
-      id: 'production-launch', 
-      label: 'Launch',
-      component: <ProductionLaunch />
-    },
-    // Phase 11: Post-Launch Monitoring & Continuous Improvement
-    { 
-      id: 'live-monitoring', 
-      label: 'Live Monitor',
-      component: <LiveMonitoring />
-    },
-    { 
-      id: 'user-feedback', 
-      label: 'Feedback',
-      component: <UserFeedbackSystem />
-    },
-    { 
-      id: 'user-analytics', 
-      label: 'User Analytics',
-      component: <UserAnalytics />
     },
   ];
 
