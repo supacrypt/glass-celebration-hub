@@ -24,11 +24,11 @@ interface AppSettings {
 
 const DEFAULT_SETTINGS: AppSettings = {
   app_name: 'Tim & Kirsten',
-  wedding_date: '2025-10-05T16:00:00',
+  wedding_date: '2025-10-05T15:00:00+10:00', // 3:00 PM Australian timezone
   welcome_message: 'We Can\'t Wait to Celebrate With You!',
   welcome_subtitle: 'Your presence is the greatest gift we could ask for. Join us for a day filled with love, laughter, and unforgettable memories as we begin our new chapter together.',
-  hero_subtitle: 'Join us as we begin our new chapter together',
-  countdown_message: 'Until our special day',
+  hero_subtitle: 'Yes, we are that couple stuffing up your long weekend plans! Why spend it somewhere relaxing when you can watch two people who have been together for well over a decade tell you that they still love each other and are going to continue living pretty much as they have but under a legally binding contract? There\'ll be top-shelf bevies, good tunes, and more love than you can poke a stick at.',
+  countdown_message: 'Countdown to Forever',
   gallery_title: 'Our Wedding Gallery',
   gallery_description: 'Capturing our most precious moments',
   rsvp_instructions: 'Please RSVP by clicking the button below. We can\'t wait to celebrate with you!',
