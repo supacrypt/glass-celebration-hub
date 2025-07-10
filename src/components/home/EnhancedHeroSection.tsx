@@ -52,8 +52,39 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
   };
 
   const handleVideoError = (e: any) => {
-    console.error('Video failed to load:', e);
+    const video = e.target as HTMLVideoElement;
+    let errorMessage = 'Unknown video error';
+    
+    if (video && video.error) {
+      switch (video.error.code) {
+        case video.error.MEDIA_ERR_ABORTED:
+          errorMessage = 'Video load aborted by user';
+          break;
+        case video.error.MEDIA_ERR_NETWORK:
+          errorMessage = 'Network error while loading video';
+          break;
+        case video.error.MEDIA_ERR_DECODE:
+          errorMessage = 'Video decode error (unsupported format)';
+          break;
+        case video.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+          errorMessage = 'Video source not supported';
+          break;
+        default:
+          errorMessage = `Video error code: ${video.error.code}`;
+      }
+    }
+    
+    console.error('Video failed to load:', errorMessage);
     console.error('Video URL was:', currentBackgroundUrl);
+    console.error('Video error object:', video?.error);
+    console.error('Is mobile device:', isMobile);
+    console.error('Video element state:', {
+      readyState: video?.readyState,
+      networkState: video?.networkState,
+      currentSrc: video?.currentSrc,
+      duration: video?.duration
+    });
+    
     setVideoError(true);
     setUseImageFallback(true);
   };
@@ -63,19 +94,40 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
     setVideoLoaded(true);
   };
 
-  // Timeout fallback: if video doesn't load within 3 seconds, use image (all devices)
+  // Enhanced mobile video timeout and fallback logic
   useEffect(() => {
     if (backgroundType === 'video') {
+      // Longer timeout for mobile devices (slower networks)
+      const timeoutDuration = isMobile ? 8000 : 5000;
+      
       const timeout = setTimeout(() => {
         if (!videoLoaded && !videoError) {
-          console.log('Video load timeout - falling back to image');
+          console.log(`Video load timeout after ${timeoutDuration}ms - falling back to image`);
           setUseImageFallback(true);
         }
-      }, 3000);
+      }, timeoutDuration);
+      
+      // Try to trigger video play on mobile after a short delay
+      if (isMobile && videoAutoplay) {
+        const mobilePlayTimeout = setTimeout(() => {
+          const video = document.querySelector('video');
+          if (video && video.paused) {
+            console.log('Attempting to trigger mobile video play');
+            video.play().catch(err => {
+              console.log('Mobile autoplay failed, this is expected:', err);
+            });
+          }
+        }, 1000);
+        
+        return () => {
+          clearTimeout(timeout);
+          clearTimeout(mobilePlayTimeout);
+        };
+      }
       
       return () => clearTimeout(timeout);
     }
-  }, [backgroundType, videoLoaded, videoError]);
+  }, [backgroundType, videoLoaded, videoError, isMobile, videoAutoplay]);
 
   // Debug logging
   console.log('HeroBackground Debug:', {
@@ -108,6 +160,23 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
             onError={handleVideoError}
             onLoadedData={handleVideoLoaded}
             onCanPlay={handleVideoLoaded}
+            onLoadStart={() => console.log('Video loading started')}
+            onWaiting={() => console.log('Video waiting for data')}
+            onCanPlayThrough={() => {
+              console.log('Video can play through');
+              setVideoLoaded(true);
+            }}
+            onTimeUpdate={() => {
+              // Verify video is actually playing
+              const video = document.querySelector('video');
+              if (video && !video.paused && video.currentTime > 0) {
+                setVideoLoaded(true);
+              }
+            }}
+            onStalled={() => console.log('Video stalled')}
+            onSuspend={() => console.log('Video suspended')}
+            onAbort={() => console.log('Video aborted')}
+            onEmptied={() => console.log('Video emptied')}
             style={{
               objectFit: 'cover',
               width: '100%',
@@ -115,14 +184,24 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
             }}
           >
             <source src={currentBackgroundUrl} type="video/mp4" />
+            {/* Fallback source without CORS for cross-origin issues */}
+            <source src={currentBackgroundUrl.replace('?', '').split('?')[0]} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          {/* Loading indicator */}
+          {/* Enhanced loading indicator with debug info */}
           {!videoLoaded && !videoError && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading video...</p>
+                {process.env.NODE_ENV === 'development' && (
+                  <div className="mt-4 text-xs text-gray-500 max-w-xs mx-auto">
+                    <p>Device: {isMobile ? 'Mobile' : 'Desktop'}</p>
+                    <p>URL: {currentBackgroundUrl.substring(0, 50)}...</p>
+                    <p>Autoplay: {videoAutoplay ? 'Yes' : 'No'}</p>
+                    <p>Muted: {videoMuted ? 'Yes' : 'No'}</p>
+                  </div>
+                )}
               </div>
             </div>
           )}
