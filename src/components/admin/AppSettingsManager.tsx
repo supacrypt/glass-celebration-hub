@@ -7,7 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Save, RefreshCw, Settings, Calendar, MessageCircle, Heart, Image } from 'lucide-react';
 import GlassCard from '@/components/GlassCard';
-import HeroBackgroundManager from '@/components/admin/HeroBackgroundManager';
+import UnifiedMediaManager from '@/components/admin/UnifiedMediaManager';
+import RichTextEditor from '@/components/admin/RichTextEditor';
 
 const AppSettingsManager: React.FC = () => {
   const { settings, loading, updateSetting, loadSettings } = useAppSettings();
@@ -34,22 +35,20 @@ const AppSettingsManager: React.FC = () => {
     rows?: number;
   }> = ({ label, value, settingKey, type = 'text', placeholder, rows = 3 }) => {
     const [localValue, setLocalValue] = useState(value);
-    const [hasChanges, setHasChanges] = useState(false);
 
     React.useEffect(() => {
       setLocalValue(value);
-      setHasChanges(false);
     }, [value]);
+
+    const hasChanges = localValue !== value;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setLocalValue(e.target.value);
-      setHasChanges(e.target.value !== value);
     };
 
-    const handleSaveLocal = () => {
+    const handleSaveLocal = async () => {
       if (hasChanges) {
-        handleSave(settingKey, localValue);
-        setHasChanges(false);
+        await handleSave(settingKey, localValue);
       }
     };
 
@@ -82,11 +81,51 @@ const AppSettingsManager: React.FC = () => {
             disabled={!hasChanges || isSaving}
             variant={hasChanges ? 'default' : 'outline'}
             size="sm"
+            className={hasChanges ? 'bg-blue-600 hover:bg-blue-700' : ''}
           >
             <Save className="w-4 h-4" />
+            {hasChanges && <span className="ml-1 text-xs">Save</span>}
           </Button>
         </div>
       </div>
+    );
+  };
+
+  const RichSettingField: React.FC<{
+    label: string;
+    value: string;
+    settingKey: string;
+    placeholder?: string;
+    fontFamily?: string;
+    fontSize?: string;
+    textColor?: string;
+  }> = ({ label, value, settingKey, placeholder, fontFamily = "Inter", fontSize = "16px", textColor = "#333333" }) => {
+    const [localValue, setLocalValue] = useState(value);
+
+    React.useEffect(() => {
+      setLocalValue(value);
+    }, [value]);
+
+    const handleChange = (newValue: string) => {
+      setLocalValue(newValue);
+    };
+
+    const handleSaveLocal = async () => {
+      await handleSave(settingKey, localValue);
+    };
+
+    return (
+      <RichTextEditor
+        label={label}
+        value={localValue}
+        onChange={handleChange}
+        onSave={handleSaveLocal}
+        placeholder={placeholder}
+        fontFamily={fontFamily}
+        fontSize={fontSize}
+        textColor={textColor}
+        className="space-y-2"
+      />
     );
   };
 
@@ -111,6 +150,7 @@ const AppSettingsManager: React.FC = () => {
         </div>
       </div>
 
+      {/* Main App Settings */}
       <GlassCard className="p-6">
         <div className="space-y-6">
           <SettingField
@@ -127,36 +167,52 @@ const AppSettingsManager: React.FC = () => {
             type="datetime-local"
           />
           
-          <SettingField
+          <RichSettingField
             label="Hero Subtitle"
             value={settings.hero_subtitle}
             settingKey="hero_subtitle"
-            type="textarea"
-            rows={4}
+            placeholder="Join us for the celebration of our love story..."
+            fontFamily="Playfair Display"
+            fontSize="24px"
+            textColor="#2C3E50"
           />
           
-          <SettingField
+          <RichSettingField
             label="Welcome Message"
             value={settings.welcome_message}
             settingKey="welcome_message"
+            placeholder="Welcome to our wedding website! We're so excited to share this special day with you."
+            fontFamily="Inter"
+            fontSize="18px"
+            textColor="#2C3E50"
           />
           
-          <SettingField
+          <RichSettingField
             label="Countdown Message"
             value={settings.countdown_message}
             settingKey="countdown_message"
+            placeholder="We can't wait to see you at our celebration!"
+            fontFamily="Inter"
+            fontSize="16px"
+            textColor="#2C3E50"
           />
           
-          <SettingField
+          <RichSettingField
             label="Footer Message"
             value={settings.footer_message}
             settingKey="footer_message"
+            placeholder="Made with love for our special day"
+            fontFamily="Inter"
+            fontSize="14px"
+            textColor="#7F8C8D"
           />
         </div>
       </GlassCard>
 
-      {/* Hero Background Manager */}
-      <HeroBackgroundManager />
+      {/* Unified Media & Background Manager - Replaces old duplicate sections */}
+      <div className="mt-8">
+        <UnifiedMediaManager />
+      </div>
     </div>
   );
 };

@@ -23,7 +23,7 @@ import Help from "./pages/Help";
 import BenEan from "./pages/venues/BenEan";
 import PrinceOfMereweather from "./pages/venues/PrinceOfMereweather";
 import NewcastleBeach from "./pages/venues/NewcastleBeach";
-import AdminDashboard from "./pages/AdminDashboard";
+import ImprovedAdminDashboard from "./pages/ImprovedAdminDashboard";
 import AdminUsers from "./pages/dashboard/AdminUsers";
 import AdminPhotos from "./pages/dashboard/AdminPhotos";
 // AdminGifts components removed - now handled externally
@@ -50,13 +50,6 @@ const AppContent = () => {
   };
 
   useEffect(() => {
-    // Temporarily bypass auth for local development
-    const isDevelopment = window.location.hostname === 'localhost';
-    if (isDevelopment) {
-      console.log('Auth bypassed for local development');
-      return;
-    }
-    
     if (!loading && !user && location.pathname !== '/auth') {
       navigate('/auth');
     } else if (!loading && user && location.pathname === '/auth') {
@@ -72,9 +65,7 @@ const AppContent = () => {
     );
   }
 
-  // Bypass auth check for local development
-  const isDevelopment = window.location.hostname === 'localhost';
-  if (!isDevelopment && !user && location.pathname !== '/auth') {
+  if (!user && location.pathname !== '/auth') {
     return null;
   }
 
@@ -105,7 +96,7 @@ const AppContent = () => {
         <Route path="/help" element={<Help />} />
         
         {/* Dashboard Admin Routes */}
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/dashboard" element={<ImprovedAdminDashboard />} />
         <Route path="/dashboard/users" element={<AdminUsers />} />
         <Route path="/dashboard/users/roles" element={<AdminUserRoles />} />
         <Route path="/dashboard/photos" element={<AdminPhotos />} />

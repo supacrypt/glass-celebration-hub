@@ -48,8 +48,8 @@ const DEFAULT_SETTINGS: AppSettings = {
   bride_name: 'Kirsten',
   groom_name: 'Tim',
   external_gift_registry_url: 'https://mygiftregistry.com.au/id/tim-and-kirsten/',
-  hero_background_type: 'image',
-  hero_background_url: 'https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/backgrounds/default-wedding.jpg',
+  hero_background_type: 'video', // Changed to video to enable video by default
+  hero_background_url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4', // Working sample video URL
   hero_background_mobile_url: 'https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/backgrounds/default-wedding-mobile.jpg',
   hero_overlay_opacity: '0.7',
   hero_overlay_position: 'center',

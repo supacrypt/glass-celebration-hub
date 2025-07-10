@@ -40,6 +40,16 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
 
   const currentBackgroundUrl = isMobile && mobileBackgroundUrl ? mobileBackgroundUrl : backgroundUrl;
 
+  // Helper function to convert YouTube URL to embed URL
+  const getYouTubeEmbedUrl = (url: string) => {
+    const videoIdMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    if (videoIdMatch) {
+      const videoId = videoIdMatch[1];
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1`;
+    }
+    return url;
+  };
+
   const handleVideoError = (e: any) => {
     console.error('Video failed to load:', e);
     console.error('Video URL was:', currentBackgroundUrl);
@@ -66,25 +76,65 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
     }
   }, [backgroundType, isMobile, videoLoaded, videoError]);
 
+  // Debug logging
+  console.log('HeroBackground Debug:', {
+    backgroundType,
+    backgroundUrl: currentBackgroundUrl,
+    videoError,
+    isMobile,
+    useImageFallback,
+    videoLoaded,
+    videoAutoplay,
+    videoMuted,
+    videoLoop
+  });
+
   return (
     <div className="relative w-full h-[500px] sm:h-[600px] lg:h-[700px] mb-6 sm:mb-8 lg:mb-10 rounded-[20px] overflow-hidden">
       {/* Background Media */}
       {backgroundType === 'video' && !videoError && !isMobile && !useImageFallback ? (
-        <video
+        <div className="absolute inset-0 w-full h-full">
+          <video
+            className="absolute inset-0 w-full h-full object-cover"
+            autoPlay={videoAutoplay}
+            muted={videoMuted}
+            loop={videoLoop}
+            playsInline
+            controls={false}
+            preload="auto"
+            onError={handleVideoError}
+            onLoadedData={handleVideoLoaded}
+            onCanPlay={handleVideoLoaded}
+          >
+            <source src={currentBackgroundUrl} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          {/* Loading indicator */}
+          {!videoLoaded && !videoError && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading video...</p>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : backgroundType === 'youtube' && !isMobile && !useImageFallback ? (
+        <iframe
           className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          controls={false}
-          preload="auto"
+          src={getYouTubeEmbedUrl(currentBackgroundUrl)}
+          title="YouTube background video"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          style={{
+            pointerEvents: 'none',
+            transform: 'scale(1.1)', // Slightly larger to hide YouTube controls
+            transformOrigin: 'center center'
+          }}
+          onLoad={handleVideoLoaded}
           onError={handleVideoError}
-          onLoadedData={handleVideoLoaded}
-          onCanPlay={handleVideoLoaded}
-        >
-          <source src={currentBackgroundUrl} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        />
       ) : (
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
@@ -139,8 +189,8 @@ const EnhancedHeroSection: React.FC = () => {
     day: 'numeric'
   });
 
-  const backgroundType = settings.hero_background_type || 'image';
-  const backgroundUrl = settings.hero_background_url || 'https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80';
+  const backgroundType = settings.hero_background_type || 'video';
+  const backgroundUrl = settings.hero_background_url || 'https://www.youtube.com/watch?v=Y8rjSEU349s';
   const mobileBackgroundUrl = settings.hero_background_mobile_url || '';
   const overlayOpacity = parseFloat(settings.hero_overlay_opacity || '0.7');
   const overlayPosition = settings.hero_overlay_position || 'center';
@@ -204,15 +254,14 @@ const EnhancedHeroSection: React.FC = () => {
           <p className="text-base sm:text-lg lg:text-xl text-glass-blue mb-3 sm:mb-4 font-dolly font-medium">
             {formattedDate}
           </p>
-          <p 
+          <div 
             className="text-sm sm:text-base max-w-2xl mx-auto leading-relaxed"
             style={{
               color: '#000000',
               textShadow: '0 0 5px rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(255, 255, 255, 0.6)'
             }}
-          >
-            {settings.hero_subtitle}
-          </p>
+            dangerouslySetInnerHTML={{ __html: settings.hero_subtitle || 'Welcome to our wedding celebration!' }}
+          />
         </div>
       </div>
 
