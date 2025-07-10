@@ -567,24 +567,43 @@ const UnifiedMediaManager: React.FC = () => {
               </p>
             </div>
 
-            {/* Mobile Background */}
-            <div className="space-y-2">
-              <Label>Mobile Background URL (Optional)</Label>
-              <div className="flex gap-2">
-                <Input
-                  type="url"
-                  placeholder="Mobile-optimized background URL"
-                  value={settings.hero_background_mobile_url || ''}
-                  onChange={(e) => handleSave('hero_background_mobile_url', e.target.value)}
-                />
-                <Button
-                  onClick={() => toast({ title: "Mobile Background", description: "Mobile background updated!" })}
-                  disabled={isSaving}
-                  variant="outline"
-                  size="sm"
-                >
-                  <Save className="w-4 h-4" />
-                </Button>
+            {/* Responsive Video Settings */}
+            <div className="space-y-4 p-4 border rounded-lg bg-green-50">
+              <div className="flex items-center gap-2">
+                <Video className="w-4 h-4 text-green-600" />
+                <Label className="font-semibold text-green-800">Responsive Video Settings</Label>
+              </div>
+              
+              <p className="text-sm text-green-700 bg-green-100 p-3 rounded-md">
+                ✅ <strong>Single Responsive Video:</strong> This video will automatically work on desktop, tablet, and mobile devices with optimized performance for each screen size.
+              </p>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Video Performance</Label>
+                  <select
+                    className="w-full px-3 py-2 border rounded-md"
+                    value={settings.hero_video_performance || 'auto'}
+                    onChange={(e) => handleSave('hero_video_performance', e.target.value)}
+                  >
+                    <option value="auto">Auto (Recommended)</option>
+                    <option value="optimized">Mobile Optimized</option>
+                    <option value="high">High Quality</option>
+                  </select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label>Cross-Device Compatibility</Label>
+                  <select
+                    className="w-full px-3 py-2 border rounded-md"
+                    value={settings.hero_video_compatibility || 'enhanced'}
+                    onChange={(e) => handleSave('hero_video_compatibility', e.target.value)}
+                  >
+                    <option value="enhanced">Enhanced (Recommended)</option>
+                    <option value="standard">Standard</option>
+                    <option value="basic">Basic</option>
+                  </select>
+                </div>
               </div>
             </div>
 

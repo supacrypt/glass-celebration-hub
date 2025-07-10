@@ -38,7 +38,8 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const currentBackgroundUrl = isMobile && mobileBackgroundUrl ? mobileBackgroundUrl : backgroundUrl;
+  // Use single responsive video URL for all devices
+  const currentBackgroundUrl = backgroundUrl;
 
   // Helper function to convert YouTube URL to embed URL
   const getYouTubeEmbedUrl = (url: string) => {
@@ -62,9 +63,9 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
     setVideoLoaded(true);
   };
 
-  // Timeout fallback: if video doesn't load within 3 seconds, use image
+  // Timeout fallback: if video doesn't load within 3 seconds, use image (all devices)
   useEffect(() => {
-    if (backgroundType === 'video' && !isMobile) {
+    if (backgroundType === 'video') {
       const timeout = setTimeout(() => {
         if (!videoLoaded && !videoError) {
           console.log('Video load timeout - falling back to image');
@@ -74,7 +75,7 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
       
       return () => clearTimeout(timeout);
     }
-  }, [backgroundType, isMobile, videoLoaded, videoError]);
+  }, [backgroundType, videoLoaded, videoError]);
 
   // Debug logging
   console.log('HeroBackground Debug:', {
@@ -92,8 +93,8 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
   return (
     <div className="relative w-full h-[500px] sm:h-[600px] lg:h-[700px] mb-6 sm:mb-8 lg:mb-10 rounded-[20px] overflow-hidden">
       {/* Background Media */}
-      {backgroundType === 'video' && !videoError && !isMobile && !useImageFallback ? (
-        <div className="absolute inset-0 w-full h-full">
+      {backgroundType === 'video' && !videoError && !useImageFallback ? (
+        <div className="absolute inset-0 w-full h-full" data-testid="hero-background-video">
           <video
             className="absolute inset-0 w-full h-full object-cover"
             autoPlay={videoAutoplay}
@@ -101,10 +102,17 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
             loop={videoLoop}
             playsInline
             controls={false}
-            preload="auto"
+            preload="metadata"
+            webkit-playsinline="true"
+            crossOrigin="anonymous"
             onError={handleVideoError}
             onLoadedData={handleVideoLoaded}
             onCanPlay={handleVideoLoaded}
+            style={{
+              objectFit: 'cover',
+              width: '100%',
+              height: '100%'
+            }}
           >
             <source src={currentBackgroundUrl} type="video/mp4" />
             Your browser does not support the video tag.
@@ -119,7 +127,7 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
             </div>
           )}
         </div>
-      ) : backgroundType === 'youtube' && !isMobile && !useImageFallback ? (
+      ) : backgroundType === 'youtube' && !useImageFallback ? (
         <iframe
           className="absolute inset-0 w-full h-full object-cover"
           src={getYouTubeEmbedUrl(currentBackgroundUrl)}
@@ -129,7 +137,7 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
           allowFullScreen
           style={{
             pointerEvents: 'none',
-            transform: 'scale(1.1)', // Slightly larger to hide YouTube controls
+            transform: 'scale(1.05)', // Slight scale for all devices
             transformOrigin: 'center center'
           }}
           onLoad={handleVideoLoaded}
@@ -222,7 +230,7 @@ const EnhancedHeroSection: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full hero-section" data-testid="enhanced-hero-section">
       {/* Welcome Message with Glass Effect - Moved above video */}
       <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
         <div 

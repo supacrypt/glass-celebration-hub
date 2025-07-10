@@ -49,13 +49,19 @@ const AppContent = () => {
     navigate(path);
   };
 
+  // Define public routes that don't require authentication
+  const publicRoutes = ['/', '/venues', '/venues/ben-ean', '/venues/prince-of-mereweather', '/venues/newcastle-beach', '/accommodation', '/transport', '/faq', '/help'];
+  const isPublicRoute = publicRoutes.includes(location.pathname);
+  const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/dashboard');
+
   useEffect(() => {
-    if (!loading && !user && location.pathname !== '/auth') {
+    // Only redirect to auth for admin routes or if user is trying to access protected content
+    if (!loading && !user && isAdminRoute) {
       navigate('/auth');
     } else if (!loading && user && location.pathname === '/auth') {
       navigate('/');
     }
-  }, [user, loading, location.pathname, navigate]);
+  }, [user, loading, location.pathname, navigate, isAdminRoute]);
 
   if (loading) {
     return (
@@ -65,8 +71,9 @@ const AppContent = () => {
     );
   }
 
-  if (!user && location.pathname !== '/auth') {
-    return null;
+  // Block access to admin routes without authentication
+  if (!user && isAdminRoute) {
+    return <Auth />;
   }
 
   if (location.pathname === '/auth') {
