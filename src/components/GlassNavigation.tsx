@@ -5,16 +5,37 @@ import { useAuth } from '@/hooks/useAuth';
 import { NAVIGATION_ROUTES } from './navigation/constants';
 import type { NavigationProps } from './navigation/types';
 
-const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate }) => {
+interface EnhancedNavigationProps extends NavigationProps {
+  onDashboardToggle?: (isOpen: boolean) => void;
+}
+
+const GlassNavigation: React.FC<EnhancedNavigationProps> = ({ activeRoute, onNavigate, onDashboardToggle }) => {
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const { userRole } = useAuth();
 
   const handleRouteClick = (routeId: string) => {
     if (routeId === 'dashboard') {
-      setIsDashboardOpen(true);
+      const newState = !isDashboardOpen;
+      setIsDashboardOpen(newState);
+      onDashboardToggle?.(newState);
+      
+      // Dispatch global event for messenger
+      window.dispatchEvent(new CustomEvent('dashboardToggle', {
+        detail: { isOpen: newState }
+      }));
     } else {
       onNavigate(routeId);
     }
+  };
+
+  const handleDashboardClose = () => {
+    setIsDashboardOpen(false);
+    onDashboardToggle?.(false);
+    
+    // Dispatch global event for messenger
+    window.dispatchEvent(new CustomEvent('dashboardToggle', {
+      detail: { isOpen: false }
+    }));
   };
 
   return (
@@ -27,7 +48,7 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate })
 
       <DashboardPopup
         isOpen={isDashboardOpen}
-        onClose={() => setIsDashboardOpen(false)}
+        onClose={handleDashboardClose}
         userRole={userRole?.role || 'guest'}
       />
     </>

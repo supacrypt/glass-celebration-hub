@@ -10,6 +10,7 @@ import UserManagement from '@/components/admin/UserManagement';
 import PhotoModeration from '@/components/admin/PhotoModeration';
 import RSVPManagement from '@/components/admin/RSVPManagement';
 import AdminOverview from '@/components/admin/AdminOverview';
+import ContentManagementSystem from '@/components/admin/ContentManagementSystem';
 // GiftManagement component removed - now managed in app settings
 
 interface AdminStats {
@@ -216,8 +217,9 @@ const AdminDashboard: React.FC = () => {
 
       {/* Admin Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4 mb-6">
+        <TabsList className="grid w-full grid-cols-5 mb-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="content">Content</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="photos">Photos</TabsTrigger>
           <TabsTrigger value="rsvps">RSVPs</TabsTrigger>
@@ -225,6 +227,10 @@ const AdminDashboard: React.FC = () => {
 
         <TabsContent value="overview" className="space-y-6">
           <AdminOverview stats={stats} />
+        </TabsContent>
+        
+        <TabsContent value="content" className="space-y-6">
+          <ContentManagementSystem />
         </TabsContent>
 
         <TabsContent value="users" className="space-y-4">

@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { SocialPostCard } from '@/components/social/SocialPostCard';
 import { useSocialFeed } from '@/hooks/useSocialFeed';
 import DirectChatContainer from '@/components/chat/DirectChatContainer';
+import FacebookMessenger from '@/components/chat/FacebookMessenger';
+import EnhancedMessenger from '@/components/chat/EnhancedMessenger';
 import PollCreator from '@/components/polls/PollCreator';
 import PollDisplay from '@/components/polls/PollDisplay';
 import { usePolls } from '@/hooks/usePolls';
@@ -20,6 +22,22 @@ const Social: React.FC = () => {
   const [posting, setPosting] = useState(false);
   const [showDirectChat, setShowDirectChat] = useState(false);
   const [showPollCreator, setShowPollCreator] = useState(false);
+  const [showMessenger, setShowMessenger] = useState(false);
+  const [messengerMinimized, setMessengerMinimized] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isDashboardActive, setIsDashboardActive] = useState(false);
+  const [messengerCenter, setMessengerCenter] = useState(false);
+  
+  // Check for mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   // Social feed functionality
   const { 
@@ -263,39 +281,117 @@ const Social: React.FC = () => {
           </p>
         </div>
 
-        {/* Direct Chat Section */}
+        {/* Facebook-Style Messenger Integration */}
         <div className="glass-card p-8 mb-8 animate-fade-up" style={{ animationDelay: '0.45s' }}>
           <div className="flex items-center justify-between mb-6">
             <h2 className="flex items-center gap-3 text-xl font-semibold text-[#2d3f51]">
-              <Mail className="w-6 h-6 text-[#667eea]" />
-              Direct Messages
+              <MessageCircle className="w-6 h-6 text-[#1877f2]" />
+              Messenger
             </h2>
-            <Button
-              onClick={() => setShowDirectChat(!showDirectChat)}
-              variant="outline"
-              className="bg-white/60 backdrop-blur-sm border-white/30 hover:bg-white/80 text-[#2d3f51]"
-            >
-              {showDirectChat ? 'Hide Messages' : 'Open Messages'}
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => {
+                  setShowMessenger(true);
+                  setMessengerMinimized(false);
+                  setMessengerCenter(true);
+                }}
+                className="bg-[#1877f2] hover:bg-[#166fe5] text-white"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Open Enhanced Chat
+              </Button>
+              <Button
+                onClick={() => setShowDirectChat(!showDirectChat)}
+                variant="outline"
+                className="bg-white/60 backdrop-blur-sm border-white/30 hover:bg-white/80 text-[#2d3f51]"
+              >
+                {showDirectChat ? 'Hide Legacy Chat' : 'Legacy Chat'}
+              </Button>
+            </div>
           </div>
           
-          {showDirectChat ? (
-            <div className="h-[500px] bg-white/20 backdrop-blur-sm rounded-xl border border-white/20">
+          {/* Messenger Preview */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="space-y-4">
+              <h3 className="font-semibold text-[#2d3f51] text-lg">💬 Real-time Chat</h3>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3 p-3 bg-white/40 rounded-lg">
+                  <div className="relative">
+                    <span className="text-2xl">👰</span>
+                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-[#2d3f51] text-sm">Sarah M.</div>
+                    <div className="text-xs text-green-600">Active now</div>
+                  </div>
+                  <div className="ml-auto bg-[#1877f2] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    2
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3 p-3 bg-white/40 rounded-lg">
+                  <div className="relative">
+                    <span className="text-2xl">🤵</span>
+                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-[#2d3f51] text-sm">Mike R.</div>
+                    <div className="text-xs text-green-600">Active now</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <h3 className="font-semibold text-[#2d3f51] text-lg">✨ Features</h3>
+              <div className="space-y-2 text-sm text-[#7a736b]">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full" />
+                  <span>Real-time messaging</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                  <span>Online status indicators</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full" />
+                  <span>Photo & video sharing</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-pink-500 rounded-full" />
+                  <span>Emoji reactions</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full" />
+                  <span>Voice & video calls</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {showDirectChat && (
+            <div className="h-[500px] bg-white/20 backdrop-blur-sm rounded-xl border border-white/20 mb-6">
               <DirectChatContainer />
             </div>
-          ) : (
+          )}
+          
+          {!showMessenger && !showDirectChat && (
             <div className="text-center py-8">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#667eea]/20 to-[#764ba2]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="w-8 h-8 text-[#667eea]" />
+              <div className="w-16 h-16 bg-gradient-to-br from-[#1877f2]/20 to-[#1877f2]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="w-8 h-8 text-[#1877f2]" />
               </div>
               <p className="text-[#7a736b] mb-4">
-                Start conversations with other wedding guests
+                Connect instantly with wedding guests using our Facebook-style messenger
               </p>
               <Button
-                onClick={() => setShowDirectChat(true)}
-                className="bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:from-[#667eea]/90 hover:to-[#764ba2]/90 text-white"
+                onClick={() => {
+                  setShowMessenger(true);
+                  setMessengerMinimized(false);
+                  setMessengerCenter(true);
+                }}
+                className="bg-[#1877f2] hover:bg-[#166fe5] text-white"
               >
-                Open Direct Messages
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Start Enhanced Chat
               </Button>
             </div>
           )}
@@ -597,6 +693,25 @@ const Social: React.FC = () => {
           )}
         </div>
       </div>
+      
+      {/* Enhanced Messenger Component */}
+      {(showMessenger || messengerMinimized) && (
+        <EnhancedMessenger
+          isMinimized={messengerMinimized}
+          isMobile={isMobile}
+          isCenter={messengerCenter}
+          isDashboardActive={isDashboardActive}
+          onMinimize={() => {
+            setMessengerMinimized(!messengerMinimized);
+            setMessengerCenter(false);
+          }}
+          onClose={() => {
+            setShowMessenger(false);
+            setMessengerMinimized(false);
+            setMessengerCenter(false);
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -1,9 +1,11 @@
-import React from 'react';
-import { Calendar, MapPin, Camera, Gift, Users, Clock, Heart, MessageSquare } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Calendar, MapPin, Camera, Gift, Users, Clock, Heart, MessageSquare, Bell, CheckCircle, AlertCircle, Target, UserPlus, MessageCircle, ExternalLink, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 import { HapticFeedback } from '@/components/mobile/HapticFeedback';
 import { QuickActionButton } from '@/components/mobile/QuickActionButton';
 import { CollapsibleSection } from '@/components/mobile/CollapsibleSection';
+import { Button } from '@/components/ui/button';
 import type { AdminStats } from './types';
 
 interface GuestDashboardContentProps {
@@ -16,13 +18,36 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
   onClose 
 }) => {
   const navigate = useNavigate();
+  const { user, profile } = useAuth();
+  const [onlineUsers, setOnlineUsers] = useState([
+    { id: 1, name: 'Sarah M.', avatar: '👰', status: 'online', lastSeen: 'now' },
+    { id: 2, name: 'Mike R.', avatar: '🤵', status: 'online', lastSeen: 'now' },
+    { id: 3, name: 'Emma J.', avatar: '👩', status: 'away', lastSeen: '5 min ago' },
+    { id: 4, name: 'David K.', avatar: '👨', status: 'online', lastSeen: 'now' }
+  ]);
+  
+  const [notifications, setNotifications] = useState([
+    { id: 1, type: 'info', title: 'New Transport Details', message: 'Coach times updated for Newcastle pickup', time: '2 hours ago', read: false },
+    { id: 2, type: 'social', title: 'Sarah posted in Social', message: 'Shared excitement about the upcoming celebration!', time: '4 hours ago', read: false },
+    { id: 3, type: 'reminder', title: 'FAQ Quiz Available', message: 'Test your knowledge about the wedding details', time: '1 day ago', read: true }
+  ]);
+  
+  const [pendingActions, setPendingActions] = useState([
+    { id: 1, title: 'Complete FAQ Quiz', description: 'Learn important wedding details', icon: MessageSquare, completed: false, points: 50 },
+    { id: 2, title: 'Make First Social Post', description: 'Share your excitement!', icon: Sparkles, completed: false, points: 30 },
+    { id: 3, title: 'Update Plus One Details', description: 'Add your guest information', icon: UserPlus, completed: profile?.plus_one_name ? true : false, points: 20 }
+  ]);
+  
+  const unreadNotifications = notifications.filter(n => !n.read).length;
+  const completedActions = pendingActions.filter(a => a.completed).length;
+  const totalPoints = pendingActions.filter(a => a.completed).reduce((sum, a) => sum + a.points, 0);
 
   const handleNavigation = (path: string) => {
     onClose();
     navigate(path);
   };
 
-  const guestActions = [
+  const coreActions = [
     {
       icon: Calendar,
       title: 'RSVP',
@@ -31,39 +56,33 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
       color: 'glass-blue'
     },
     {
-      icon: Camera,
-      title: 'Gallery',
-      description: 'View & share photos',
-      path: '/gallery',
-      color: 'glass-purple'
-    },
-    {
-      icon: Gift,
-      title: 'Gifts',
-      description: 'Wedding registry',
-      path: '/gifts',
-      color: 'glass-pink'
-    },
-    {
-      icon: MapPin,
-      title: 'Venue',
-      description: 'Location details',
-      path: '/venue',
-      color: 'glass-green'
-    },
-    {
       icon: Users,
-      title: 'Social',
-      description: 'Connect with others',
+      title: 'Social Chat',
+      description: 'Connect with guests',
       path: '/social',
-      color: 'glass-blue'
+      color: 'glass-blue',
+      badge: '2'
     },
     {
       icon: MessageSquare,
-      title: 'FAQ',
-      description: 'Common questions',
+      title: 'FAQ Quiz',
+      description: 'Test your knowledge',
       path: '/faq',
       color: 'glass-purple'
+    },
+    {
+      icon: MapPin,
+      title: 'Transport',
+      description: 'Coaches & travel',
+      path: '/transport',
+      color: 'glass-green'
+    },
+    {
+      icon: MapPin,
+      title: 'Accommodation',
+      description: 'Places to stay',
+      path: '/accommodation',
+      color: 'glass-blue'
     }
   ];
 
@@ -71,48 +90,67 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
     {
       icon: Calendar,
       label: 'Days to Go',
-      value: '42', // Would be calculated from wedding date
+      value: '42',
       color: 'glass-pink'
     },
     {
-      icon: Users,
-      label: 'Guests',
-      value: stats.totalRSVPs.toString(),
-      color: 'glass-blue'
+      icon: Bell,
+      label: 'Notifications',
+      value: unreadNotifications.toString(),
+      color: 'glass-blue',
+      highlight: unreadNotifications > 0
     },
     {
-      icon: Camera,
-      label: 'Photos',
-      value: stats.approvedPhotos.toString(),
+      icon: Target,
+      label: 'Goals Done',
+      value: `${completedActions}/${pendingActions.length}`,
       color: 'glass-purple'
     },
     {
-      icon: Heart,
-      label: 'Memories',
-      value: stats.totalMessages.toString(),
+      icon: Sparkles,
+      label: 'Points',
+      value: totalPoints.toString(),
       color: 'glass-green'
     }
   ];
 
+  const handleNotificationClick = (notificationId: number) => {
+    setNotifications(prev => prev.map(n => 
+      n.id === notificationId ? { ...n, read: true } : n
+    ));
+  };
+  
+  const handleActionComplete = (actionId: number) => {
+    setPendingActions(prev => prev.map(a => 
+      a.id === actionId ? { ...a, completed: true } : a
+    ));
+  };
+
   return (
     <div className="p-2 sm:p-4 space-y-4 sm:space-y-6 h-full overflow-y-auto">
-      {/* Welcome Message */}
+      {/* Welcome Message with Activity Status */}
       <div className="glass-card p-3 sm:p-4 text-center space-y-2">
-        <Heart className="w-6 h-6 mx-auto text-glass-pink" />
+        <div className="flex items-center justify-center space-x-2">
+          <Heart className="w-6 h-6 text-glass-pink" />
+          <div className="flex items-center space-x-1">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-xs text-muted-foreground">{onlineUsers.filter(u => u.status === 'online').length} online</span>
+          </div>
+        </div>
         <h3 className="text-lg font-semibold text-wedding-navy">
-          Welcome to Our Wedding
+          Welcome Back, {profile?.first_name || 'Guest'}!
         </h3>
         <p className="text-sm text-muted-foreground">
-          We're so excited to celebrate with you!
+          {unreadNotifications > 0 ? `${unreadNotifications} new updates` : 'You\'re all caught up!'}
         </p>
       </div>
 
-      {/* Quick Stats */}
+      {/* Activity Stats */}
       <div className="responsive-grid-4">
         {quickStats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className="glass-card responsive-card-padding-sm text-center space-y-2">
+            <div key={index} className={`glass-card responsive-card-padding-sm text-center space-y-2 ${stat.highlight ? 'ring-2 ring-wedding-gold/30' : ''}`}>
               <Icon className={`w-4 h-4 sm:w-5 sm:h-5 mx-auto text-${stat.color}`} />
               <div className="text-base sm:text-lg font-semibold text-wedding-navy">
                 {stat.value}
@@ -125,28 +163,158 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
         })}
       </div>
 
-      {/* Quick Actions with Haptic Feedback */}
+      {/* Notifications */}
+      <CollapsibleSection 
+        title={`Notifications ${unreadNotifications > 0 ? `(${unreadNotifications})` : ''}`}
+        icon={<Bell className="w-5 h-5" />}
+        defaultOpen={unreadNotifications > 0}
+      >
+        <div className="space-y-2">
+          {notifications.slice(0, 3).map((notification) => (
+            <HapticFeedback key={notification.id} type="light">
+              <div 
+                className={`glass-card p-3 cursor-pointer hover:scale-102 transition-transform ${
+                  !notification.read ? 'ring-2 ring-wedding-gold/30' : 'opacity-70'
+                }`}
+                onClick={() => handleNotificationClick(notification.id)}
+              >
+                <div className="flex items-start space-x-3">
+                  <div className={`w-2 h-2 rounded-full mt-2 ${
+                    notification.type === 'info' ? 'bg-blue-500' :
+                    notification.type === 'social' ? 'bg-green-500' :
+                    'bg-orange-500'
+                  }`} />
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium text-wedding-navy text-sm">{notification.title}</h4>
+                      <span className="text-xs text-muted-foreground">{notification.time}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">{notification.message}</p>
+                  </div>
+                </div>
+              </div>
+            </HapticFeedback>
+          ))}
+        </div>
+      </CollapsibleSection>
+
+      {/* Pending Actions & Goals */}
+      <CollapsibleSection 
+        title="Your Goals"
+        icon={<Target className="w-5 h-5" />}
+        defaultOpen={true}
+      >
+        <div className="space-y-3">
+          {pendingActions.map((action) => {
+            const Icon = action.icon;
+            return (
+              <HapticFeedback key={action.id} type="light">
+                <div className={`glass-card p-3 ${action.completed ? 'opacity-70' : ''}`}>
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      action.completed ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      {action.completed ? <CheckCircle className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium text-wedding-navy text-sm">{action.title}</h4>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-xs text-wedding-gold font-medium">+{action.points}</span>
+                          {action.completed && <CheckCircle className="w-4 h-4 text-green-500" />}
+                        </div>
+                      </div>
+                      <p className="text-xs text-muted-foreground">{action.description}</p>
+                    </div>
+                  </div>
+                </div>
+              </HapticFeedback>
+            );
+          })}
+        </div>
+      </CollapsibleSection>
+
+      {/* Who's Online */}
+      <CollapsibleSection 
+        title="Who's Online"
+        icon={<Users className="w-5 h-5" />}
+        defaultOpen={true}
+      >
+        <div className="space-y-2">
+          {onlineUsers.slice(0, 4).map((user) => (
+            <HapticFeedback key={user.id} type="light">
+              <div className="glass-card p-3 flex items-center space-x-3 hover:scale-102 transition-transform">
+                <div className="relative">
+                  <span className="text-lg">{user.avatar}</span>
+                  <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${
+                    user.status === 'online' ? 'bg-green-500' : 'bg-gray-400'
+                  }`} />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-wedding-navy text-sm">{user.name}</span>
+                    <button className="text-xs text-wedding-gold hover:text-wedding-gold/80">
+                      <MessageCircle className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <span className="text-xs text-muted-foreground">{user.lastSeen}</span>
+                </div>
+              </div>
+            </HapticFeedback>
+          ))}
+        </div>
+      </CollapsibleSection>
+
+      {/* Quick Actions */}
       <CollapsibleSection 
         title="Quick Actions" 
         icon={<Heart className="w-5 h-5" />}
         defaultOpen={true}
       >
-        <div className="responsive-grid-2 gap-3">
-          {guestActions.map((action, index) => {
-            const Icon = action.icon;
-            return (
-              <HapticFeedback key={index} type="light">
-                <QuickActionButton
-                  icon={<Icon className="w-5 h-5" />}
-                  label={action.title}
-                  onClick={() => handleNavigation(action.path)}
-                  variant="secondary"
-                  size="medium"
-                  className="w-full justify-start space-y-1 h-auto py-4"
-                />
-              </HapticFeedback>
-            );
-          })}
+        <div className="space-y-3">
+          {/* Gift Registry - External Link */}
+          <HapticFeedback type="light">
+            <Button
+              onClick={() => window.open('https://example.com/tim-kirsten-gifts', '_blank')}
+              className="w-full glass-button-secondary h-auto py-4 justify-between"
+              variant="outline"
+            >
+              <div className="flex items-center space-x-3">
+                <Gift className="w-5 h-5 text-glass-pink" />
+                <div className="text-left">
+                  <div className="font-medium">Gift Registry</div>
+                  <div className="text-xs text-muted-foreground">View our wishes</div>
+                </div>
+              </div>
+              <ExternalLink className="w-4 h-4" />
+            </Button>
+          </HapticFeedback>
+          
+          {/* Core Actions Grid */}
+          <div className="responsive-grid-2 gap-3">
+            {coreActions.map((action, index) => {
+              const Icon = action.icon;
+              return (
+                <HapticFeedback key={index} type="light">
+                  <div className="relative">
+                    <QuickActionButton
+                      icon={<Icon className="w-5 h-5" />}
+                      label={action.title}
+                      onClick={() => handleNavigation(action.path)}
+                      variant="secondary"
+                      size="medium"
+                      className="w-full justify-start space-y-1 h-auto py-4"
+                    />
+                    {action.badge && (
+                      <div className="absolute -top-2 -right-2 w-5 h-5 bg-wedding-gold text-white text-xs rounded-full flex items-center justify-center">
+                        {action.badge}
+                      </div>
+                    )}
+                  </div>
+                </HapticFeedback>
+              );
+            })}
+          </div>
         </div>
       </CollapsibleSection>
 

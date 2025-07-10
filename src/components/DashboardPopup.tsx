@@ -6,6 +6,7 @@ import AccessRestrictedView from './dashboard/AccessRestrictedView';
 import DashboardHeader from './dashboard/DashboardHeader';
 import AdminDashboardContent from './dashboard/AdminDashboardContent';
 import GuestDashboardContent from './dashboard/GuestDashboardContent';
+import PublicGuestDashboard from './dashboard/PublicGuestDashboard';
 
 interface DashboardPopupProps {
   isOpen: boolean;
@@ -37,10 +38,12 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  // Access restriction check
-  if (authUserRole?.role !== 'admin' && authUserRole?.role !== 'couple' && authUserRole?.role !== 'guest') {
-    return <AccessRestrictedView onClose={onClose} />;
-  }
+  // Determine if user has access - allow authenticated users and provide guest experience for unauthenticated
+  const hasAccess = authUserRole?.role === 'admin' || authUserRole?.role === 'couple' || authUserRole?.role === 'guest';
+  const isAuthenticated = !!authUserRole;
+  
+  // If not authenticated, treat as guest user
+  const effectiveRole = isAuthenticated ? authUserRole.role : 'guest';
 
   return (
     <>
@@ -68,7 +71,7 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
           aria-labelledby="dashboard-title"
         >
           {/* Header with improved touch targets */}
-          <DashboardHeader userRole={authUserRole?.role} onClose={onClose} />
+          <DashboardHeader userRole={effectiveRole} onClose={onClose} />
 
           {/* Content container with proper scrolling */}
           <div className="flex-1 overflow-y-auto overscroll-contain" style={{ maxHeight: 'calc(90vh - 60px)' }}>
@@ -76,7 +79,7 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
               <div className="flex items-center justify-center h-40 p-4">
                 <div className="animate-spin rounded-full h-8 w-8 border-2 border-wedding-navy border-t-transparent" />
               </div>
-            ) : authUserRole?.role === 'admin' || authUserRole?.role === 'couple' ? (
+            ) : effectiveRole === 'admin' || effectiveRole === 'couple' ? (
               <AdminDashboardContent
                 stats={stats}
                 users={users}
@@ -84,8 +87,10 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
                 photos={photos}
                 onRefresh={fetchDashboardData}
               />
-            ) : (
+            ) : isAuthenticated ? (
               <GuestDashboardContent stats={stats} onClose={onClose} />
+            ) : (
+              <PublicGuestDashboard onClose={onClose} />
             )}
           </div>
         </div>

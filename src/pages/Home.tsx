@@ -1,19 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useWeddingEvents } from '@/hooks/useWeddingData';
 import { useAuth } from '@/hooks/useAuth';
 import { useAppSettings } from '@/hooks/useAppSettings';
+import { useRSVPStatus } from '@/hooks/useRSVPStatus';
 import EnhancedHeroSection from '@/components/home/EnhancedHeroSection';
 import DynamicCountdownSection from '@/components/home/DynamicCountdownSection';
-
+import DynamicFAQSection from '@/components/home/DynamicFAQSection';
 import EventsSection from '@/components/home/EventsSection';
 import DressCodeCard from '@/components/DressCodeCard';
 import ContactInfo from '@/components/ContactInfo';
+import RSVPPopup from '@/components/RSVPPopup';
 
 const Home: React.FC = () => {
   const { events, loading: eventsLoading } = useWeddingEvents();
   const { userRole } = useAuth();
   const { settings } = useAppSettings();
+  const { needsRSVP, markRSVPComplete } = useRSVPStatus();
+  const [showRSVPPopup, setShowRSVPPopup] = useState(false);
   const isAdmin = userRole?.role === 'admin' || userRole?.role === 'couple';
+
+  // Show RSVP popup after a short delay for guests who need to RSVP
+  useEffect(() => {
+    if (needsRSVP && !isAdmin) {
+      const timer = setTimeout(() => {
+        setShowRSVPPopup(true);
+      }, 2000); // Show after 2 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [needsRSVP, isAdmin]);
+
+  const handleRSVPComplete = () => {
+    markRSVPComplete();
+    setShowRSVPPopup(false);
+  };
 
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8 xl:p-10 relative overflow-hidden">
@@ -27,25 +47,8 @@ const Home: React.FC = () => {
         />
         
         
-        {/* Quick Links */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
-          <a href="/accommodation" className="glass-card p-4 text-center hover:scale-105 transition-transform duration-200">
-            <div className="text-2xl mb-2">🏨</div>
-            <span className="text-sm font-medium text-wedding-navy">Stay</span>
-          </a>
-          <a href="/transport" className="glass-card p-4 text-center hover:scale-105 transition-transform duration-200">
-            <div className="text-2xl mb-2">🚌</div>
-            <span className="text-sm font-medium text-wedding-navy">Transport</span>
-          </a>
-          <a href={settings.external_gift_registry_url} target="_blank" rel="noopener noreferrer" className="glass-card p-4 text-center hover:scale-105 transition-transform duration-200">
-            <div className="text-2xl mb-2">🎁</div>
-            <span className="text-sm font-medium text-wedding-navy">Gifts</span>
-          </a>
-          <a href="/faq" className="glass-card p-4 text-center hover:scale-105 transition-transform duration-200">
-            <div className="text-2xl mb-2">❓</div>
-            <span className="text-sm font-medium text-wedding-navy">FAQ</span>
-          </a>
-        </div>
+        {/* Dynamic FAQ Section - Admin Controlled */}
+        <DynamicFAQSection />
         
         {/* Dress Code */}
         <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
@@ -71,6 +74,13 @@ const Home: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* RSVP Popup for guests who haven't RSVP'd */}
+      <RSVPPopup
+        isOpen={showRSVPPopup}
+        onClose={() => setShowRSVPPopup(false)}
+        onComplete={handleRSVPComplete}
+      />
     </div>
   );
 };
