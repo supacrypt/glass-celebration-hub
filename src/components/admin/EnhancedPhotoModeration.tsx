@@ -134,7 +134,7 @@ const EnhancedPhotoModeration: React.FC<EnhancedPhotoModerationProps> = ({ photo
 
   const approvePhoto = async (photoId: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('photos')
         .update({ 
           is_approved: true,
@@ -162,7 +162,7 @@ const EnhancedPhotoModeration: React.FC<EnhancedPhotoModerationProps> = ({ photo
 
   const rejectPhoto = async (photoId: string, reason?: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('photos')
         .update({ 
           is_approved: false,
@@ -194,7 +194,7 @@ const EnhancedPhotoModeration: React.FC<EnhancedPhotoModerationProps> = ({ photo
 
   const deletePhoto = async (photoId: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('photos')
         .delete()
         .eq('id', photoId);

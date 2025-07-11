@@ -170,7 +170,7 @@ const EnhancedMediaManagement: React.FC = () => {
       }
 
       // Get pending approval count from database
-      const { count } = await supabase
+      const { count } = await (supabase as any)
         .from('photos')
         .select('*', { count: 'exact', head: true })
         .eq('is_approved', false);
@@ -191,7 +191,7 @@ const EnhancedMediaManagement: React.FC = () => {
 
   const handleApprove = async (id: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('photos')
         .update({ is_approved: true })
         .eq('id', id);
@@ -216,7 +216,7 @@ const EnhancedMediaManagement: React.FC = () => {
 
   const handleReject = async (id: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('photos')
         .update({ is_approved: false })
         .eq('id', id);
@@ -242,7 +242,7 @@ const EnhancedMediaManagement: React.FC = () => {
   const handleDelete = async (id: string, filePath: string) => {
     try {
       // Delete from database
-      const { error: dbError } = await supabase
+      const { error: dbError } = await (supabase as any)
         .from('photos')
         .delete()
         .eq('id', id);
