@@ -6,10 +6,21 @@ interface Profile {
   id: string;
   user_id: string;
   email: string;
-  name?: string;
-  role: 'guest' | 'admin' | 'couple';
+  first_name?: string;
+  last_name?: string;
+  display_name?: string;
   avatar_url?: string;
   phone?: string;
+  mobile?: string;
+  address?: string;
+  state?: string;
+  country?: string;
+  postcode?: string;
+  has_plus_one?: boolean;
+  plus_one_name?: string;
+  plus_one_email?: string;
+  plus_one_invited?: boolean;
+  rsvp_completed?: boolean;
   created_at?: string;
   updated_at?: string;
 }
@@ -62,17 +73,26 @@ export const useAuth = () => {
 
   const fetchUserData = async (userId: string) => {
     try {
-      // Fetch profile from user_profiles table (the correct table name)
-      const { data: profileData } = await supabase
-        .from('user_profiles')
+      // Fetch profile from profiles table
+      const { data: profileData } = await (supabase as any)
+        .from('profiles')
         .select('*')
         .eq('user_id', userId)
         .maybeSingle();
       
       setProfile(profileData);
 
-      // Extract role from user_profiles table (role is stored directly in user_profiles)
-      const roleData = profileData ? { role: profileData.role } : null;
+      // Fetch user role from user_roles table
+      let roleData = null;
+      if (profileData) {
+        const { data: userRoleData } = await (supabase as any)
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', userId)
+          .maybeSingle();
+        
+        roleData = userRoleData ? { role: userRoleData.role } : { role: 'guest' };
+      }
       setUserRole(roleData);
       
       console.log('User data fetched:', { profileData, roleData });
@@ -136,8 +156,8 @@ export const useAuth = () => {
   const updateProfile = async (updates: Partial<Profile>) => {
     if (!user) return { error: new Error('No user logged in') };
     
-    const { error } = await supabase
-      .from('user_profiles')
+    const { error } = await (supabase as any)
+      .from('profiles')
       .upsert({
         user_id: user.id,
         email: user.email,

@@ -14,29 +14,287 @@ export type Database = {
   }
   public: {
     Tables: {
+      accommodation_categories: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      accommodation_options: {
+        Row: {
+          address: string | null
+          amenities: string[] | null
+          area: string | null
+          booking_url: string | null
+          category_id: string | null
+          coordinates: number[] | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          distance_from_venue: string | null
+          email: string | null
+          featured: boolean | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          metadata: Json | null
+          name: string
+          phone: string | null
+          price_range: string | null
+          type: string | null
+          updated_at: string | null
+          website_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          amenities?: string[] | null
+          area?: string | null
+          booking_url?: string | null
+          category_id?: string | null
+          coordinates?: number[] | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          distance_from_venue?: string | null
+          email?: string | null
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          metadata?: Json | null
+          name: string
+          phone?: string | null
+          price_range?: string | null
+          type?: string | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          amenities?: string[] | null
+          area?: string | null
+          booking_url?: string | null
+          category_id?: string | null
+          coordinates?: number[] | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          distance_from_venue?: string | null
+          email?: string | null
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          metadata?: Json | null
+          name?: string
+          phone?: string | null
+          price_range?: string | null
+          type?: string | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "accommodation_options_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "accommodation_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       app_settings: {
         Row: {
           created_at: string | null
+          description: string | null
           id: string
+          is_public: boolean | null
           setting_key: string
+          setting_type: string | null
           setting_value: string | null
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
+          description?: string | null
           id?: string
+          is_public?: boolean | null
           setting_key: string
+          setting_type?: string | null
           setting_value?: string | null
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
+          description?: string | null
           id?: string
+          is_public?: boolean | null
           setting_key?: string
+          setting_type?: string | null
           setting_value?: string | null
           updated_at?: string | null
         }
         Relationships: []
+      }
+      bus_seat_bookings: {
+        Row: {
+          booking_status: string | null
+          contact_phone: string | null
+          created_at: string | null
+          id: string
+          passenger_name: string
+          seat_number: number | null
+          special_requirements: string | null
+          transportation_schedule_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          booking_status?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          id?: string
+          passenger_name: string
+          seat_number?: number | null
+          special_requirements?: string | null
+          transportation_schedule_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          booking_status?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          id?: string
+          passenger_name?: string
+          seat_number?: number | null
+          special_requirements?: string | null
+          transportation_schedule_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bus_seat_bookings_transportation_schedule_id_fkey"
+            columns: ["transportation_schedule_id"]
+            isOneToOne: false
+            referencedRelation: "transportation_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      carpool_coordination: {
+        Row: {
+          available_seats: number | null
+          contact_phone: string | null
+          contact_preferences: string | null
+          coordination_type: string | null
+          created_at: string | null
+          departure_location: string | null
+          departure_time: string | null
+          id: string
+          special_requirements: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          available_seats?: number | null
+          contact_phone?: string | null
+          contact_preferences?: string | null
+          coordination_type?: string | null
+          created_at?: string | null
+          departure_location?: string | null
+          departure_time?: string | null
+          id?: string
+          special_requirements?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          available_seats?: number | null
+          contact_phone?: string | null
+          contact_preferences?: string | null
+          coordination_type?: string | null
+          created_at?: string | null
+          departure_location?: string | null
+          departure_time?: string | null
+          id?: string
+          special_requirements?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      carpool_participants: {
+        Row: {
+          carpool_id: string | null
+          contact_phone: string | null
+          created_at: string | null
+          id: string
+          participant_user_id: string | null
+          passenger_name: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          carpool_id?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          id?: string
+          participant_user_id?: string | null
+          passenger_name: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          carpool_id?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          id?: string
+          participant_user_id?: string | null
+          passenger_name?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "carpool_participants_carpool_id_fkey"
+            columns: ["carpool_id"]
+            isOneToOne: false
+            referencedRelation: "carpool_coordination"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       chat_members: {
         Row: {
@@ -75,33 +333,45 @@ export type Database = {
           chat_id: string
           content: string | null
           created_at: string
+          file_url: string | null
           id: string
           is_read: boolean
           media_thumbnail: string | null
           media_type: string | null
           media_url: string | null
+          message_type: string | null
+          recipient_id: string | null
+          sender_id: string | null
           user_id: string
         }
         Insert: {
           chat_id: string
           content?: string | null
           created_at?: string
+          file_url?: string | null
           id?: string
           is_read?: boolean
           media_thumbnail?: string | null
           media_type?: string | null
           media_url?: string | null
+          message_type?: string | null
+          recipient_id?: string | null
+          sender_id?: string | null
           user_id: string
         }
         Update: {
           chat_id?: string
           content?: string | null
           created_at?: string
+          file_url?: string | null
           id?: string
           is_read?: boolean
           media_thumbnail?: string | null
           media_type?: string | null
           media_url?: string | null
+          message_type?: string | null
+          recipient_id?: string | null
+          sender_id?: string | null
           user_id?: string
         }
         Relationships: [
@@ -113,6 +383,155 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      contact_categories: {
+        Row: {
+          category_name: string
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          category_name: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          category_name?: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      contact_details: {
+        Row: {
+          address: string | null
+          availability_hours: string | null
+          category_id: string | null
+          contact_type: string
+          created_at: string | null
+          display_order: number | null
+          email_primary: string | null
+          email_secondary: string | null
+          emergency_contact: boolean | null
+          featured: boolean | null
+          id: string
+          instructions: string | null
+          is_active: boolean | null
+          metadata: Json | null
+          name: string
+          phone_primary: string | null
+          phone_secondary: string | null
+          role: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          availability_hours?: string | null
+          category_id?: string | null
+          contact_type: string
+          created_at?: string | null
+          display_order?: number | null
+          email_primary?: string | null
+          email_secondary?: string | null
+          emergency_contact?: boolean | null
+          featured?: boolean | null
+          id?: string
+          instructions?: string | null
+          is_active?: boolean | null
+          metadata?: Json | null
+          name: string
+          phone_primary?: string | null
+          phone_secondary?: string | null
+          role?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          availability_hours?: string | null
+          category_id?: string | null
+          contact_type?: string
+          created_at?: string | null
+          display_order?: number | null
+          email_primary?: string | null
+          email_secondary?: string | null
+          emergency_contact?: boolean | null
+          featured?: boolean | null
+          id?: string
+          instructions?: string | null
+          is_active?: boolean | null
+          metadata?: Json | null
+          name?: string
+          phone_primary?: string | null
+          phone_secondary?: string | null
+          role?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_details_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "contact_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      content_blocks: {
+        Row: {
+          content: string | null
+          content_type: string | null
+          created_at: string | null
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          metadata: Json | null
+          page_slug: string
+          section_key: string
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          content?: string | null
+          content_type?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          page_slug: string
+          section_key: string
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string | null
+          content_type?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          page_slug?: string
+          section_key?: string
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       conversation_settings: {
         Row: {
@@ -303,6 +722,42 @@ export type Database = {
           },
         ]
       }
+      faqs: {
+        Row: {
+          answer: string
+          category: string | null
+          created_at: string | null
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          is_featured: boolean | null
+          question: string
+          updated_at: string | null
+        }
+        Insert: {
+          answer: string
+          category?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          question: string
+          updated_at?: string | null
+        }
+        Update: {
+          answer?: string
+          category?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          question?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       gallery_photos: {
         Row: {
           backstory: string | null
@@ -394,6 +849,84 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
         ]
+      }
+      gift_registry_redirects: {
+        Row: {
+          button_text: string | null
+          created_at: string | null
+          display_order: number | null
+          featured: boolean | null
+          id: string
+          is_active: boolean | null
+          metadata: Json | null
+          redirect_url: string
+          service_description: string | null
+          service_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          button_text?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          featured?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          redirect_url: string
+          service_description?: string | null
+          service_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          button_text?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          featured?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          redirect_url?: string
+          service_description?: string | null
+          service_name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      guest_transport_status: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_reminder_sent: string | null
+          notes: string | null
+          status: string | null
+          transport_details: Json | null
+          transport_method: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_reminder_sent?: string | null
+          notes?: string | null
+          status?: string | null
+          transport_details?: Json | null
+          transport_method?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_reminder_sent?: string | null
+          notes?: string | null
+          status?: string | null
+          transport_details?: Json | null
+          transport_method?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       guests: {
         Row: {
@@ -673,6 +1206,54 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
         ]
+      }
+      photo_gallery: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          id: string
+          image_url: string
+          is_approved: boolean | null
+          is_featured: boolean | null
+          metadata: Json | null
+          thumbnail_url: string | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url: string
+          is_approved?: boolean | null
+          is_featured?: boolean | null
+          metadata?: Json | null
+          thumbnail_url?: string | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          is_approved?: boolean | null
+          is_featured?: boolean | null
+          metadata?: Json | null
+          thumbnail_url?: string | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       photo_likes: {
         Row: {
@@ -1066,39 +1647,64 @@ export type Database = {
       }
       rsvps: {
         Row: {
+          accommodation_needed: boolean | null
           created_at: string
           dietary_restrictions: string | null
           event_id: string
           guest_count: number | null
           id: string
+          meal_preference: string | null
           message: string | null
+          plus_one_name: string | null
+          song_request: string | null
           status: string
+          table_assignment: string | null
+          transportation_needed: boolean | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          accommodation_needed?: boolean | null
           created_at?: string
           dietary_restrictions?: string | null
           event_id: string
           guest_count?: number | null
           id?: string
+          meal_preference?: string | null
           message?: string | null
+          plus_one_name?: string | null
+          song_request?: string | null
           status: string
+          table_assignment?: string | null
+          transportation_needed?: boolean | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          accommodation_needed?: boolean | null
           created_at?: string
           dietary_restrictions?: string | null
           event_id?: string
           guest_count?: number | null
           id?: string
+          meal_preference?: string | null
           message?: string | null
+          plus_one_name?: string | null
+          song_request?: string | null
           status?: string
+          table_assignment?: string | null
+          transportation_needed?: boolean | null
           updated_at?: string
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "rsvps_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "event_attendance_summary"
+            referencedColumns: ["event_id"]
+          },
           {
             foreignKeyName: "rsvps_event_id_fkey"
             columns: ["event_id"]
@@ -1112,6 +1718,74 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      social_feed: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          image_url: string | null
+          is_approved: boolean | null
+          is_pinned: boolean | null
+          like_count: number | null
+          post_type: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean | null
+          is_pinned?: boolean | null
+          like_count?: number | null
+          post_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean | null
+          is_pinned?: boolean | null
+          like_count?: number | null
+          post_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      social_feed_likes: {
+        Row: {
+          created_at: string | null
+          id: string
+          post_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          post_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          post_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_feed_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "social_feed"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1192,6 +1866,172 @@ export type Database = {
         }
         Relationships: []
       }
+      transportation_categories: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      transportation_options: {
+        Row: {
+          booking_phone: string | null
+          booking_required: boolean | null
+          booking_url: string | null
+          capacity_info: string | null
+          category_id: string | null
+          cost_info: string | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          dropoff_locations: string[] | null
+          duration_info: string | null
+          featured: boolean | null
+          id: string
+          is_active: boolean | null
+          metadata: Json | null
+          method_name: string
+          pickup_locations: string[] | null
+          schedule_info: string | null
+          special_notes: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          booking_phone?: string | null
+          booking_required?: boolean | null
+          booking_url?: string | null
+          capacity_info?: string | null
+          category_id?: string | null
+          cost_info?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          dropoff_locations?: string[] | null
+          duration_info?: string | null
+          featured?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          method_name: string
+          pickup_locations?: string[] | null
+          schedule_info?: string | null
+          special_notes?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          booking_phone?: string | null
+          booking_required?: boolean | null
+          booking_url?: string | null
+          capacity_info?: string | null
+          category_id?: string | null
+          cost_info?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          dropoff_locations?: string[] | null
+          duration_info?: string | null
+          featured?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          method_name?: string
+          pickup_locations?: string[] | null
+          schedule_info?: string | null
+          special_notes?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transportation_options_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "transportation_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transportation_schedules: {
+        Row: {
+          arrival_location: string | null
+          arrival_time: string | null
+          available_dates: string[] | null
+          created_at: string | null
+          current_bookings: number | null
+          departure_location: string | null
+          departure_time: string
+          id: string
+          is_active: boolean | null
+          max_capacity: number | null
+          notes: string | null
+          transportation_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          arrival_location?: string | null
+          arrival_time?: string | null
+          available_dates?: string[] | null
+          created_at?: string | null
+          current_bookings?: number | null
+          departure_location?: string | null
+          departure_time: string
+          id?: string
+          is_active?: boolean | null
+          max_capacity?: number | null
+          notes?: string | null
+          transportation_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          arrival_location?: string | null
+          arrival_time?: string | null
+          available_dates?: string[] | null
+          created_at?: string | null
+          current_bookings?: number | null
+          departure_location?: string | null
+          departure_time?: string
+          id?: string
+          is_active?: boolean | null
+          max_capacity?: number | null
+          notes?: string | null
+          transportation_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transportation_schedules_transportation_id_fkey"
+            columns: ["transportation_id"]
+            isOneToOne: false
+            referencedRelation: "transportation_options"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_blocks: {
         Row: {
           blocked_at: string
@@ -1210,6 +2050,42 @@ export type Database = {
           blocked_user_id?: string
           id?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          email: string
+          id: string
+          name: string | null
+          phone: string | null
+          role: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          name?: string | null
+          phone?: string | null
+          role?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string | null
+          phone?: string | null
+          role?: string | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -1340,48 +2216,95 @@ export type Database = {
           address: string | null
           created_at: string
           description: string | null
+          display_order: number | null
           dress_code: string | null
+          end_time: string | null
           event_date: string
           id: string
+          is_active: boolean | null
           is_main_event: boolean | null
           location: string | null
+          max_guests: number | null
+          metadata: Json | null
+          name: string | null
           notes: string | null
+          requires_rsvp: boolean | null
+          start_time: string | null
           title: string
           updated_at: string
+          venue_address: string | null
+          venue_coordinates: number[] | null
           venue_name: string | null
         }
         Insert: {
           address?: string | null
           created_at?: string
           description?: string | null
+          display_order?: number | null
           dress_code?: string | null
+          end_time?: string | null
           event_date: string
           id?: string
+          is_active?: boolean | null
           is_main_event?: boolean | null
           location?: string | null
+          max_guests?: number | null
+          metadata?: Json | null
+          name?: string | null
           notes?: string | null
+          requires_rsvp?: boolean | null
+          start_time?: string | null
           title: string
           updated_at?: string
+          venue_address?: string | null
+          venue_coordinates?: number[] | null
           venue_name?: string | null
         }
         Update: {
           address?: string | null
           created_at?: string
           description?: string | null
+          display_order?: number | null
           dress_code?: string | null
+          end_time?: string | null
           event_date?: string
           id?: string
+          is_active?: boolean | null
           is_main_event?: boolean | null
           location?: string | null
+          max_guests?: number | null
+          metadata?: Json | null
+          name?: string | null
           notes?: string | null
+          requires_rsvp?: boolean | null
+          start_time?: string | null
           title?: string
           updated_at?: string
+          venue_address?: string | null
+          venue_coordinates?: number[] | null
           venue_name?: string | null
         }
         Relationships: []
       }
     }
     Views: {
+      event_attendance_summary: {
+        Row: {
+          attending_count: number | null
+          declined_count: number | null
+          event_date: string | null
+          event_id: string | null
+          event_name: string | null
+          max_guests: number | null
+          maybe_count: number | null
+          pending_count: number | null
+          remaining_capacity: number | null
+          total_attending_guests: number | null
+          total_rsvps: number | null
+          venue_name: string | null
+        }
+        Relationships: []
+      }
       faq_with_categories: {
         Row: {
           answer: string | null
@@ -1441,20 +2364,30 @@ export type Database = {
         Returns: boolean
       }
       safe_upsert_rsvp: {
-        Args: {
-          p_user_id: string
-          p_event_id: string
-          p_status: string
-          p_guest_count?: number
-          p_dietary_restrictions?: string
-          p_message?: string
-          p_plus_one_name?: string
-          p_table_assignment?: string
-          p_meal_preference?: string
-          p_song_request?: string
-          p_accommodation_needed?: boolean
-          p_transportation_needed?: boolean
-        }
+        Args:
+          | {
+              p_user_id: string
+              p_event_id: string
+              p_status: string
+              p_guest_count?: number
+              p_dietary_restrictions?: string
+              p_message?: string
+              p_plus_one_name?: string
+            }
+          | {
+              p_user_id: string
+              p_event_id: string
+              p_status: string
+              p_guest_count?: number
+              p_dietary_restrictions?: string
+              p_message?: string
+              p_plus_one_name?: string
+              p_table_assignment?: string
+              p_meal_preference?: string
+              p_song_request?: string
+              p_accommodation_needed?: boolean
+              p_transportation_needed?: boolean
+            }
         Returns: string
       }
     }
