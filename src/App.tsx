@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import GlassLayout from "./components/GlassLayout";
 import Home from "./pages/Home";
 import Venue from "./pages/Venue";
@@ -104,6 +104,7 @@ const AppContent = () => {
         
         {/* Dashboard Admin Routes */}
         <Route path="/admin/dashboard" element={<ImprovedAdminDashboard />} />
+        <Route path="/dashboard" element={<Navigate to="/" replace />} />
         <Route path="/dashboard/users" element={<AdminUsers />} />
         <Route path="/dashboard/users/roles" element={<AdminUserRoles />} />
         <Route path="/dashboard/photos" element={<AdminPhotos />} />

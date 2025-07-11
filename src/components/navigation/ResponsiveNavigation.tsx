@@ -31,7 +31,7 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
         padding: '8px 12px', // Add padding for better touch targets
         height: 'auto', // Auto height to accommodate icons
         zIndex: 9999, // Ensure it stays above all content
-        pointerEvents: 'none', // Allow clicks to pass through container
+        
       }}
     >
       {routes.map((route) => {
@@ -41,7 +41,12 @@ const ResponsiveNavigation: React.FC<ResponsiveNavigationProps> = ({
         return (
           <HapticFeedback key={route.id} type="light">
             <button
-              onClick={() => onRouteClick(route.id)}
+              onClick={() => {
+                console.log('ResponsiveNavigation button clicked:', route.id);
+                console.log('Is center button?', isCenter);
+                console.log('Route details:', route);
+                onRouteClick(route.id);
+              }}
               className={`nav-item ${isCenter ? 'dashboard' : ''} ${isActive ? 'active' : ''} touch-target`}
               style={{
                 display: 'flex',

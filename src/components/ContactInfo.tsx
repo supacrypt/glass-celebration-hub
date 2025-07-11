@@ -1,22 +1,39 @@
 import React from 'react';
-import GlassCard from '@/components/GlassCard';
-import { Mail, MessageCircle, HelpCircle } from 'lucide-react';
+import { Phone } from 'lucide-react';
+import { useAppSettings } from '@/hooks/useAppSettings';
 
 const ContactInfo: React.FC = () => {
+  const { settings } = useAppSettings();
+
   return (
-    <GlassCard className="p-6 text-center">
-      <div className="w-12 h-12 rounded-full bg-wedding-navy/10 flex items-center justify-center mx-auto mb-4">
-        <MessageCircle className="w-6 h-6 text-wedding-navy" />
+    <div className="glass-card responsive-card-padding">
+      <div className="text-center">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-glass-blue/20 flex items-center justify-center ring-2 ring-glass-border mx-auto mb-4">
+          <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-glass-blue" />
+        </div>
+        <h2 className="responsive-heading-lg font-semibold text-wedding-navy">Get in Touch</h2>
+        <p className="responsive-text-base text-muted-foreground mt-2 max-w-2xl mx-auto">
+          {settings.contact_message || 'For any questions leading up to the day, feel free to reach out. For day-of emergencies, please contact our coordinator.'}
+        </p>
       </div>
-      <h3 className="font-semibold text-wedding-navy mb-2">Need to Get in Touch?</h3>
-      <p className="text-muted-foreground text-sm mb-4">
-        Don't hesitate to reach out to Tim & Kirsten directly if you have any questions or need clarification about the wedding details.
-      </p>
-      <div className="flex items-center justify-center gap-2 text-sm text-blue-600">
-        <HelpCircle className="w-4 h-4" />
-        <span>Contact through your RSVP or check the FAQ section</span>
+      
+      <div className="mt-6 bg-glass-secondary/50 rounded-lg p-4 max-w-sm mx-auto">
+        <div className="space-y-3 text-center">
+          <div className="responsive-text-base">
+            <strong className="text-wedding-navy">{settings.groom_name}:</strong>
+            <span className="text-muted-foreground ml-2">04XX XXX XXX</span>
+          </div>
+          <div className="responsive-text-base">
+            <strong className="text-wedding-navy">{settings.bride_name}:</strong>
+            <span className="text-muted-foreground ml-2">04XX XXX XXX</span>
+          </div>
+          <div className="responsive-text-base">
+            <strong className="text-wedding-navy">Coordinator:</strong>
+            <span className="text-muted-foreground ml-2">(Details TBC)</span>
+          </div>
+        </div>
       </div>
-    </GlassCard>
+    </div>
   );
 };
 

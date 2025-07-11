@@ -7,7 +7,7 @@ const ProfileDropdown: React.FC = () => {
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
 
-  const handleMenuClick = (action: string) => {
+  const handleMenuClick = async (action: string) => {
     setIsOpen(false);
     
     switch (action) {
@@ -21,7 +21,8 @@ const ProfileDropdown: React.FC = () => {
         navigate('/help');
         break;
       case 'signout':
-        signOut();
+        await signOut();
+        navigate('/auth');
         break;
     }
   };

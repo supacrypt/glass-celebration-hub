@@ -1,7 +1,8 @@
 import React, { ReactNode, useState, useEffect } from 'react';
+import UniversalHeader from './navigation/UniversalHeader';
+
 import GlassNavigation from './GlassNavigation';
-import ProfileDropdown from './ProfileDropdown';
-import NotificationBell from './NotificationBell';
+import { NAVIGATION_ROUTES } from './navigation/constants';
 import InstantMessenger from './chat/InstantMessenger';
 
 interface GlassLayoutProps {
@@ -17,37 +18,32 @@ interface MessengerState {
   isCenter: boolean;
 }
 
+interface MessengerEventDetail {
+  center?: boolean;
+}
+
 const GlassLayout: React.FC<GlassLayoutProps> = ({ 
   children, 
   activeRoute, 
   onNavigate, 
   showNavigation = true 
 }) => {
-  // Messenger state management
   const [messengerState, setMessengerState] = useState<MessengerState>({
     isOpen: false,
     isMinimized: false,
     isCenter: false
   });
-  
-  // Dashboard state (will be passed from GlassNavigation)
-  const [isDashboardActive, setIsDashboardActive] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Check for mobile device
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Listen for global messenger events (can be triggered from any page)
   useEffect(() => {
-    const handleOpenMessenger = (event: CustomEvent) => {
+    const handleOpenMessenger = (event: CustomEvent<MessengerEventDetail>) => {
       setMessengerState({
         isOpen: true,
         isMinimized: false,
@@ -55,69 +51,39 @@ const GlassLayout: React.FC<GlassLayoutProps> = ({
       });
     };
 
-    const handleDashboardToggle = (event: CustomEvent) => {
-      setIsDashboardActive(event.detail?.isOpen ?? false);
-    };
-
-    // Global event listeners
-    window.addEventListener('openMessenger' as any, handleOpenMessenger);
-    window.addEventListener('dashboardToggle' as any, handleDashboardToggle);
-
-    return () => {
-      window.removeEventListener('openMessenger' as any, handleOpenMessenger);
-      window.removeEventListener('dashboardToggle' as any, handleDashboardToggle);
-    };
+    window.addEventListener('openMessenger', handleOpenMessenger as EventListener);
+    return () => window.removeEventListener('openMessenger', handleOpenMessenger as EventListener);
   }, []);
 
   const handleMessengerMinimize = () => {
-    setMessengerState(prev => ({
-      ...prev,
-      isMinimized: !prev.isMinimized,
-      isCenter: false // When minimized, move to corner
-    }));
+    setMessengerState(prev => ({ ...prev, isMinimized: !prev.isMinimized, isCenter: false }));
   };
 
   const handleMessengerClose = () => {
-    setMessengerState({
-      isOpen: false,
-      isMinimized: false,
-      isCenter: false
-    });
+    setMessengerState({ isOpen: false, isMinimized: false, isCenter: false });
   };
 
   return (
     <div className="min-h-screen relative">
-      {/* Background Mesh Gradient - Applied globally in CSS */}
-      
-      {/* Profile Dropdown */}
-      <ProfileDropdown />
-      
-      {/* Notification Bell - positioned in top-right */}
-      <div className="fixed top-4 right-14 z-50">
-        <NotificationBell />
-      </div>
-      
-      {/* Main Content Area */}
-      <main className={`relative ${showNavigation ? 'pb-glass-nav' : ''}`}>
+      {showNavigation && <UniversalHeader />}
+
+      <main className={`relative ${showNavigation ? 'pt-16 pb-24' : ''}`}>
         {children}
       </main>
-      
-      {/* Glass Navigation */}
+
       {showNavigation && (
         <GlassNavigation 
-          activeRoute={activeRoute} 
+          activeRoute={activeRoute}
           onNavigate={onNavigate}
-          onDashboardToggle={setIsDashboardActive}
         />
       )}
-
-      {/* Instant Messenger - Global Instance */}
+      
       {(messengerState.isOpen || messengerState.isMinimized) && (
         <InstantMessenger
           isMinimized={messengerState.isMinimized}
           isMobile={isMobile}
           isCenter={messengerState.isCenter}
-          isDashboardActive={isDashboardActive}
+          isDashboardActive={false}
           onMinimize={handleMessengerMinimize}
           onClose={handleMessengerClose}
         />

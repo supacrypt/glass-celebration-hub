@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import GlassCard from '@/components/GlassCard';
 import { 
   HelpCircle, 
@@ -9,52 +9,110 @@ import {
   Baby, 
   Coffee, 
   Calendar,
-  AlertCircle 
+  AlertCircle,
+  Loader2,
+  Bed,
+  Gift,
+  Phone,
+  PartyPopper,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
+import { getPublicFAQs, incrementFAQViewCount } from '@/lib/api/faq';
+import { useToast } from '@/hooks/use-toast';
+
+// Icon mapping
+const iconMap: Record<string, any> = {
+  HelpCircle,
+  MapPin,
+  Car,
+  Bus,
+  Shirt,
+  Baby,
+  Coffee,
+  Calendar,
+  AlertCircle,
+  Bed,
+  Gift,
+  Phone,
+  PartyPopper
+};
+
+interface FAQGroup {
+  name: string;
+  slug: string;
+  icon: string;
+  description?: string;
+  items: Array<{
+    id: string;
+    question: string;
+    answer: string;
+    is_featured: boolean;
+    view_count: number;
+  }>;
+}
 
 const FAQ: React.FC = () => {
-  const faqs = [
-    {
-      icon: AlertCircle,
-      question: "Is the venue different to the one listed on the save the date?",
-      answer: "Yes! We apologise for any issues this has caused for people who already booked accommodation. The Edwards (the original venue) went into liquidation in February 2025 (and they kept our money!). The new venue is approximately 1 hour drive from Newcastle. A coach will be available to transport people between Newcastle and the wedding venue."
-    },
-    {
-      icon: Car,
-      question: "Is there plenty of parking at the wedding venue?",
-      answer: "Yes, there is plenty of on-site parking at Ben Ean."
-    },
-    {
-      icon: Bus,
-      question: "Are there other ways to get to the wedding venue besides driving?",
-      answer: "Yes. There will be two coaches available to transport guests to and from the wedding ceremony and reception. One coach will collect guests from Newcastle City, the other will collect guests staying in the Hunter Valley. Please indicate in the RSVP how many seats on the coach you would like and where you are staying. Availability is strictly on a first come, first served basis."
-    },
-    {
-      icon: MapPin,
-      question: "Is the wedding indoor or outdoor?",
-      answer: "Both! The ceremony and cocktail hour are outside and the reception is inside. We have a wet weather plan in place, so everyone will stay warm and dry."
-    },
-    {
-      icon: Baby,
-      question: "Are children invited?",
-      answer: "Although we love your little ones, we probably met you before children and we would love to spend the night celebrating with just you! Babes in arms excepted."
-    },
-    {
-      icon: Coffee,
-      question: "Is there a recovery breakfast?",
-      answer: "While we do not have a formal recovery breakfast planned, we will be at Newcastle Beach from 11 am onwards on Monday October 6th. There is a kiosk that serves good coffee and excellent food. Good for soaking up the libations!"
-    },
-    {
-      icon: Calendar,
-      question: "Any other fun stuff planned?",
-      answer: "Tim and Kirsten will be at the Prince of Mereweather pub from 4-8 pm on Saturday 4th of October. Stop in to have a drink and grab yourself a meal if you are hungry."
-    },
-    {
-      icon: Shirt,
-      question: "What's the dress code?",
-      answer: "Dapper/Cocktail: Suits, dress chinos, button up shirt and optional tie. We love a pocket kerchief! Classy dress, pantsuit or jumpsuit."
+  const [faqGroups, setFaqGroups] = useState<FAQGroup[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const { toast } = useToast();
+
+  useEffect(() => {
+    loadFAQs();
+  }, []);
+
+  const loadFAQs = async () => {
+    try {
+      const data = await getPublicFAQs();
+      setFaqGroups(data);
+      
+      // Auto-expand featured items
+      const featuredIds = data.flatMap(group => 
+        group.items.filter((item: any) => item.is_featured).map((item: any) => item.id)
+      );
+      setExpandedItems(new Set(featuredIds));
+    } catch (error) {
+      console.error('Error loading FAQs:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load FAQs. Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  const toggleExpanded = async (id: string) => {
+    setExpandedItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+        // Track view count when expanding
+        incrementFAQViewCount(id).catch(console.error);
+      }
+      return newSet;
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen px-3 sm:px-5 pt-8 sm:pt-12 pb-20 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 animate-spin text-wedding-gold" />
+          <p className="text-muted-foreground">Loading FAQs...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Find important venue update FAQ
+  const venueUpdateFAQ = faqGroups
+    .flatMap(g => g.items)
+    .find(item => item.question.toLowerCase().includes('venue different'));
 
   return (
     <div className="min-h-screen px-3 sm:px-5 pt-8 sm:pt-12 pb-20">
@@ -68,77 +126,124 @@ const FAQ: React.FC = () => {
         </p>
       </div>
 
-      {/* Important Notice */}
-      <GlassCard className="mb-6 sm:mb-8 p-4 sm:p-6 animate-fade-up border-l-4 border-amber-400" style={{ animationDelay: '0.1s' }}>
-        <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600 flex-shrink-0 mt-1" />
-          <div>
-            <h3 className="font-semibold text-wedding-navy mb-2 text-sm sm:text-base">Important Venue Update</h3>
-            <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
-              Please note the venue has changed from The Edwards to Ben Ean due to the original venue going into liquidation. 
-              We've arranged coach transport to help with the change. Thank you for your understanding!
-            </p>
+      {/* Important Notice - Show if venue update FAQ exists */}
+      {venueUpdateFAQ && (
+        <GlassCard className="mb-6 sm:mb-8 p-4 sm:p-6 animate-fade-up border-l-4 border-amber-400" style={{ animationDelay: '0.1s' }}>
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600 flex-shrink-0 mt-1" />
+            <div>
+              <h3 className="font-semibold text-wedding-navy mb-2 text-sm sm:text-base">Important Venue Update</h3>
+              <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
+                Please note the venue has changed from The Edwards to Ben Ean due to the original venue going into liquidation. 
+                We've arranged coach transport to help with the change. Thank you for your understanding!
+              </p>
+            </div>
           </div>
-        </div>
-      </GlassCard>
+        </GlassCard>
+      )}
 
-      {/* FAQ List */}
-      <div className="space-y-3 sm:space-y-4 max-w-4xl mx-auto">
-        {faqs.map((faq, index) => (
-          <GlassCard 
-            key={index}
-            className="p-4 sm:p-6 animate-fade-up"
-            style={{ animationDelay: `${0.2 + (index * 0.1)}s` }}
-          >
-            <div className="flex items-start gap-3 sm:gap-4">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-glass-blue/20 flex items-center justify-center flex-shrink-0">
-                <faq.icon className="w-4 h-4 sm:w-5 sm:h-5 text-glass-blue" />
+      {/* FAQ Groups */}
+      <div className="space-y-6 sm:space-y-8 max-w-4xl mx-auto">
+        {faqGroups.map((group, groupIndex) => {
+          const Icon = iconMap[group.icon] || HelpCircle;
+          
+          return (
+            <div key={group.slug} className="animate-fade-up" style={{ animationDelay: `${0.2 + (groupIndex * 0.1)}s` }}>
+              {/* Category Header */}
+              <div className="flex items-center gap-3 mb-3 sm:mb-4">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-glass-blue/20 flex items-center justify-center">
+                  <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-glass-blue" />
+                </div>
+                <div>
+                  <h2 className="text-lg sm:text-xl font-semibold text-wedding-navy">{group.name}</h2>
+                  {group.description && (
+                    <p className="text-xs sm:text-sm text-muted-foreground">{group.description}</p>
+                  )}
+                </div>
               </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-wedding-navy mb-2 sm:mb-3 leading-relaxed text-sm sm:text-base">
-                  {faq.question}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed text-xs sm:text-sm">
-                  {faq.answer}
-                </p>
+
+              {/* FAQ Items */}
+              <div className="space-y-3 sm:space-y-4">
+                {group.items.map((faq, index) => (
+                  <GlassCard 
+                    key={faq.id}
+                    className="overflow-hidden animate-fade-up cursor-pointer"
+                    style={{ animationDelay: `${0.3 + (index * 0.05)}s` }}
+                  >
+                    <div
+                      onClick={() => toggleExpanded(faq.id)}
+                      className="p-4 sm:p-6 hover:bg-white/5 transition-colors"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-wedding-navy mb-1 leading-relaxed text-sm sm:text-base flex items-center gap-2">
+                            {faq.is_featured && (
+                              <span className="text-wedding-gold">⭐</span>
+                            )}
+                            {faq.question}
+                          </h3>
+                          {expandedItems.has(faq.id) && (
+                            <p className="text-muted-foreground leading-relaxed text-xs sm:text-sm mt-3">
+                              {faq.answer}
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex-shrink-0">
+                          {expandedItems.has(faq.id) ? (
+                            <ChevronUp className="w-4 h-4 text-muted-foreground" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                          )}
+                        </div>
+                      </div>
+                      {faq.view_count > 50 && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Viewed {faq.view_count} times
+                        </p>
+                      )}
+                    </div>
+                  </GlassCard>
+                ))}
               </div>
             </div>
-          </GlassCard>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Additional Events */}
-      <GlassCard 
-        className="mt-6 sm:mt-8 p-4 sm:p-6 animate-fade-up max-w-4xl mx-auto" 
-        variant="secondary"
-        style={{ animationDelay: '1.0s' }}
-      >
-        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-wedding-navy flex items-center gap-2">
-          <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
-          Weekend Events
-        </h3>
-        <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm">
-          <div className="p-3 sm:p-4 bg-glass-green/10 rounded-lg">
-            <p className="font-medium text-wedding-navy mb-1 text-sm sm:text-base">Saturday, October 4th</p>
-            <p className="text-muted-foreground">
-              <strong>Pre-wedding drinks:</strong> Prince of Mereweather pub, 4-8 PM
-            </p>
-            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-              Come have a drink and grab a meal if you're hungry!
-            </p>
+      {/* Weekend Events - Now dynamic from Schedule & Events category */}
+      {faqGroups.some(g => g.slug === 'schedule-events' && g.items.length > 0) && (
+        <GlassCard 
+          className="mt-6 sm:mt-8 p-4 sm:p-6 animate-fade-up max-w-4xl mx-auto" 
+          variant="secondary"
+          style={{ animationDelay: '1.0s' }}
+        >
+          <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-wedding-navy flex items-center gap-2">
+            <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
+            Weekend Events
+          </h3>
+          <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm">
+            <div className="p-3 sm:p-4 bg-glass-green/10 rounded-lg">
+              <p className="font-medium text-wedding-navy mb-1 text-sm sm:text-base">Saturday, October 4th</p>
+              <p className="text-muted-foreground">
+                <strong>Pre-wedding drinks:</strong> Prince of Mereweather pub, 4-8 PM
+              </p>
+              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                Come have a drink and grab a meal if you're hungry!
+              </p>
+            </div>
+            
+            <div className="p-3 sm:p-4 bg-glass-blue/10 rounded-lg">
+              <p className="font-medium text-wedding-navy mb-1 text-sm sm:text-base">Monday, October 6th</p>
+              <p className="text-muted-foreground">
+                <strong>Recovery hangout:</strong> Newcastle Beach, from 11 AM
+              </p>
+              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                Kiosk with good coffee and food - perfect for recovery!
+              </p>
+            </div>
           </div>
-          
-          <div className="p-3 sm:p-4 bg-glass-blue/10 rounded-lg">
-            <p className="font-medium text-wedding-navy mb-1 text-sm sm:text-base">Monday, October 6th</p>
-            <p className="text-muted-foreground">
-              <strong>Recovery hangout:</strong> Newcastle Beach, from 11 AM
-            </p>
-            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-              Kiosk with good coffee and food - perfect for recovery!
-            </p>
-          </div>
-        </div>
-      </GlassCard>
+        </GlassCard>
+      )}
 
       {/* Contact Card */}
       <GlassCard 

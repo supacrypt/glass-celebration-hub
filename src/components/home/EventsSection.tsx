@@ -1,20 +1,41 @@
-
 import React from 'react';
-import { Settings } from 'lucide-react';
+import { Settings, MapPin, Clock } from 'lucide-react';
+
+// Define a specific type for a wedding event for type safety
+interface WeddingEvent {
+  id: string;
+  title: string;
+  start_time: string;
+  end_time?: string;
+  venue_name?: string;
+  location?: string;
+  description?: string;
+}
 
 interface EventsSectionProps {
   isAdmin: boolean;
-  events: any[];
+  events: WeddingEvent[];
   eventsLoading: boolean;
 }
 
 const EventsSection: React.FC<EventsSectionProps> = ({ isAdmin, events, eventsLoading }) => {
+  // Sort events by start time to ensure chronological order
+  const sortedEvents = [...events].sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
+
+  const formatTime = (dateString: string) => {
+    return new Date(dateString).toLocaleTimeString('en-AU', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+  };
+
   return (
     <div className="glass-card responsive-card-padding mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
-      <div className="flex items-center justify-between mb-4 sm:mb-6">
+      <div className="flex items-center justify-between mb-6 sm:mb-8">
         <h2 className="flex items-center gap-2 sm:gap-3 responsive-heading-lg font-semibold text-wedding-navy">
           <span className="text-xl sm:text-2xl">🎉</span>
-          The Big Day
+          Schedule of Events
         </h2>
         {isAdmin && (
           <button className="glass-secondary w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 text-muted-foreground">
@@ -25,78 +46,51 @@ const EventsSection: React.FC<EventsSectionProps> = ({ isAdmin, events, eventsLo
 
       {eventsLoading ? (
         <div className="flex items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-wedding-navy" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-wedding-navy" />
         </div>
-      ) : (
-        <div className="space-y-3 sm:space-y-4">
-          {/* Main Wedding Event Only */}
-          {events && events.length > 0 ? (
-            events
-              .filter(event => event.is_main_event) // Only show main wedding event
-              .map((event) => (
-                <div key={event.id} className="glass-secondary responsive-card-padding rounded-xl transition-all duration-300 hover:scale-105">
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="responsive-text-lg font-semibold text-wedding-navy flex items-center gap-2">
-                      <span className="text-glass-pink text-lg">💕</span>
-                      {event.title}
-                    </h3>
-                    {isAdmin && (
-                      <div className="text-xs text-muted-foreground">
-                        Event ID: {event.id.slice(0, 8)}...
+      ) : sortedEvents.length > 0 ? (
+        <div className="relative pl-8 sm:pl-12">
+          {/* The vertical timeline bar */}
+          <div className="absolute left-3 sm:left-4 top-2 bottom-2 w-0.5 bg-glass-border rounded-full"></div>
+
+          <div className="space-y-10">
+            {sortedEvents.map((event, index) => (
+              <div key={event.id} className="relative">
+                <div className="absolute -left-[2.1rem] sm:-left-[2.7rem] top-1.5 w-6 h-6 sm:w-8 sm:h-8 bg-glass-blue rounded-full flex items-center justify-center ring-4 ring-glass-bg shadow-md">
+                  <span className="text-sm sm:text-base">{['🎉', '🥂', '🍽️', '💃', '🕺'][index % 5]}</span>
+                </div>
+                <div className="ml-4">
+                  <h3 className="responsive-text-lg font-bold text-wedding-navy">{event.title}</h3>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-x-4 gap-y-1 text-muted-foreground mt-1">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-glass-blue" />
+                      <span>
+                        {formatTime(event.start_time)}
+                        {event.end_time && ` - ${formatTime(event.end_time)}`}
+                      </span>
+                    </div>
+                    {(event.venue_name || event.location) && (
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-glass-purple" />
+                        <span>{event.venue_name || event.location}</span>
                       </div>
                     )}
                   </div>
-                  <div className="responsive-text-base text-glass-blue font-medium mb-3">
-                    {new Date(event.event_date).toLocaleDateString('en-AU', {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })} at {new Date(event.event_date).toLocaleTimeString('en-AU', {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </div>
                   {event.description && (
-                    <p className="responsive-text-base text-muted-foreground leading-relaxed mb-4">
+                    <p className="mt-2 responsive-text-base text-muted-foreground">
                       {event.description}
                     </p>
                   )}
-                  {(event.venue_name || event.location || event.address) && (
-                    <div className="flex items-center gap-2 responsive-text-base text-muted-foreground mb-4">
-                      <div className="glass-primary w-6 h-6 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center text-sm">
-                        📍
-                      </div>
-                      <span>{event.venue_name || event.location}{event.address && `, ${event.address}`}</span>
-                    </div>
-                  )}
-                  
-                  {/* Action Buttons */}
-                  <div className="flex gap-2 sm:gap-3 mb-4">
-                    <button className="glass-primary px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-wedding-navy hover:scale-105 transition-transform">
-                      📍 View Map
-                    </button>
-                    <button className="glass-primary px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-wedding-navy hover:scale-105 transition-transform">
-                      🧭 Directions
-                    </button>
-                  </div>
-                  
-                  {event.dress_code && (
-                    <div className="glass-primary responsive-card-padding-sm rounded-lg text-center">
-                      <span className="text-xs sm:text-sm text-muted-foreground">
-                        Dress Code: {event.dress_code}
-                      </span>
-                    </div>
-                  )}
                 </div>
-              ))
-          ) : (
-            <div className="text-center py-8 text-muted-foreground">
-              <p>Main wedding event not configured yet.</p>
-              {isAdmin && (
-                <p className="text-xs mt-2">Add the main wedding event through the admin panel.</p>
-              )}
-            </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="text-center py-8 text-muted-foreground">
+          <p>The event schedule will be posted soon. Stay tuned!</p>
+          {isAdmin && (
+            <p className="text-xs mt-2">Add events through the admin panel.</p>
           )}
         </div>
       )}

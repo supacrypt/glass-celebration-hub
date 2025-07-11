@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS content_blocks (
   order_index integer NOT NULL DEFAULT 0,
   is_visible boolean DEFAULT true,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
-  updated_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+  updated_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
+  UNIQUE (section, type, title)
 );
 
 -- Create content_sections table for organizing content
@@ -97,7 +98,7 @@ INSERT INTO content_blocks (section, type, title, content, order_index, is_visib
   ('faq', 'faq', 'Can I take photos during the ceremony?', 'We ask that you put devices away during the ceremony. Our photographers will capture everything!', 8, true),
   ('faq', 'faq', 'What time does the reception end?', 'The reception will conclude at 11:00 PM.', 9, true),
   ('faq', 'faq', 'Is there a gift registry?', 'Your presence is the best present! If you wish to give a gift, details are in the Gift section.', 10, true)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (section, type, title) DO NOTHING;
 
 -- Insert sample hero content
 INSERT INTO content_blocks (section, type, title, content, order_index, is_visible) VALUES
@@ -105,11 +106,11 @@ INSERT INTO content_blocks (section, type, title, content, order_index, is_visib
   ('hero', 'text', 'Wedding Date', 'Saturday, March 15, 2025', 2, true),
   ('hero', 'text', 'Wedding Time', '4:00 PM Ceremony', 3, true),
   ('hero', 'text', 'Venue Name', 'Ben Ean Pokolbin', 4, true)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (section, type, title) DO NOTHING;
 
 -- Insert sample contact content
 INSERT INTO content_blocks (section, type, title, content, order_index, is_visible) VALUES
   ('contact', 'text', 'Emergency Contact', 'For urgent matters on the day: +61 XXX XXX XXX', 1, true),
   ('contact', 'text', 'Wedding Coordinator', 'Sarah Johnson: sarah@weddingcoordinator.com', 2, true),
   ('contact', 'text', 'Venue Contact', 'Ben Ean: (02) 4998 7777', 3, true)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (section, type, title) DO NOTHING;

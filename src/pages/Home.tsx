@@ -4,12 +4,13 @@ import { useAuth } from '@/hooks/useAuth';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { useRSVPStatus } from '@/hooks/useRSVPStatus';
 import EnhancedHeroSection from '@/components/home/EnhancedHeroSection';
-import DynamicCountdownSection from '@/components/home/DynamicCountdownSection';
+
 import DynamicFAQSection from '@/components/home/DynamicFAQSection';
 import EventsSection from '@/components/home/EventsSection';
 import DressCodeCard from '@/components/DressCodeCard';
 import ContactInfo from '@/components/ContactInfo';
 import RSVPPopup from '@/components/RSVPPopup';
+import DatabaseDiagnostics from '@/components/debug/DatabaseDiagnostics';
 
 const Home: React.FC = () => {
   const { events, loading: eventsLoading } = useWeddingEvents();
@@ -39,7 +40,6 @@ const Home: React.FC = () => {
     <div className="min-h-screen p-4 sm:p-6 lg:p-8 xl:p-10 relative overflow-hidden">
       <div className="max-w-4xl mx-auto">
         <EnhancedHeroSection />
-        <DynamicCountdownSection />
         <EventsSection 
           isAdmin={isAdmin} 
           events={events} 
@@ -81,6 +81,9 @@ const Home: React.FC = () => {
         onClose={() => setShowRSVPPopup(false)}
         onComplete={handleRSVPComplete}
       />
+      
+      {/* Debug component - remove in production */}
+      {process.env.NODE_ENV === 'development' && <DatabaseDiagnostics />}
     </div>
   );
 };

@@ -38,6 +38,7 @@ import RealTimeMonitoring from '@/components/admin/RealTimeMonitoring';
 import { PerformanceMonitor } from '@/components/monitoring/PerformanceMonitor';
 import { LiveMonitoring } from '@/components/monitoring/LiveMonitoring';
 import AdminFunctionalityTester from '@/components/admin/AdminFunctionalityTester';
+import FAQManagement from '@/components/admin/FAQManagement/FAQManagement';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface ConsolidatedAdminDashboardProps {
@@ -71,6 +72,7 @@ const ConsolidatedAdminDashboard: React.FC<ConsolidatedAdminDashboardProps> = ({
   const contentTabs = [
     { id: 'app-settings', label: 'App Settings', component: <AppSettingsManager /> },
     { id: 'timeline', label: 'Events', component: <EventTimeline /> },
+    { id: 'faq', label: 'FAQ Management', component: <FAQManagement /> },
     { id: 'stats', label: 'Overview', component: <CompactStats stats={stats} /> }
   ];
 

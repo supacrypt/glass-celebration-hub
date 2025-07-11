@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { getUrlWithFallback } from '@/utils/supabaseStorage';
+import Countdown from './Countdown';
+import RSVPCallToAction from './RSVPCallToAction';
 
 interface HeroBackgroundProps {
   backgroundType: string;
@@ -43,7 +45,7 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
 
   // Helper function to convert YouTube URL to embed URL
   const getYouTubeEmbedUrl = (url: string) => {
-    const videoIdMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    const videoIdMatch = url.match(/(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/);
     if (videoIdMatch) {
       const videoId = videoIdMatch[1];
       return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1`;
@@ -51,7 +53,7 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
     return url;
   };
 
-  const handleVideoError = (e: any) => {
+  const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
     const video = e.target as HTMLVideoElement;
     let errorMessage = 'Unknown video error';
     
@@ -208,19 +210,12 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
         </div>
       ) : backgroundType === 'youtube' && !useImageFallback ? (
         <iframe
-          className="absolute inset-0 w-full h-full object-cover"
           src={getYouTubeEmbedUrl(currentBackgroundUrl)}
-          title="YouTube background video"
+          className="absolute top-0 left-0 w-full h-full object-cover"
           frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allow="autoplay; encrypted-media"
           allowFullScreen
-          style={{
-            pointerEvents: 'none',
-            transform: 'scale(1.05)', // Slight scale for all devices
-            transformOrigin: 'center center'
-          }}
-          onLoad={handleVideoLoaded}
-          onError={handleVideoError}
+          title="background-video"
         />
       ) : (
         <div
@@ -324,31 +319,30 @@ const EnhancedHeroSection: React.FC = () => {
             textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
           }}
         >
-          <div className="text-4xl sm:text-5xl lg:text-6xl mb-4 sm:mb-5 flex justify-center gap-2">
-            💕
-          </div>
           <h1 
-            className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-dolly font-bold mb-3 sm:mb-4 tracking-tight"
+            className="text-3xl sm:text-4xl lg:text-5xl font-dolly font-bold mb-2 tracking-tight"
             style={{
               color: '#000000',
               textShadow: '0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.8), 2px 2px 4px rgba(255, 255, 255, 1)',
-              lineHeight: '1.6',
+              lineHeight: '1.4',
               fontWeight: '800'
             }}
           >
             {settings.app_name}
           </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-glass-blue mb-3 sm:mb-4 font-dolly font-medium">
+          <p className="text-base sm:text-lg lg:text-xl text-glass-blue mb-4 font-dolly font-medium">
+            ARE GETTING MARRIED!
+          </p>
+          <Countdown targetDate={settings.wedding_date || ''} />
+          <p className="text-base sm:text-lg lg:text-xl text-glass-blue mt-4 font-dolly font-medium">
             {formattedDate}
           </p>
-          <div 
-            className="text-sm sm:text-base max-w-2xl mx-auto leading-relaxed"
-            style={{
-              color: '#000000',
-              textShadow: '0 0 5px rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(255, 255, 255, 0.6)'
-            }}
-            dangerouslySetInnerHTML={{ __html: settings.hero_subtitle || 'Welcome to our wedding celebration!' }}
-          />
+          <p className="text-sm sm:text-base text-muted-foreground mt-6 italic max-w-2xl mx-auto">
+            "Yes, we are that couple stuffing up your long weekend plans! Why spend it somewhere relaxing when you can watch two people who have been together for well over a decade tell you that they still love each other..."
+          </p>
+          
+          {/* RSVP Call to Action */}
+          <RSVPCallToAction />
         </div>
       </div>
 
