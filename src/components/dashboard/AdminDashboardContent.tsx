@@ -1,5 +1,5 @@
 import React from 'react';
-import ConsolidatedAdminDashboard from './ConsolidatedAdminDashboard';
+import WireframeAdminDashboard from './WireframeAdminDashboard';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface AdminDashboardContentProps {
@@ -18,7 +18,7 @@ const AdminDashboardContent: React.FC<AdminDashboardContentProps> = ({
   onRefresh
 }) => {
   return (
-    <ConsolidatedAdminDashboard
+    <WireframeAdminDashboard
       stats={stats}
       users={users}
       rsvps={rsvps}
