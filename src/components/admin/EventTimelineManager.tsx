@@ -43,7 +43,7 @@ const EventTimelineManager: React.FC = () => {
     setLoading(true);
     try {
       // Load events with live attendance data
-      const { data: eventsData, error: eventsError } = await supabase
+      const { data: eventsData, error: eventsError } = await (supabase as any)
         .from('event_attendance_summary')
         .select('*')
         .order('event_date, event_time');
@@ -51,7 +51,7 @@ const EventTimelineManager: React.FC = () => {
       if (eventsError) throw eventsError;
 
       // Transform data to match interface
-      const formattedEvents = eventsData?.map(event => ({
+      const formattedEvents = eventsData?.map((event: any) => ({
         id: event.event_id,
         date: event.event_date,
         time: event.event_time,
@@ -76,13 +76,13 @@ const EventTimelineManager: React.FC = () => {
       if (fullEventsError) throw fullEventsError;
 
       // Merge the data
-      const mergedEvents = fullEventsData?.map(event => {
+      const mergedEvents = fullEventsData?.map((event: any) => {
         const attendanceData = formattedEvents.find(ae => ae.id === event.id);
         return {
           id: event.id,
           date: event.date,
           time: event.time,
-          title: event.title,
+          title: event.title || event.name,
           description: event.description || '',
           location: event.location || '',
           type: event.type,

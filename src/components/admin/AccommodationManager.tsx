@@ -115,7 +115,7 @@ const AccommodationManager: React.FC = () => {
     setLoading(true);
     try {
       // Load categories
-      const { data: categoriesData, error: categoriesError } = await supabase
+      const { data: categoriesData, error: categoriesError } = await (supabase as any)
         .from('accommodation_categories')
         .select('*')
         .order('display_order');
@@ -123,7 +123,7 @@ const AccommodationManager: React.FC = () => {
       if (categoriesError) throw categoriesError;
 
       // Load accommodations with categories
-      const { data: accommodationsData, error: accommodationsError } = await supabase
+      const { data: accommodationsData, error: accommodationsError } = await (supabase as any)
         .from('accommodation_options')
         .select(`
           *,
@@ -228,7 +228,7 @@ const AccommodationManager: React.FC = () => {
       };
 
       if (editingAccommodation) {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('accommodation_options')
           .update(accommodationData)
           .eq('id', editingAccommodation.id);
@@ -236,7 +236,7 @@ const AccommodationManager: React.FC = () => {
         if (error) throw error;
         toast.success('Accommodation updated successfully');
       } else {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('accommodation_options')
           .insert([accommodationData]);
 
@@ -298,7 +298,7 @@ const AccommodationManager: React.FC = () => {
     if (!confirm('Are you sure you want to delete this accommodation option?')) return;
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('accommodation_options')
         .delete()
         .eq('id', accommodationId);
@@ -314,7 +314,7 @@ const AccommodationManager: React.FC = () => {
 
   const toggleActive = async (accommodationId: string, isActive: boolean) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('accommodation_options')
         .update({ is_active: !isActive })
         .eq('id', accommodationId);

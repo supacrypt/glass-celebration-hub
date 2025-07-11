@@ -134,7 +134,7 @@ const TransportationManager: React.FC = () => {
     setLoading(true);
     try {
       // Load transportation options with schedules and bookings
-      const { data: transportData, error: transportError } = await supabase
+      const { data: transportData, error: transportError } = await (supabase as any)
         .from('transportation_options')
         .select(`
           *,
@@ -149,7 +149,7 @@ const TransportationManager: React.FC = () => {
       if (transportError) throw transportError;
 
       // Load carpool offerings with bookings
-      const { data: carpoolData, error: carpoolError } = await supabase
+      const { data: carpoolData, error: carpoolError } = await (supabase as any)
         .from('carpool_offerings')
         .select(`
           *,
@@ -165,7 +165,7 @@ const TransportationManager: React.FC = () => {
       if (carpoolError) throw carpoolError;
 
       // Load guest transport statuses
-      const { data: statusData, error: statusError } = await supabase
+      const { data: statusData, error: statusError } = await (supabase as any)
         .from('guest_transport_status')
         .select(`
           *,
@@ -201,7 +201,7 @@ const TransportationManager: React.FC = () => {
       // For now, we'll simulate it
       for (const guest of unorganizedGuests) {
         // Update reminder count
-        await supabase
+        await (supabase as any)
           .from('guest_transport_status')
           .update({ 
             reminder_sent_count: guest.reminder_sent_count + 1,

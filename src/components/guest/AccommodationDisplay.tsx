@@ -66,7 +66,7 @@ const AccommodationDisplay: React.FC = () => {
     setLoading(true);
     try {
       // Load categories
-      const { data: categoriesData, error: categoriesError } = await supabase
+      const { data: categoriesData, error: categoriesError } = await (supabase as any)
         .from('accommodation_categories')
         .select('*')
         .eq('is_active', true)
@@ -75,7 +75,7 @@ const AccommodationDisplay: React.FC = () => {
       if (categoriesError) throw categoriesError;
 
       // Load accommodations with categories
-      const { data: accommodationsData, error: accommodationsError } = await supabase
+      const { data: accommodationsData, error: accommodationsError } = await (supabase as any)
         .from('accommodation_options')
         .select(`
           *,
@@ -300,7 +300,7 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({
             <div className="flex flex-wrap gap-2">
               {accommodation.amenities.slice(0, isExpanded ? undefined : 4).map((amenity, index) => (
                 <Badge key={index} variant="secondary" className="text-xs flex items-center gap-1">
-                  {getAmenityIcon(amenity)}
+                  <span className="w-2 h-2 bg-current rounded-full"></span>
                   {amenity}
                 </Badge>
               ))}

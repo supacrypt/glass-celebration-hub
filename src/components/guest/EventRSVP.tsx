@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { useUser } from '@supabase/auth-helpers-react';
+import { useAuth } from '@/hooks/useAuth';
 
 interface WeddingEvent {
   id: string;
@@ -44,7 +44,7 @@ interface EventRSVP {
 }
 
 const EventRSVP: React.FC = () => {
-  const user = useUser();
+  const { user } = useAuth();
   const [events, setEvents] = useState<WeddingEvent[]>([]);
   const [myRSVPs, setMyRSVPs] = useState<Record<string, EventRSVP>>({});
   const [loading, setLoading] = useState(true);
@@ -62,7 +62,7 @@ const EventRSVP: React.FC = () => {
     setLoading(true);
     try {
       // Load events with attendance data
-      const { data: eventsData, error: eventsError } = await supabase
+      const { data: eventsData, error: eventsError } = await (supabase as any)
         .from('event_attendance_summary')
         .select('*')
         .order('event_date, event_time');
@@ -73,18 +73,18 @@ const EventRSVP: React.FC = () => {
       const { data: fullEventsData, error: fullEventsError } = await supabase
         .from('wedding_events')
         .select('*')
-        .order('date, time');
+        .order('event_date, start_time');
 
       if (fullEventsError) throw fullEventsError;
 
       // Merge event data
-      const mergedEvents = fullEventsData?.map(event => {
-        const attendanceData = eventsData?.find(ae => ae.event_id === event.id);
+      const mergedEvents = fullEventsData?.map((event: any) => {
+        const attendanceData = eventsData?.find((ae: any) => ae.event_id === event.id);
         return {
           id: event.id,
-          date: event.date,
-          time: event.time,
-          title: event.title,
+          date: event.event_date,
+          time: event.start_time,
+          title: event.title || event.name,
           description: event.description || '',
           location: event.location || '',
           type: event.type,
@@ -95,8 +95,8 @@ const EventRSVP: React.FC = () => {
       }) || [];
 
       // Load user's RSVPs
-      const { data: rsvpsData, error: rsvpsError } = await supabase
-        .from('event_rsvps')
+      const { data: rsvpsData, error: rsvpsError } = await (supabase as any)
+        .from('rsvps')
         .select('*')
         .eq('user_id', user.id);
 
@@ -104,7 +104,7 @@ const EventRSVP: React.FC = () => {
 
       // Convert RSVPs to record for easy lookup
       const rsvpsRecord: Record<string, EventRSVP> = {};
-      rsvpsData?.forEach(rsvp => {
+      rsvpsData?.forEach((rsvp: any) => {
         rsvpsRecord[rsvp.event_id] = rsvp;
       });
 
@@ -122,8 +122,8 @@ const EventRSVP: React.FC = () => {
     if (!user) return;
 
     try {
-      const { error } = await supabase
-        .from('event_rsvps')
+      const { error } = await (supabase as any)
+        .from('rsvps')
         .upsert({
           user_id: user.id,
           event_id: eventId,
@@ -145,8 +145,8 @@ const EventRSVP: React.FC = () => {
     if (!user) return;
 
     try {
-      const { error } = await supabase
-        .from('event_rsvps')
+      const { error } = await (supabase as any)
+        .from('rsvps')
         .update(details)
         .eq('user_id', user.id)
         .eq('event_id', eventId);
