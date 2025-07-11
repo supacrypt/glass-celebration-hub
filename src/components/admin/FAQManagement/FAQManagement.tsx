@@ -189,10 +189,10 @@ const FAQManagement: React.FC = () => {
               {/* FAQ Items */}
               <div className="lg:col-span-3">
                 <FAQItemList
-                  items={filteredItems}
+                  items={filteredItems as any}
                   categories={categories}
                   onEdit={(item) => {
-                    setEditingItem(item);
+                    setEditingItem(item as any);
                     setShowItemForm(true);
                   }}
                   onDelete={handleDeleteItem}
@@ -207,7 +207,7 @@ const FAQManagement: React.FC = () => {
       {/* Add/Edit Form Modal */}
       {showItemForm && (
         <FAQItemForm
-          item={editingItem}
+          item={editingItem as any}
           categories={categories}
           selectedCategoryId={selectedCategory}
           onSave={handleSaveItem}
@@ -221,7 +221,7 @@ const FAQManagement: React.FC = () => {
       {/* Reorder Modal */}
       {showReorderModal && (
         <FAQReorderModal
-          items={filteredItems}
+          items={filteredItems as any}
           onSave={handleReorder}
           onClose={() => setShowReorderModal(false)}
         />

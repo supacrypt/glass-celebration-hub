@@ -61,7 +61,7 @@ export const LiveReactions: React.FC<LiveReactionsProps> = ({
 
     // Save to database
     if (postId && user) {
-      await supabase
+      await (supabase as any)
         .from('post_reactions')
         .upsert({
           post_id: postId,
@@ -69,7 +69,7 @@ export const LiveReactions: React.FC<LiveReactionsProps> = ({
           reaction_type: type
         });
     } else if (photoId && user) {
-      await supabase
+      await (supabase as any)
         .from('photo_likes')
         .upsert({
           photo_id: photoId,
@@ -115,18 +115,18 @@ export const LiveReactions: React.FC<LiveReactionsProps> = ({
     // Load initial counts
     const loadReactionCounts = async () => {
       if (postId) {
-        const { data } = await supabase
+        const { data } = await (supabase as any)
           .from('post_reactions')
           .select('reaction_type')
           .eq('post_id', postId);
         
         const counts: Record<string, number> = {};
-        data?.forEach(reaction => {
+        data?.forEach((reaction: any) => {
           counts[reaction.reaction_type] = (counts[reaction.reaction_type] || 0) + 1;
         });
         setReactionCounts(counts);
       } else if (photoId) {
-        const { count } = await supabase
+        const { count } = await (supabase as any)
           .from('photo_likes')
           .select('*', { count: 'exact', head: true })
           .eq('photo_id', photoId);

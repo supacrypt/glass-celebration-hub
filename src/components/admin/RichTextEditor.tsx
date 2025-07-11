@@ -442,7 +442,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
             style={editorStyle}
             onInput={(e) => handleContentChange((e.target as HTMLElement).innerHTML)}
             dangerouslySetInnerHTML={{ __html: content }}
-            placeholder={placeholder}
+            data-placeholder={placeholder}
           />
         </>
       ) : (

@@ -38,7 +38,20 @@ export const useRSVPWizard = () => {
       }
       
       console.log('Events fetched successfully:', data);
-      setEvents(data || []);
+      setEvents((data || []).map((event: any) => ({
+        id: event.id,
+        title: event.title || 'Event',
+        event_date: event.event_date || new Date().toISOString(),
+        location: event.location || '',
+        description: event.description || '',
+        is_main_event: event.is_main_event || false,
+        venue_name: event.venue_name || '',
+        address: event.address || '',
+        dress_code: event.dress_code || '',
+        notes: event.notes || '',
+        created_at: event.created_at || new Date().toISOString(),
+        updated_at: event.updated_at || new Date().toISOString()
+      })));
       
       // Auto-select main event if available
       const mainEvent = data?.find(event => event.is_main_event);
@@ -66,7 +79,7 @@ export const useRSVPWizard = () => {
       console.log('Submitting RSVP:', { user: user.id, rsvpData });
       
       // Check if RSVP already exists for this user and event
-      const { data: existingRSVP } = await supabase
+      const { data: existingRSVP } = await (supabase as any)
         .from('rsvps')
         .select('id')
         .eq('user_id', user.id)
@@ -86,7 +99,7 @@ export const useRSVPWizard = () => {
       if (existingRSVP) {
         console.log('Updating existing RSVP...');
         // Update existing RSVP
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('rsvps')
           .update({
             ...rsvpPayload,
@@ -97,7 +110,7 @@ export const useRSVPWizard = () => {
       } else {
         console.log('Creating new RSVP...');
         // Insert new RSVP
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('rsvps')
           .insert(rsvpPayload);
         rsvpError = error;

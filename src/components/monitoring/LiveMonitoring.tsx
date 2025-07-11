@@ -99,10 +99,10 @@ export const LiveMonitoring: React.FC = () => {
         { count: giftsPurchased }
       ] = await Promise.all([
         supabase.from('profiles').select('*', { count: 'exact', head: true }),
-        supabase.from('photos').select('*', { count: 'exact', head: true }),
-        supabase.from('messages').select('*', { count: 'exact', head: true }),
-        supabase.from('rsvps').select('*', { count: 'exact', head: true }),
-        supabase.from('gift_registry').select('*', { count: 'exact', head: true }).eq('is_purchased', true)
+        (supabase as any).from('photos').select('*', { count: 'exact', head: true }),
+        (supabase as any).from('messages').select('*', { count: 'exact', head: true }),
+        (supabase as any).from('rsvps').select('*', { count: 'exact', head: true }),
+        (supabase as any).from('gift_registry').select('*', { count: 'exact', head: true }).eq('is_purchased', true)
       ]);
 
       // Simulate active users and performance metrics

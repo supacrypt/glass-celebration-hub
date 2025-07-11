@@ -583,7 +583,7 @@ const UnifiedMediaManager: React.FC = () => {
                   <Label>Video Performance</Label>
                   <select
                     className="w-full px-3 py-2 border rounded-md"
-                    value={settings.hero_video_performance || 'auto'}
+                    value={(settings as any).hero_video_performance || 'auto'}
                     onChange={(e) => handleSave('hero_video_performance', e.target.value)}
                   >
                     <option value="auto">Auto (Recommended)</option>
@@ -596,7 +596,7 @@ const UnifiedMediaManager: React.FC = () => {
                   <Label>Cross-Device Compatibility</Label>
                   <select
                     className="w-full px-3 py-2 border rounded-md"
-                    value={settings.hero_video_compatibility || 'enhanced'}
+                    value={(settings as any).hero_video_compatibility || 'enhanced'}
                     onChange={(e) => handleSave('hero_video_compatibility', e.target.value)}
                   >
                     <option value="enhanced">Enhanced (Recommended)</option>

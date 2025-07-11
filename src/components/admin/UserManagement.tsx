@@ -32,7 +32,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ users, onRefresh }) => 
 
   const handleRoleChange = async (userId: string, newRole: 'guest' | 'admin' | 'couple') => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('user_roles')
         .update({ role: newRole })
         .eq('user_id', userId);

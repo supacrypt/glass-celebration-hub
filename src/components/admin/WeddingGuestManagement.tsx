@@ -40,7 +40,7 @@ const WeddingGuestManagement: React.FC<WeddingGuestManagementProps> = ({ onRefre
         .order('guest_names');
 
       if (error) throw error;
-      setGuests(data || []);
+      setGuests((data || []) as any);
     } catch (error) {
       console.error('Error fetching guests:', error);
       toast({
