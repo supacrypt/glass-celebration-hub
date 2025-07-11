@@ -7,9 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { SocialPostCard } from '@/components/social/SocialPostCard';
 import { useSocialFeed } from '@/hooks/useSocialFeed';
-import DirectChatContainer from '@/components/chat/DirectChatContainer';
-import FacebookMessenger from '@/components/chat/FacebookMessenger';
-import EnhancedMessenger from '@/components/chat/EnhancedMessenger';
+import InstantMessenger from '@/components/chat/InstantMessenger';
 import PollCreator from '@/components/polls/PollCreator';
 import PollDisplay from '@/components/polls/PollDisplay';
 import { usePolls } from '@/hooks/usePolls';
@@ -20,7 +18,6 @@ const Social: React.FC = () => {
   const { toast } = useToast();
   const [newMessage, setNewMessage] = useState('');
   const [posting, setPosting] = useState(false);
-  const [showDirectChat, setShowDirectChat] = useState(false);
   const [showPollCreator, setShowPollCreator] = useState(false);
   const [showMessenger, setShowMessenger] = useState(false);
   const [messengerMinimized, setMessengerMinimized] = useState(false);
@@ -230,8 +227,8 @@ const Social: React.FC = () => {
           </h1>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 mb-8 sm:mb-10">
+        {/* Stats Grid with Online Status */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 sm:gap-5 mb-8 sm:mb-10">
           <div className="glass-card p-6 sm:p-8 text-center cursor-pointer transition-all duration-300 hover:translate-y-[-3px] sm:hover:translate-y-[-5px] hover:scale-[1.02] animate-fade-up min-h-[120px] flex flex-col justify-center" style={{ animationDelay: '0.1s' }}>
             <div className="text-[28px] sm:text-[32px] mb-2 sm:mb-3 h-8 sm:h-10">💬</div>
             <div className="text-[28px] sm:text-[36px] font-bold text-[#2d3f51] mb-1 leading-none">{messages.length}</div>
@@ -252,6 +249,14 @@ const Social: React.FC = () => {
               {new Set(messages.map(msg => msg.user_id)).size}
             </div>
             <div className="text-xs sm:text-sm text-[#7a736b] font-medium">Contributors</div>
+          </div>
+
+          <div className="glass-card p-6 sm:p-8 text-center cursor-pointer transition-all duration-300 hover:translate-y-[-3px] sm:hover:translate-y-[-5px] hover:scale-[1.02] animate-fade-up min-h-[120px] flex flex-col justify-center" style={{ animationDelay: '0.4s' }}>
+            <div className="relative text-[28px] sm:text-[32px] mb-2 sm:mb-3 h-8 sm:h-10">
+              <span>🟢</span>
+            </div>
+            <div className="text-[28px] sm:text-[36px] font-bold text-green-600 mb-1 leading-none">4</div>
+            <div className="text-xs sm:text-sm text-[#7a736b] font-medium">Online Now</div>
           </div>
         </div>
 
@@ -298,14 +303,7 @@ const Social: React.FC = () => {
                 className="bg-[#1877f2] hover:bg-[#166fe5] text-white"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
-                Open Enhanced Chat
-              </Button>
-              <Button
-                onClick={() => setShowDirectChat(!showDirectChat)}
-                variant="outline"
-                className="bg-white/60 backdrop-blur-sm border-white/30 hover:bg-white/80 text-[#2d3f51]"
-              >
-                {showDirectChat ? 'Hide Legacy Chat' : 'Legacy Chat'}
+                Open Instant Chat
               </Button>
             </div>
           </div>
@@ -368,19 +366,14 @@ const Social: React.FC = () => {
             </div>
           </div>
           
-          {showDirectChat && (
-            <div className="h-[500px] bg-white/20 backdrop-blur-sm rounded-xl border border-white/20 mb-6">
-              <DirectChatContainer />
-            </div>
-          )}
           
-          {!showMessenger && !showDirectChat && (
+          {!showMessenger && (
             <div className="text-center py-8">
               <div className="w-16 h-16 bg-gradient-to-br from-[#1877f2]/20 to-[#1877f2]/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MessageCircle className="w-8 h-8 text-[#1877f2]" />
               </div>
               <p className="text-[#7a736b] mb-4">
-                Connect instantly with wedding guests using our Facebook-style messenger
+                Connect instantly with wedding guests using our Instant Messenger
               </p>
               <Button
                 onClick={() => {
@@ -391,7 +384,7 @@ const Social: React.FC = () => {
                 className="bg-[#1877f2] hover:bg-[#166fe5] text-white"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
-                Start Enhanced Chat
+                Start Instant Chat
               </Button>
             </div>
           )}
@@ -694,9 +687,9 @@ const Social: React.FC = () => {
         </div>
       </div>
       
-      {/* Enhanced Messenger Component */}
+      {/* Instant Messenger Component */}
       {(showMessenger || messengerMinimized) && (
-        <EnhancedMessenger
+        <InstantMessenger
           isMinimized={messengerMinimized}
           isMobile={isMobile}
           isCenter={messengerCenter}

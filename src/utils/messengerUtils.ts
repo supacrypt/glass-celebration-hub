@@ -1,5 +1,5 @@
 /**
- * Utility functions for triggering the Enhanced Messenger from any component
+ * Utility functions for triggering the Instant Messenger from any component
  */
 
 export interface MessengerOptions {
@@ -9,7 +9,7 @@ export interface MessengerOptions {
 }
 
 /**
- * Opens the Enhanced Messenger with specified options
+ * Opens the Instant Messenger with specified options
  */
 export const openMessenger = (options: MessengerOptions = {}) => {
   const { center = true, chatId, minimized = false } = options;

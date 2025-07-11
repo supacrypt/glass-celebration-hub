@@ -2,7 +2,7 @@ import React, { ReactNode, useState, useEffect } from 'react';
 import GlassNavigation from './GlassNavigation';
 import ProfileDropdown from './ProfileDropdown';
 import NotificationBell from './NotificationBell';
-import EnhancedMessenger from './chat/EnhancedMessenger';
+import InstantMessenger from './chat/InstantMessenger';
 
 interface GlassLayoutProps {
   children: ReactNode;
@@ -111,9 +111,9 @@ const GlassLayout: React.FC<GlassLayoutProps> = ({
         />
       )}
 
-      {/* Enhanced Messenger - Global Instance */}
+      {/* Instant Messenger - Global Instance */}
       {(messengerState.isOpen || messengerState.isMinimized) && (
-        <EnhancedMessenger
+        <InstantMessenger
           isMinimized={messengerState.isMinimized}
           isMobile={isMobile}
           isCenter={messengerState.isCenter}

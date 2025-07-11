@@ -58,7 +58,7 @@ interface CallState {
   isVideoEnabled: boolean;
 }
 
-interface EnhancedMessengerProps {
+interface InstantMessengerProps {
   isMinimized?: boolean;
   onMinimize?: () => void;
   onClose?: () => void;
@@ -68,7 +68,7 @@ interface EnhancedMessengerProps {
   isDashboardActive?: boolean; // New prop for dashboard interaction
 }
 
-const EnhancedMessenger: React.FC<EnhancedMessengerProps> = ({ 
+const InstantMessenger: React.FC<InstantMessengerProps> = ({ 
   isMinimized = false, 
   onMinimize, 
   onClose,
@@ -485,7 +485,7 @@ const EnhancedMessenger: React.FC<EnhancedMessengerProps> = ({
             }}
           >
             <MessageCircle className={`${isMobileView ? 'w-7 h-7' : 'w-6 h-6 mr-3'} text-wedding-gold drop-shadow-sm`} />
-            {!isMobileView && <span className="font-bold text-base font-dolly drop-shadow-sm">Wedding Chat</span>}
+            {!isMobileView && <span className="font-bold text-base font-dolly drop-shadow-sm">Instant Chat</span>}
             {chats.reduce((sum, chat) => sum + chat.unreadCount, 0) > 0 && (
               <div className={`bg-gradient-to-br from-red-500 via-red-600 to-red-700 text-white text-xs rounded-full flex items-center justify-center font-bold shadow-lg animate-pulse border-2 border-white/30 ${
                 isMobileView 
@@ -605,7 +605,7 @@ const EnhancedMessenger: React.FC<EnhancedMessengerProps> = ({
           <MessageCircle className="w-6 h-6 text-wedding-gold" />
           <div>
             <h3 className="font-bold text-lg font-dolly">
-              {selectedChatId ? selectedChat?.participants.map(p => p.name.split(' ')[0]).join(', ') : 'Wedding Messenger'}
+              {selectedChatId ? selectedChat?.participants.map(p => p.name.split(' ')[0]).join(', ') : 'Instant Messenger'}
             </h3>
             {selectedChatId && selectedChat && (
               <div className="text-sm opacity-90 flex items-center space-x-2">
@@ -853,4 +853,4 @@ const EnhancedMessenger: React.FC<EnhancedMessengerProps> = ({
   );
 };
 
-export default EnhancedMessenger;
+export default InstantMessenger;

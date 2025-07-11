@@ -58,7 +58,7 @@ const AdvancedCommunicationCenter: React.FC = () => {
         id: '1',
         type: 'announcement',
         title: 'Wedding Schedule Update',
-        content: 'Please note the ceremony will now start at 4:30 PM instead of 4:00 PM due to venue requirements.',
+        content: 'Please note the ceremony will now start at 3:30 PM instead of 3:00 PM due to venue requirements.',
         recipients: 'attending',
         sentAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
         status: 'sent',

@@ -61,7 +61,7 @@ const RSVPPopup: React.FC<RSVPPopupProps> = ({ isOpen, onClose, onComplete }) =>
     {
       icon: Clock,
       title: "Timing is Important",
-      description: "Please arrive 15 minutes early for the 4:00 PM ceremony. The day will conclude at 11:00 PM.",
+      description: "Please arrive 15 minutes early for the 3:00 PM ceremony. The day will conclude at 11:00 PM.",
       acknowledged: false
     }
   ]);
@@ -171,7 +171,7 @@ const RSVPPopup: React.FC<RSVPPopupProps> = ({ isOpen, onClose, onComplete }) =>
         <div className="glass-card p-4 space-y-2">
           <div className="flex items-center justify-center space-x-2 text-wedding-gold">
             <Calendar className="w-5 h-5" />
-            <span className="font-medium">5 October 2025 • 4:00 PM</span>
+            <span className="font-medium">5 October 2025 • 3:00 PM</span>
           </div>
           <div className="flex items-center justify-center space-x-2 text-muted-foreground">
             <MapPin className="w-4 h-4" />

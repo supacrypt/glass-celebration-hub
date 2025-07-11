@@ -147,7 +147,7 @@ const EnhancedCommunicationCenter: React.FC = () => {
       {
         id: '1',
         title: 'Wedding Day Schedule Update',
-        content: 'The ceremony will now start at 4:30 PM instead of 4:00 PM. Please plan accordingly!',
+        content: 'The ceremony will now start at 3:30 PM instead of 3:00 PM. Please plan accordingly!',
         type: 'urgent',
         target_audience: 'all',
         created_at: new Date().toISOString(),

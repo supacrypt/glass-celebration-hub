@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useDashboardData } from '@/hooks/useDashboardData';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -6,7 +7,6 @@ import AccessRestrictedView from './dashboard/AccessRestrictedView';
 import DashboardHeader from './dashboard/DashboardHeader';
 import AdminDashboardContent from './dashboard/AdminDashboardContent';
 import GuestDashboardContent from './dashboard/GuestDashboardContent';
-import PublicGuestDashboard from './dashboard/PublicGuestDashboard';
 
 interface DashboardPopupProps {
   isOpen: boolean;
@@ -15,6 +15,7 @@ interface DashboardPopupProps {
 }
 
 const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
   const { userRole: authUserRole } = useAuth();
   const { stats, users, rsvps, photos, loading, fetchDashboardData } = useDashboardData();
   
@@ -22,6 +23,13 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) {
+      // Check if user is authenticated, if not redirect to auth
+      if (!authUserRole) {
+        onClose();
+        navigate('/auth', { state: { mode: 'signin' } });
+        return;
+      }
+      
       fetchDashboardData();
       // Prevent body scroll when dashboard opens
       document.body.classList.add('dashboard-open');
@@ -34,16 +42,17 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
     return () => {
       document.body.classList.remove('dashboard-open');
     };
-  }, [isOpen, fetchDashboardData]);
+  }, [isOpen, fetchDashboardData, authUserRole, navigate, onClose]);
 
   if (!isOpen) return null;
-
-  // Determine if user has access - allow authenticated users and provide guest experience for unauthenticated
-  const hasAccess = authUserRole?.role === 'admin' || authUserRole?.role === 'couple' || authUserRole?.role === 'guest';
-  const isAuthenticated = !!authUserRole;
   
-  // If not authenticated, treat as guest user
-  const effectiveRole = isAuthenticated ? authUserRole.role : 'guest';
+  // Only show dashboard if user is authenticated
+  if (!authUserRole) {
+    return null; // This shouldn't render as the redirect happens in useEffect
+  }
+
+  // Determine user access level
+  const effectiveRole = authUserRole.role;
 
   return (
     <>
@@ -87,10 +96,8 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
                 photos={photos}
                 onRefresh={fetchDashboardData}
               />
-            ) : isAuthenticated ? (
-              <GuestDashboardContent stats={stats} onClose={onClose} />
             ) : (
-              <PublicGuestDashboard onClose={onClose} />
+              <GuestDashboardContent stats={stats} onClose={onClose} />
             )}
           </div>
         </div>

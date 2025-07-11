@@ -24,20 +24,6 @@ const PublicGuestDashboard: React.FC<PublicGuestDashboardProps> = ({ onClose }) 
 
   const publicActions = [
     {
-      icon: Calendar,
-      title: 'View Events',
-      description: 'Wedding schedule',
-      path: '/',
-      color: 'glass-blue'
-    },
-    {
-      icon: MapPin,
-      title: 'Venue',
-      description: 'Location & directions',
-      path: '/venue',
-      color: 'glass-green'
-    },
-    {
       icon: MessageSquare,
       title: 'FAQ',
       description: 'Common questions',
@@ -45,17 +31,11 @@ const PublicGuestDashboard: React.FC<PublicGuestDashboardProps> = ({ onClose }) 
       color: 'glass-purple'
     },
     {
-      icon: Camera,
-      title: 'Gallery',
-      description: 'Wedding photos',
-      path: '/gallery',
-      color: 'glass-pink'
-    },
-    {
       icon: Gift,
       title: 'Gifts',
       description: 'Wedding registry',
-      path: '/gifts',
+      action: () => window.open('https://example.com/tim-kirsten-gifts', '_blank'),
+      path: '',
       color: 'glass-pink'
     },
     {
@@ -113,7 +93,7 @@ const PublicGuestDashboard: React.FC<PublicGuestDashboardProps> = ({ onClose }) 
         <div className="glass-card responsive-card-padding-sm text-center space-y-2">
           <Clock className="w-5 h-5 mx-auto text-glass-blue" />
           <div className="text-sm font-semibold text-wedding-navy">
-            4:00 PM
+            3:00 PM
           </div>
           <div className="text-xs text-muted-foreground">
             Ceremony
@@ -183,7 +163,7 @@ const PublicGuestDashboard: React.FC<PublicGuestDashboardProps> = ({ onClose }) 
                 <QuickActionButton
                   icon={<Icon className="w-5 h-5" />}
                   label={action.title}
-                  onClick={() => handleNavigation(action.path)}
+                  onClick={() => action.action ? action.action() : handleNavigation(action.path)}
                   variant="secondary"
                   size="medium"
                   className="w-full justify-start space-y-1 h-auto py-4"
@@ -202,8 +182,8 @@ const PublicGuestDashboard: React.FC<PublicGuestDashboardProps> = ({ onClose }) 
       >
         <div className="space-y-3">
           {[
-            { time: '3:30 PM', event: 'Guest Arrival', location: 'Ben Ean Entrance' },
-            { time: '4:00 PM', event: 'Ceremony', location: 'Garden Terrace Lawn' },
+            { time: '2:30 PM', event: 'Guest Arrival', location: 'Ben Ean Entrance' },
+            { time: '3:00 PM', event: 'Ceremony', location: 'Garden Terrace Lawn' },
             { time: '4:30 PM', event: 'Cocktail Hour', location: 'Garden Terrace' },
             { time: '6:00 PM', event: 'Reception', location: 'Ben Ean Reception Hall' },
             { time: '11:00 PM', event: 'Celebration End', location: 'Thank you!' },

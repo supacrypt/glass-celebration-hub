@@ -58,7 +58,7 @@ interface TypingIndicator {
   expires_at: string;
 }
 
-export const useEnhancedMessenger = () => {
+export const useInstantMessenger = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   

@@ -38,6 +38,12 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
     { id: 3, title: 'Update Plus One Details', description: 'Add your guest information', icon: UserPlus, completed: profile?.plus_one_name ? true : false, points: 20 }
   ]);
   
+  // Latest reactions to user posts (new personalized feature)
+  const [latestReactions, setLatestReactions] = useState([
+    { id: 1, type: 'like', postSnippet: 'So excited for the wedding!', reactorName: 'Sarah M.', reactorAvatar: '👰', time: '2 hours ago' },
+    { id: 2, type: 'comment', postSnippet: 'Looking forward to the celebration', reactorName: 'Mike R.', reactorAvatar: '🤵', time: '4 hours ago', comment: 'Me too! It\'s going to be amazing!' }
+  ]);
+  
   const unreadNotifications = notifications.filter(n => !n.read).length;
   const completedActions = pendingActions.filter(a => a.completed).length;
   const totalPoints = pendingActions.filter(a => a.completed).reduce((sum, a) => sum + a.points, 0);
@@ -54,14 +60,6 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
       description: 'Confirm attendance',
       path: '/rsvp',
       color: 'glass-blue'
-    },
-    {
-      icon: Users,
-      title: 'Social Chat',
-      description: 'Connect with guests',
-      path: '/social',
-      color: 'glass-blue',
-      badge: '2'
     },
     {
       icon: MessageSquare,
@@ -141,7 +139,7 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
           Welcome Back, {profile?.first_name || 'Guest'}!
         </h3>
         <p className="text-sm text-muted-foreground">
-          {unreadNotifications > 0 ? `${unreadNotifications} new updates` : 'You\'re all caught up!'}
+          {unreadNotifications > 0 ? `${unreadNotifications} new updates • ${onlineUsers.filter(u => u.status === 'online').length} friends online` : `You\'re all caught up! • ${onlineUsers.filter(u => u.status === 'online').length} friends online`}
         </p>
       </div>
 
@@ -253,7 +251,10 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
                     <span className="font-medium text-wedding-navy text-sm">{user.name}</span>
-                    <button className="text-xs text-wedding-gold hover:text-wedding-gold/80">
+                    <button 
+                      className="text-xs text-wedding-gold hover:text-wedding-gold/80"
+                      onClick={() => handleNavigation('/social')}
+                    >
                       <MessageCircle className="w-4 h-4" />
                     </button>
                   </div>
@@ -264,6 +265,40 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
           ))}
         </div>
       </CollapsibleSection>
+
+      {/* Latest Reactions to Your Posts */}
+      {latestReactions.length > 0 && (
+        <CollapsibleSection 
+          title="Recent Activity"
+          icon={<Heart className="w-5 h-5" />}
+          defaultOpen={true}
+        >
+          <div className="space-y-2">
+            {latestReactions.map((reaction) => (
+              <HapticFeedback key={reaction.id} type="light">
+                <div className="glass-card p-3 cursor-pointer hover:scale-102 transition-transform"
+                     onClick={() => handleNavigation('/social')}>
+                  <div className="flex items-start space-x-3">
+                    <span className="text-lg">{reaction.reactorAvatar}</span>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium text-wedding-navy text-sm">{reaction.reactorName}</span>
+                        <span className="text-xs text-muted-foreground">{reaction.time}</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {reaction.type === 'like' ? '❤️ liked' : '💬 commented on'}: "{reaction.postSnippet}"
+                      </div>
+                      {reaction.comment && (
+                        <div className="text-xs text-wedding-navy mt-1 italic">"{reaction.comment}"</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </HapticFeedback>
+            ))}
+          </div>
+        </CollapsibleSection>
+      )}
 
       {/* Quick Actions */}
       <CollapsibleSection 
