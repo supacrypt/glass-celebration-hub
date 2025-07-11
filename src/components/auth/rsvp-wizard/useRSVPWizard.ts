@@ -26,17 +26,24 @@ export const useRSVPWizard = () => {
 
   const fetchEvents = async () => {
     try {
+      console.log('Fetching wedding events...');
       const { data, error } = await supabase
         .from('wedding_events')
         .select('*')
         .order('event_date', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database error:', error);
+        throw error;
+      }
+      
+      console.log('Events fetched successfully:', data);
       setEvents(data || []);
       
       // Auto-select main event if available
       const mainEvent = data?.find(event => event.is_main_event);
       if (mainEvent) {
+        console.log('Auto-selecting main event:', mainEvent);
         setRSVPData(prev => ({ ...prev, eventId: mainEvent.id }));
       }
     } catch (error) {
@@ -50,31 +57,70 @@ export const useRSVPWizard = () => {
   };
 
   const submitRSVP = async () => {
-    if (!user || !rsvpData.eventId) return;
+    if (!user || !rsvpData.eventId) {
+      console.log('Cannot submit RSVP - missing user or eventId:', { user: !!user, eventId: rsvpData.eventId });
+      return;
+    }
 
     try {
-      // Submit RSVP
-      const { error: rsvpError } = await supabase
+      console.log('Submitting RSVP:', { user: user.id, rsvpData });
+      
+      // Check if RSVP already exists for this user and event
+      const { data: existingRSVP } = await supabase
         .from('rsvps')
-        .upsert({
-          event_id: rsvpData.eventId,
-          user_id: user.id,
-          status: rsvpData.status,
-          guest_count: rsvpData.guestCount,
-          dietary_restrictions: rsvpData.dietaryRestrictions,
-          message: rsvpData.message,
-        }, {
-          onConflict: 'user_id,event_id'
-        });
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('event_id', rsvpData.eventId)
+        .maybeSingle();
+      
+      const rsvpPayload = {
+        event_id: rsvpData.eventId,
+        user_id: user.id,
+        status: rsvpData.status,
+        guest_count: rsvpData.guestCount,
+        dietary_restrictions: rsvpData.dietaryRestrictions,
+        message: rsvpData.message,
+      };
+      
+      let rsvpError;
+      if (existingRSVP) {
+        console.log('Updating existing RSVP...');
+        // Update existing RSVP
+        const { error } = await supabase
+          .from('rsvps')
+          .update({
+            ...rsvpPayload,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existingRSVP.id);
+        rsvpError = error;
+      } else {
+        console.log('Creating new RSVP...');
+        // Insert new RSVP
+        const { error } = await supabase
+          .from('rsvps')
+          .insert(rsvpPayload);
+        rsvpError = error;
+      }
 
-      if (rsvpError) throw rsvpError;
+      if (rsvpError) {
+        console.error('RSVP submission error:', rsvpError);
+        throw rsvpError;
+      }
 
+      console.log('RSVP submitted successfully, updating profile...');
+      
       // Update profile to mark RSVP as completed
       const { error: profileError } = await updateProfile({
         rsvp_completed: true
       });
 
-      if (profileError) throw profileError;
+      if (profileError) {
+        console.error('Profile update error:', profileError);
+        throw profileError;
+      }
+
+      console.log('Profile updated successfully');
 
       toast({
         title: "RSVP Submitted!",

@@ -124,18 +124,27 @@ const RSVPPopup: React.FC<RSVPPopupProps> = ({ isOpen, onClose, onComplete }) =>
 
       if (profileError) throw profileError;
 
-      // Create RSVP record
-      const { error: rsvpError } = await supabase
-        .from('rsvps')
-        .insert([{
-          user_id: user?.id,
-          event_id: 'wedding', // You might want to make this dynamic
-          status: attendance,
-          guest_count: attendance === 'yes' ? (hasPlusOne ? 2 : 1) : 0,
-          dietary_requirements: guestDetails.dietaryRequirements,
-          plus_one_dietary: hasPlusOne ? guestDetails.plusOneDietary : null,
-          notes: attendance === 'maybe' ? 'Guest responded maybe - follow up needed' : ''
-        }]);
+      // Get the main wedding event ID first
+      const { data: mainEvent } = await supabase
+        .from('wedding_events')
+        .select('id')
+        .eq('is_main_event', true)
+        .single();
+
+      if (!mainEvent) {
+        throw new Error('No main wedding event found');
+      }
+
+      // Use safe upsert function to handle RSVP conflicts properly
+      const { data: rsvpData, error: rsvpError } = await supabase
+        .rpc('safe_upsert_rsvp', {
+          p_user_id: user?.id,
+          p_event_id: mainEvent.id,
+          p_status: attendance === 'yes' ? 'attending' : attendance === 'no' ? 'declined' : 'maybe',
+          p_guest_count: attendance === 'yes' ? (hasPlusOne ? 2 : 1) : 0,
+          p_dietary_restrictions: guestDetails.dietaryRequirements || null,
+          p_message: attendance === 'maybe' ? 'Guest responded maybe - follow up needed' : null
+        });
 
       if (rsvpError) throw rsvpError;
 

@@ -120,18 +120,41 @@ export const useRSVPs = (userId?: string) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return { error: new Error('Not authenticated') };
 
-      const { error } = await supabase
+      // Check if RSVP already exists
+      const { data: existingRSVP } = await supabase
         .from('rsvps')
-        .upsert({
-          user_id: user.id,
-          event_id: eventId,
-          status,
-          guest_count: guestCount,
-          dietary_restrictions: dietaryRestrictions,
-          message,
-        }, {
-          onConflict: 'user_id,event_id'
-        });
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('event_id', eventId)
+        .maybeSingle();
+
+      const rsvpPayload = {
+        user_id: user.id,
+        event_id: eventId,
+        status,
+        guest_count: guestCount,
+        dietary_restrictions: dietaryRestrictions,
+        message,
+      };
+
+      let error;
+      if (existingRSVP) {
+        // Update existing RSVP
+        const { error: updateError } = await supabase
+          .from('rsvps')
+          .update({
+            ...rsvpPayload,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existingRSVP.id);
+        error = updateError;
+      } else {
+        // Insert new RSVP
+        const { error: insertError } = await supabase
+          .from('rsvps')
+          .insert(rsvpPayload);
+        error = insertError;
+      }
 
       if (error) throw error;
       await fetchRSVPs();
@@ -185,15 +208,25 @@ export const usePhotos = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { error } = await supabase
+      // Check if like already exists
+      const { data: existingLike } = await supabase
         .from('photo_likes')
-        .upsert({ 
-          photo_id: photoId,
-          user_id: user.id
-        });
+        .select('id')
+        .eq('photo_id', photoId)
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-      if (error) throw error;
-      await fetchPhotos();
+      if (!existingLike) {
+        const { error } = await supabase
+          .from('photo_likes')
+          .insert({ 
+            photo_id: photoId,
+            user_id: user.id
+          });
+
+        if (error) throw error;
+        await fetchPhotos();
+      }
     } catch (error) {
       console.error('Error liking photo:', error);
     }
@@ -330,15 +363,25 @@ export const useMessages = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { error } = await supabase
+      // Check if like already exists
+      const { data: existingLike } = await supabase
         .from('message_likes')
-        .upsert({ 
-          message_id: messageId,
-          user_id: user.id
-        });
+        .select('id')
+        .eq('message_id', messageId)
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-      if (error) throw error;
-      await fetchMessages();
+      if (!existingLike) {
+        const { error } = await supabase
+          .from('message_likes')
+          .insert({ 
+            message_id: messageId,
+            user_id: user.id
+          });
+
+        if (error) throw error;
+        await fetchMessages();
+      }
     } catch (error) {
       console.error('Error liking message:', error);
     }
