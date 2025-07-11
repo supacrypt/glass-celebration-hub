@@ -38,24 +38,23 @@ export const useContentBlocks = (sectionId?: string) => {
       setError(null);
 
       // Load sections first
-      const { data: sectionsData, error: sectionsError } = await supabase
-        .from('content_sections')
+      const { data: sectionsData, error: sectionsError } = await (supabase as any)
+        .from('content_blocks')
         .select('*')
-        .eq('is_enabled', true)
-        .order('id');
+        .eq('is_active', true)
+        .order('display_order');
 
       if (sectionsError) throw sectionsError;
 
       // Load blocks
-      let blocksQuery = supabase
+      let blocksQuery = (supabase as any)
         .from('content_blocks')
         .select('*')
-        .eq('is_visible', true)
-        .order('section')
-        .order('order_index');
+        .eq('is_active', true)
+        .order('display_order');
 
       if (sectionId) {
-        blocksQuery = blocksQuery.eq('section', sectionId);
+        blocksQuery = blocksQuery.eq('section_key', sectionId);
       }
 
       const { data: blocksData, error: blocksError } = await blocksQuery;

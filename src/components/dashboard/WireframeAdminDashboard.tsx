@@ -70,14 +70,14 @@ const WireframeAdminDashboard: React.FC<WireframeAdminDashboardProps> = ({
 
   // WIREFRAME TAB 1: Content Management
   const contentSubTabs = [
-    { id: 'home', label: 'Home Page', icon: Home, component: <HomePageManager /> },
-    { id: 'events', label: 'Events & Timeline', icon: Calendar, component: <EventTimelineManager /> },
-    { id: 'guest-dashboard', label: 'Guest Dashboard', icon: Heart, component: <GuestContentManager /> },
-    { id: 'social', label: 'Social Feed', icon: MessageSquare, component: <div>Social Feed Management</div> },
-    { id: 'gallery', label: 'Gallery', icon: Camera, component: <div>Gallery Management</div> },
-    { id: 'faq', label: 'FAQ Management', icon: HelpCircle, component: <FAQManagement /> },
-    { id: 'accommodation', label: 'Accommodation', icon: Building, component: <AccommodationManager /> },
-    { id: 'transport', label: 'Transportation', icon: Bus, component: <TransportationManager /> }
+    { id: 'home', label: 'Home Page', icon: Home, badge: undefined, component: <HomePageManager /> },
+    { id: 'events', label: 'Events & Timeline', icon: Calendar, badge: undefined, component: <EventTimelineManager /> },
+    { id: 'guest-dashboard', label: 'Guest Dashboard', icon: Heart, badge: undefined, component: <GuestContentManager /> },
+    { id: 'social', label: 'Social Feed', icon: MessageSquare, badge: undefined, component: <div>Social Feed Management</div> },
+    { id: 'gallery', label: 'Gallery', icon: Camera, badge: undefined, component: <div>Gallery Management</div> },
+    { id: 'faq', label: 'FAQ Management', icon: HelpCircle, badge: undefined, component: <FAQManagement /> },
+    { id: 'accommodation', label: 'Accommodation', icon: Building, badge: undefined, component: <AccommodationManager /> },
+    { id: 'transport', label: 'Transportation', icon: Bus, badge: undefined, component: <TransportationManager /> }
   ];
 
   // WIREFRAME TAB 2: Users & RSVPs
@@ -107,16 +107,17 @@ const WireframeAdminDashboard: React.FC<WireframeAdminDashboardProps> = ({
       id: 'seating', 
       label: 'Seating Plan', 
       icon: MapPin, 
+      badge: undefined,
       component: <SeatingPlanManager /> 
     }
   ];
 
   // WIREFRAME TAB 3: System
   const systemSubTabs = [
-    { id: 'settings', label: 'Settings', icon: Settings, component: <CompactSystemSettings /> },
-    { id: 'performance', label: 'Performance', icon: BarChart, component: <EnhancedAnalytics /> },
-    { id: 'security', label: 'Security & Backup', icon: Shield, component: <AdvancedSecurity /> },
-    { id: 'dev', label: 'Dev Tools', icon: Code, component: <ProductionReadinessTest /> }
+    { id: 'settings', label: 'Settings', icon: Settings, badge: undefined, component: <CompactSystemSettings /> },
+    { id: 'performance', label: 'Performance', icon: BarChart, badge: undefined, component: <EnhancedAnalytics /> },
+    { id: 'security', label: 'Security & Backup', icon: Shield, badge: undefined, component: <AdvancedSecurity /> },
+    { id: 'dev', label: 'Dev Tools', icon: Code, badge: undefined, component: <ProductionReadinessTest /> }
   ];
 
   const mainTabs = [

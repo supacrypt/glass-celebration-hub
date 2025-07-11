@@ -23,7 +23,7 @@ const VenueHeroImage: React.FC<VenueHeroImageProps> = ({
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .from('venue_images')
           .select('*')
           .eq('venue_id', venueId)

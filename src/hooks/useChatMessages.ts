@@ -38,7 +38,7 @@ export const useChatMessages = (chatId: string | null) => {
 
     try {
       setLoading(true);
-      const { data: messagesData, error: messagesError } = await supabase
+      const { data: messagesData, error: messagesError } = await (supabase as any)
         .from('chat_messages')
         .select('*')
         .eq('chat_id', chatId)
@@ -49,7 +49,7 @@ export const useChatMessages = (chatId: string | null) => {
       // Get unique user IDs to fetch profiles
       const userIds = [...new Set(messagesData?.map(m => m.user_id) || [])];
       
-      const { data: profilesData, error: profilesError } = await supabase
+      const { data: profilesData, error: profilesError } = await (supabase as any)
         .from('profiles')
         .select('user_id, first_name, last_name, display_name, avatar_url')
         .in('user_id', userIds);

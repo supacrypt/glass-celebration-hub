@@ -59,28 +59,32 @@ const GuestDashboardContent: React.FC<GuestDashboardContentProps> = ({
       title: 'RSVP',
       description: 'Confirm attendance',
       path: '/rsvp',
-      color: 'glass-blue'
+      color: 'glass-blue',
+      badge: undefined
     },
     {
       icon: MessageSquare,
       title: 'FAQ Quiz',
       description: 'Test your knowledge',
       path: '/faq',
-      color: 'glass-purple'
+      color: 'glass-purple',
+      badge: undefined
     },
     {
       icon: MapPin,
       title: 'Transport',
       description: 'Coaches & travel',
       path: '/transport',
-      color: 'glass-green'
+      color: 'glass-green',
+      badge: undefined
     },
     {
       icon: MapPin,
       title: 'Accommodation',
       description: 'Places to stay',
       path: '/accommodation',
-      color: 'glass-blue'
+      color: 'glass-blue',
+      badge: undefined
     }
   ];
 

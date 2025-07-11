@@ -16,12 +16,12 @@ export const useAdminAuth = () => {
 
   const checkAdminRole = async (userId: string): Promise<boolean> => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('user_roles')
         .select('role')
         .eq('user_id', userId)
         .eq('role', 'admin')
-        .single();
+        .maybeSingle();
 
       if (error && error.code !== 'PGRST116') {
         console.error('Error checking admin role:', error);
@@ -156,7 +156,7 @@ export const useAdminAuth = () => {
   const createDevAdmin = async () => {
     try {
       // First check if any admin exists
-      const { data: existingAdmin } = await supabase
+      const { data: existingAdmin } = await (supabase as any)
         .from('user_roles')
         .select('user_id')
         .eq('role', 'admin')
@@ -186,7 +186,7 @@ export const useAdminAuth = () => {
 
       if (data.user) {
         // Add admin role
-        const { error: roleError } = await supabase
+        const { error: roleError } = await (supabase as any)
           .from('user_roles')
           .insert({
             user_id: data.user.id,

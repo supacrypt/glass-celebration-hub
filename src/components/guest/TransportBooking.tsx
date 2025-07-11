@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { useUser } from '@supabase/auth-helpers-react';
+import { useAuth } from '@/hooks/useAuth';
 
 interface TransportationOption {
   id: string;
@@ -72,7 +72,7 @@ interface MyTransportStatus {
 }
 
 const TransportBooking: React.FC = () => {
-  const user = useUser();
+  const { user } = useAuth();
   const [transportOptions, setTransportOptions] = useState<TransportationOption[]>([]);
   const [carpoolOfferings, setCarpoolOfferings] = useState<CarpoolOffering[]>([]);
   const [myStatus, setMyStatus] = useState<MyTransportStatus | null>(null);
@@ -102,7 +102,7 @@ const TransportBooking: React.FC = () => {
     setLoading(true);
     try {
       // Load available transport options
-      const { data: transportData, error: transportError } = await supabase
+      const { data: transportData, error: transportError } = await (supabase as any)
         .from('transportation_options')
         .select(`
           *,
@@ -114,52 +114,52 @@ const TransportBooking: React.FC = () => {
       if (transportError) throw transportError;
 
       // Load available carpool offerings (excluding user's own)
-      const { data: carpoolData, error: carpoolError } = await supabase
-        .from('carpool_offerings')
+      const { data: carpoolData, error: carpoolError } = await (supabase as any)
+        .from('carpool_coordination')
         .select(`
           *,
-          driver_profile:profiles!carpool_offerings_driver_user_id_fkey(first_name, last_name)
+          driver_profile:profiles(first_name, last_name)
         `)
-        .eq('is_active', true)
-        .neq('driver_user_id', user.id)
-        .order('departure_date, departure_time');
+        .eq('status', 'active')
+        .neq('user_id', user.id)
+        .order('departure_time');
 
       if (carpoolError) throw carpoolError;
 
       // Load user's transport status and bookings
-      const { data: statusData, error: statusError } = await supabase
+      const { data: statusData, error: statusError } = await (supabase as any)
         .from('guest_transport_status')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       // Load user's bookings
-      const { data: bookingsData, error: bookingsError } = await supabase
-        .from('transportation_bookings')
+      const { data: bookingsData, error: bookingsError } = await (supabase as any)
+        .from('bus_seat_bookings')
         .select('*')
         .eq('user_id', user.id);
 
       // Load user's carpool offering
-      const { data: myCarpoolData, error: myCarpoolError } = await supabase
-        .from('carpool_offerings')
+      const { data: myCarpoolData, error: myCarpoolError } = await (supabase as any)
+        .from('carpool_coordination')
         .select('*')
-        .eq('driver_user_id', user.id)
-        .eq('is_active', true)
-        .single();
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .maybeSingle();
 
       // Load user's carpool booking
-      const { data: myCarpoolBookingData, error: myCarpoolBookingError } = await supabase
-        .from('carpool_bookings')
+      const { data: myCarpoolBookingData, error: myCarpoolBookingError } = await (supabase as any)
+        .from('carpool_participants')
         .select(`
           *,
-          carpool:carpool_offerings(
+          carpool:carpool_coordination(
             *,
-            driver_profile:profiles!carpool_offerings_driver_user_id_fkey(first_name, last_name)
+            driver_profile:profiles(first_name, last_name)
           )
         `)
-        .eq('passenger_user_id', user.id)
+        .eq('participant_user_id', user.id)
         .eq('status', 'confirmed')
-        .single();
+        .maybeSingle();
 
       setTransportOptions(transportData || []);
       setCarpoolOfferings(carpoolData || []);
@@ -182,14 +182,12 @@ const TransportBooking: React.FC = () => {
     if (!user) return;
 
     try {
-      const { error } = await supabase
-        .from('transportation_bookings')
+      const { error } = await (supabase as any)
+        .from('bus_seat_bookings')
         .insert([{
           user_id: user.id,
-          transportation_id: transportationId,
-          schedule_id: scheduleId,
-          booking_type: 'bus_seat',
-          guest_count: 1
+          transportation_schedule_id: scheduleId,
+          passenger_name: user.email || 'Guest'
         }]);
 
       if (error) throw error;
@@ -206,12 +204,12 @@ const TransportBooking: React.FC = () => {
     if (!user) return;
 
     try {
-      const { error } = await supabase
-        .from('carpool_bookings')
+      const { error } = await (supabase as any)
+        .from('carpool_participants')
         .insert([{
           carpool_id: carpoolId,
-          passenger_user_id: user.id,
-          passenger_count: 1
+          participant_user_id: user.id,
+          passenger_name: user.email || 'Guest'
         }]);
 
       if (error) throw error;
@@ -228,11 +226,16 @@ const TransportBooking: React.FC = () => {
     if (!user) return;
 
     try {
-      const { error } = await supabase
-        .from('carpool_offerings')
+      const { error } = await (supabase as any)
+        .from('carpool_coordination')
         .insert([{
-          driver_user_id: user.id,
-          ...carpoolFormData
+          user_id: user.id,
+          coordination_type: 'driver',
+          departure_location: carpoolFormData.departure_location,
+          departure_time: `${carpoolFormData.departure_date} ${carpoolFormData.departure_time}`,
+          available_seats: carpoolFormData.available_seats,
+          contact_phone: carpoolFormData.driver_phone,
+          special_requirements: carpoolFormData.special_notes
         }]);
 
       if (error) throw error;
@@ -261,13 +264,12 @@ const TransportBooking: React.FC = () => {
     if (!user) return;
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('guest_transport_status')
         .upsert({
           user_id: user.id,
           transport_method: method,
-          status: method === 'staying_nearby' ? 'staying_nearby' : 'self_arranged',
-          needs_reminder: false
+          status: method === 'staying_nearby' ? 'staying_nearby' : 'self_arranged'
         });
 
       if (error) throw error;
@@ -285,13 +287,13 @@ const TransportBooking: React.FC = () => {
 
     try {
       if (bookingType === 'transportation') {
-        await supabase
-          .from('transportation_bookings')
+        await (supabase as any)
+          .from('bus_seat_bookings')
           .delete()
           .eq('id', bookingId);
       } else if (bookingType === 'carpool') {
-        await supabase
-          .from('carpool_bookings')
+        await (supabase as any)
+          .from('carpool_participants')
           .delete()
           .eq('id', bookingId);
       }
