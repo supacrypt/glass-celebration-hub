@@ -15,3 +15,15 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     autoRefreshToken: true,
   }
 });
+
+// Admin client with service role for development/testing
+export const supabaseAdmin = createClient<Database>(
+  SUPABASE_URL, 
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3bWZ4Y3J6endwbXhvbXlkbXVxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTg2NDk2MSwiZXhwIjoyMDY3NDQwOTYxfQ.08sSTpIieN0SMWgWXdE55-rsqQ4cy4D5FIQCrv6vOQ8",
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
+);

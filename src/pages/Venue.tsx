@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, supabaseAdmin } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -74,24 +74,37 @@ const Venue: React.FC = () => {
     try {
       console.log('Fetching venues from Supabase...');
       
+      // Try admin client first for reliable access
+      const { data: adminData, error: adminError } = await supabaseAdmin
+        .from('venues')
+        .select('*')
+        .order('display_order', { ascending: true });
+
+      console.log('Admin venues query result:', { adminData, adminError });
+      
+      if (!adminError && adminData && adminData.length > 0) {
+        setVenues(adminData);
+        console.log('Venues successfully loaded from database (admin):', adminData);
+        return;
+      }
+
+      // Fallback to regular client
       const { data, error } = await supabase
         .from('venues')
         .select('*')
         .order('display_order', { ascending: true });
 
-      console.log('Venues query result:', { data, error });
+      console.log('Regular venues query result:', { data, error });
       
       if (error) {
         console.warn('Database fetch failed, will use fallback venues:', error);
-        // Don't throw error, just log it
         setVenues([]);
       } else {
         setVenues(data || []);
-        console.log('Venues successfully loaded from database:', data);
+        console.log('Venues successfully loaded from database (regular):', data);
       }
     } catch (error) {
       console.warn('Error fetching venues, using fallback:', error);
-      // Don't show error toast, just use fallback
       setVenues([]);
     } finally {
       setLoading(false);
