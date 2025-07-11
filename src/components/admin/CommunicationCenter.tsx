@@ -53,7 +53,7 @@ const CommunicationCenter: React.FC = () => {
     try {
       // In a real implementation, this would send to a message queue or notification service
       // For now, we'll just create a record in the messages table
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('messages')
         .insert([{
           content: `${messageForm.subject}\n\n${messageForm.content}`,

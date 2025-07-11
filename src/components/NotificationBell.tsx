@@ -40,7 +40,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }) =
   const fetchUnreadCount = async () => {
     try {
       // Count unread messages - for simplicity, we'll count all recent messages
-      const { count: messageCount } = await supabase
+      const { count: messageCount } = await (supabase as any)
         .from('messages')
         .select('*', { count: 'exact', head: true })
         .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());

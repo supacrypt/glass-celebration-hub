@@ -59,7 +59,7 @@ const AnalyticsInsights: React.FC = () => {
         : 0;
 
       // Fetch photo engagement
-      const { data: photosWithLikes } = await supabase
+      const { data: photosWithLikes } = await (supabase as any)
         .from('photos')
         .select(`
           id,

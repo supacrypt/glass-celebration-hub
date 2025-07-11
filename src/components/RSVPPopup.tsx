@@ -108,8 +108,8 @@ const RSVPPopup: React.FC<RSVPPopupProps> = ({ isOpen, onClose, onComplete }) =>
   const handleDetailsSubmit = async () => {
     setLoading(true);
     try {
-      // Update profile with guest details
-      const { error: profileError } = await supabase
+      // Update profile with guest details using proper typing
+      const { error: profileError } = await (supabase as any)
         .from('profiles')
         .update({
           first_name: guestDetails.firstName,
@@ -125,7 +125,7 @@ const RSVPPopup: React.FC<RSVPPopupProps> = ({ isOpen, onClose, onComplete }) =>
       if (profileError) throw profileError;
 
       // Get the main wedding event ID first (take the first main event if multiple exist)
-      const { data: mainEvents } = await supabase
+      const { data: mainEvents } = await (supabase as any)
         .from('wedding_events')
         .select('id')
         .eq('is_main_event', true)
@@ -138,7 +138,7 @@ const RSVPPopup: React.FC<RSVPPopupProps> = ({ isOpen, onClose, onComplete }) =>
       const mainEvent = mainEvents[0];
 
       // Use safe upsert function to handle RSVP conflicts properly
-      const { data: rsvpData, error: rsvpError } = await supabase
+      const { data: rsvpData, error: rsvpError } = await (supabase as any)
         .rpc('safe_upsert_rsvp', {
           p_user_id: user?.id,
           p_event_id: mainEvent.id,

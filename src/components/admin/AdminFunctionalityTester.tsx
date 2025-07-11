@@ -75,24 +75,24 @@ const AdminFunctionalityTester: React.FC = () => {
   };
 
   const testGuestDataIntegrity = async (): Promise<boolean> => {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('guests')
       .select('guest_names, rsvp_status')
       .ilike('guest_names', '%fleuren%');
     
     if (error) throw error;
-    return data?.some(guest => guest.guest_names.includes('Dan and Nicky Fleuren')) || false;
+    return (data as any)?.some((guest: any) => guest.guest_names?.includes('Dan and Nicky Fleuren')) || false;
   };
 
   const testDanielNickyLinkage = async (): Promise<boolean> => {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('profiles')
       .select('display_name, has_plus_one, plus_one_name')
       .eq('display_name', 'Daniel Fleuren')
       .single();
     
     if (error) throw error;
-    return data?.has_plus_one && data?.plus_one_name === 'Nicky Fleuren';
+    return (data as any)?.has_plus_one && (data as any)?.plus_one_name === 'Nicky Fleuren';
   };
 
   const testAdminRoleVerification = async (): Promise<boolean> => {
@@ -150,7 +150,7 @@ const AdminFunctionalityTester: React.FC = () => {
   };
 
   const testRSVPManagement = async (): Promise<boolean> => {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('rsvps')
       .select('id, status, user_id')
       .limit(1);
