@@ -14,6 +14,7 @@ import DressCodeCard from '@/components/DressCodeCard';
 import ContactInfo from '@/components/ContactInfo';
 import RSVPPopup from '@/components/RSVPPopup';
 import DatabaseDiagnostics from '@/components/debug/DatabaseDiagnostics';
+import { FixWeddingData } from '@/components/FixWeddingData';
 
 const Home: React.FC = () => {
   const { events, loading: eventsLoading } = useWeddingEvents();
@@ -117,6 +118,9 @@ const Home: React.FC = () => {
         
         {/* Debug component - remove in production */}
         {process.env.NODE_ENV === 'development' && <DatabaseDiagnostics />}
+        
+        {/* Fix Wedding Data Component */}
+        <FixWeddingData />
       </div>
 
       {/* Bottom Navigation - Same for all users */}

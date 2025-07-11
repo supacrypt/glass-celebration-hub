@@ -32,7 +32,7 @@ import AdminPhotosDetail from "./pages/dashboard/AdminPhotosDetail";
 import AdminUserRoles from "./pages/dashboard/AdminUserRoles";
 import SocialCompose from "./pages/SocialCompose";
 import { SystemTest } from "./components/test/SystemTest";
-import { useAuth } from "./hooks/useAuth";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
@@ -131,7 +131,9 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AppContent />
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAllFAQs } from '@/lib/api/faq';
+import { supabaseAdmin } from '@/integrations/supabase/client';
 
 // Define a type for the FAQ object for better type safety
 interface FAQ {
@@ -27,14 +28,31 @@ const DynamicFAQSection: React.FC = () => {
   useEffect(() => {
     const loadRandomFAQs = async () => {
       try {
-        const allFaqs = await getAllFAQs();
-        if (allFaqs) {
+        console.log('DynamicFAQSection: Loading FAQs...');
+        
+        // Try the admin client first since regular client might have RLS issues
+        const { data: allFaqs, error } = await supabaseAdmin
+          .from('faq_items')
+          .select('id, question, answer')
+          .eq('is_active', true);
+        
+        if (error) {
+          console.error('DynamicFAQSection: Supabase error:', error);
+          throw error;
+        }
+        
+        console.log('DynamicFAQSection: Received FAQs:', allFaqs);
+        if (allFaqs && allFaqs.length > 0) {
           // Shuffle the array and take the first 4
           const shuffled = [...allFaqs].sort(() => 0.5 - Math.random());
-          setFaqs(shuffled.slice(0, 4));
+          const selectedFaqs = shuffled.slice(0, 4);
+          console.log('DynamicFAQSection: Selected FAQs:', selectedFaqs);
+          setFaqs(selectedFaqs);
+        } else {
+          console.log('DynamicFAQSection: No FAQs received or empty array');
         }
       } catch (error) {
-        console.error('Error loading FAQs:', error);
+        console.error('DynamicFAQSection: Error loading FAQs:', error);
       } finally {
         setLoading(false);
       }
@@ -58,7 +76,17 @@ const DynamicFAQSection: React.FC = () => {
 
   // Do not render the section if there are no FAQs to show
   if (faqs.length === 0) {
-    return null;
+    console.log('DynamicFAQSection: No FAQs to display, rendering nothing');
+    return (
+      <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
+        <div className="text-center p-4 bg-red-100 border border-red-300 rounded">
+          <h3 className="text-red-800 font-semibold">FAQ Debug</h3>
+          <p className="text-red-600">No FAQs loaded. Check console for errors.</p>
+          <p className="text-red-600 text-sm">Loading: {loading ? 'true' : 'false'}</p>
+          <p className="text-red-600 text-sm">FAQ count: {faqs.length}</p>
+        </div>
+      </div>
+    );
   }
 
   return (
