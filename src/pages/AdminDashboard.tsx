@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDashboardData } from '@/hooks/useDashboardData';
 import { Button } from '@/components/ui/button';
 import AdminDashboardContent from '@/components/dashboard/AdminDashboardContent';
+import SupabaseSecurityFix from '@/components/admin/SupabaseSecurityFix';
 
 const AdminDashboard: React.FC = () => {
   const { userRole } = useAuth();
@@ -65,6 +66,11 @@ const AdminDashboard: React.FC = () => {
             </Button>
           </Link>
         </div>
+      </div>
+
+      {/* Security Fix Section */}
+      <div className="mb-6">
+        <SupabaseSecurityFix />
       </div>
 
       {/* Full Dashboard Content */}

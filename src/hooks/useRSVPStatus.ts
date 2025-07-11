@@ -38,6 +38,18 @@ export const useRSVPStatus = () => {
         .maybeSingle();
 
       if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+        // Check if it's an RLS/permission error
+        if (error.code === '42501' || error.message?.includes('permission denied')) {
+          console.warn('RSVP check blocked by RLS policy. User may need to complete RSVP manually.');
+          // Assume they need to RSVP if we can't check
+          setRSVPStatus({
+            hasRSVPd: false,
+            rsvpData: null,
+            loading: false,
+            needsRSVP: true
+          });
+          return;
+        }
         throw error;
       }
 

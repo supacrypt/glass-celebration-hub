@@ -2,6 +2,14 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import type { AdminStats, User, RSVP, Photo, DashboardData } from '@/components/dashboard/types';
+import { 
+  getFallbackAdminStats, 
+  getFallbackUsers, 
+  getFallbackRSVPs, 
+  getFallbackPhotos,
+  isDashboardBlocked,
+  getErrorMessage 
+} from '@/utils/dashboardFallback';
 
 export const useDashboardData = () => {
   const [loading, setLoading] = useState(true);
@@ -140,11 +148,31 @@ export const useDashboardData = () => {
 
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load dashboard data",
-        variant: "destructive"
-      });
+      
+      // Check if error is due to RLS/security policies
+      if (isDashboardBlocked(error)) {
+        // Use fallback data when blocked by security policies
+        console.warn('Dashboard data blocked by RLS. Using fallback data.');
+        
+        setData({
+          stats: getFallbackAdminStats(),
+          users: getFallbackUsers(),
+          rsvps: getFallbackRSVPs(),
+          photos: getFallbackPhotos()
+        });
+        
+        toast({
+          title: "Limited Dashboard Access",
+          description: "Using sample data. Run security fix for full access.",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: getErrorMessage(error),
+          variant: "destructive"
+        });
+      }
     } finally {
       setLoading(false);
     }

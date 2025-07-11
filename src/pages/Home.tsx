@@ -13,8 +13,10 @@ import EventsSection from '@/components/home/EventsSection';
 import DressCodeCard from '@/components/DressCodeCard';
 import ContactInfo from '@/components/ContactInfo';
 import RSVPPopup from '@/components/RSVPPopup';
+import RSVPCallToAction from '@/components/home/RSVPCallToAction';
 import DatabaseDiagnostics from '@/components/debug/DatabaseDiagnostics';
 import { FixWeddingData } from '@/components/FixWeddingData';
+import { FixSupabaseSecurity } from '@/components/FixSupabaseSecurity';
 
 const Home: React.FC = () => {
   const { events, loading: eventsLoading } = useWeddingEvents();
@@ -77,6 +79,9 @@ const Home: React.FC = () => {
           {/* Dynamic FAQ Section - Admin Controlled */}
           <DynamicFAQSection />
           
+          {/* RSVP Call to Action */}
+          <RSVPCallToAction onRSVPClick={handleOpenRSVP} />
+          
           {/* Dress Code */}
           <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
             <DressCodeCard />
@@ -121,6 +126,9 @@ const Home: React.FC = () => {
         
         {/* Fix Wedding Data Component */}
         <FixWeddingData />
+        
+        {/* Fix Supabase Security Issues */}
+        {isAdmin && <FixSupabaseSecurity />}
       </div>
 
       {/* Bottom Navigation - Same for all users */}
