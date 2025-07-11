@@ -74,7 +74,6 @@ const Venue: React.FC = () => {
     try {
       console.log('Fetching venues from Supabase...');
       
-      // Try with service role first, then fallback to anon
       const { data, error } = await supabase
         .from('venues')
         .select('*')
@@ -82,18 +81,12 @@ const Venue: React.FC = () => {
 
       console.log('Venues query result:', { data, error });
       
-      if (error) {
-        console.error('Supabase error:', error);
-        // Don't throw error, just log it and use empty array
-        console.log('Using hardcoded venues due to database access issue');
-      } else {
-        setVenues(data || []);
-        console.log('Venues set to state:', data);
-      }
+      if (error) throw error;
+      setVenues(data || []);
+      console.log('Venues successfully loaded from database:', data);
     } catch (error) {
       console.error('Error fetching venues:', error);
-      console.log('Using hardcoded venues due to fetch error');
-      // Don't show error toast, just fall back to hardcoded
+      toast.error('Failed to load venues');
     } finally {
       setLoading(false);
     }
@@ -239,54 +232,8 @@ const Venue: React.FC = () => {
     );
   }
 
-  // Hardcoded venues while we fix database access
-  const hardcodedVenues = [
-    {
-      id: 'ben-ean',
-      name: 'Ben Ean Winery',
-      image_url: 'https://iwmfxcrzzwpmxomydmuq.storage.supabase.co/v1/object/public/venue-ben-ean/Ben%20Ean%20Venue%20Main.png',
-      caption: 'Wedding ceremony and reception venue in the beautiful Hunter Valley. Join us for the main celebration on Sunday, October 5th, 2025.',
-      address: '119 McDonalds Rd, Pokolbin NSW 2320',
-      quick_facts: {
-        'Ceremony': '3:00 PM on Garden Terrace',
-        'Reception': '5:00 PM cocktails, 7:00 PM dinner',
-        'Dress Code': 'Cocktail/Dapper',
-        'End Time': '12:00 AM'
-      },
-      route: '/venue/ben-ean'
-    },
-    {
-      id: 'prince-merewether',
-      name: 'Prince of Mereweather',
-      image_url: 'https://iwmfxcrzzwpmxomydmuq.storage.supabase.co/v1/object/public/venue-pub/The%20Prince%20Merewether.png',
-      caption: 'Pre-wedding drinks and casual dinner. Stop in to have a drink and grab yourself a meal if you are hungry.',
-      address: 'Mereweather, NSW 2291',
-      quick_facts: {
-        'Date': 'Saturday, October 4th',
-        'Time': '4:00 PM - 8:00 PM',
-        'Style': 'Casual drinks and food',
-        'Dress Code': 'Casual'
-      },
-      route: '/venue/prince-of-mereweather'
-    },
-    {
-      id: 'newcastle-beach',
-      name: 'Newcastle Beach',
-      image_url: 'https://iwmfxcrzzwpmxomydmuq.storage.supabase.co/v1/object/public/venue-beach/Necastle%20Beach.png',
-      caption: 'Recovery beach day with coffee and excellent food. Good for soaking up the libations from the night before!',
-      address: 'Newcastle Beach, Newcastle NSW',
-      quick_facts: {
-        'Date': 'Monday, October 6th',
-        'Time': 'From 11:00 AM onwards',
-        'Style': 'Casual beach hangout',
-        'Food': 'Kiosk with coffee and food'
-      },
-      route: '/venue/newcastle-beach'
-    }
-  ];
-
-  // Use hardcoded venues if database is empty
-  const displayVenues = venues.length > 0 ? venues : hardcodedVenues;
+  // No more hardcoded venues - using database only
+  const displayVenues = venues;
 
   if (loading) {
     return (
@@ -442,14 +389,7 @@ const Venue: React.FC = () => {
                   <div className="pt-4">
                     <Button 
                       className="w-full"
-                      onClick={() => {
-                        // Handle both database venues and hardcoded venues
-                        if ((currentVenue as any).route) {
-                          navigate((currentVenue as any).route);
-                        } else {
-                          handleVenueClick(currentVenue.name);
-                        }
-                      }}
+                      onClick={() => handleVenueClick(currentVenue.name)}
                     >
                       View Full Details & Maps
                     </Button>
