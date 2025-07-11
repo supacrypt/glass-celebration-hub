@@ -1,4 +1,12 @@
-export type Json = | string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
+import { PostgrestError } from '@supabase/supabase-js'
+
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export type Database = {
   // Allows to automatically instanciate createClient with right options
@@ -8,29 +16,287 @@ export type Database = {
   }
   public: {
     Tables: {
+      accommodation_categories: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      accommodation_options: {
+        Row: {
+          address: string | null
+          amenities: string[] | null
+          area: string | null
+          booking_url: string | null
+          category_id: string | null
+          coordinates: number[] | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          distance_from_venue: string | null
+          email: string | null
+          featured: boolean | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          metadata: Json | null
+          name: string
+          phone: string | null
+          price_range: string | null
+          type: string | null
+          updated_at: string | null
+          website_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          amenities?: string[] | null
+          area?: string | null
+          booking_url?: string | null
+          category_id?: string | null
+          coordinates?: number[] | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          distance_from_venue?: string | null
+          email?: string | null
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          metadata?: Json | null
+          name: string
+          phone?: string | null
+          price_range?: string | null
+          type?: string | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          amenities?: string[] | null
+          area?: string | null
+          booking_url?: string | null
+          category_id?: string | null
+          coordinates?: number[] | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          distance_from_venue?: string | null
+          email?: string | null
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          metadata?: Json | null
+          name?: string
+          phone?: string | null
+          price_range?: string | null
+          type?: string | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "accommodation_options_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "accommodation_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       app_settings: {
         Row: {
           created_at: string | null
+          description: string | null
           id: string
+          is_public: boolean | null
           setting_key: string
+          setting_type: string | null
           setting_value: string | null
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
+          description?: string | null
           id?: string
+          is_public?: boolean | null
           setting_key: string
+          setting_type?: string | null
           setting_value?: string | null
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
+          description?: string | null
           id?: string
+          is_public?: boolean | null
           setting_key?: string
+          setting_type?: string | null
           setting_value?: string | null
           updated_at?: string | null
         }
         Relationships: []
+      }
+      bus_seat_bookings: {
+        Row: {
+          booking_status: string | null
+          contact_phone: string | null
+          created_at: string | null
+          id: string
+          passenger_name: string
+          seat_number: number | null
+          special_requirements: string | null
+          transportation_schedule_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          booking_status?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          id?: string
+          passenger_name: string
+          seat_number?: number | null
+          special_requirements?: string | null
+          transportation_schedule_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          booking_status?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          id?: string
+          passenger_name?: string
+          seat_number?: number | null
+          special_requirements?: string | null
+          transportation_schedule_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bus_seat_bookings_transportation_schedule_id_fkey"
+            columns: ["transportation_schedule_id"]
+            isOneToOne: false
+            referencedRelation: "transportation_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      carpool_coordination: {
+        Row: {
+          available_seats: number | null
+          contact_phone: string | null
+          contact_preferences: string | null
+          coordination_type: string | null
+          created_at: string | null
+          departure_location: string | null
+          departure_time: string | null
+          id: string
+          special_requirements: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          available_seats?: number | null
+          contact_phone?: string | null
+          contact_preferences?: string | null
+          coordination_type?: string | null
+          created_at?: string | null
+          departure_location?: string | null
+          departure_time?: string | null
+          id?: string
+          special_requirements?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          available_seats?: number | null
+          contact_phone?: string | null
+          contact_preferences?: string | null
+          coordination_type?: string | null
+          created_at?: string | null
+          departure_location?: string | null
+          departure_time?: string | null
+          id?: string
+          special_requirements?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      carpool_participants: {
+        Row: {
+          carpool_id: string | null
+          contact_phone: string | null
+          created_at: string | null
+          id: string
+          participant_user_id: string | null
+          passenger_name: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          carpool_id?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          id?: string
+          participant_user_id?: string | null
+          passenger_name: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          carpool_id?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          id?: string
+          participant_user_id?: string | null
+          passenger_name?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "carpool_participants_carpool_id_fkey"
+            columns: ["carpool_id"]
+            isOneToOne: false
+            referencedRelation: "carpool_coordination"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       chat_members: {
         Row: {
@@ -69,28 +335,46 @@ export type Database = {
           chat_id: string
           content: string | null
           created_at: string
+          file_url: string | null
           id: string
           is_read: boolean
-          message_type: string
-          sender_id: string
+          media_thumbnail: string | null
+          media_type: string | null
+          media_url: string | null
+          message_type: string | null
+          recipient_id: string | null
+          sender_id: string | null
+          user_id: string
         }
         Insert: {
           chat_id: string
           content?: string | null
           created_at?: string
+          file_url?: string | null
           id?: string
           is_read?: boolean
-          message_type?: string
-          sender_id: string
+          media_thumbnail?: string | null
+          media_type?: string | null
+          media_url?: string | null
+          message_type?: string | null
+          recipient_id?: string | null
+          sender_id?: string | null
+          user_id: string
         }
         Update: {
           chat_id?: string
           content?: string | null
           created_at?: string
+          file_url?: string | null
           id?: string
           is_read?: boolean
-          message_type?: string
-          sender_id?: string
+          media_thumbnail?: string | null
+          media_type?: string | null
+          media_url?: string | null
+          message_type?: string | null
+          recipient_id?: string | null
+          sender_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -102,30 +386,258 @@ export type Database = {
           },
         ]
       }
-      direct_chats: {
+      contact_categories: {
+        Row: {
+          category_name: string
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          category_name: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          category_name?: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      contact_details: {
+        Row: {
+          address: string | null
+          availability_hours: string | null
+          category_id: string | null
+          contact_type: string
+          created_at: string | null
+          display_order: number | null
+          email_primary: string | null
+          email_secondary: string | null
+          emergency_contact: boolean | null
+          featured: boolean | null
+          id: string
+          instructions: string | null
+          is_active: boolean | null
+          metadata: Json | null
+          name: string
+          phone_primary: string | null
+          phone_secondary: string | null
+          role: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          availability_hours?: string | null
+          category_id?: string | null
+          contact_type: string
+          created_at?: string | null
+          display_order?: number | null
+          email_primary?: string | null
+          email_secondary?: string | null
+          emergency_contact?: boolean | null
+          featured?: boolean | null
+          id?: string
+          instructions?: string | null
+          is_active?: boolean | null
+          metadata?: Json | null
+          name: string
+          phone_primary?: string | null
+          phone_secondary?: string | null
+          role?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          availability_hours?: string | null
+          category_id?: string | null
+          contact_type?: string
+          created_at?: string | null
+          display_order?: number | null
+          email_primary?: string | null
+          email_secondary?: string | null
+          emergency_contact?: boolean | null
+          featured?: boolean | null
+          id?: string
+          instructions?: string | null
+          is_active?: boolean | null
+          metadata?: Json | null
+          name?: string
+          phone_primary?: string | null
+          phone_secondary?: string | null
+          role?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_details_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "contact_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      content_blocks: {
+        Row: {
+          content: string | null
+          content_type: string | null
+          created_at: string | null
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          metadata: Json | null
+          page_slug: string
+          section_key: string
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          content?: string | null
+          content_type?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          page_slug: string
+          section_key: string
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string | null
+          content_type?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          page_slug?: string
+          section_key?: string
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      conversation_settings: {
+        Row: {
+          chat_id: string
+          id: string
+          is_archived: boolean
+          is_important: boolean
+          is_muted: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chat_id: string
+          id?: string
+          is_archived?: boolean
+          is_important?: boolean
+          is_muted?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chat_id?: string
+          id?: string
+          is_archived?: boolean
+          is_important?: boolean
+          is_muted?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_settings_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "direct_chats"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dietary_requirements: {
         Row: {
           created_at: string
+          custom_requirement: string | null
+          dietary_option_id: string | null
           id: string
-          last_message: string | null
-          last_message_at: string | null
-          participant1_id: string
-          participant2_id: string
+          notes: string | null
+          rsvp_id: string
+          severity: string | null
+          updated_at: string
         }
         Insert: {
           created_at?: string
+          custom_requirement?: string | null
+          dietary_option_id?: string | null
           id?: string
-          last_message?: string | null
-          last_message_at?: string | null
-          participant1_id: string
-          participant2_id: string
+          notes?: string | null
+          rsvp_id: string
+          severity?: string | null
+          updated_at?: string
         }
         Update: {
           created_at?: string
+          custom_requirement?: string | null
+          dietary_option_id?: string | null
           id?: string
-          last_message?: string | null
-          last_message_at?: string | null
-          participant1_id?: string
-          participant2_id?: string
+          notes?: string | null
+          rsvp_id?: string
+          severity?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dietary_requirements_rsvp_id_fkey"
+            columns: ["rsvp_id"]
+            isOneToOne: false
+            referencedRelation: "rsvps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      direct_chats: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          is_group: boolean
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          is_group?: boolean
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          is_group?: boolean
+          title?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -136,7 +648,7 @@ export type Database = {
           display_order: number
           icon: string | null
           id: string
-          is_active: boolean
+          is_active: boolean | null
           name: string
           slug: string
           updated_at: string
@@ -147,7 +659,7 @@ export type Database = {
           display_order?: number
           icon?: string | null
           id?: string
-          is_active?: boolean
+          is_active?: boolean | null
           name: string
           slug: string
           updated_at?: string
@@ -158,7 +670,7 @@ export type Database = {
           display_order?: number
           icon?: string | null
           id?: string
-          is_active?: boolean
+          is_active?: boolean | null
           name?: string
           slug?: string
           updated_at?: string
@@ -172,11 +684,11 @@ export type Database = {
           created_at: string
           display_order: number
           id: string
-          is_active: boolean
-          is_featured: boolean
+          is_active: boolean | null
+          is_featured: boolean | null
           question: string
           updated_at: string
-          view_count: number
+          view_count: number | null
         }
         Insert: {
           answer: string
@@ -184,11 +696,11 @@ export type Database = {
           created_at?: string
           display_order?: number
           id?: string
-          is_active?: boolean
-          is_featured?: boolean
+          is_active?: boolean | null
+          is_featured?: boolean | null
           question: string
           updated_at?: string
-          view_count?: number
+          view_count?: number | null
         }
         Update: {
           answer?: string
@@ -196,11 +708,11 @@ export type Database = {
           created_at?: string
           display_order?: number
           id?: string
-          is_active?: boolean
-          is_featured?: boolean
+          is_active?: boolean | null
+          is_featured?: boolean | null
           question?: string
           updated_at?: string
-          view_count?: number
+          view_count?: number | null
         }
         Relationships: [
           {
@@ -212,258 +724,688 @@ export type Database = {
           },
         ]
       }
-      gallery_albums: {
+      faqs: {
         Row: {
-          cover_image_path: string | null
-          created_at: string
-          description: string | null
+          answer: string
+          category: string | null
+          created_at: string | null
+          display_order: number | null
           id: string
-          is_public: boolean
-          name: string
-          slug: string
-          updated_at: string
+          is_active: boolean | null
+          is_featured: boolean | null
+          question: string
+          updated_at: string | null
         }
         Insert: {
-          cover_image_path?: string | null
-          created_at?: string
-          description?: string | null
+          answer: string
+          category?: string | null
+          created_at?: string | null
+          display_order?: number | null
           id?: string
-          is_public?: boolean
-          name: string
-          slug: string
-          updated_at?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          question: string
+          updated_at?: string | null
         }
         Update: {
-          cover_image_path?: string | null
-          created_at?: string
-          description?: string | null
+          answer?: string
+          category?: string | null
+          created_at?: string | null
+          display_order?: number | null
           id?: string
-          is_public?: boolean
-          name?: string
-          slug?: string
-          updated_at?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          question?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
       gallery_photos: {
         Row: {
-          album_id: string
-          caption: string | null
+          backstory: string | null
           created_at: string
+          display_order: number
           id: string
           image_path: string
-          uploaded_by: string | null
+          image_url: string
+          is_published: boolean
+          title: string | null
+          updated_at: string
         }
         Insert: {
-          album_id: string
-          caption?: string | null
+          backstory?: string | null
           created_at?: string
+          display_order?: number
           id?: string
           image_path: string
-          uploaded_by?: string | null
+          image_url: string
+          is_published?: boolean
+          title?: string | null
+          updated_at?: string
         }
         Update: {
-          album_id?: string
-          caption?: string | null
+          backstory?: string | null
           created_at?: string
+          display_order?: number
           id?: string
           image_path?: string
-          uploaded_by?: string | null
+          image_url?: string
+          is_published?: boolean
+          title?: string | null
+          updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "gallery_photos_album_id_fkey"
-            columns: ["album_id"]
-            isOneToOne: false
-            referencedRelation: "gallery_albums"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
-      guest_gifts: {
+      gift_registry: {
         Row: {
-          amount: number | null
+          category: string
           created_at: string
-          gift_id: string
-          guest_id: string
+          description: string | null
           id: string
-          message: string | null
-          payment_intent_id: string | null
-          payment_status: string | null
+          image_url: string | null
+          is_purchased: boolean | null
+          price: number | null
+          priority: number | null
+          purchased_at: string | null
+          purchased_by: string | null
+          store_url: string | null
+          title: string
+          updated_at: string
         }
         Insert: {
-          amount?: number | null
+          category?: string
           created_at?: string
-          gift_id: string
-          guest_id: string
+          description?: string | null
           id?: string
-          message?: string | null
-          payment_intent_id?: string | null
-          payment_status?: string | null
+          image_url?: string | null
+          is_purchased?: boolean | null
+          price?: number | null
+          priority?: number | null
+          purchased_at?: string | null
+          purchased_by?: string | null
+          store_url?: string | null
+          title: string
+          updated_at?: string
         }
         Update: {
-          amount?: number | null
+          category?: string
           created_at?: string
-          gift_id?: string
-          guest_id?: string
+          description?: string | null
           id?: string
-          message?: string | null
-          payment_intent_id?: string | null
-          payment_status?: string | null
+          image_url?: string | null
+          is_purchased?: boolean | null
+          price?: number | null
+          priority?: number | null
+          purchased_at?: string | null
+          purchased_by?: string | null
+          store_url?: string | null
+          title?: string
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "guest_gifts_gift_id_fkey"
-            columns: ["gift_id"]
+            foreignKeyName: "gift_registry_purchased_by_fkey"
+            columns: ["purchased_by"]
             isOneToOne: false
-            referencedRelation: "gifts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "guest_gifts_guest_id_fkey"
-            columns: ["guest_id"]
-            isOneToOne: false
-            referencedRelation: "guests"
-            referencedColumns: ["id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
-      guests: {
+      gift_registry_redirects: {
         Row: {
-          accommodation_notes: string | null
-          additional_guests: number | null
-          created_at: string
-          dietary_restrictions: string | null
-          email: string | null
-          full_name: string
+          button_text: string | null
+          created_at: string | null
+          display_order: number | null
+          featured: boolean | null
           id: string
-          is_attending: boolean | null
-          is_plus_one_attending: boolean | null
-          plus_one_name: string | null
-          rsvp_at: string | null
-          song_requests: string | null
-          updated_at: string
+          is_active: boolean | null
+          metadata: Json | null
+          redirect_url: string
+          service_description: string | null
+          service_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          button_text?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          featured?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          redirect_url: string
+          service_description?: string | null
+          service_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          button_text?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          featured?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          redirect_url?: string
+          service_description?: string | null
+          service_name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      guest_transport_status: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_reminder_sent: string | null
+          notes: string | null
+          status: string | null
+          transport_details: Json | null
+          transport_method: string | null
+          updated_at: string | null
           user_id: string | null
         }
         Insert: {
-          accommodation_notes?: string | null
-          additional_guests?: number | null
-          created_at?: string
-          dietary_restrictions?: string | null
-          email?: string | null
-          full_name: string
+          created_at?: string | null
           id?: string
-          is_attending?: boolean | null
-          is_plus_one_attending?: boolean | null
-          plus_one_name?: string | null
-          rsvp_at?: string | null
-          song_requests?: string | null
-          updated_at?: string
+          last_reminder_sent?: string | null
+          notes?: string | null
+          status?: string | null
+          transport_details?: Json | null
+          transport_method?: string | null
+          updated_at?: string | null
           user_id?: string | null
         }
         Update: {
-          accommodation_notes?: string | null
-          additional_guests?: number | null
-          created_at?: string
-          dietary_restrictions?: string | null
-          email?: string | null
-          full_name?: string
+          created_at?: string | null
           id?: string
-          is_attending?: boolean | null
-          is_plus_one_attending?: boolean | null
-          plus_one_name?: string | null
-          rsvp_at?: string | null
-          song_requests?: string | null
-          updated_at?: string
+          last_reminder_sent?: string | null
+          notes?: string | null
+          status?: string | null
+          transport_details?: Json | null
+          transport_method?: string | null
+          updated_at?: string | null
           user_id?: string | null
         }
         Relationships: []
       }
-      gifts: {
+      guests: {
         Row: {
-          amount_raised: number
+          category: string
           created_at: string
-          description: string | null
-          display_order: number
-          goal_amount: number
+          guest_count: number
+          guest_names: string
           id: string
-          image_url: string | null
-          is_active: boolean
-          name: string
+          invite_sent: boolean | null
+          location: string | null
+          mobile: string | null
+          notes: string | null
+          rsvp_count: number | null
+          rsvp_status: string | null
+          save_the_date_sent: boolean | null
           updated_at: string
         }
         Insert: {
-          amount_raised?: number
+          category: string
           created_at?: string
-          description?: string | null
-          display_order?: number
-          goal_amount?: number
+          guest_count?: number
+          guest_names: string
           id?: string
-          image_url?: string | null
-          is_active?: boolean
-          name: string
+          invite_sent?: boolean | null
+          location?: string | null
+          mobile?: string | null
+          notes?: string | null
+          rsvp_count?: number | null
+          rsvp_status?: string | null
+          save_the_date_sent?: boolean | null
           updated_at?: string
         }
         Update: {
-          amount_raised?: number
+          category?: string
           created_at?: string
-          description?: string | null
-          display_order?: number
-          goal_amount?: number
+          guest_count?: number
+          guest_names?: string
           id?: string
-          image_url?: string | null
-          is_active?: boolean
-          name?: string
+          invite_sent?: boolean | null
+          location?: string | null
+          mobile?: string | null
+          notes?: string | null
+          rsvp_count?: number | null
+          rsvp_status?: string | null
+          save_the_date_sent?: boolean | null
           updated_at?: string
         }
         Relationships: []
       }
-      notifications: {
+      message_likes: {
         Row: {
           created_at: string
           id: string
-          is_read: boolean
-          link: string | null
-          message: string
-          recipient_id: string
-          type: string
+          message_id: string
+          user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
-          is_read?: boolean
-          link?: string | null
-          message: string
-          recipient_id: string
-          type: string
+          message_id: string
+          user_id: string
         }
         Update: {
           created_at?: string
           id?: string
-          is_read?: boolean
-          link?: string | null
-          message?: string
-          recipient_id?: string
-          type?: string
+          message_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_likes_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      message_reactions: {
+        Row: {
+          created_at: string
+          id: string
+          message_id: string
+          reaction_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message_id: string
+          reaction_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message_id?: string
+          reaction_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_reactions_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_replies: {
+        Row: {
+          chat_id: string
+          content: string
+          created_at: string
+          id: string
+          parent_message_id: string
+          user_id: string
+        }
+        Insert: {
+          chat_id: string
+          content: string
+          created_at?: string
+          id?: string
+          parent_message_id: string
+          user_id: string
+        }
+        Update: {
+          chat_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          parent_message_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_replies_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "direct_chats"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_replies_parent_message_id_fkey"
+            columns: ["parent_message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_reports: {
+        Row: {
+          created_at: string
+          id: string
+          message_id: string
+          report_details: string | null
+          report_reason: string
+          reported_by: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message_id: string
+          report_details?: string | null
+          report_reason: string
+          reported_by: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message_id?: string
+          report_details?: string | null
+          report_reason?: string
+          reported_by?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_reports_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_public: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_public?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_public?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      photo_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          photo_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          photo_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          photo_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "photo_comments_photo_id_fkey"
+            columns: ["photo_id"]
+            isOneToOne: false
+            referencedRelation: "photos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "photo_comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      photo_gallery: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          id: string
+          image_url: string
+          is_approved: boolean | null
+          is_featured: boolean | null
+          metadata: Json | null
+          thumbnail_url: string | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url: string
+          is_approved?: boolean | null
+          is_featured?: boolean | null
+          metadata?: Json | null
+          thumbnail_url?: string | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          is_approved?: boolean | null
+          is_featured?: boolean | null
+          metadata?: Json | null
+          thumbnail_url?: string | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
+      }
+      photo_likes: {
+        Row: {
+          created_at: string
+          id: string
+          photo_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          photo_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          photo_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "photo_likes_photo_id_fkey"
+            columns: ["photo_id"]
+            isOneToOne: false
+            referencedRelation: "photos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "photo_likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      photos: {
+        Row: {
+          created_at: string
+          description: string | null
+          file_path: string
+          file_size: number | null
+          file_url: string
+          height: number | null
+          id: string
+          is_approved: boolean | null
+          mime_type: string | null
+          title: string | null
+          updated_at: string
+          user_id: string
+          width: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          file_path: string
+          file_size?: number | null
+          file_url: string
+          height?: number | null
+          id?: string
+          is_approved?: boolean | null
+          mime_type?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+          width?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          file_path?: string
+          file_size?: number | null
+          file_url?: string
+          height?: number | null
+          id?: string
+          is_approved?: boolean | null
+          mime_type?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "photos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      poll_notifications: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          message: string | null
+          notification_type: string
+          poll_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string | null
+          notification_type: string
+          poll_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string | null
+          notification_type?: string
+          poll_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_notifications_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       poll_options: {
         Row: {
           created_at: string
           id: string
+          option_order: number
           option_text: string
           poll_id: string
         }
         Insert: {
           created_at?: string
           id?: string
+          option_order?: number
           option_text: string
           poll_id: string
         }
         Update: {
           created_at?: string
           id?: string
+          option_order?: number
           option_text?: string
           poll_id?: string
         }
@@ -477,396 +1419,757 @@ export type Database = {
           },
         ]
       }
-      poll_responses: {
+      poll_votes: {
         Row: {
           created_at: string
           id: string
-          option_id: string | null
-          poll_id: string
-          rating_value: number | null
+          option_id: string
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
-          option_id?: string | null
-          poll_id: string
-          rating_value?: number | null
+          option_id: string
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
-          option_id?: string | null
-          poll_id?: string
-          rating_value?: number | null
+          option_id?: string
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "poll_responses_option_id_fkey"
+            foreignKeyName: "poll_votes_option_id_fkey"
             columns: ["option_id"]
             isOneToOne: false
             referencedRelation: "poll_options"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "poll_responses_poll_id_fkey"
-            columns: ["poll_id"]
-            isOneToOne: false
-            referencedRelation: "polls"
             referencedColumns: ["id"]
           },
         ]
       }
       polls: {
         Row: {
+          allow_multiple_selections: boolean | null
+          anonymous_voting: boolean | null
           created_at: string
-          description: string | null
+          expires_at: string | null
           id: string
-          is_anonymous: boolean
+          poll_status: Database["public"]["Enums"]["poll_status"] | null
+          poll_type: Database["public"]["Enums"]["poll_type"] | null
+          post_id: string
           question: string
-          status: Database["public"]["Enums"]["poll_status"]
-          type: Database["public"]["Enums"]["poll_type"]
-          updated_at: string
+          settings: Json | null
+          updated_at: string | null
+          vote_count: number | null
         }
         Insert: {
+          allow_multiple_selections?: boolean | null
+          anonymous_voting?: boolean | null
           created_at?: string
-          description?: string | null
+          expires_at?: string | null
           id?: string
-          is_anonymous?: boolean
+          poll_status?: Database["public"]["Enums"]["poll_status"] | null
+          poll_type?: Database["public"]["Enums"]["poll_type"] | null
+          post_id: string
           question: string
-          status?: Database["public"]["Enums"]["poll_status"]
-          type: Database["public"]["Enums"]["poll_type"]
-          updated_at?: string
+          settings?: Json | null
+          updated_at?: string | null
+          vote_count?: number | null
         }
         Update: {
+          allow_multiple_selections?: boolean | null
+          anonymous_voting?: boolean | null
           created_at?: string
-          description?: string | null
+          expires_at?: string | null
           id?: string
-          is_anonymous?: boolean
+          poll_status?: Database["public"]["Enums"]["poll_status"] | null
+          poll_type?: Database["public"]["Enums"]["poll_type"] | null
+          post_id?: string
           question?: string
-          status?: Database["public"]["Enums"]["poll_status"]
-          type?: Database["public"]["Enums"]["poll_type"]
-          updated_at?: string
+          settings?: Json | null
+          updated_at?: string | null
+          vote_count?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "polls_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "social_posts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      posts: {
+      post_comments: {
         Row: {
-          author_id: string | null
           content: string
           created_at: string
           id: string
-          title: string
+          parent_id: string | null
+          post_id: string
           updated_at: string
+          user_id: string
         }
         Insert: {
-          author_id?: string | null
           content: string
           created_at?: string
           id?: string
-          title: string
+          parent_id?: string | null
+          post_id: string
           updated_at?: string
+          user_id: string
         }
         Update: {
-          author_id?: string | null
           content?: string
           created_at?: string
           id?: string
-          title?: string
+          parent_id?: string | null
+          post_id?: string
           updated_at?: string
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "post_comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "post_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "social_posts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      profiles: {
-        Row: {
-          avatar_url: string | null
-          bio: string | null
-          created_at: string
-          full_name: string | null
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          updated_at: string
-        }
-        Insert: {
-          avatar_url?: string | null
-          bio?: string | null
-          created_at?: string
-          full_name?: string | null
-          id: string
-          role?: Database["public"]["Enums"]["app_role"]
-          updated_at?: string
-        }
-        Update: {
-          avatar_url?: string | null
-          bio?: string | null
-          created_at?: string
-          full_name?: string | null
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      reactions: {
+      post_reactions: {
         Row: {
           created_at: string
           id: string
           post_id: string
-          type: Database["public"]["Enums"]["reaction_type"]
+          reaction_type: Database["public"]["Enums"]["reaction_type"]
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
           post_id: string
-          type: Database["public"]["Enums"]["reaction_type"]
+          reaction_type: Database["public"]["Enums"]["reaction_type"]
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
           post_id?: string
-          type?: Database["public"]["Enums"]["reaction_type"]
+          reaction_type?: Database["public"]["Enums"]["reaction_type"]
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "reactions_post_id_fkey"
+            foreignKeyName: "post_reactions_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: false
-            referencedRelation: "posts"
+            referencedRelation: "social_posts"
             referencedColumns: ["id"]
           },
         ]
       }
-      registry_items: {
+      profiles: {
         Row: {
-          category: string | null
+          address: string | null
+          avatar_url: string | null
+          country: string | null
           created_at: string
-          description: string | null
+          display_name: string | null
+          email: string
+          first_name: string | null
+          has_plus_one: boolean | null
           id: string
-          image_url: string | null
-          is_purchased: boolean
-          name: string
-          price: number
-          purchase_url: string | null
-          quantity: number
+          last_name: string | null
+          mobile: string | null
+          phone: string | null
+          plus_one_email: string | null
+          plus_one_invited: boolean | null
+          plus_one_name: string | null
+          postcode: string | null
+          rsvp_completed: boolean | null
+          state: string | null
           updated_at: string
+          user_id: string
         }
         Insert: {
-          category?: string | null
+          address?: string | null
+          avatar_url?: string | null
+          country?: string | null
           created_at?: string
-          description?: string | null
+          display_name?: string | null
+          email: string
+          first_name?: string | null
+          has_plus_one?: boolean | null
           id?: string
-          image_url?: string | null
-          is_purchased?: boolean
-          name: string
-          price: number
-          purchase_url?: string | null
-          quantity?: number
+          last_name?: string | null
+          mobile?: string | null
+          phone?: string | null
+          plus_one_email?: string | null
+          plus_one_invited?: boolean | null
+          plus_one_name?: string | null
+          postcode?: string | null
+          rsvp_completed?: boolean | null
+          state?: string | null
           updated_at?: string
+          user_id: string
         }
         Update: {
-          category?: string | null
+          address?: string | null
+          avatar_url?: string | null
+          country?: string | null
           created_at?: string
-          description?: string | null
+          display_name?: string | null
+          email?: string
+          first_name?: string | null
+          has_plus_one?: boolean | null
           id?: string
-          image_url?: string | null
-          is_purchased?: boolean
-          name?: string
-          price?: number
-          purchase_url?: string | null
-          quantity?: number
+          last_name?: string | null
+          mobile?: string | null
+          phone?: string | null
+          plus_one_email?: string | null
+          plus_one_invited?: boolean | null
+          plus_one_name?: string | null
+          postcode?: string | null
+          rsvp_completed?: boolean | null
+          state?: string | null
           updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
-      rsvp_responses: {
+      rsvps: {
         Row: {
-          attending_events: string[] | null
+          accommodation_needed: boolean | null
           created_at: string
-          guest_id: string
+          dietary_restrictions: string | null
+          event_id: string
+          guest_count: number | null
           id: string
+          meal_preference: string | null
           message: string | null
+          plus_one_name: string | null
+          song_request: string | null
+          status: string
+          table_assignment: string | null
+          transportation_needed: boolean | null
           updated_at: string
+          user_id: string
         }
         Insert: {
-          attending_events?: string[] | null
+          accommodation_needed?: boolean | null
           created_at?: string
-          guest_id: string
+          dietary_restrictions?: string | null
+          event_id: string
+          guest_count?: number | null
           id?: string
+          meal_preference?: string | null
           message?: string | null
+          plus_one_name?: string | null
+          song_request?: string | null
+          status: string
+          table_assignment?: string | null
+          transportation_needed?: boolean | null
           updated_at?: string
+          user_id: string
         }
         Update: {
-          attending_events?: string[] | null
+          accommodation_needed?: boolean | null
           created_at?: string
-          guest_id?: string
+          dietary_restrictions?: string | null
+          event_id?: string
+          guest_count?: number | null
           id?: string
+          meal_preference?: string | null
           message?: string | null
+          plus_one_name?: string | null
+          song_request?: string | null
+          status?: string
+          table_assignment?: string | null
+          transportation_needed?: boolean | null
           updated_at?: string
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "rsvp_responses_guest_id_fkey"
-            columns: ["guest_id"]
-            isOneToOne: true
-            referencedRelation: "guests"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      table_assignments: {
-        Row: {
-          created_at: string
-          guest_id: string
-          id: string
-          seat_number: number | null
-          table_id: string
-        }
-        Insert: {
-          created_at?: string
-          guest_id: string
-          id?: string
-          seat_number?: number | null
-          table_id: string
-        }
-        Update: {
-          created_at?: string
-          guest_id?: string
-          id?: string
-          seat_number?: number | null
-          table_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "table_assignments_guest_id_fkey"
-            columns: ["guest_id"]
-            isOneToOne: true
-            referencedRelation: "guests"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "table_assignments_table_id_fkey"
-            columns: ["table_id"]
+            foreignKeyName: "rsvps_event_id_fkey"
+            columns: ["event_id"]
             isOneToOne: false
-            referencedRelation: "tables"
+            referencedRelation: "event_attendance_summary"
+            referencedColumns: ["event_id"]
+          },
+          {
+            foreignKeyName: "rsvps_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "wedding_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rsvps_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      social_feed: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          image_url: string | null
+          is_approved: boolean | null
+          is_pinned: boolean | null
+          like_count: number | null
+          post_type: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean | null
+          is_pinned?: boolean | null
+          like_count?: number | null
+          post_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean | null
+          is_pinned?: boolean | null
+          like_count?: number | null
+          post_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      social_feed_likes: {
+        Row: {
+          created_at: string | null
+          id: string
+          post_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          post_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          post_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_feed_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "social_feed"
             referencedColumns: ["id"]
           },
         ]
       }
-      tables: {
+      social_posts: {
         Row: {
-          capacity: number
+          content: string | null
           created_at: string
           id: string
-          name: string
-          venue_id: string
+          is_published: boolean
+          media_thumbnail: string | null
+          media_type: string | null
+          media_url: string | null
+          updated_at: string
+          user_id: string
         }
         Insert: {
-          capacity?: number
+          content?: string | null
           created_at?: string
           id?: string
-          name: string
-          venue_id: string
+          is_published?: boolean
+          media_thumbnail?: string | null
+          media_type?: string | null
+          media_url?: string | null
+          updated_at?: string
+          user_id: string
         }
         Update: {
-          capacity?: number
+          content?: string | null
           created_at?: string
           id?: string
+          is_published?: boolean
+          media_thumbnail?: string | null
+          media_type?: string | null
+          media_url?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_posts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      stories: {
+        Row: {
+          created_at: string
+          duration: number | null
+          expires_at: string
+          id: string
+          media_thumbnail: string | null
+          media_type: string
+          media_url: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration?: number | null
+          expires_at?: string
+          id?: string
+          media_thumbnail?: string | null
+          media_type: string
+          media_url: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duration?: number | null
+          expires_at?: string
+          id?: string
+          media_thumbnail?: string | null
+          media_type?: string
+          media_url?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      transportation_categories: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
           name?: string
-          venue_id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      transportation_options: {
+        Row: {
+          booking_phone: string | null
+          booking_required: boolean | null
+          booking_url: string | null
+          capacity_info: string | null
+          category_id: string | null
+          cost_info: string | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          dropoff_locations: string[] | null
+          duration_info: string | null
+          featured: boolean | null
+          id: string
+          is_active: boolean | null
+          metadata: Json | null
+          method_name: string
+          pickup_locations: string[] | null
+          schedule_info: string | null
+          special_notes: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          booking_phone?: string | null
+          booking_required?: boolean | null
+          booking_url?: string | null
+          capacity_info?: string | null
+          category_id?: string | null
+          cost_info?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          dropoff_locations?: string[] | null
+          duration_info?: string | null
+          featured?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          method_name: string
+          pickup_locations?: string[] | null
+          schedule_info?: string | null
+          special_notes?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          booking_phone?: string | null
+          booking_required?: boolean | null
+          booking_url?: string | null
+          capacity_info?: string | null
+          category_id?: string | null
+          cost_info?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          dropoff_locations?: string[] | null
+          duration_info?: string | null
+          featured?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          method_name?: string
+          pickup_locations?: string[] | null
+          schedule_info?: string | null
+          special_notes?: string | null
+          updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "tables_venue_id_fkey"
-            columns: ["venue_id"]
+            foreignKeyName: "transportation_options_category_id_fkey"
+            columns: ["category_id"]
             isOneToOne: false
-            referencedRelation: "venues"
+            referencedRelation: "transportation_categories"
             referencedColumns: ["id"]
           },
         ]
       }
-      timeline_events: {
+      transportation_schedules: {
+        Row: {
+          arrival_location: string | null
+          arrival_time: string | null
+          available_dates: string[] | null
+          created_at: string | null
+          current_bookings: number | null
+          departure_location: string | null
+          departure_time: string
+          id: string
+          is_active: boolean | null
+          max_capacity: number | null
+          notes: string | null
+          transportation_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          arrival_location?: string | null
+          arrival_time?: string | null
+          available_dates?: string[] | null
+          created_at?: string | null
+          current_bookings?: number | null
+          departure_location?: string | null
+          departure_time: string
+          id?: string
+          is_active?: boolean | null
+          max_capacity?: number | null
+          notes?: string | null
+          transportation_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          arrival_location?: string | null
+          arrival_time?: string | null
+          available_dates?: string[] | null
+          created_at?: string | null
+          current_bookings?: number | null
+          departure_location?: string | null
+          departure_time?: string
+          id?: string
+          is_active?: boolean | null
+          max_capacity?: number | null
+          notes?: string | null
+          transportation_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transportation_schedules_transportation_id_fkey"
+            columns: ["transportation_id"]
+            isOneToOne: false
+            referencedRelation: "transportation_options"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_blocks: {
+        Row: {
+          blocked_at: string
+          blocked_user_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          blocked_at?: string
+          blocked_user_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          blocked_at?: string
+          blocked_user_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          email: string
+          id: string
+          name: string | null
+          phone: string | null
+          role: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          name?: string | null
+          phone?: string | null
+          role?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string | null
+          phone?: string | null
+          role?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      venue_images: {
         Row: {
           created_at: string
           description: string | null
-          end_time: string | null
+          file_size: number | null
+          height: number | null
           id: string
-          image_url: string | null
-          location: string | null
-          start_time: string
-          title: string
-          venue_id: string | null
+          image_order: number
+          image_path: string
+          image_type: string
+          image_url: string
+          is_published: boolean
+          mime_type: string | null
+          title: string | null
+          updated_at: string
+          venue_id: string
+          width: number | null
         }
         Insert: {
           created_at?: string
           description?: string | null
-          end_time?: string | null
+          file_size?: number | null
+          height?: number | null
           id?: string
-          image_url?: string | null
-          location?: string | null
-          start_time: string
-          title: string
-          venue_id?: string | null
+          image_order?: number
+          image_path: string
+          image_type?: string
+          image_url: string
+          is_published?: boolean
+          mime_type?: string | null
+          title?: string | null
+          updated_at?: string
+          venue_id: string
+          width?: number | null
         }
         Update: {
           created_at?: string
           description?: string | null
-          end_time?: string | null
+          file_size?: number | null
+          height?: number | null
           id?: string
-          image_url?: string | null
-          location?: string | null
-          start_time?: string
-          title?: string
-          venue_id?: string | null
+          image_order?: number
+          image_path?: string
+          image_type?: string
+          image_url?: string
+          is_published?: boolean
+          mime_type?: string | null
+          title?: string | null
+          updated_at?: string
+          venue_id?: string
+          width?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "timeline_events_venue_id_fkey"
+            foreignKeyName: "venue_images_venue_id_fkey"
             columns: ["venue_id"]
             isOneToOne: false
             referencedRelation: "venues"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      travel_bookings: {
-        Row: {
-          booking_reference: string | null
-          created_at: string
-          details: string | null
-          guest_id: string
-          id: string
-          provider: string | null
-          type: string
-        }
-        Insert: {
-          booking_reference?: string | null
-          created_at?: string
-          details?: string | null
-          guest_id: string
-          id?: string
-          provider?: string | null
-          type: string
-        }
-        Update: {
-          booking_reference?: string | null
-          created_at?: string
-          details?: string | null
-          guest_id?: string
-          id?: string
-          provider?: string | null
-          type?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "travel_bookings_guest_id_fkey"
-            columns: ["guest_id"]
-            isOneToOne: false
-            referencedRelation: "guests"
             referencedColumns: ["id"]
           },
         ]
@@ -912,39 +2215,98 @@ export type Database = {
       }
       wedding_events: {
         Row: {
+          address: string | null
           created_at: string
-          date: string
           description: string | null
+          display_order: number | null
+          dress_code: string | null
+          end_time: string | null
+          event_date: string
           id: string
-          is_main_event: boolean
-          location: string
-          name: string
-          time: string
+          is_active: boolean | null
+          is_main_event: boolean | null
+          location: string | null
+          max_guests: number | null
+          metadata: Json | null
+          name: string | null
+          notes: string | null
+          requires_rsvp: boolean | null
+          start_time: string | null
+          title: string
+          updated_at: string
+          venue_address: string | null
+          venue_coordinates: number[] | null
+          venue_name: string | null
         }
         Insert: {
+          address?: string | null
           created_at?: string
-          date: string
           description?: string | null
+          display_order?: number | null
+          dress_code?: string | null
+          end_time?: string | null
+          event_date: string
           id?: string
-          is_main_event?: boolean
-          location: string
-          name: string
-          time: string
+          is_active?: boolean | null
+          is_main_event?: boolean | null
+          location?: string | null
+          max_guests?: number | null
+          metadata?: Json | null
+          name?: string | null
+          notes?: string | null
+          requires_rsvp?: boolean | null
+          start_time?: string | null
+          title: string
+          updated_at?: string
+          venue_address?: string | null
+          venue_coordinates?: number[] | null
+          venue_name?: string | null
         }
         Update: {
+          address?: string | null
           created_at?: string
-          date?: string
           description?: string | null
+          display_order?: number | null
+          dress_code?: string | null
+          end_time?: string | null
+          event_date?: string
           id?: string
-          is_main_event?: boolean
-          location?: string
-          name?: string
-          time?: string
+          is_active?: boolean | null
+          is_main_event?: boolean | null
+          location?: string | null
+          max_guests?: number | null
+          metadata?: Json | null
+          name?: string | null
+          notes?: string | null
+          requires_rsvp?: boolean | null
+          start_time?: string | null
+          title?: string
+          updated_at?: string
+          venue_address?: string | null
+          venue_coordinates?: number[] | null
+          venue_name?: string | null
         }
         Relationships: []
       }
     }
     Views: {
+      event_attendance_summary: {
+        Row: {
+          attending_count: number | null
+          declined_count: number | null
+          event_date: string | null
+          event_id: string | null
+          event_name: string | null
+          max_guests: number | null
+          maybe_count: number | null
+          pending_count: number | null
+          remaining_capacity: number | null
+          total_attending_guests: number | null
+          total_rsvps: number | null
+          venue_name: string | null
+        }
+        Relationships: []
+      }
       faq_with_categories: {
         Row: {
           answer: string | null
@@ -953,40 +2315,14 @@ export type Database = {
           category_id: string | null
           category_name: string | null
           category_slug: string | null
+          created_at: string | null
           display_order: number | null
           id: string | null
           is_active: boolean | null
           is_featured: boolean | null
           question: string | null
+          updated_at: string | null
           view_count: number | null
-        }
-        Insert: {
-          answer?: string | null
-          category_description?: string | null
-          category_icon?: string | null
-          category_id?: string | null
-          category_name?: string | null
-          category_slug?: string | null
-          display_order?: number | null
-          id?: string | null
-          is_active?: boolean | null
-          is_featured?: boolean | null
-          question?: string | null
-          view_count?: number | null
-        }
-        Update: {
-          answer?: string | null
-          category_description?: string | null
-          category_icon?: string | null
-          category_id?: string | null
-          category_name?: string | null
-          category_slug?: string | null
-          display_order?: number | null
-          id?: string | null
-          is_active?: boolean | null
-          is_featured?: boolean | null
-          question?: string | null
-          view_count?: number | null
         }
         Relationships: [
           {
@@ -998,51 +2334,63 @@ export type Database = {
           },
         ]
       }
-      guest_details: {
-        Row: {
-          accommodation_notes: string | null
-          additional_guests: number | null
-          attending_events: string[] | null
-          dietary_restrictions: string | null
-          email: string | null
-          full_name: string | null
-          guest_id: string | null
-          is_attending: boolean | null
-          is_plus_one_attending: boolean | null
-          plus_one_name: string | null
-          rsvp_at: string | null
-          rsvp_message: string | null
-          song_requests: string | null
-          user_id: string | null
-        }
-        Relationships: []
-      }
     }
     Functions: {
       get_featured_faqs: {
-        Args: {
-          limit_count: number
-        }
+        Args: { limit_count?: number }
         Returns: {
-          answer: string | null
-          category_description: string | null
-          category_icon: string | null
-          category_id: string | null
-          category_name: string | null
-          category_slug: string | null
-          display_order: number | null
-          id: string | null
-          is_active: boolean | null
-          is_featured: boolean | null
-          question: string | null
-          view_count: number | null
+          id: string
+          question: string
+          answer: string
+          category_name: string
+          category_icon: string
         }[]
       }
-      increment_faq_view_count: {
+      has_role: {
         Args: {
-          faq_id: string
+          _user_id: string
+          _role: Database["public"]["Enums"]["app_role"]
         }
+        Returns: boolean
+      }
+      increment_faq_view: {
+        Args: { faq_id: string }
         Returns: undefined
+      }
+      increment_faq_view_count: {
+        Args: { faq_id: string }
+        Returns: undefined
+      }
+      is_chat_member: {
+        Args: { chat_uuid: string; user_uuid: string }
+        Returns: boolean
+      }
+      safe_upsert_rsvp: {
+        Args:
+          | {
+              p_user_id: string
+              p_event_id: string
+              p_status: string
+              p_guest_count?: number
+              p_dietary_restrictions?: string
+              p_message?: string
+              p_plus_one_name?: string
+            }
+          | {
+              p_user_id: string
+              p_event_id: string
+              p_status: string
+              p_guest_count?: number
+              p_dietary_restrictions?: string
+              p_message?: string
+              p_plus_one_name?: string
+              p_table_assignment?: string
+              p_meal_preference?: string
+              p_song_request?: string
+              p_accommodation_needed?: boolean
+              p_transportation_needed?: boolean
+            }
+        Returns: string
       }
     }
     Enums: {
@@ -1051,43 +2399,39 @@ export type Database = {
       poll_type: "multiple_choice" | "yes_no" | "rating"
       reaction_type: "like" | "love" | "laugh" | "wow" | "sad" | "angry"
     }
-    CompositeTypes: {}
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
 }
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
-export type Tables<T extends keyof PublicSchema["Tables"]> = PublicSchema["Tables"][T]["Row"]
-export type Enums<T extends keyof PublicSchema["Enums"]> = PublicSchema["Enums"][T]
-export type Functions<T extends keyof PublicSchema["Functions"]> = PublicSchema["Functions"][T]
-
-export type TablesInsert<T extends keyof PublicSchema["Tables"]> = PublicSchema["Tables"][T]["Insert"]
-export type TablesUpdate<T extends keyof PublicSchema["Tables"]> = PublicSchema["Tables"][T]["Update"]
-
-
-export type DbResult<T> = T extends PromiseLike<infer U> ? U : never
-export type DbResultOk<T> = T extends PromiseLike<{ data: infer U }> ? Exclude<U, null> : never
-export type DbResultErr = PostgrestError
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
-    | { schema: keyof Database },
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof Database
+  schema: keyof DatabaseWithoutInternals
 }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -1096,23 +2440,23 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
-    | { schema: keyof Database },
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof Database
+  schema: keyof DatabaseWithoutInternals
 }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -1121,23 +2465,23 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
-    | { schema: keyof Database },
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof Database
+  schema: keyof DatabaseWithoutInternals
 }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -1188,3 +2532,7 @@ export const Constants = {
     },
   },
 } as const
+
+export type DbResult<T> = T extends PromiseLike<infer U> ? U : never
+export type DbResultOk<T> = T extends PromiseLike<{ data: infer U }> ? Exclude<U, null> : never
+export type DbResultErr = PostgrestError

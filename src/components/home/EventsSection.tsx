@@ -5,11 +5,12 @@ import { Settings, MapPin, Clock } from 'lucide-react';
 interface WeddingEvent {
   id: string;
   title: string;
-  start_time: string;
-  end_time?: string;
+  start_time?: string | null;
+  end_time?: string | null;
   venue_name?: string;
   location?: string;
   description?: string;
+  event_date?: string;
 }
 
 interface EventsSectionProps {
@@ -19,8 +20,12 @@ interface EventsSectionProps {
 }
 
 const EventsSection: React.FC<EventsSectionProps> = ({ isAdmin, events, eventsLoading }) => {
-  // Sort events by start time to ensure chronological order
-  const sortedEvents = [...events].sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
+  // Sort events by event_date to ensure chronological order
+  const sortedEvents = [...events].sort((a, b) => {
+    const dateA = a.event_date ? new Date(a.event_date).getTime() : 0;
+    const dateB = b.event_date ? new Date(b.event_date).getTime() : 0;
+    return dateA - dateB;
+  });
 
   const formatTime = (dateString: string) => {
     return new Date(dateString).toLocaleTimeString('en-AU', {
@@ -28,6 +33,25 @@ const EventsSection: React.FC<EventsSectionProps> = ({ isAdmin, events, eventsLo
       minute: '2-digit',
       hour12: true,
     });
+  };
+
+  const formatEventDateTime = (event: WeddingEvent) => {
+    if (!event.event_date) return 'Time TBA';
+    
+    const eventDate = new Date(event.event_date);
+    const dateStr = eventDate.toLocaleDateString('en-AU', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    if (event.start_time) {
+      const timeStr = formatTime(event.start_time);
+      const endTimeStr = event.end_time ? ` - ${formatTime(event.end_time)}` : '';
+      return `${dateStr}, ${timeStr}${endTimeStr}`;
+    }
+    
+    return dateStr;
   };
 
   return (
@@ -64,10 +88,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({ isAdmin, events, eventsLo
                   <div className="flex flex-col sm:flex-row sm:items-center gap-x-4 gap-y-1 text-muted-foreground mt-1">
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4 text-glass-blue" />
-                      <span>
-                        {formatTime(event.start_time)}
-                        {event.end_time && ` - ${formatTime(event.end_time)}`}
-                      </span>
+                      <span>{formatEventDateTime(event)}</span>
                     </div>
                     {(event.venue_name || event.location) && (
                       <div className="flex items-center gap-2">

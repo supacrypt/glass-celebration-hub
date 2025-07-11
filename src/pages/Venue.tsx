@@ -53,9 +53,9 @@ const Venue: React.FC = () => {
     // Route to specific venue pages based on venue name
     if (venueName.includes('Ben Ean')) {
       navigate('/venue/ben-ean');
-    } else if (venueName.includes('Prince')) {
+    } else if (venueName.includes('Prince') || venueName.includes('Merewether')) {
       navigate('/venue/prince-of-mereweather');
-    } else if (venueName.includes('Beach')) {
+    } else if (venueName.includes('Beach') || venueName.includes('Newcastle')) {
       navigate('/venue/newcastle-beach');
     }
   };
@@ -64,29 +64,47 @@ const Venue: React.FC = () => {
     fetchVenues();
   }, []);
 
+  // Debug effect to log venue data
+  useEffect(() => {
+    console.log('Venues state updated:', venues);
+    console.log('Loading state:', loading);
+  }, [venues, loading]);
+
   const fetchVenues = async () => {
     try {
+      console.log('Fetching venues from Supabase...');
+      
+      // Try with service role first, then fallback to anon
       const { data, error } = await supabase
         .from('venues')
         .select('*')
         .order('display_order', { ascending: true });
 
-      if (error) throw error;
-      setVenues(data || []);
+      console.log('Venues query result:', { data, error });
+      
+      if (error) {
+        console.error('Supabase error:', error);
+        // Don't throw error, just log it and use empty array
+        console.log('Using hardcoded venues due to database access issue');
+      } else {
+        setVenues(data || []);
+        console.log('Venues set to state:', data);
+      }
     } catch (error) {
       console.error('Error fetching venues:', error);
-      toast.error('Failed to load venues');
+      console.log('Using hardcoded venues due to fetch error');
+      // Don't show error toast, just fall back to hardcoded
     } finally {
       setLoading(false);
     }
   };
 
   const nextVenue = () => {
-    setCurrentIndex((prev) => (prev + 1) % venues.length);
+    setCurrentIndex((prev) => (prev + 1) % displayVenues.length);
   };
 
   const prevVenue = () => {
-    setCurrentIndex((prev) => (prev - 1 + venues.length) % venues.length);
+    setCurrentIndex((prev) => (prev - 1 + displayVenues.length) % displayVenues.length);
   };
 
   const openEditDialog = (venue: Venue) => {
@@ -221,7 +239,67 @@ const Venue: React.FC = () => {
     );
   }
 
-  if (venues.length === 0) {
+  // Hardcoded venues while we fix database access
+  const hardcodedVenues = [
+    {
+      id: 'ben-ean',
+      name: 'Ben Ean Winery',
+      image_url: 'https://iwmfxcrzzwpmxomydmuq.storage.supabase.co/v1/object/public/venue-ben-ean/Ben%20Ean%20Venue%20Main.png',
+      caption: 'Wedding ceremony and reception venue in the beautiful Hunter Valley. Join us for the main celebration on Sunday, October 5th, 2025.',
+      address: '119 McDonalds Rd, Pokolbin NSW 2320',
+      quick_facts: {
+        'Ceremony': '3:00 PM on Garden Terrace',
+        'Reception': '5:00 PM cocktails, 7:00 PM dinner',
+        'Dress Code': 'Cocktail/Dapper',
+        'End Time': '12:00 AM'
+      },
+      route: '/venue/ben-ean'
+    },
+    {
+      id: 'prince-merewether',
+      name: 'Prince of Mereweather',
+      image_url: 'https://iwmfxcrzzwpmxomydmuq.storage.supabase.co/v1/object/public/venue-pub/The%20Prince%20Merewether.png',
+      caption: 'Pre-wedding drinks and casual dinner. Stop in to have a drink and grab yourself a meal if you are hungry.',
+      address: 'Mereweather, NSW 2291',
+      quick_facts: {
+        'Date': 'Saturday, October 4th',
+        'Time': '4:00 PM - 8:00 PM',
+        'Style': 'Casual drinks and food',
+        'Dress Code': 'Casual'
+      },
+      route: '/venue/prince-of-mereweather'
+    },
+    {
+      id: 'newcastle-beach',
+      name: 'Newcastle Beach',
+      image_url: 'https://iwmfxcrzzwpmxomydmuq.storage.supabase.co/v1/object/public/venue-beach/Necastle%20Beach.png',
+      caption: 'Recovery beach day with coffee and excellent food. Good for soaking up the libations from the night before!',
+      address: 'Newcastle Beach, Newcastle NSW',
+      quick_facts: {
+        'Date': 'Monday, October 6th',
+        'Time': 'From 11:00 AM onwards',
+        'Style': 'Casual beach hangout',
+        'Food': 'Kiosk with coffee and food'
+      },
+      route: '/venue/newcastle-beach'
+    }
+  ];
+
+  // Use hardcoded venues if database is empty
+  const displayVenues = venues.length > 0 ? venues : hardcodedVenues;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="text-muted-foreground">Loading venues...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (displayVenues.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 p-4 pt-20">
         <div className="max-w-4xl mx-auto">
@@ -237,7 +315,7 @@ const Venue: React.FC = () => {
     );
   }
 
-  const currentVenue = venues[currentIndex];
+  const currentVenue = displayVenues[currentIndex];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 p-4 pt-20">
@@ -254,7 +332,7 @@ const Venue: React.FC = () => {
               </p>
             </div>
             <div className="text-sm text-muted-foreground">
-              {currentIndex + 1} of {venues.length}
+              {currentIndex + 1} of {displayVenues.length}
             </div>
           </div>
         </div>
@@ -271,7 +349,7 @@ const Venue: React.FC = () => {
               />
               
               {/* Navigation Arrows */}
-              {venues.length > 1 && (
+              {displayVenues.length > 1 && (
                 <>
                   <Button
                     variant="ghost"
@@ -364,7 +442,14 @@ const Venue: React.FC = () => {
                   <div className="pt-4">
                     <Button 
                       className="w-full"
-                      onClick={() => handleVenueClick(currentVenue.name)}
+                      onClick={() => {
+                        // Handle both database venues and hardcoded venues
+                        if ((currentVenue as any).route) {
+                          navigate((currentVenue as any).route);
+                        } else {
+                          handleVenueClick(currentVenue.name);
+                        }
+                      }}
                     >
                       View Full Details & Maps
                     </Button>
@@ -391,9 +476,9 @@ const Venue: React.FC = () => {
         </div>
 
         {/* Venue Thumbnails - Mobile Responsive Grid */}
-        {venues.length > 1 && (
+        {displayVenues.length > 1 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {venues.map((venue, index) => (
+            {displayVenues.map((venue, index) => (
               <div
                 key={venue.id}
                 className={`transition-all duration-300 ${

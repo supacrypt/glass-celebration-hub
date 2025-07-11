@@ -25,7 +25,7 @@ export const useDashboardData = () => {
       setLoading(true);
       
       // Fetch users with roles
-      const { data: usersData } = await (supabase as any)
+      const { data: usersData, error: usersError } = await supabase
         .from('profiles')
         .select(`
           id,
@@ -36,30 +36,54 @@ export const useDashboardData = () => {
           created_at
         `);
 
+      if (usersError) {
+        console.error('Error fetching users:', usersError);
+      }
+
       // Fetch RSVPs
-      const { data: rsvpsData } = await (supabase as any)
+      const { data: rsvpsData, error: rsvpsError } = await supabase
         .from('rsvps')
         .select('*');
 
+      if (rsvpsError) {
+        console.error('Error fetching RSVPs:', rsvpsError);
+      }
+
       // Fetch photos
-      const { data: photosData } = await (supabase as any)
+      const { data: photosData, error: photosError } = await supabase
         .from('photos')
         .select('*');
 
+      if (photosError) {
+        console.error('Error fetching photos:', photosError);
+      }
+
       // Fetch all profiles for joining
-      const { data: profilesData } = await (supabase as any)
+      const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select('user_id, first_name, last_name, email');
 
+      if (profilesError) {
+        console.error('Error fetching profiles:', profilesError);
+      }
+
       // Fetch messages count
-      const { count: messagesCount } = await (supabase as any)
+      const { count: messagesCount, error: messagesError } = await supabase
         .from('messages')
         .select('*', { count: 'exact', head: true });
 
+      if (messagesError) {
+        console.error('Error fetching messages count:', messagesError);
+      }
+
       // Fetch user roles separately
-      const { data: userRolesData } = await (supabase as any)
+      const { data: userRolesData, error: userRolesError } = await supabase
         .from('user_roles')
         .select('user_id, role');
+
+      if (userRolesError) {
+        console.error('Error fetching user roles:', userRolesError);
+      }
 
       // Format users data
       const formattedUsers: User[] = usersData?.map(user => ({

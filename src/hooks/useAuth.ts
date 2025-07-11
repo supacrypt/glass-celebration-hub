@@ -1,33 +1,10 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
+import { Database } from '@/types/database.types';
 
-interface Profile {
-  id: string;
-  user_id: string;
-  email: string;
-  first_name?: string;
-  last_name?: string;
-  display_name?: string;
-  avatar_url?: string;
-  phone?: string;
-  mobile?: string;
-  address?: string;
-  state?: string;
-  country?: string;
-  postcode?: string;
-  has_plus_one?: boolean;
-  plus_one_name?: string;
-  plus_one_email?: string;
-  plus_one_invited?: boolean;
-  rsvp_completed?: boolean;
-  created_at?: string;
-  updated_at?: string;
-}
-
-interface UserRole {
-  role: 'guest' | 'admin' | 'couple';
-}
+type Profile = Database['public']['Tables']['profiles']['Row'];
+type UserRole = Database['public']['Tables']['user_roles']['Row'];
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -74,28 +51,32 @@ export const useAuth = () => {
   const fetchUserData = async (userId: string) => {
     try {
       // Fetch profile from profiles table
-      const { data: profileData } = await (supabase as any)
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('user_id', userId)
         .maybeSingle();
       
+      if (profileError) {
+        console.error('Error fetching profile:', profileError);
+      }
+      
       setProfile(profileData);
 
       // Fetch user role from user_roles table
-      let roleData = null;
-      if (profileData) {
-        const { data: userRoleData } = await (supabase as any)
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', userId)
-          .maybeSingle();
-        
-        roleData = userRoleData ? { role: userRoleData.role } : { role: 'guest' };
-      }
-      setUserRole(roleData);
+      const { data: userRoleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle();
       
-      console.log('User data fetched:', { profileData, roleData });
+      if (roleError) {
+        console.error('Error fetching user role:', roleError);
+      }
+      
+      setUserRole(userRoleData || null);
+      
+      console.log('User data fetched:', { profileData, userRoleData });
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
@@ -156,11 +137,11 @@ export const useAuth = () => {
   const updateProfile = async (updates: Partial<Profile>) => {
     if (!user) return { error: new Error('No user logged in') };
     
-    const { error } = await (supabase as any)
+    const { error } = await supabase
       .from('profiles')
       .upsert({
         user_id: user.id,
-        email: user.email,
+        email: user.email || '',
         ...updates
       }, {
         onConflict: 'user_id'
