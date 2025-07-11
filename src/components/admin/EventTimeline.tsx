@@ -49,7 +49,21 @@ const EventTimeline: React.FC = () => {
         .order('event_date', { ascending: true });
 
       if (error) throw error;
-      setEvents(data || []);
+      const mappedEvents = (data || []).map(event => {
+        const eventData = event as any;
+        return {
+          id: eventData.id,
+          title: eventData.title || eventData.name || 'Untitled Event',
+          event_date: eventData.event_date || eventData.date || new Date().toISOString(),
+          description: eventData.description || '',
+          location: eventData.location || '',
+          venue_name: eventData.venue_name || '',
+          is_main_event: eventData.is_main_event || false,
+          dress_code: eventData.dress_code || '',
+          notes: eventData.notes || ''
+        };
+      }) as TimelineEvent[];
+      setEvents(mappedEvents);
     } catch (error) {
       console.error('Error fetching events:', error);
       toast({
@@ -86,7 +100,7 @@ const EventTimeline: React.FC = () => {
         if (error) throw error;
         toast({ title: "Success", description: "Event updated successfully" });
       } else {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('wedding_events')
           .insert([eventData]);
         

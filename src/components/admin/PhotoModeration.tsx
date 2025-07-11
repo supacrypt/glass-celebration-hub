@@ -28,7 +28,7 @@ const PhotoModeration: React.FC<PhotoModerationProps> = ({ photos, onRefresh }) 
 
   const handlePhotoApproval = async (photoId: string, approved: boolean) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('photos')
         .update({ is_approved: approved })
         .eq('id', photoId);

@@ -56,8 +56,8 @@ const RealTimeMonitoring: React.FC = () => {
       // Simulate fetching real metrics - in real app, these would come from monitoring APIs
       const [usersData, messagesData, photosData] = await Promise.all([
         supabase.from('profiles').select('*', { count: 'exact', head: true }),
-        supabase.from('messages').select('*').gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()),
-        supabase.from('photos').select('*').gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+        (supabase as any).from('messages').select('*').gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()),
+        (supabase as any).from('photos').select('*').gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
       ]);
 
       setMetrics({

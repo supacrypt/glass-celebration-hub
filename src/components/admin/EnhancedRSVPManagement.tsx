@@ -49,11 +49,26 @@ const EnhancedRSVPManagement: React.FC<EnhancedRSVPManagementProps> = ({ rsvps, 
 
       if (error) throw error;
       
-      const eventsWithDeadlines = data.map(event => ({
-        ...event,
-        rsvp_deadline: new Date(new Date(event.event_date).getTime() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-        max_capacity: 150 // Mock capacity
-      }));
+      const eventsWithDeadlines = (data || []).map(event => {
+        const eventData = event as any;
+        const eventDate = eventData.event_date || eventData.date || new Date().toISOString();
+        return {
+          id: eventData.id,
+          title: eventData.title || eventData.name || 'Untitled Event',
+          event_date: eventDate,
+          description: eventData.description || '',
+          location: eventData.location || '',
+          venue_name: eventData.venue_name || '',
+          is_main_event: eventData.is_main_event || false,
+          dress_code: eventData.dress_code || '',
+          notes: eventData.notes || '',
+          created_at: eventData.created_at || new Date().toISOString(),
+          updated_at: eventData.updated_at || new Date().toISOString(),
+          address: eventData.address || '',
+          rsvp_deadline: new Date(new Date(eventDate).getTime() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+          max_capacity: 150 // Mock capacity
+        };
+      }) as RSVPEvent[];
       
       setEvents(eventsWithDeadlines);
     } catch (error) {

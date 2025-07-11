@@ -80,7 +80,7 @@ const UnifiedAccountsManagement: React.FC<UnifiedAccountsManagementProps> = ({ u
       const guestsWithType = (guests || []).map(guest => ({ ...guest, type: 'guest' as const }));
       const usersWithType = users.map(user => ({ ...user, type: 'user' as const }));
       
-      setAccounts([...usersWithType, ...guestsWithType]);
+      setAccounts([...usersWithType, ...guestsWithType] as UnifiedAccount[]);
     } catch (error) {
       console.error('Error fetching accounts:', error);
       toast({
@@ -127,7 +127,7 @@ const UnifiedAccountsManagement: React.FC<UnifiedAccountsManagementProps> = ({ u
 
   const addGuest = async () => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('guests')
         .insert([guestForm]);
 
@@ -162,7 +162,7 @@ const UnifiedAccountsManagement: React.FC<UnifiedAccountsManagementProps> = ({ u
     try {
       // This would integrate with email service
       // For now, just mark as invited
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('guests')
         .update({ invite_sent: true })
         .eq('id', guest.id);
@@ -187,7 +187,7 @@ const UnifiedAccountsManagement: React.FC<UnifiedAccountsManagementProps> = ({ u
 
   const updateUserRole = async (userId: string, newRole: 'guest' | 'admin' | 'couple') => {
     try {
-      const { error } = await supabase
+        const { error } = await (supabase as any)
         .from('user_roles')
         .update({ role: newRole })
         .eq('user_id', userId);
