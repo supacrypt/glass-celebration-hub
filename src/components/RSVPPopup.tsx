@@ -124,16 +124,18 @@ const RSVPPopup: React.FC<RSVPPopupProps> = ({ isOpen, onClose, onComplete }) =>
 
       if (profileError) throw profileError;
 
-      // Get the main wedding event ID first
-      const { data: mainEvent } = await supabase
+      // Get the main wedding event ID first (take the first main event if multiple exist)
+      const { data: mainEvents } = await supabase
         .from('wedding_events')
         .select('id')
         .eq('is_main_event', true)
-        .single();
+        .order('event_date', { ascending: true });
 
-      if (!mainEvent) {
+      if (!mainEvents || mainEvents.length === 0) {
         throw new Error('No main wedding event found');
       }
+
+      const mainEvent = mainEvents[0];
 
       // Use safe upsert function to handle RSVP conflicts properly
       const { data: rsvpData, error: rsvpError } = await supabase

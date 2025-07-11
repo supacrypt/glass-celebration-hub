@@ -220,6 +220,89 @@ export type Database = {
         }
         Relationships: []
       }
+      faq_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      faq_items: {
+        Row: {
+          answer: string
+          category_id: string | null
+          created_at: string
+          display_order: number
+          id: string
+          is_active: boolean | null
+          is_featured: boolean | null
+          question: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          answer: string
+          category_id?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          question: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          answer?: string
+          category_id?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          question?: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "faq_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "faq_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gallery_photos: {
         Row: {
           backstory: string | null
@@ -1299,9 +1382,45 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      faq_with_categories: {
+        Row: {
+          answer: string | null
+          category_description: string | null
+          category_icon: string | null
+          category_id: string | null
+          category_name: string | null
+          category_slug: string | null
+          created_at: string | null
+          display_order: number | null
+          id: string | null
+          is_active: boolean | null
+          is_featured: boolean | null
+          question: string | null
+          updated_at: string | null
+          view_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "faq_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "faq_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
+      get_featured_faqs: {
+        Args: { limit_count?: number }
+        Returns: {
+          id: string
+          question: string
+          answer: string
+          category_name: string
+          category_icon: string
+        }[]
+      }
       has_role: {
         Args: {
           _user_id: string
@@ -1309,9 +1428,34 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_faq_view: {
+        Args: { faq_id: string }
+        Returns: undefined
+      }
+      increment_faq_view_count: {
+        Args: { faq_id: string }
+        Returns: undefined
+      }
       is_chat_member: {
         Args: { chat_uuid: string; user_uuid: string }
         Returns: boolean
+      }
+      safe_upsert_rsvp: {
+        Args: {
+          p_user_id: string
+          p_event_id: string
+          p_status: string
+          p_guest_count?: number
+          p_dietary_restrictions?: string
+          p_message?: string
+          p_plus_one_name?: string
+          p_table_assignment?: string
+          p_meal_preference?: string
+          p_song_request?: string
+          p_accommodation_needed?: boolean
+          p_transportation_needed?: boolean
+        }
+        Returns: string
       }
     }
     Enums: {
