@@ -81,12 +81,18 @@ const Venue: React.FC = () => {
 
       console.log('Venues query result:', { data, error });
       
-      if (error) throw error;
-      setVenues(data || []);
-      console.log('Venues successfully loaded from database:', data);
+      if (error) {
+        console.warn('Database fetch failed, will use fallback venues:', error);
+        // Don't throw error, just log it
+        setVenues([]);
+      } else {
+        setVenues(data || []);
+        console.log('Venues successfully loaded from database:', data);
+      }
     } catch (error) {
-      console.error('Error fetching venues:', error);
-      toast.error('Failed to load venues');
+      console.warn('Error fetching venues, using fallback:', error);
+      // Don't show error toast, just use fallback
+      setVenues([]);
     } finally {
       setLoading(false);
     }
@@ -232,8 +238,63 @@ const Venue: React.FC = () => {
     );
   }
 
-  // No more hardcoded venues - using database only
-  const displayVenues = venues;
+  // Fallback venues in case database access fails
+  const fallbackVenues = [
+    {
+      id: 'deee0f2e-6b57-469c-aac3-fd7c7ee9ef68',
+      name: 'Ben Ean Winery',
+      image_url: 'https://iwmfxcrzzwpmxomydmuq.storage.supabase.co/v1/object/public/venue-ben-ean/Ben%20Ean%20Venue%20Main.png',
+      image_path: 'venue-ben-ean/Ben Ean Venue Main.png',
+      caption: 'Wedding ceremony and reception venue in the beautiful Hunter Valley. Join us for the main celebration on Sunday, October 5th, 2025.',
+      address: '119 McDonalds Rd, Pokolbin NSW 2320',
+      quick_facts: {
+        'Ceremony': '3:00 PM on Garden Terrace',
+        'Reception': '5:00 PM cocktails, 7:00 PM dinner',
+        'Dress Code': 'Cocktail/Dapper',
+        'End Time': '12:00 AM'
+      },
+      display_order: 1,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: 'dac9fa6a-6c86-4b3b-b1cc-12f99c0eade7',
+      name: 'The Prince Hotel, Merewether',
+      image_url: 'https://iwmfxcrzzwpmxomydmuq.storage.supabase.co/v1/object/public/venue-pub/The%20Prince%20Merewether.png',
+      image_path: 'venue-pub/The Prince Merewether.png',
+      caption: 'Pre-wedding drinks and casual dinner. Stop in to have a drink and grab yourself a meal if you are hungry.',
+      address: 'Mereweather, NSW 2291',
+      quick_facts: {
+        'Date': 'Saturday, October 4th',
+        'Time': '4:00 PM - 8:00 PM',
+        'Style': 'Casual drinks and food',
+        'Dress Code': 'Casual'
+      },
+      display_order: 2,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: 'b3e0b587-46ea-4bf1-9ce1-9455ff61a9bf',
+      name: 'Newcastle Beach',
+      image_url: 'https://iwmfxcrzzwpmxomydmuq.storage.supabase.co/v1/object/public/venue-beach/Necastle%20Beach.png',
+      image_path: 'venue-beach/Necastle Beach.png',
+      caption: 'Recovery beach day with coffee and excellent food. Good for soaking up the libations from the night before!',
+      address: 'Newcastle Beach, Newcastle NSW',
+      quick_facts: {
+        'Date': 'Monday, October 6th',
+        'Time': 'From 11:00 AM onwards',
+        'Style': 'Casual beach hangout',
+        'Food': 'Kiosk with coffee and food'
+      },
+      display_order: 3,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+  ];
+
+  // Use database venues if available, otherwise fallback to hardcoded
+  const displayVenues = venues.length > 0 ? venues : (!loading ? fallbackVenues : []);
 
   if (loading) {
     return (
