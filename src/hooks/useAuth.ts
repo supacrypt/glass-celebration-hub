@@ -6,21 +6,12 @@ interface Profile {
   id: string;
   user_id: string;
   email: string;
-  first_name?: string;
-  last_name?: string;
-  display_name?: string;
+  name?: string;
+  role: 'guest' | 'admin' | 'couple';
   avatar_url?: string;
   phone?: string;
-  mobile?: string;
-  address?: string;
-  state?: string;
-  country?: string;
-  postcode?: string;
-  has_plus_one?: boolean;
-  plus_one_name?: string;
-  plus_one_email?: string;
-  plus_one_invited?: boolean;
-  rsvp_completed?: boolean;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface UserRole {
@@ -71,23 +62,20 @@ export const useAuth = () => {
 
   const fetchUserData = async (userId: string) => {
     try {
-      // Fetch profile
+      // Fetch profile from user_profiles table (the correct table name)
       const { data: profileData } = await supabase
-        .from('profiles')
+        .from('user_profiles')
         .select('*')
         .eq('user_id', userId)
         .maybeSingle();
       
       setProfile(profileData);
 
-      // Fetch user role
-      const { data: roleData } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', userId)
-        .maybeSingle();
-      
+      // Extract role from user_profiles table (role is stored directly in user_profiles)
+      const roleData = profileData ? { role: profileData.role } : null;
       setUserRole(roleData);
+      
+      console.log('User data fetched:', { profileData, roleData });
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
@@ -102,16 +90,9 @@ export const useAuth = () => {
       options: {
         emailRedirectTo: redirectUrl,
         data: {
-          first_name: firstName,
-          last_name: lastName,
-          mobile: profileData?.mobile,
-          address: profileData?.address,
-          state: profileData?.state,
-          country: profileData?.country,
-          postcode: profileData?.postcode,
-          has_plus_one: profileData?.hasPlusOne || false,
-          plus_one_name: profileData?.plusOneName,
-          plus_one_email: profileData?.plusOneEmail,
+          name: firstName && lastName ? `${firstName} ${lastName}` : firstName,
+          phone: profileData?.phone,
+          role: 'guest' // Default role for new users
         }
       }
     });
@@ -156,7 +137,7 @@ export const useAuth = () => {
     if (!user) return { error: new Error('No user logged in') };
     
     const { error } = await supabase
-      .from('profiles')
+      .from('user_profiles')
       .upsert({
         user_id: user.id,
         email: user.email,

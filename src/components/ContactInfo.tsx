@@ -13,23 +13,19 @@ const ContactInfo: React.FC = () => {
         </div>
         <h2 className="responsive-heading-lg font-semibold text-wedding-navy">Get in Touch</h2>
         <p className="responsive-text-base text-muted-foreground mt-2 max-w-2xl mx-auto">
-          {settings.contact_message || 'For any questions leading up to the day, feel free to reach out. For day-of emergencies, please contact our coordinator.'}
+          {settings.contact_message || 'For any questions leading up to the day, feel free to reach out to us directly.'}
         </p>
       </div>
       
       <div className="mt-6 bg-glass-secondary/50 rounded-lg p-4 max-w-sm mx-auto">
         <div className="space-y-3 text-center">
           <div className="responsive-text-base">
-            <strong className="text-wedding-navy">{settings.groom_name}:</strong>
-            <span className="text-muted-foreground ml-2">04XX XXX XXX</span>
+            <strong className="text-wedding-navy">Tim:</strong>
+            <span className="text-muted-foreground ml-2">0401372025</span>
           </div>
           <div className="responsive-text-base">
-            <strong className="text-wedding-navy">{settings.bride_name}:</strong>
-            <span className="text-muted-foreground ml-2">04XX XXX XXX</span>
-          </div>
-          <div className="responsive-text-base">
-            <strong className="text-wedding-navy">Coordinator:</strong>
-            <span className="text-muted-foreground ml-2">(Details TBC)</span>
+            <strong className="text-wedding-navy">Kirsten:</strong>
+            <span className="text-muted-foreground ml-2">0402180915</span>
           </div>
         </div>
       </div>
