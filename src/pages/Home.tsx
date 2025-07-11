@@ -4,9 +4,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { useRSVPStatus } from '@/hooks/useRSVPStatus';
 import EnhancedHeroSection from '@/components/home/EnhancedHeroSection';
-
 import DynamicFAQSection from '@/components/home/DynamicFAQSection';
 import EventsSection from '@/components/home/EventsSection';
+import RSVPCallToAction from '@/components/home/RSVPCallToAction';
 import DressCodeCard from '@/components/DressCodeCard';
 import ContactInfo from '@/components/ContactInfo';
 import RSVPPopup from '@/components/RSVPPopup';
@@ -36,6 +36,10 @@ const Home: React.FC = () => {
     setShowRSVPPopup(false);
   };
 
+  const handleOpenRSVP = () => {
+    setShowRSVPPopup(true);
+  };
+
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8 xl:p-10 relative overflow-hidden">
       <div className="max-w-4xl mx-auto">
@@ -46,6 +50,10 @@ const Home: React.FC = () => {
           eventsLoading={eventsLoading} 
         />
         
+        {/* RSVP Call to Action */}
+        <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
+          <RSVPCallToAction onRSVPClick={handleOpenRSVP} />
+        </div>
         
         {/* Dynamic FAQ Section - Admin Controlled */}
         <DynamicFAQSection />
