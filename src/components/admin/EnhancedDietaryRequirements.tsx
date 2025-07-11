@@ -72,7 +72,7 @@ const EnhancedDietaryRequirements: React.FC<EnhancedDietaryRequirementsProps> = 
   const fetchDietaryRequirements = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('dietary_requirements')
         .select('*')
         .eq('rsvp_id', rsvpId)
@@ -111,7 +111,7 @@ const EnhancedDietaryRequirements: React.FC<EnhancedDietaryRequirementsProps> = 
       setLoading(true);
 
       // Delete existing requirements for this RSVP
-      await supabase
+      await (supabase as any)
         .from('dietary_requirements')
         .delete()
         .eq('rsvp_id', rsvpId);
@@ -139,7 +139,7 @@ const EnhancedDietaryRequirements: React.FC<EnhancedDietaryRequirementsProps> = 
       }
 
       if (newRequirements.length > 0) {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('dietary_requirements')
           .insert(newRequirements);
 
@@ -152,7 +152,7 @@ const EnhancedDietaryRequirements: React.FC<EnhancedDietaryRequirementsProps> = 
         customRequirement.trim()
       ].filter(Boolean).join(', ');
 
-      await supabase
+      await (supabase as any)
         .from('rsvps')
         .update({ dietary_restrictions: summaryText || null })
         .eq('id', rsvpId);

@@ -90,9 +90,9 @@ const EnhancedAnalytics: React.FC = () => {
       }, {} as Record<string, number>);
 
       const topUploaders = Object.entries(photosByUser || {})
-        .sort(([, a], [, b]) => b - a)
+        .sort(([, a], [, b]) => Number(b) - Number(a))
         .slice(0, 5)
-        .map(([name, count]) => ({ name, count }));
+        .map(([name, count]) => ({ name, count: Number(count) }));
 
       // RSVP responses by day
       const responsesByDay = allRSVPs.data?.reduce((acc, rsvp) => {

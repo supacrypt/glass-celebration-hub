@@ -53,7 +53,7 @@ const EnhancedMediaManagement: React.FC = () => {
       setLoading(true);
       
       // Fetch from database (photos table)
-      const { data: dbPhotos, error: dbError } = await supabase
+      const { data: dbPhotos, error: dbError } = await (supabase as any)
         .from('photos')
         .select(`
           *,

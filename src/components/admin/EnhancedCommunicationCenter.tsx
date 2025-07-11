@@ -94,7 +94,7 @@ const EnhancedCommunicationCenter: React.FC = () => {
 
   const loadMessages = async () => {
     try {
-      const { data: messagesData, error: messagesError } = await supabase
+      const { data: messagesData, error: messagesError } = await (supabase as any)
         .from('messages')
         .select('*')
         .order('created_at', { ascending: false })
@@ -108,22 +108,22 @@ const EnhancedCommunicationCenter: React.FC = () => {
 
       if (profilesError) throw profilesError;
 
-      const { data: likesData, error: likesError } = await supabase
+      const { data: likesData, error: likesError } = await (supabase as any)
         .from('message_likes')
         .select('*');
 
       if (likesError) throw likesError;
 
       // Combine the data
-      const enhancedMessages: EnhancedMessage[] = messagesData?.map(message => ({
+      const enhancedMessages: EnhancedMessage[] = (messagesData as any)?.map((message: any) => ({
         ...message,
-        profiles: profilesData?.find(p => p.user_id === message.user_id) || {
+        profiles: (profilesData as any)?.find((p: any) => p.user_id === message.user_id) || {
           first_name: '',
           last_name: '',
           email: 'unknown@email.com',
           display_name: ''
         },
-        message_likes: likesData?.filter(like => like.message_id === message.id) || []
+        message_likes: (likesData as any)?.filter((like: any) => like.message_id === message.id) || []
       })) || [];
 
       setMessages(enhancedMessages);
@@ -189,7 +189,7 @@ const EnhancedCommunicationCenter: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('messages')
         .insert({
           content: newMessage,
@@ -254,10 +254,10 @@ const EnhancedCommunicationCenter: React.FC = () => {
 
   const deleteMessage = async (messageId: string) => {
     try {
-      const { error } = await supabase
-        .from('messages')
-        .delete()
-        .eq('id', messageId);
+    const { error } = await (supabase as any)
+      .from('messages')
+      .delete()
+      .eq('id', messageId);
 
       if (error) throw error;
 
