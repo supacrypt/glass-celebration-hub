@@ -78,7 +78,7 @@ const DietaryRequirementsReport: React.FC = () => {
       setLoading(true);
       
       // Fetch dietary requirements with related data
-      const { data: requirementsData, error: reqError } = await supabase
+      const { data: requirementsData, error: reqError } = await (supabase as any)
         .from('dietary_requirements')
         .select(`
           *,
@@ -104,16 +104,16 @@ const DietaryRequirementsReport: React.FC = () => {
       if (reqError) throw reqError;
 
       // Fetch events for filter
-      const { data: eventsData, error: eventsError } = await supabase
+      const { data: eventsData, error: eventsError } = await (supabase as any)
         .from('wedding_events')
         .select('id, title')
         .order('event_date', { ascending: true });
 
       if (eventsError) throw eventsError;
 
-      setRequirements(requirementsData || []);
-      setEvents(eventsData || []);
-      calculateStats(requirementsData || []);
+      setRequirements(requirementsData as any || []);
+      setEvents(eventsData as any || []);
+      calculateStats(requirementsData as any || []);
     } catch (error) {
       console.error('Error fetching dietary requirements:', error);
       toast({

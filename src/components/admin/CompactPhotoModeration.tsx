@@ -33,7 +33,7 @@ const CompactPhotoModeration: React.FC<CompactPhotoModerationProps> = ({ photos,
   const updatePhotoStatus = async (photoId: string, isApproved: boolean) => {
     setProcessing(photoId);
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('photos')
         .update({ is_approved: isApproved })
         .eq('id', photoId);

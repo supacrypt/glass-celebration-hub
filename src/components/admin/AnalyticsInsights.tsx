@@ -73,12 +73,12 @@ const AnalyticsInsights: React.FC = () => {
       const photoEngagement = totalPhotos > 0 ? Math.round((totalLikes / totalPhotos) * 100) / 100 : 0;
 
       // Fetch RSVP response rate
-      const { data: allRsvps } = await supabase
+      const { data: allRsvps } = await (supabase as any)
         .from('rsvps')
         .select('status');
 
       const totalRsvps = allRsvps?.length || 0;
-      const respondedRsvps = allRsvps?.filter(r => r.status !== 'pending').length || 0;
+      const respondedRsvps = (allRsvps as any)?.filter((r: any) => r.status !== 'pending').length || 0;
       const rsvpResponseRate = totalRsvps > 0 ? Math.round((respondedRsvps / totalRsvps) * 100) : 0;
 
       setAnalytics({

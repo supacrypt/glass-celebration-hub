@@ -99,7 +99,7 @@ const ContentManagementSystem: React.FC = () => {
       setLoading(true);
       
       // Load existing content blocks
-      const { data: blocks, error } = await supabase
+      const { data: blocks, error } = await (supabase as any)
         .from('content_blocks')
         .select('*')
         .order('section', { ascending: true })
@@ -131,7 +131,7 @@ const ContentManagementSystem: React.FC = () => {
 
   const saveContentBlock = async (block: Partial<ContentBlock>) => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('content_blocks')
         .upsert([{
           ...block,
@@ -171,7 +171,7 @@ const ContentManagementSystem: React.FC = () => {
 
   const deleteContentBlock = async (blockId: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('content_blocks')
         .delete()
         .eq('id', blockId);
@@ -362,15 +362,17 @@ const ContentManagementSystem: React.FC = () => {
 
                 <div>
                   <Label htmlFor="content">Content</Label>
-                  {editingBlock.type === 'rich_text' ? (
-                    <RichTextEditor
-                      value={editingBlock.content}
-                      onChange={(content) => setEditingBlock({
-                        ...editingBlock,
-                        content
-                      })}
-                    />
-                  ) : (
+                   {editingBlock.type === 'rich_text' ? (
+                     <RichTextEditor
+                       label="Content"
+                       value={editingBlock.content}
+                       onChange={(content) => setEditingBlock({
+                         ...editingBlock,
+                         content
+                       })}
+                       onSave={() => {}}
+                     />
+                   ) : (
                     <Textarea
                       id="content"
                       value={editingBlock.content}

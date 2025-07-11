@@ -33,7 +33,7 @@ const CompactUserManagement: React.FC<CompactUserManagementProps> = ({ users, on
   const updateUserRole = async (userId: string, newRole: 'guest' | 'admin' | 'couple') => {
     setUpdating(userId);
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('user_roles')
         .update({ role: newRole })
         .eq('user_id', userId);

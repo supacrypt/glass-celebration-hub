@@ -56,17 +56,17 @@ const EnhancedAnalytics: React.FC = () => {
 
       // Fetch real data from multiple tables
       const [usersData, rsvpsData, photosData, messagesData] = await Promise.all([
-        supabase.from('profiles').select('*').gte('created_at', startDate.toISOString()),
-        supabase.from('rsvps').select('*').gte('created_at', startDate.toISOString()),
-        supabase.from('photos').select('*').gte('created_at', startDate.toISOString()),
-        supabase.from('messages').select('*').gte('created_at', startDate.toISOString())
+        (supabase as any).from('profiles').select('*').gte('created_at', startDate.toISOString()),
+        (supabase as any).from('rsvps').select('*').gte('created_at', startDate.toISOString()),
+        (supabase as any).from('photos').select('*').gte('created_at', startDate.toISOString()),
+        (supabase as any).from('messages').select('*').gte('created_at', startDate.toISOString())
       ]);
 
       // Get all users and RSVPs for rate calculations
       const [allUsers, allRSVPs, allPhotos] = await Promise.all([
-        supabase.from('profiles').select('*'),
-        supabase.from('rsvps').select('*'),
-        supabase.from('photos').select('*, profiles(first_name, last_name)')
+        (supabase as any).from('profiles').select('*'),
+        (supabase as any).from('rsvps').select('*'),
+        (supabase as any).from('photos').select('*, profiles(first_name, last_name)')
       ]);
 
       // Calculate metrics
@@ -75,8 +75,8 @@ const EnhancedAnalytics: React.FC = () => {
       const totalPhotos = allPhotos.data?.length || 0;
 
       // RSVP Response Rate
-      const attendingCount = allRSVPs.data?.filter(r => r.status === 'attending').length || 0;
-      const declinedCount = allRSVPs.data?.filter(r => r.status === 'declined').length || 0;
+      const attendingCount = (allRSVPs.data as any)?.filter((r: any) => r.status === 'attending').length || 0;
+      const declinedCount = (allRSVPs.data as any)?.filter((r: any) => r.status === 'declined').length || 0;
       const pendingCount = totalUsers - totalRSVPs;
 
       // Photo upload metrics
