@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Role Management Tool</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        h1 {
+            color: #2d3f51;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .user-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-info {
+            flex: 1;
+        }
+        .user-email {
+            font-weight: bold;
+            color: #2d3f51;
+            margin-bottom: 5px;
+        }
+        .user-role {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .role-admin { background: #ff6b6b; color: white; }
+        .role-guest { background: #95a5a6; color: white; }
+        .role-couple { background: #f39c12; color: white; }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        select, button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        select {
+            background: white;
+            border: 1px solid #ddd;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        .load-btn {
+            background: #27ae60;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .load-btn:hover {
+            background: #229954;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .instructions {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .sql-commands {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .sql-commands h3 {
+            margin-top: 0;
+            color: #2d3f51;
+        }
+        .sql-code {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 3px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 User Role Management Tool</h1>
+        
+        <div class="instructions">
+            <h3>📋 Instructions:</h3>
+            <p><strong>1.</strong> Click "Load Users & Roles" to see current user roles in the database</p>
+            <p><strong>2.</strong> Use the dropdown to change roles and click "Update Role"</p>
+            <p><strong>3.</strong> For direct SQL access, use the commands shown below</p>
+        </div>
+
+        <button class="load-btn" onclick="loadUsers()">Load Users & Roles</button>
+        
+        <div id="status"></div>
+        <div id="users-container"></div>
+
+        <div class="sql-commands">
+            <h3>🗄️ Direct SQL Commands (for Supabase SQL Editor):</h3>
+            
+            <p><strong>1. View all users with their roles:</strong></p>
+            <div class="sql-code">
+SELECT 
+    p.email,
+    p.first_name,
+    p.last_name,
+    p.display_name,
+    ur.role,
+    ur.created_at as role_assigned_at,
+    p.user_id
+FROM profiles p
+LEFT JOIN user_roles ur ON p.user_id = ur.user_id
+ORDER BY p.email;
+            </div>
+
+            <p><strong>2. Find specific user (daniel.j.fleuren@gmail.com):</strong></p>
+            <div class="sql-code">
+SELECT 
+    p.email,
+    p.user_id,
+    ur.role,
+    ur.id as role_id
+FROM profiles p
+LEFT JOIN user_roles ur ON p.user_id = ur.user_id
+WHERE p.email = 'daniel.j.fleuren@gmail.com';
+            </div>
+
+            <p><strong>3. Change daniel.j.fleuren@gmail.com to guest role:</strong></p>
+            <div class="sql-code">
+-- First, get the user_id
+WITH user_info AS (
+    SELECT user_id FROM profiles WHERE email = 'daniel.j.fleuren@gmail.com'
+)
+-- Then update or insert the role
+INSERT INTO user_roles (user_id, role)
+SELECT user_id, 'guest'::app_role FROM user_info
+ON CONFLICT (user_id, role) 
+DO UPDATE SET 
+    role = 'guest'::app_role,
+    created_at = NOW();
+            </div>
+
+            <p><strong>4. Change daniel.j.fleuren@gmail.com back to admin role:</strong></p>
+            <div class="sql-code">
+-- First, get the user_id
+WITH user_info AS (
+    SELECT user_id FROM profiles WHERE email = 'daniel.j.fleuren@gmail.com'
+)
+-- Then update or insert the role
+INSERT INTO user_roles (user_id, role)
+SELECT user_id, 'admin'::app_role FROM user_info
+ON CONFLICT (user_id, role) 
+DO UPDATE SET 
+    role = 'admin'::app_role,
+    created_at = NOW();
+            </div>
+
+            <p><strong>5. Safer approach - Delete old role and insert new one:</strong></p>
+            <div class="sql-code">
+-- For changing daniel.j.fleuren@gmail.com to guest:
+WITH user_info AS (
+    SELECT user_id FROM profiles WHERE email = 'daniel.j.fleuren@gmail.com'
+)
+DELETE FROM user_roles 
+WHERE user_id = (SELECT user_id FROM user_info);
+
+-- Then insert new role
+WITH user_info AS (
+    SELECT user_id FROM profiles WHERE email = 'daniel.j.fleuren@gmail.com'
+)
+INSERT INTO user_roles (user_id, role)
+SELECT user_id, 'guest'::app_role FROM user_info;
+            </div>
+
+            <p><strong>6. Backup current roles before changes:</strong></p>
+            <div class="sql-code">
+-- Create a backup of current roles
+CREATE TABLE user_roles_backup AS
+SELECT * FROM user_roles;
+
+-- View the backup
+SELECT * FROM user_roles_backup;
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Supabase credentials from your .env file
+        const SUPABASE_URL = 'https://iwmfxcrzzwpmxomydmuq.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3bWZ4Y3J6endwbXhvbXlkbXVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE4NjQ5NjEsImV4cCI6MjA2NzQ0MDk2MX0.0Nh_rE_1vKYxT68nwQ11esIkOz6OcDY3YdZCb-bucYc';
+        
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        async function loadUsers() {
+            try {
+                showStatus('Loading users...', 'info');
+                
+                const { data, error } = await supabaseClient
+                    .from('profiles')
+                    .select(`
+                        *,
+                        user_roles(role, created_at)
+                    `)
+                    .order('email');
+
+                if (error) throw error;
+
+                displayUsers(data || []);
+                showStatus('Users loaded successfully!', 'success');
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showStatus(`Error loading users: ${error.message}`, 'error');
+            }
+        }
+
+        function displayUsers(users) {
+            const container = document.getElementById('users-container');
+            container.innerHTML = '';
+
+            users.forEach(user => {
+                const role = user.user_roles?.[0]?.role || 'guest';
+                const userCard = document.createElement('div');
+                userCard.className = 'user-card';
+                
+                userCard.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-email">${user.email}</div>
+                        <div class="user-name">${getDisplayName(user)}</div>
+                        <span class="user-role role-${role}">${role}</span>
+                    </div>
+                    <div class="controls">
+                        <select id="role-${user.user_id}">
+                            <option value="guest" ${role === 'guest' ? 'selected' : ''}>Guest</option>
+                            <option value="couple" ${role === 'couple' ? 'selected' : ''}>Couple</option>
+                            <option value="admin" ${role === 'admin' ? 'selected' : ''}>Admin</option>
+                        </select>
+                        <button onclick="updateUserRole('${user.user_id}', '${user.email}')">
+                            Update Role
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(userCard);
+            });
+        }
+
+        function getDisplayName(user) {
+            return user.display_name || 
+                   `${user.first_name || ''} ${user.last_name || ''}`.trim() || 
+                   user.email.split('@')[0];
+        }
+
+        async function updateUserRole(userId, email) {
+            try {
+                const newRole = document.getElementById(`role-${userId}`).value;
+                showStatus(`Updating role for ${email}...`, 'info');
+
+                // Try upsert first
+                const { error } = await supabaseClient
+                    .from('user_roles')
+                    .upsert({
+                        user_id: userId,
+                        role: newRole
+                    }, {
+                        onConflict: 'user_id'
+                    });
+
+                if (error) {
+                    // If upsert fails, try delete and insert approach
+                    console.log('Upsert failed, trying delete and insert approach...');
+                    
+                    const { error: deleteError } = await supabaseClient
+                        .from('user_roles')
+                        .delete()
+                        .eq('user_id', userId);
+
+                    if (deleteError) throw deleteError;
+
+                    const { error: insertError } = await supabaseClient
+                        .from('user_roles')
+                        .insert({
+                            user_id: userId,
+                            role: newRole
+                        });
+
+                    if (insertError) throw insertError;
+                }
+
+                showStatus(`Role updated successfully for ${email}!`, 'success');
+                loadUsers(); // Refresh the list
+            } catch (error) {
+                console.error('Error updating role:', error);
+                showStatus(`Error updating role: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -27,12 +27,6 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
   
   useKeyboardShortcuts({ isOpen, onClose });
 
-  // Debug logging
-  React.useEffect(() => {
-    console.log('DashboardPopup state:', { isOpen, userRole: authUserRole?.role, loading });
-    console.log('DashboardPopup effectiveRole:', effectiveRole);
-    console.log('DashboardPopup will render:', effectiveRole === 'admin' || effectiveRole === 'couple' ? 'AdminDashboard' : 'GuestDashboard');
-  }, [isOpen, authUserRole, loading, effectiveRole]);
 
   useEffect(() => {
     if (isOpen) {
@@ -45,10 +39,7 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
       
       // Only fetch admin data if user is admin
       if (isAdmin) {
-        console.log('Fetching dashboard data for admin user');
         fetchDashboardData();
-      } else {
-        console.log('Skipping dashboard data fetch for guest user');
       }
       
       // Prevent body scroll when dashboard opens
@@ -65,21 +56,14 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
   }, [isOpen, fetchDashboardData, authUserRole, navigate, onClose, isAdmin]);
 
   if (!isOpen) {
-    console.log('DashboardPopup not rendering - isOpen is false');
     return null;
   }
-  
-  console.log('DashboardPopup IS rendering - isOpen is true');
   
   // Only show dashboard if user is authenticated
   if (!authUserRole) {
     return null; // This shouldn't render as the redirect happens in useEffect
   }
 
-  // effectiveRole already defined above
-
-  // Force render even if there are issues
-  console.log('[DASHBOARD] Rendering popup with role:', effectiveRole);
   
   return (
     <>
@@ -125,7 +109,7 @@ const DashboardPopup: React.FC<DashboardPopupProps> = ({ isOpen, onClose }) => {
 
           {/* Content container with proper scrolling */}
           <div className="flex-1 overflow-y-auto overscroll-contain" style={{ maxHeight: 'calc(90vh - 60px)' }}>
-            {loading ? (
+            {loading && isAdmin ? (
               <div className="flex items-center justify-center h-40 p-4">
                 <div className="animate-spin rounded-full h-8 w-8 border-2 border-wedding-navy border-t-transparent" />
               </div>

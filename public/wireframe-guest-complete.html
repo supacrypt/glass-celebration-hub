@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Guest Experience - Complete Wireframe | Tim & Kirsten's Wedding</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    
+    /* Universal Header */
+    .universal-header {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .profile-button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .profile-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .notification-bell {
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .notification-bell:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .notification-dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 8px;
+      height: 8px;
+      background: #ef4444;
+      border-radius: 50%;
+    }
+    
+    .header-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+    
+    .avatar {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 0;
+      z-index: 100;
+    }
+    
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      background: none;
+      border: none;
+    }
+    
+    .nav-item:hover, .nav-item.active {
+      color: #FFD700;
+    }
+    
+    .nav-icon {
+      font-size: 24px;
+    }
+    
+    .nav-label {
+      font-size: 11px;
+      font-weight: 500;
+    }
+    
+    /* Page Content */
+    .page-content {
+      padding: 80px 20px 100px;
+      min-height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .page {
+      display: none;
+    }
+    
+    .page.active {
+      display: block;
+    }
+    
+    /* Glass Cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 20px;
+      transition: all 0.3s;
+    }
+    
+    .glass-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Hero Section */
+    .hero-section {
+      min-height: 500px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      border-radius: 30px;
+      padding: 60px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+    
+    /* Countdown Timer */
+    .countdown-timer {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    
+    .countdown-item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px 30px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .countdown-number {
+      font-size: 48px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* Dashboard Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 700;
+      color: #FFD700;
+      margin: 10px 0;
+    }
+    
+    /* Events Timeline */
+    .event-timeline {
+      position: relative;
+      padding-left: 40px;
+      margin: 40px 0;
+    }
+    
+    .event-timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .event-item {
+      position: relative;
+      margin-bottom: 40px;
+      padding-left: 30px;
+    }
+    
+    .event-dot {
+      position: absolute;
+      left: -30px;
+      top: 5px;
+      width: 20px;
+      height: 20px;
+      background: #667eea;
+      border-radius: 50%;
+      border: 4px solid #0a0a0a;
+    }
+    
+    .event-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    
+    .event-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateX(10px);
+    }
+    
+    /* Social Feed */
+    .social-feed {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .post-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+    
+    /* Gallery Grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 30px;
+    }
+    
+    .gallery-item {
+      aspect-ratio: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .gallery-item:hover {
+      transform: scale(1.05);
+    }
+    
+    /* FAQ Section */
+    .faq-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+    
+    .faq-question {
+      padding: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+    
+    .faq-question:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .faq-answer {
+      display: none;
+      padding: 0 20px 20px;
+      opacity: 0.8;
+    }
+    
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+    
+    /* Floating Online Bar */
+    .floating-online-bar {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 20px 10px;
+      z-index: 50;
+      transition: all 0.3s;
+    }
+    
+    .online-user {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      cursor: pointer;
+    }
+    
+    .online-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      position: relative;
+      background-size: cover;
+    }
+    
+    .online-dot {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      background: #22c55e;
+      border-radius: 50%;
+      border: 2px solid #0a0a0a;
+    }
+    
+    /* Chat Panel */
+    .chat-panel {
+      position: fixed;
+      right: -400px; /* Hidden by default */
+      top: 0;
+      width: 380px;
+      height: 100%;
+      background: rgba(10, 10, 10, 0.98);
+      backdrop-filter: blur(30px);
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 110;
+      transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .chat-panel.open {
+      right: 0;
+    }
+    
+    .chat-header {
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .chat-conversations {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 10px;
+    }
+    
+    .chat-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+      gap: 15px;
+    }
+    
+    .chat-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .chat-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 600;
+      position: relative;
+    }
+    
+    .chat-info {
+      flex-grow: 1;
+    }
+    
+    .chat-preview {
+      font-size: 14px;
+      opacity: 0.7;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+    
+    .chat-time {
+      font-size: 12px;
+      opacity: 0.5;
+    }
+    
+    
+  </style>
+</head>
+<body>
+  <!-- Universal Header -->
+  <div class="universal-header">
+    <div class="header-left">
+      <div class="profile-button">
+        <div class="avatar">TK</div>
+        <span>Tim & Kirsten</span>
+      </div>
+      <div class="notification-bell">
+        🔔
+        <div class="notification-dot"></div>
+      </div>
+    </div>
+    <div class="header-center">
+      <h2>Tim & Kirsten's Wedding</h2>
+    </div>
+    <div class="header-right">
+      <!-- Empty for now -->
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <div class="nav-grid">
+      <button class="nav-item active" data-page="home">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">Home</div>
+      </button>
+      <button class="nav-item" data-page="events">
+        <div class="nav-icon">📅</div>
+        <div class="nav-label">Events</div>
+      </button>
+      <button class="nav-item" data-page="social">
+        <div class="nav-icon">💬</div>
+        <div class="nav-label">Social</div>
+      </button>
+      <button class="nav-item" data-page="gallery">
+        <div class="nav-icon">🖼️</div>
+        <div class="nav-label">Gallery</div>
+      </button>
+      <button class="nav-item" data-page="faq">
+        <div class="nav-icon">❓</div>
+        <div class="nav-label">FAQ</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="page-content">
+    <!-- Home Page -->
+    <div id="home" class="page active">
+      <div class="hero-section">
+        <h1>Welcome to Our Celebration</h1>
+        <p>We're so excited to share our special day with you.</p>
+        <div class="countdown-timer">
+          <div class="countdown-item">
+            <div class="countdown-number">120</div>
+            <div>Days</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-number">08</div>
+            <div>Hours</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-number">45</div>
+            <div>Minutes</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-number">30</div>
+            <div>Seconds</div>
+          </div>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Guests Attending</h3>
+          <div class="stat-number">152</div>
+        </div>
+        <div class="stat-card">
+          <h3>Photos Shared</h3>
+          <div class="stat-number">87</div>
+        </div>
+        <div class="stat-card">
+          <h3>Events Planned</h3>
+          <div class="stat-number">5</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Events Page -->
+    <div id="events" class="page">
+      <h2>Schedule of Events</h2>
+      <div class="event-timeline">
+        <div class="event-item">
+          <div class="event-dot"></div>
+          <div class="event-card">
+            <h3>Welcome Drinks</h3>
+            <p>Friday, 24th October 2025, 7:00 PM</p>
+            <p>The Lucky Hotel, Newcastle</p>
+          </div>
+        </div>
+        <div class="event-item">
+          <div class="event-dot"></div>
+          <div class="event-card">
+            <h3>Ceremony</h3>
+            <p>Saturday, 25th October 2025, 2:00 PM</p>
+            <p>Merewether Surfhouse, Newcastle</p>
+          </div>
+        </div>
+        <div class="event-item">
+          <div class="event-dot"></div>
+          <div class="event-card">
+            <h3>Reception</h3>
+            <p>Saturday, 25th October 2025, 5:00 PM</p>
+            <p>Merewether Surfhouse, Newcastle</p>
+          </div>
+        </div>
+        <div class="event-item">
+          <div class="event-dot"></div>
+          <div class="event-card">
+            <h3>Recovery Brunch</h3>
+            <p>Sunday, 26th October 2025, 11:00 AM</p>
+            <p>King Edward Park, Newcastle</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Page -->
+    <div id="social" class="page">
+      <h2>Social Wall</h2>
+      <div class="social-feed">
+        <div class="post-card">
+          <div class="post-header">
+            <div class="avatar">JD</div>
+            <div>
+              <strong>Jane Doe</strong>
+              <small>@janedoe · 2h</small>
+            </div>
+          </div>
+          <p>So excited for Tim and Kirsten! Can't wait to celebrate with you both! 🥂 #TimAndKirsten2025</p>
+        </div>
+        <div class="post-card">
+          <div class="post-header">
+            <div class="avatar">SM</div>
+            <div>
+              <strong>Sarah Miller</strong>
+              <small>@sarahm · 5h</small>
+            </div>
+          </div>
+          <p>Just booked my flights to Newcastle! Let the countdown begin! ✈️</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gallery Page -->
+    <div id="gallery" class="page">
+      <h2>Our Gallery</h2>
+      <div class="gallery-grid">
+        <div class="gallery-item">📷</div>
+        <div class="gallery-item">📷</div>
+        <div class="gallery-item">📷</div>
+        <div class="gallery-item">📷</div>
+        <div class="gallery-item">📷</div>
+        <div class="gallery-item">📷</div>
+        <div class="gallery-item">📷</div>
+        <div class="gallery-item">📷</div>
+      </div>
+    </div>
+
+    <!-- FAQ Page -->
+    <div id="faq" class="page">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>What is the dress code?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <p>The dress code is cocktail attire. We'd love for you to get dressed up with us!</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Can I bring a plus one?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Our wedding is strictly RSVP only. We will only be able to accommodate those listed on your invitation.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Are children welcome?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <p>While we love your little ones, our wedding is an adults-only event. We appreciate you making arrangements ahead of time so you can celebrate with us.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Online Bar -->
+  <div class="floating-online-bar">
+    <div class="online-user">
+      <div class="online-avatar" style="background-image: url('https://i.pravatar.cc/48?u=1')">
+        <div class="online-dot"></div>
+      </div>
+    </div>
+    <div class="online-user">
+      <div class="online-avatar" style="background-image: url('https://i.pravatar.cc/48?u=2')">
+        <div class="online-dot"></div>
+      </div>
+    </div>
+    <div class="online-user">
+      <div class="online-avatar" style="background-image: url('https://i.pravatar.cc/48?u=3')"></div>
+    </div>
+    <div class="online-user">
+      <div class="online-avatar" style="background-image: url('https://i.pravatar.cc/48?u=4')">
+        <div class="online-dot"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Chat Panel -->
+  <div class="chat-panel">
+    <div class="chat-header">
+      <h3>Conversations</h3>
+      <button style="background: none; border: none; color: #fff; font-size: 24px; cursor: pointer;">×</button>
+    </div>
+    
+    <div class="chat-conversations">
+      <!-- Tim & Kirsten Group Chat -->
+      <div class="chat-item active">
+        <div class="chat-avatar">
+          TK
+          <div class="online-dot"></div>
+        </div>
+        <div class="chat-info">
+          <div class="chat-name">Tim & Kirsten</div>
+          <div class="chat-preview">Welcome everyone! So excited to celebrate...</div>
+        </div>
+        <div class="chat-time">2m</div>
+      </div>
+      
+      <!-- Wedding Party Chat -->
+      <div class="chat-item">
+        <div class="chat-avatar">WP</div>
+        <div class="chat-info">
+          <div class="chat-name">Wedding Party</div>
+          <div class="chat-preview">Sarah: Don't forget about the rehearsal!</div>
+        </div>
+        <div class="chat-time">1h</div>
+      </div>
+      
+      <!-- Table 5 Chat -->
+      <div class="chat-item">
+        <div class="chat-avatar">T5</div>
+        <div class="chat-info">
+          <div class="chat-name">Table 5 Friends</div>
+          <div class="chat-preview">John: Who else is driving from Sydney?</div>
+        </div>
+        <div class="chat-time">3h</div>
+      </div>
+      
+      <!-- Accommodation Group -->
+      <div class="chat-item">
+        <div class="chat-avatar">
+          🏨
+          <div class="online-dot"></div>
+        </div>
+        <div class="chat-info">
+          <div class="chat-name">Newcastle Hotel Group</div>
+          <div class="chat-preview">Mike: I have 2 extra rooms if anyone needs</div>
+        </div>
+        <div class="chat-time">5h</div>
+      </div>
+      
+      <!-- Direct Message -->
+      <div class="chat-item">
+        <div class="chat-avatar">JD</div>
+        <div class="chat-info">
+          <div class="chat-name">Jane Doe</div>
+          <div class="chat-preview">Hey! Are you going to the pre-wedding drinks?</div>
+        </div>
+        <div class="chat-time">1d</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

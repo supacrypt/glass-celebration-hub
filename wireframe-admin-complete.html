@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Experience - Complete Wireframe | Glass Celebration Hub</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    
+    /* Universal Header for Admin */
+    .admin-header {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .profile-button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .profile-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .notification-bell {
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .notification-bell:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .notification-dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 8px;
+      height: 8px;
+      background: #ef4444;
+      border-radius: 50%;
+    }
+    
+    .avatar {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    /* Main Admin Layout */
+    .admin-layout {
+      display: flex;
+      padding-top: 70px; /* Height of header */
+    }
+    
+    .sidebar {
+      width: 250px;
+      background: rgba(255, 255, 255, 0.02);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      height: calc(100vh - 70px);
+      position: fixed;
+      padding: 20px;
+    }
+    
+    .main-content {
+      margin-left: 250px;
+      padding: 30px;
+      width: calc(100% - 250px);
+    }
+    
+    /* Sidebar Navigation */
+    .main-nav-item {
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .main-nav-item:hover, .main-nav-item.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFD700;
+    }
+    
+    /* Glass Cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 20px;
+    }
+    
+    /* Sub-navigation Tabs */
+    .sub-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 15px;
+    }
+    
+    .sub-tab {
+      padding: 10px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .sub-tab:hover, .sub-tab.active {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      opacity: 0.8;
+    }
+    
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+    }
+    
+    .button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .button-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+    }
+    
+    .button-primary:hover {
+      opacity: 0.9;
+    }
+    
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    .data-table th, .data-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .data-table th {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Page-specific styles */
+    .page {
+      display: none;
+    }
+    
+    .page.active {
+      display: block;
+    }
+    
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 700;
+      color: #FFD700;
+      margin: 10px 0;
+    }
+    
+    .admin-view-button {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      text-decoration: none;
+      color: #fff;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    
+    .admin-view-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="admin-header">
+    <div class="header-left">
+      <h2>Admin Panel</h2>
+    </div>
+    <div class="header-right">
+      <div class="notification-bell">
+        🔔
+        <div class="notification-dot"></div>
+      </div>
+      <div class="profile-button">
+        <div class="avatar">A</div>
+        <span>Admin User</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-layout">
+    <div class="sidebar">
+      <div class="main-nav">
+        <div class="main-nav-item active" data-tab="content">
+          <span>📝</span>
+          <span>Content</span>
+        </div>
+        <div class="main-nav-item" data-tab="users">
+          <span>👥</span>
+          <span>Users & RSVPs</span>
+        </div>
+        <div class="main-nav-item" data-tab="system">
+          <span>⚙️</span>
+          <span>System</span>
+        </div>
+        <div class="main-nav-item" onclick="showNextPage()">
+          <span>➡️</span>
+          <span>Next Page (Dev)</span>
+        </div>
+      </div>
+    </div>
+
+    <main class="main-content">
+      <!-- Content Tab -->
+      <div id="contentTab" class="page active">
+        <div class="sub-nav">
+          <div class="sub-tab active" data-page="home">Home</div>
+          <div class="sub-tab" data-page="events">Events</div>
+          <div class="sub-tab" data-page="faq">FAQ</div>
+          <div class="sub-tab" data-page="socialAdmin">Social</div>
+          <div class="sub-tab" data-page="galleryAdmin">Gallery</div>
+        </div>
+        
+        <div id="homePage" class="page active">
+          <div class="glass-card">
+            <h3>Homepage Content</h3>
+            <div class="form-group">
+              <label for="heroTitle">Hero Title</label>
+              <input type="text" id="heroTitle" value="Welcome to Our Celebration">
+            </div>
+            <div class="form-group">
+              <label for="heroSubtitle">Hero Subtitle</label>
+              <input type="text" id="heroSubtitle" value="We're so excited to share our special day with you.">
+            </div>
+            <button class="button button-primary">Save Changes</button>
+          </div>
+        </div>
+        
+        <div id="eventsPage" class="page">
+          <div class="glass-card">
+            <h3>Manage Events</h3>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Event Name</th>
+                  <th>Date & Time</th>
+                  <th>Location</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Welcome Drinks</td>
+                  <td>Friday, 24th Oct 2025, 7:00 PM</td>
+                  <td>The Lucky Hotel, Newcastle</td>
+                  <td><button class="button">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>Ceremony</td>
+                  <td>Saturday, 25th Oct 2025, 2:00 PM</td>
+                  <td>Merewether Surfhouse</td>
+                  <td><button class="button">Edit</button></td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="button button-primary" style="margin-top: 20px;">Add New Event</button>
+          </div>
+        </div>
+        
+        <div id="faqPage" class="page">
+          <div class="glass-card">
+            <h3>Manage FAQ</h3>
+            <div class="form-group">
+              <label for="faqQuestion">Question</label>
+              <input type="text" id="faqQuestion" value="What is the dress code?">
+            </div>
+            <div class="form-group">
+              <label for="faqAnswer">Answer</label>
+              <textarea id="faqAnswer" rows="3">The dress code is cocktail attire.</textarea>
+            </div>
+            <button class="button button-primary">Add/Update FAQ</button>
+          </div>
+        </div>
+        
+        <div id="socialAdminPage" class="page">
+          <div class="glass-card">
+            <h3>Social Wall Moderation</h3>
+            <p>Feature to moderate social posts will be here.</p>
+          </div>
+        </div>
+        
+        <div id="galleryAdminPage" class="page">
+          <div class="glass-card">
+            <h3>Gallery Management</h3>
+            <p>Feature to upload and manage gallery photos will be here.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users & RSVPs Tab -->
+      <div id="usersTab" class="page">
+        <div class="sub-nav">
+          <div class="sub-tab active" data-page="accounts">User Accounts</div>
+          <div class="sub-tab" data-page="rsvp">RSVP List</div>
+          <div class="sub-tab" data-page="seating">Seating Chart</div>
+        </div>
+        
+        <div id="accountsPage" class="page active">
+          <div class="glass-card">
+            <h3>User Accounts</h3>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>RSVP Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Jane Doe</td>
+                  <td>jane.doe@example.com</td>
+                  <td>Attending</td>
+                  <td><button class="button">View</button></td>
+                </tr>
+                <tr>
+                  <td>John Smith</td>
+                  <td>john.smith@example.com</td>
+                  <td>Pending</td>
+                  <td><button class="button">View</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div id="rsvpPage" class="page">
+          <div class="glass-card">
+            <h3>RSVP List</h3>
+            <p>Detailed RSVP list will be displayed here.</p>
+          </div>
+        </div>
+        
+        <div id="seatingPage" class="page">
+          <div class="glass-card">
+            <h3>Seating Chart</h3>
+            <p>Interactive seating chart builder will be here.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Tab -->
+      <div id="systemTab" class="page">
+        <div class="sub-nav">
+          <div class="sub-tab active" data-page="settings">App Settings</div>
+          <div class="sub-tab" data-page="design">Design</div>
+          <div class="sub-tab" data-page="analytics">Analytics</div>
+        </div>
+        
+        <div id="settingsPage" class="page active">
+          <div class="glass-card">
+            <h3>Application Settings</h3>
+            <div class="form-group">
+              <label for="weddingTitle">Wedding Title</label>
+              <input type="text" id="weddingTitle" value="Tim & Kirsten's Wedding">
+            </div>
+            <button class="button button-primary">Save Settings</button>
+          </div>
+        </div>
+        
+        <div id="designPage" class="page">
+          <div class="glass-card">
+            <h3>Design & Theming</h3>
+            <p>Theme customization options will be here.</p>
+          </div>
+        </div>
+        
+        <div id="analyticsPage" class="page">
+          <div class="glass-card">
+            <h3>Analytics Dashboard</h3>
+            <p>Analytics and reporting will be displayed here.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Admin View Pages (for dev) -->
+      <div id="adminViewTab" class="page">
+        <div class="sub-nav">
+          <div class="sub-tab" data-page="dashboardAdmin">Dashboard View</div>
+          <div class="sub-tab" data-page="eventsAdmin">Events View</div>
+          <div class="sub-tab" data-page="socialAdmin">Social View</div>
+          <div class="sub-tab" data-page="galleryAdmin">Gallery View</div>
+        </div>
+        
+        <div id="dashboardAdminPage" class="page">
+          <div class="glass-card" style="position: relative;">
+            <a href="#" class="admin-view-button">Back to Admin</a>
+            <h3>Dashboard Admin View</h3>
+            <div class="dashboard-grid">
+              <div class="stat-card">
+                <h3>Guests Attending</h3>
+                <div class="stat-number">152</div>
+              </div>
+              <div class="stat-card">
+                <h3>Photos Shared</h3>
+                <div class="stat-number">87</div>
+              </div>
+              <div class="stat-card">
+                <h3>Events Planned</h3>
+                <div class="stat-number">5</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Main Tab Navigation
+    document.querySelectorAll('.main-nav-item[data-tab]').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabName = tab.getAttribute('data-tab');
+        showMainTab(tabName);
+      });
+    });
+    
+    function showMainTab(tabName) {
+      document.querySelectorAll('.main-nav-item').forEach(item => item.classList.remove('active'));
+      document.querySelector(`.main-nav-item[data-tab="${tabName}"]`).classList.add('active');
+      
+      document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+      document.getElementById(tabName + 'Tab').style.display = 'block';
+      
+      // Show the first sub-page of the tab
+      const firstSubPage = document.querySelector(`#${tabName}Tab .sub-tab`);
+      if (firstSubPage) {
+        const pageId = firstSubPage.getAttribute('data-page');
+        if (tabName === 'content') showContentPage(pageId);
+        else if (tabName === 'users') showUsersPage(pageId);
+        else if (tabName === 'system') showSystemPage(pageId);
+      }
+    }
+    
+    // Content Tab Sub-navigation
+    document.querySelectorAll('#contentTab .sub-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const pageName = tab.getAttribute('data-page');
+        showContentPage(pageName);
+      });
+    });
+    
+    function showContentPage(pageName) {
+      document.querySelectorAll('#contentTab .page').forEach(page => page.style.display = 'none');
+      document.getElementById(pageName + 'Page').style.display = 'block';
+      document.querySelectorAll('#contentTab .sub-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`#contentTab .sub-tab[data-page="${pageName}"]`).classList.add('active');
+    }
+
+    // Users Tab Sub-navigation
+    document.querySelectorAll('#usersTab .sub-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const pageName = tab.getAttribute('data-page');
+        showUsersPage(pageName);
+      });
+    });
+    
+    function showUsersPage(pageName) {
+      document.querySelectorAll('#usersTab .page').forEach(page => page.style.display = 'none');
+      document.getElementById(pageName + 'Page').style.display = 'block';
+      document.querySelectorAll('#usersTab .sub-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`#usersTab .sub-tab[data-page="${pageName}"]`).classList.add('active');
+    }
+
+    // System Tab Sub-navigation
+    document.querySelectorAll('#systemTab .sub-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const pageName = tab.getAttribute('data-page');
+        showSystemPage(pageName);
+      });
+    });
+    
+    function showSystemPage(pageName) {
+      document.querySelectorAll('#systemTab .page').forEach(page => page.style.display = 'none');
+      document.getElementById(pageName + 'Page').style.display = 'block';
+      document.querySelectorAll('#systemTab .sub-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`#systemTab .sub-tab[data-page="${pageName}"]`).classList.add('active');
+    }
+    
+    // Special handling for admin view buttons
+    document.querySelectorAll('.admin-view-button').forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const pageName = button.getAttribute('href').substring(1);
+        showAdminViewPage(pageName);
+      });
+    });
+    
+    // Show admin view pages
+    function showAdminViewPage(pageName) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+      
+      // Show the selected admin view page
+      document.getElementById(pageName + 'Page').style.display = 'block';
+      
+      // Update sub-nav active state
+      document.querySelectorAll('#contentTab .sub-tab').forEach(tab => tab.classList.remove('active'));
+      
+      // Set the correct sub-tab as active based on page
+      if (pageName === 'galleryAdmin') {
+        document.querySelectorAll('#contentTab .sub-tab')[4].classList.add('active');
+      } else if (pageName === 'socialAdmin') {
+        document.querySelectorAll('#contentTab .sub-tab')[3].classList.add('active');
+      } else if (pageName === 'dashboardAdmin') {
+        document.querySelectorAll('#contentTab .sub-tab')[2].classList.add('active');
+      }
+    }
+    
+    // Navigation helper
+    let currentSection = 0;
+    const sections = [
+      {tab: 'content', page: 'home'},
+      {tab: 'content', page: 'events'},
+      {tab: 'content', page: 'faq'},
+      {tab: 'users', page: 'accounts'},
+      {tab: 'users', page: 'rsvp'},
+      {tab: 'users', page: 'seating'},
+      {tab: 'system', page: 'settings'},
+      {tab: 'adminView', page: 'galleryAdmin'},
+      {tab: 'adminView', page: 'socialAdmin'},
+      {tab: 'adminView', page: 'eventsAdmin'},
+      {tab: 'adminView', page: 'dashboardAdmin'}
+    ];
+    
+    function showNextPage() {
+      currentSection = (currentSection + 1) % sections.length;
+      const section = sections[currentSection];
+      showMainTab(section.tab);
+      
+      setTimeout(() => {
+        if (section.tab === 'content') showContentPage(section.page);
+        else if (section.tab === 'users') showUsersPage(section.page);
+        else if (section.tab === 'system') showSystemPage(section.page);
+        else if (section.tab === 'adminView') showAdminViewPage(section.page);
+      }, 100);
+    }
+  </script>
+</body>
+</html>

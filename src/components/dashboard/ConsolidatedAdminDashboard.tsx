@@ -16,7 +16,7 @@ import {
 // Import existing components
 import AppSettingsManager from '@/components/admin/AppSettingsManager';
 import CompactStats from '@/components/admin/CompactStats';
-import EventTimeline from '@/components/admin/EventTimeline';
+// import EventTimeline from '@/components/admin/EventTimeline'; // Replaced by GuestContentManager
 import UnifiedAccountsManagement from '@/components/admin/UnifiedAccountsManagement';
 import WeddingGuestManagement from '@/components/admin/WeddingGuestManagement';
 import EnhancedRSVPManagement from '@/components/admin/EnhancedRSVPManagement';
@@ -39,6 +39,7 @@ import { PerformanceMonitor } from '@/components/monitoring/PerformanceMonitor';
 import { LiveMonitoring } from '@/components/monitoring/LiveMonitoring';
 import AdminFunctionalityTester from '@/components/admin/AdminFunctionalityTester';
 import FAQManagement from '@/components/admin/FAQManagement/FAQManagement';
+import GuestContentManager from '@/components/admin/GuestContentManager';
 import type { AdminStats, User, RSVP, Photo } from './types';
 
 interface ConsolidatedAdminDashboardProps {
@@ -58,7 +59,7 @@ const ConsolidatedAdminDashboard: React.FC<ConsolidatedAdminDashboardProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState('content');
   const [activeSubTab, setActiveSubTab] = useState<Record<string, string>>({
-    content: 'app-settings',
+    content: 'guest-content',
     users: 'accounts',
     design: 'themes',
     communication: 'messaging',
@@ -70,8 +71,8 @@ const ConsolidatedAdminDashboard: React.FC<ConsolidatedAdminDashboardProps> = ({
 
   // Content Management Group
   const contentTabs = [
+    { id: 'guest-content', label: 'Guest Experience', component: <GuestContentManager /> },
     { id: 'app-settings', label: 'App Settings', component: <AppSettingsManager /> },
-    { id: 'timeline', label: 'Events', component: <EventTimeline /> },
     { id: 'faq', label: 'FAQ Management', component: <FAQManagement /> },
     { id: 'stats', label: 'Overview', component: <CompactStats stats={stats} /> }
   ];

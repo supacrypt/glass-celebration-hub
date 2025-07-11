@@ -1,0 +1,10 @@
+[
+  {
+    "user_id": "3c3a1bb8-c0f6-4865-b45d-04c79b1ea474",
+    "email": "daniel.j.fleuren@gmail.com",
+    "old_role": "admin",
+    "new_role": "guest",
+    "timestamp": "2025-07-11T13:28:44.071Z",
+    "operation": "role_change"
+  }
+]

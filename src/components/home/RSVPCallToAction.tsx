@@ -48,29 +48,17 @@ const RSVPCallToAction: React.FC<RSVPCallToActionProps> = ({ onRSVPClick }) => {
           </button>
         </div>
       ) : (
-        // Show update option for guests who have RSVP'd
+        // Show confirmation for guests who have RSVP'd
         <div className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
+          <div className="flex items-center justify-center gap-2 mb-2">
             <Check className="w-5 h-5 text-green-500" />
             <span className="text-sm sm:text-base text-muted-foreground">
               Thank you for your RSVP!
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-muted-foreground/80 mb-4">
+          <p className="text-xs sm:text-sm text-muted-foreground/80">
             We look forward to celebrating with you
           </p>
-          <button
-            onClick={handleRSVPClick}
-            className="group relative px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
-          >
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4" />
-              <span>Update RSVP</span>
-            </div>
-            
-            {/* Glassmorphic overlay */}
-            <div className="absolute inset-0 bg-white/10 rounded-lg backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </button>
         </div>
       )}
     </div>

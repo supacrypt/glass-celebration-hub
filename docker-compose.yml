@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  supabase-mcp:
+    build:
+      context: ./run_supabase_mcp
+    image: supabase-mcp-server
+    environment:
+      - SUPABASE_ACCESS_TOKEN=${SUPABASE_ACCESS_TOKEN}
+    # This allows the container to be stopped by the client
+    init: true

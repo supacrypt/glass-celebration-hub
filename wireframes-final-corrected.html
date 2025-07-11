@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Final System Wireframes - Glass Celebration Hub</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .wireframe-section {
+      margin-bottom: 60px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    
+    .section-title {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 30px;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    /* Corrected Universal Header */
+    .universal-header {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .profile-button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .profile-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .notification-bell {
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .notification-bell:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .notification-dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 8px;
+      height: 8px;
+      background: #ef4444;
+      border-radius: 50%;
+    }
+    
+    .header-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+    
+    .avatar {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    /* Current Bottom Navigation Style */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 0;
+      z-index: 100;
+    }
+    
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+    }
+    
+    .nav-item:hover, .nav-item.active {
+      color: #FFD700;
+    }
+    
+    .nav-icon {
+      font-size: 24px;
+    }
+    
+    .nav-label {
+      font-size: 11px;
+      font-weight: 500;
+    }
+    
+    /* Page Content */
+    .page-content {
+      padding: 20px;
+      min-height: calc(100vh - 140px);
+      margin-bottom: 80px;
+    }
+    
+    /* Glass Cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 20px;
+      transition: all 0.3s;
+    }
+    
+    .glass-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Events Page Specific */
+    .event-timeline {
+      position: relative;
+      padding-left: 40px;
+      margin: 40px 0;
+    }
+    
+    .event-timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .event-item {
+      position: relative;
+      margin-bottom: 40px;
+      padding-left: 30px;
+    }
+    
+    .event-dot {
+      position: absolute;
+      left: -30px;
+      top: 5px;
+      width: 20px;
+      height: 20px;
+      background: #667eea;
+      border-radius: 50%;
+      border: 4px solid #0a0a0a;
+    }
+    
+    .event-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    
+    .event-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateX(10px);
+    }
+    
+    .event-time {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+      min-height: 500px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      border-radius: 30px;
+      padding: 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .countdown-timer {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      margin: 40px 0;
+    }
+    
+    .countdown-item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px 30px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .countdown-number {
+      font-size: 48px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* Floating Online Bar */
+    .floating-online-bar {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 20px 10px;
+      z-index: 50;
+    }
+    
+    .online-user {
+      width: 48px;
+      height: 48px;
+      margin: 10px 0;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .online-user:hover {
+      transform: scale(1.1);
+    }
+    
+    .online-avatar {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      position: relative;
+    }
+    
+    .online-indicator {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 12px;
+      height: 12px;
+      background: #10b981;
+      border: 2px solid #0a0a0a;
+      border-radius: 50%;
+    }
+    
+    .note-box {
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    @media (max-width: 768px) {
+      .floating-online-bar {
+        display: none;
+      }
+      
+      .header-center {
+        display: none;
+      }
+      
+      .hero-section {
+        padding: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="text-align: center; margin-bottom: 40px; font-size: 36px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+      Glass Celebration Hub - Final System Wireframes
+    </h1>
+
+    <!-- Corrected Universal Header -->
+    <div class="wireframe-section">
+      <div class="section-title">🎯 Universal Header (All Pages) - CORRECTED</div>
+      <div class="universal-header">
+        <div class="header-left">
+          <div class="profile-button">
+            <div class="avatar">TK</div>
+            <span>Profile</span>
+            <span style="margin-left: 5px;">▼</span>
+          </div>
+          <div class="notification-bell">
+            🔔
+            <div class="notification-dot"></div>
+          </div>
+        </div>
+        <div class="header-center">
+          <h2 style="font-size: 20px; font-weight: 600;">Tim & Kirsten's Wedding</h2>
+          <span style="color: #FFD700; font-size: 14px;">October 5th, 2025</span>
+        </div>
+        <div style="width: 120px;"></div> <!-- Spacer for balance -->
+      </div>
+      <div class="note-box">
+        <p>✅ <strong>Profile Button</strong> - Top left corner (as requested)</p>
+        <p>✅ <strong>Notification Bell</strong> - Next to profile</p>
+        <p>✅ <strong>Wedding Info</strong> - Centered in header</p>
+        <p>✅ Consistent across ALL main pages</p>
+      </div>
+    </div>
+
+    <!-- Current Navigation Structure -->
+    <div class="wireframe-section">
+      <div class="section-title">📱 Bottom Navigation (Current Structure Maintained)</div>
+      <div style="padding: 20px; background: rgba(255, 255, 255, 0.02);">
+        <div class="bottom-nav" style="position: relative;">
+          <div class="nav-grid">
+            <a class="nav-item active">
+              <span class="nav-icon">🏠</span>
+              <span class="nav-label">Home</span>
+            </a>
+            <a class="nav-item">
+              <span class="nav-icon">📊</span>
+              <span class="nav-label">Dashboard</span>
+            </a>
+            <a class="nav-item">
+              <span class="nav-icon">📅</span>
+              <span class="nav-label">Events</span>
+            </a>
+            <a class="nav-item">
+              <span class="nav-icon">💬</span>
+              <span class="nav-label">Social</span>
+            </a>
+            <a class="nav-item">
+              <span class="nav-icon">🖼️</span>
+              <span class="nav-label">Gallery</span>
+            </a>
+          </div>
+        </div>
+        <div class="note-box" style="margin-top: 20px;">
+          <p>✅ <strong>Events</strong> restored to its original position</p>
+          <p>✅ Exact same navigation structure as current app</p>
+          <p>✅ No changes to bottom navigation</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Events Page Wireframe -->
+    <div class="wireframe-section">
+      <div class="section-title">📅 Events Page</div>
+      <div class="universal-header">
+        <div class="header-left">
+          <div class="profile-button">
+            <div class="avatar">TK</div>
+            <span>Profile</span>
+          </div>
+          <div class="notification-bell">
+            🔔
+            <div class="notification-dot"></div>
+          </div>
+        </div>
+        <div class="header-center">
+          <h2 style="font-size: 20px; font-weight: 600;">Wedding Events</h2>
+        </div>
+        <div style="width: 120px;"></div>
+      </div>
+      
+      <div class="page-content">
+        <!-- Events Hero -->
+        <div style="text-align: center; margin-bottom: 40px;">
+          <h1 style="font-size: 36px; margin-bottom: 10px;">Wedding Weekend Events</h1>
+          <p style="opacity: 0.8;">Join us for a weekend of celebration</p>
+        </div>
+
+        <!-- Event Timeline -->
+        <div class="event-timeline">
+          <!-- Friday -->
+          <div class="event-item">
+            <div class="event-dot"></div>
+            <div style="margin-bottom: 10px;">
+              <span style="font-size: 14px; opacity: 0.6;">FRIDAY, OCTOBER 3RD</span>
+            </div>
+            <div class="event-card">
+              <div class="event-time">6:00 PM</div>
+              <h3 style="font-size: 20px; margin: 10px 0;">Welcome Drinks</h3>
+              <p style="opacity: 0.8; margin-bottom: 10px;">Join us for casual drinks and mingling</p>
+              <p style="font-size: 14px; opacity: 0.6;">📍 The Rooftop Bar, Newcastle</p>
+              <button style="margin-top: 15px; background: rgba(102, 126, 234, 0.2); border: 1px solid #667eea; padding: 8px 20px; border-radius: 8px; color: #fff; cursor: pointer;">
+                View Details →
+              </button>
+            </div>
+          </div>
+
+          <!-- Saturday -->
+          <div class="event-item">
+            <div class="event-dot" style="background: #764ba2;"></div>
+            <div style="margin-bottom: 10px;">
+              <span style="font-size: 14px; opacity: 0.6;">SATURDAY, OCTOBER 4TH</span>
+            </div>
+            
+            <!-- Morning Event -->
+            <div class="event-card" style="margin-bottom: 20px;">
+              <div class="event-time">10:00 AM</div>
+              <h3 style="font-size: 20px; margin: 10px 0;">Bridal Party Preparation</h3>
+              <p style="opacity: 0.8; margin-bottom: 10px;">Getting ready with the wedding party</p>
+              <p style="font-size: 14px; opacity: 0.6;">📍 The Grand Hotel</p>
+              <span style="background: rgba(255, 215, 0, 0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px;">
+                Bridal Party Only
+              </span>
+            </div>
+
+            <!-- Afternoon Event -->
+            <div class="event-card">
+              <div class="event-time">4:00 PM - 8:00 PM</div>
+              <h3 style="font-size: 20px; margin: 10px 0;">Pre-Wedding Gathering</h3>
+              <p style="opacity: 0.8; margin-bottom: 10px;">Tim and Kirsten will be at the Prince of Mereweather pub</p>
+              <p style="font-size: 14px; opacity: 0.6;">📍 Prince of Mereweather</p>
+              <button style="margin-top: 15px; background: rgba(102, 126, 234, 0.2); border: 1px solid #667eea; padding: 8px 20px; border-radius: 8px; color: #fff; cursor: pointer;">
+                View Details →
+              </button>
+            </div>
+          </div>
+
+          <!-- Sunday - Wedding Day -->
+          <div class="event-item">
+            <div class="event-dot" style="background: #FFD700; width: 24px; height: 24px; left: -32px;"></div>
+            <div style="margin-bottom: 10px;">
+              <span style="font-size: 14px; opacity: 0.6;">SUNDAY, OCTOBER 5TH - THE BIG DAY!</span>
+            </div>
+            
+            <!-- Ceremony -->
+            <div class="event-card" style="border: 2px solid #FFD700; margin-bottom: 20px;">
+              <div class="event-time">3:00 PM</div>
+              <h3 style="font-size: 24px; margin: 10px 0;">Wedding Ceremony</h3>
+              <p style="opacity: 0.8; margin-bottom: 10px;">Please arrive by 2:30 PM</p>
+              <p style="font-size: 14px; opacity: 0.6;">📍 Ben Ean, Hunter Valley</p>
+              <button style="margin-top: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 10px 24px; border-radius: 8px; color: #fff; cursor: pointer;">
+                View Details →
+              </button>
+            </div>
+
+            <!-- Cocktail Hour -->
+            <div class="event-card" style="margin-bottom: 20px;">
+              <div class="event-time">3:30 PM</div>
+              <h3 style="font-size: 20px; margin: 10px 0;">Cocktail Hour</h3>
+              <p style="opacity: 0.8; margin-bottom: 10px;">Drinks, canapés, and mingling</p>
+              <p style="font-size: 14px; opacity: 0.6;">📍 Garden Terrace</p>
+            </div>
+
+            <!-- Reception -->
+            <div class="event-card" style="border: 2px solid #FFD700;">
+              <div class="event-time">5:00 PM - 11:00 PM</div>
+              <h3 style="font-size: 24px; margin: 10px 0;">Wedding Reception</h3>
+              <p style="opacity: 0.8; margin-bottom: 10px;">Dinner, dancing, and celebration!</p>
+              <p style="font-size: 14px; opacity: 0.6;">📍 Grand Ballroom</p>
+              <button style="margin-top: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 10px 24px; border-radius: 8px; color: #fff; cursor: pointer;">
+                View Details →
+              </button>
+            </div>
+          </div>
+
+          <!-- Monday -->
+          <div class="event-item">
+            <div class="event-dot"></div>
+            <div style="margin-bottom: 10px;">
+              <span style="font-size: 14px; opacity: 0.6;">MONDAY, OCTOBER 6TH</span>
+            </div>
+            <div class="event-card">
+              <div class="event-time">11:00 AM</div>
+              <h3 style="font-size: 20px; margin: 10px 0;">Recovery Beach Day</h3>
+              <p style="opacity: 0.8; margin-bottom: 10px;">Join us at Newcastle Beach for coffee and recovery</p>
+              <p style="font-size: 14px; opacity: 0.6;">📍 Newcastle Beach Kiosk</p>
+              <span style="background: rgba(16, 185, 129, 0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px;">
+                Casual - No RSVP Needed
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 40px;">
+          <button class="glass-card" style="text-align: center; cursor: pointer; border: none; color: #fff;">
+            <span style="font-size: 24px;">📍</span>
+            <p style="margin-top: 10px;">View All Locations</p>
+          </button>
+          <button class="glass-card" style="text-align: center; cursor: pointer; border: none; color: #fff;">
+            <span style="font-size: 24px;">🚗</span>
+            <p style="margin-top: 10px;">Transportation Info</p>
+          </button>
+          <button class="glass-card" style="text-align: center; cursor: pointer; border: none; color: #fff;">
+            <span style="font-size: 24px;">👔</span>
+            <p style="margin-top: 10px;">Dress Code Guide</p>
+          </button>
+        </div>
+
+        <div class="note-box" style="margin-top: 40px;">
+          <p>💡 <strong>Note:</strong> Individual event detail pages remain unchanged as requested</p>
+          <p>✅ Timeline view for easy navigation</p>
+          <p>✅ Clear visual hierarchy with wedding day highlighted</p>
+          <p>✅ Quick access to important info (locations, transport, dress code)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Home Page with Header -->
+    <div class="wireframe-section">
+      <div class="section-title">🏠 Home Page (With Corrected Header)</div>
+      <div class="universal-header">
+        <div class="header-left">
+          <div class="profile-button">
+            <div class="avatar">TK</div>
+            <span>Profile</span>
+          </div>
+          <div class="notification-bell">
+            🔔
+          </div>
+        </div>
+        <div class="header-center">
+          <h2 style="font-size: 20px; font-weight: 600;">Welcome to Our Celebration</h2>
+        </div>
+        <div style="width: 120px;"></div>
+      </div>
+      
+      <div class="page-content">
+        <div class="hero-section">
+          <h1 style="font-size: 48px; margin-bottom: 20px;">Tim & Kirsten</h1>
+          <p style="font-size: 20px; opacity: 0.8; margin-bottom: 40px;">October 5th, 2025 • Hunter Valley</p>
+          
+          <div class="countdown-timer">
+            <div class="countdown-item">
+              <div class="countdown-number">267</div>
+              <div>Days</div>
+            </div>
+            <div class="countdown-item">
+              <div class="countdown-number">12</div>
+              <div>Hours</div>
+            </div>
+            <div class="countdown-item">
+              <div class="countdown-number">38</div>
+              <div>Minutes</div>
+            </div>
+          </div>
+          
+          <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 16px 40px; border-radius: 12px; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 40px;">
+            RSVP Now ✨
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Page with Floating Bar -->
+    <div class="wireframe-section">
+      <div class="section-title">💬 Social Page (With Corrected Header)</div>
+      <div class="universal-header">
+        <div class="header-left">
+          <div class="profile-button">
+            <div class="avatar">TK</div>
+            <span>Profile</span>
+          </div>
+          <div class="notification-bell">
+            🔔
+            <div class="notification-dot"></div>
+          </div>
+        </div>
+        <div class="header-center">
+          <h2 style="font-size: 20px; font-weight: 600;">Wedding Social Feed</h2>
+        </div>
+        <div style="width: 120px;"></div>
+      </div>
+      
+      <div class="page-content" style="position: relative;">
+        <!-- Floating Online Bar -->
+        <div class="floating-online-bar">
+          <h4 style="writing-mode: vertical-rl; text-orientation: mixed; margin-bottom: 20px; font-size: 14px; opacity: 0.6;">
+            Online Now
+          </h4>
+          <div class="online-user">
+            <div class="online-avatar">JD</div>
+            <div class="online-indicator"></div>
+          </div>
+          <div class="online-user">
+            <div class="online-avatar">SM</div>
+            <div class="online-indicator"></div>
+          </div>
+          <div class="online-user">
+            <div class="online-avatar">RJ</div>
+            <div class="online-indicator"></div>
+          </div>
+          <div class="online-user">
+            <div class="online-avatar">+5</div>
+          </div>
+        </div>
+
+        <!-- Social Feed Content -->
+        <div style="max-width: 600px; margin: 0 auto;">
+          <p style="text-align: center; opacity: 0.6;">[Social feed content as shown in previous wireframe]</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Box -->
+    <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border-radius: 20px; padding: 40px; margin-top: 60px;">
+      <h2 style="font-size: 28px; margin-bottom: 30px; text-align: center;">✅ Final Structure Summary</h2>
+      
+      <div style="display: grid; gap: 20px;">
+        <div class="glass-card">
+          <h3 style="color: #667eea; margin-bottom: 10px;">📱 Navigation</h3>
+          <ul style="list-style: none; padding: 0;">
+            <li>✓ Bottom navigation unchanged</li>
+            <li>✓ Events restored to original position</li>
+            <li>✓ 5 main sections: Home, Dashboard, Events, Social, Gallery</li>
+          </ul>
+        </div>
+        
+        <div class="glass-card">
+          <h3 style="color: #764ba2; margin-bottom: 10px;">🎯 Header Elements</h3>
+          <ul style="list-style: none; padding: 0;">
+            <li>✓ Profile button - Top LEFT (as requested)</li>
+            <li>✓ Notification bell - Next to profile</li>
+            <li>✓ Consistent on ALL main pages</li>
+            <li>✓ Page title centered when space allows</li>
+          </ul>
+        </div>
+        
+        <div class="glass-card">
+          <h3 style="color: #667eea; margin-bottom: 10px;">📅 Events Page</h3>
+          <ul style="list-style: none; padding: 0;">
+            <li>✓ Timeline view of all wedding events</li>
+            <li>✓ Wedding day highlighted in gold</li>
+            <li>✓ Individual event pages unchanged</li>
+            <li>✓ Quick access to key information</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

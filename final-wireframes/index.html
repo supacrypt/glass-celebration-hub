@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Glass Celebration Hub - Final Wireframes | Tim & Kirsten's Wedding</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .header {
+      margin-bottom: 60px;
+    }
+    
+    h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+    
+    .subtitle {
+      font-size: 20px;
+      color: #FFD700;
+      margin-bottom: 10px;
+    }
+    
+    .description {
+      color: rgba(255, 255, 255, 0.6);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .wireframe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 40px;
+      margin-top: 60px;
+    }
+    
+    .wireframe-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px;
+      transition: all 0.3s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    
+    .wireframe-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      border-color: rgba(102, 126, 234, 0.3);
+    }
+    
+    .wireframe-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      display: block;
+    }
+    
+    .wireframe-title {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    
+    .wireframe-desc {
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    .feature-list {
+      text-align: left;
+      list-style: none;
+      margin: 20px 0;
+    }
+    
+    .feature-list li {
+      padding: 8px 0;
+      color: rgba(255, 255, 255, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .feature-list li::before {
+      content: '✓';
+      color: #10b981;
+      font-weight: bold;
+    }
+    
+    .cta-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    
+    .badge {
+      background: rgba(255, 215, 0, 0.2);
+      color: #FFD700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+    
+    .footer {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 14px;
+    }
+    
+    @media (max-width: 900px) {
+      .wireframe-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Glass Celebration Hub</h1>
+      <p class="subtitle">Tim & Kirsten's Wedding • October 5th, 2025</p>
+      <p class="description">
+        Complete wireframe demonstrations showcasing the redesigned wedding platform. 
+        Click below to explore the full guest and admin experiences with the new streamlined interface.
+      </p>
+    </div>
+    
+    <div class="wireframe-grid">
+      <!-- Guest Experience Card -->
+      <a href="wireframe-guest-complete.html" class="wireframe-card">
+        <span class="wireframe-icon">👰</span>
+        <div class="badge">GUEST EXPERIENCE</div>
+        <h2 class="wireframe-title">Guest Journey</h2>
+        <p class="wireframe-desc">
+          Experience the complete guest interface with all the features your wedding attendees will use to celebrate with you.
+        </p>
+        <ul class="feature-list">
+          <li>Beautiful home page with countdown</li>
+          <li>Central Dashboard - control center</li>
+          <li>Complete event timeline</li>
+          <li>Social feed with online presence</li>
+          <li>Instant messaging & group chats</li>
+          <li>Photo gallery</li>
+          <li>Comprehensive FAQ section</li>
+        </ul>
+        <div class="cta-button">
+          View Guest Experience
+          <span>→</span>
+        </div>
+      </a>
+      
+      <!-- Admin Experience Card -->
+      <a href="wireframe-admin-complete.html" class="wireframe-card">
+        <span class="wireframe-icon">👨‍💼</span>
+        <div class="badge">ADMIN DASHBOARD</div>
+        <h2 class="wireframe-title">Admin Journey</h2>
+        <p class="wireframe-desc">
+          Explore the powerful new 3-tab admin dashboard that simplifies wedding management while maintaining complete control.
+        </p>
+        <ul class="feature-list">
+          <li>Streamlined 3-tab navigation</li>
+          <li>Content management with inline design</li>
+          <li>User & RSVP management</li>
+          <li>Integrated analytics throughout</li>
+          <li>Chat groups & instant messaging control</li>
+          <li>FAQ, Events, Transport management</li>
+          <li>System settings & security</li>
+        </ul>
+        <div class="cta-button">
+          View Admin Dashboard
+          <span>→</span>
+        </div>
+      </a>
+    </div>
+    
+    <div class="footer">
+      <p>🎯 Key Achievement: Reduced admin navigation from 8 tabs to 3 main sections</p>
+      <p style="margin-top: 10px;">📊 Dashboard centered as the main control hub for both guests and admins</p>
+      <p style="margin-top: 10px;">💬 Instant messaging integrated throughout the platform</p>
+      <p style="margin-top: 10px;">✨ Using Aceternity UI components for an ultra-sleek, professional experience</p>
+    </div>
+  </div>
+</body>
+</html>
