@@ -22,6 +22,16 @@ const ImprovedAdminDashboard: React.FC = () => {
   // Check if user has admin access
   const hasAdminAccess = userRole?.role === 'admin' || adminUser?.isAdmin;
 
+  // Add debugging
+  useEffect(() => {
+    console.log('Admin Dashboard Debug:', {
+      userRole: userRole?.role,
+      adminUser: adminUser?.isAdmin,
+      hasAdminAccess,
+      loading
+    });
+  }, [userRole, adminUser, hasAdminAccess, loading]);
+
   useEffect(() => {
     // Show login modal if no admin access
     if (!hasAdminAccess && !loading) {
