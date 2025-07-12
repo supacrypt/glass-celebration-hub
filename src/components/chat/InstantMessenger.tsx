@@ -10,6 +10,8 @@ import { Input } from '@/components/ui/input';
 import { HapticFeedback } from '@/components/mobile/HapticFeedback';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useDirectChats } from '@/hooks/useDirectChats';
+import { useChatMessages } from '@/hooks/useChatMessages';
 
 interface User {
   id: string;
@@ -126,49 +128,71 @@ const InstantMessenger: React.FC<InstantMessengerProps> = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, [isMobile]);
 
-  // Mock data - replace with real data from Supabase
-  const [onlineUsers] = useState<User[]>([
-    { id: '1', name: 'Sarah M.', avatar: '👰', status: 'online', lastSeen: 'now' },
-    { id: '2', name: 'Mike R.', avatar: '🤵', status: 'online', lastSeen: 'now' },
-    { id: '3', name: 'Emma J.', avatar: '👩', status: 'away', lastSeen: '5 min ago' },
-    { id: '4', name: 'David K.', avatar: '👨', status: 'online', lastSeen: 'now' },
-  ]);
+  // Real data from Supabase hooks
+  const { chats: directChats, loading: chatsLoading, createDirectChat } = useDirectChats();
+  const { messages: chatMessages, sendMessage, loading: messagesLoading } = useChatMessages(selectedChatId);
 
-  const [chats] = useState<Chat[]>([
-    {
-      id: '1',
-      participants: [onlineUsers[0], onlineUsers[1]],
-      lastMessage: {
-        id: '1',
-        senderId: '1',
-        content: 'So excited for the wedding! 🎉',
-        timestamp: new Date(Date.now() - 300000),
-        type: 'text'
-      },
-      unreadCount: 2,
-      isActive: false,
-      isTyping: false
-    }
-  ]);
+  // Get online users from profiles
+  const [onlineUsers, setOnlineUsers] = useState<User[]>([]);
 
-  const [chatMessages] = useState<{ [chatId: string]: Message[] }>({
-    '1': [
-      {
-        id: '1',
-        senderId: '1',
-        content: 'Hey! Are you excited for Tim & Kirsten\'s wedding?',
-        timestamp: new Date(Date.now() - 600000),
-        type: 'text'
-      },
-      {
-        id: '2',
-        senderId: user?.id || 'current',
-        content: 'Absolutely! I can\'t wait to see them tie the knot 💕',
-        timestamp: new Date(Date.now() - 500000),
-        type: 'text'
+  useEffect(() => {
+    const fetchOnlineUsers = async () => {
+      try {
+        const { data: profiles, error } = await supabase
+          .from('profiles')
+          .select('user_id, first_name, last_name, display_name, avatar_url')
+          .limit(10);
+
+        if (!error && profiles) {
+          const users = profiles.map(profile => ({
+            id: profile.user_id,
+            name: profile.display_name || `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Guest',
+            avatar: profile.avatar_url || '👤',
+            status: 'online' as const,
+            lastSeen: 'now'
+          }));
+          setOnlineUsers(users);
+        }
+      } catch (err) {
+        console.error('Error fetching online users:', err);
       }
-    ]
-  });
+    };
+
+    fetchOnlineUsers();
+  }, []);
+
+  // Convert direct chats to the expected format
+  const chats: Chat[] = directChats.map(chat => ({
+    id: chat.id,
+    participants: chat.members?.map(member => ({
+      id: member.user_id,
+      name: member.profiles?.display_name || 
+            `${member.profiles?.first_name || ''} ${member.profiles?.last_name || ''}`.trim() || 'Guest',
+      avatar: member.profiles?.avatar_url || '👤',
+      status: 'online' as const,
+      lastSeen: 'now'
+    })) || [],
+    lastMessage: chat.last_message ? {
+      id: 'last',
+      senderId: chat.last_message.user_id,
+      content: chat.last_message.content || '',
+      timestamp: new Date(chat.last_message.created_at),
+      type: 'text' as const
+    } : undefined,
+    unreadCount: 0, // TODO: Calculate from unread messages
+    isActive: false,
+    isTyping: false
+  }));
+
+  const currentMessages: Message[] = chatMessages.map(msg => ({
+    id: msg.id,
+    senderId: msg.user_id,
+    content: msg.content || '',
+    timestamp: new Date(msg.created_at),
+    type: msg.media_type ? (msg.media_type as any) : 'text',
+    mediaUrl: msg.media_url || undefined,
+    isRead: msg.is_read
+  }));
 
   // WebRTC Configuration
   const rtcConfiguration: RTCConfiguration = {
@@ -441,18 +465,25 @@ const InstantMessenger: React.FC<InstantMessengerProps> = ({
       clearTimeout(typingTimeoutRef.current);
     }
     
-    // Implementation would save to Supabase
-    console.log('Sending message:', messageText);
-    setMessageText('');
-    
-    toast({
-      title: "Message sent!",
-      description: "Your message was delivered.",
-    });
+    try {
+      await sendMessage({ content: messageText.trim() });
+      setMessageText('');
+      
+      toast({
+        title: "Message sent!",
+        description: "Your message was delivered.",
+      });
+    } catch (error) {
+      console.error('Error sending message:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const selectedChat = chats.find(chat => chat.id === selectedChatId);
-  const currentMessages = selectedChatId ? chatMessages[selectedChatId] || [] : [];
 
   // Position calculation
   const getPositionClasses = () => {
@@ -693,7 +724,7 @@ const InstantMessenger: React.FC<InstantMessengerProps> = ({
             backdropFilter: 'blur(15px)'
           }}>
             {currentMessages.map((message, index) => {
-              const isCurrentUser = message.senderId === user?.id || message.senderId === 'current';
+              const isCurrentUser = message.senderId === user?.id;
               const showAvatar = index === 0 || currentMessages[index - 1].senderId !== message.senderId;
               
               return (
@@ -827,9 +858,121 @@ const InstantMessenger: React.FC<InstantMessengerProps> = ({
           </div>
         </>
       ) : (
-        // Chat List View with existing implementation
-        <div className="flex-1 p-3">
-          <p className="text-center text-gray-500">Select a chat to start messaging</p>
+        // Chat List View
+        <div className="flex-1 overflow-y-auto">
+          {/* Search Bar */}
+          <div className="p-3 border-b border-gray-200">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search conversations..."
+                className="pl-10 rounded-full border-gray-300 text-sm"
+              />
+            </div>
+          </div>
+
+          {/* Online Users */}
+          {onlineUsers.length > 0 && (
+            <div className="p-3 border-b border-gray-200">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Active Now</h3>
+              <div className="flex space-x-2 overflow-x-auto">
+                {onlineUsers.slice(0, 8).map(user => (
+                  <button
+                    key={user.id}
+                    onClick={async () => {
+                      try {
+                        const chatId = await createDirectChat([user.id]);
+                        setSelectedChatId(chatId);
+                      } catch (error) {
+                        toast({
+                          title: "Error",
+                          description: "Failed to create chat. Please try again.",
+                          variant: "destructive"
+                        });
+                      }
+                    }}
+                    className="flex flex-col items-center space-y-1 min-w-[60px] hover:bg-gray-100 rounded-lg p-2 transition-colors"
+                  >
+                    <div className="relative">
+                      <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-lg">
+                        {user.avatar}
+                      </div>
+                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+                    </div>
+                    <span className="text-xs text-gray-600 truncate max-w-[50px]">
+                      {user.name.split(' ')[0]}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Chat List */}
+          <div className="divide-y divide-gray-200">
+            {chatsLoading ? (
+              <div className="p-4 text-center">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#1877f2] mx-auto"></div>
+              </div>
+            ) : chats.length === 0 ? (
+              <div className="p-8 text-center">
+                <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500 text-sm">No conversations yet</p>
+                <p className="text-xs text-gray-400 mt-1">Start a chat with someone above</p>
+              </div>
+            ) : (
+              chats.map(chat => {
+                const otherParticipant = chat.participants.find(p => p.id !== user?.id);
+                const displayName = chat.participants.length > 2 
+                  ? 'Group Chat' 
+                  : otherParticipant?.name || 'Unknown';
+                
+                return (
+                  <button
+                    key={chat.id}
+                    onClick={() => setSelectedChatId(chat.id)}
+                    className="w-full p-3 text-left hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="relative">
+                        <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center text-lg">
+                          {otherParticipant?.avatar || '👤'}
+                        </div>
+                        {otherParticipant?.status === 'online' && (
+                          <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-medium text-gray-900 truncate">{displayName}</h4>
+                          {chat.lastMessage && (
+                            <span className="text-xs text-gray-500">
+                              {chat.lastMessage.timestamp.toLocaleTimeString('en-US', { 
+                                hour: 'numeric', 
+                                minute: '2-digit' 
+                              })}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm text-gray-500 truncate">
+                            {chat.lastMessage?.content || 'No messages yet'}
+                          </p>
+                          {chat.unreadCount > 0 && (
+                            <span className="bg-[#1877f2] text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
+                              {chat.unreadCount}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })
+            )}
+          </div>
         </div>
       )}
 

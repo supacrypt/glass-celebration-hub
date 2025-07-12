@@ -609,3 +609,55 @@
     transform: translateY(-10px) rotate(1deg);
   }
 }
+
+/* Mobile Navigation and Form Interaction Fixes */
+@layer utilities {
+  /* Ensure modals and popups don't interfere with navigation */
+  .modal-overlay {
+    z-index: 9998 !important;
+  }
+  
+  .modal-content {
+    z-index: 9999 !important;
+  }
+  
+  /* Mobile-specific adjustments for forms */
+  @media (max-width: 768px) {
+    .modal-content {
+      max-height: 85vh !important;
+      margin-bottom: 100px !important;
+      overflow-y: auto;
+    }
+    
+    /* Ensure bottom padding for forms on mobile */
+    .mobile-form-container {
+      padding-bottom: 120px !important;
+    }
+    
+    /* Ensure proper spacing for fixed bottom navigation */
+    .mobile-safe-bottom {
+      padding-bottom: max(100px, env(safe-area-inset-bottom, 0px)) !important;
+    }
+    
+    /* Keyboard handling for mobile inputs */
+    .mobile-input-container {
+      margin-bottom: 20px;
+    }
+    
+    .mobile-input-container:last-child {
+      margin-bottom: 40px;
+    }
+  }
+  
+  /* Touch target improvements */
+  .touch-target {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+  
+  /* Prevent navigation interference */
+  .nav-overlay-prevention {
+    position: relative;
+    z-index: 10000;
+  }
+}

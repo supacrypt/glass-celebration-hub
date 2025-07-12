@@ -13,7 +13,6 @@ import Gallery from "./pages/Gallery";
 // GiftRegistry component removed - now redirects externally
 import Accommodation from "./pages/Accommodation";
 import Transport from "./pages/Transport";
-import RSVP from "./pages/RSVP";
 import FAQ from "./pages/FAQ";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -95,7 +94,7 @@ const AppContent = () => {
         {/* Gift Registry route removed - now redirects externally */}
         <Route path="/accommodation" element={<Accommodation />} />
         <Route path="/transport" element={<Transport />} />
-        <Route path="/rsvp" element={<RSVP />} />
+        {/* RSVP removed - now handled via popup on home page */}
         <Route path="/faq" element={<FAQ />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/profile" element={<Profile />} />

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Settings } from 'lucide-react';
 import { useWeddingEvents } from '@/hooks/useWeddingData';
 import { useAuth } from '@/hooks/useAuth';
 import { useAppSettings } from '@/hooks/useAppSettings';
@@ -12,9 +13,10 @@ import DynamicFAQSection from '@/components/home/DynamicFAQSection';
 import EventsSection from '@/components/home/EventsSection';
 import DressCodeCard from '@/components/DressCodeCard';
 import ContactInfo from '@/components/ContactInfo';
-import RSVPPopup from '@/components/RSVPPopup';
+import SimpleRSVPPopup from '@/components/SimpleRSVPPopup';
 import RSVPCallToAction from '@/components/home/RSVPCallToAction';
 import DatabaseDiagnostics from '@/components/debug/DatabaseDiagnostics';
+import RSVPDebugModal from '@/components/debug/RSVPDebugModal';
 import { FixWeddingData } from '@/components/FixWeddingData';
 import { FixSupabaseSecurity } from '@/components/FixSupabaseSecurity';
 
@@ -25,6 +27,7 @@ const Home: React.FC = () => {
   const { needsRSVP, markRSVPComplete } = useRSVPStatus();
   const [showRSVPPopup, setShowRSVPPopup] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [showDebugModal, setShowDebugModal] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
   const isAdmin = userRole?.role === 'admin' || userRole?.role === 'couple';
 
@@ -82,6 +85,28 @@ const Home: React.FC = () => {
           {/* RSVP Call to Action */}
           <RSVPCallToAction onRSVPClick={handleOpenRSVP} />
           
+          {/* Debug Button for authenticated users */}
+          {userRole && (
+            <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
+              <div className="glass-card p-4 text-center">
+                <h3 className="text-lg font-semibold text-wedding-navy mb-2">
+                  🔧 RSVP Debug Tool
+                </h3>
+                <p className="text-muted-foreground mb-4 text-sm">
+                  Having issues with RSVP submission? Use this tool to diagnose problems.
+                </p>
+                <Button 
+                  onClick={() => setShowDebugModal(true)}
+                  variant="outline"
+                  className="flex items-center gap-2 mx-auto"
+                >
+                  <Settings className="w-4 h-4" />
+                  Open Debug Tool
+                </Button>
+              </div>
+            </div>
+          )}
+          
           {/* Dress Code */}
           <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up">
             <DressCodeCard />
@@ -108,7 +133,7 @@ const Home: React.FC = () => {
         </div>
 
         {/* RSVP Popup for guests who haven't RSVP'd */}
-        <RSVPPopup
+        <SimpleRSVPPopup
           isOpen={showRSVPPopup}
           onClose={() => setShowRSVPPopup(false)}
           onComplete={handleRSVPComplete}
@@ -119,6 +144,12 @@ const Home: React.FC = () => {
           isOpen={showDashboard}
           onClose={() => setShowDashboard(false)}
           userRole={userRole?.role || 'guest'}
+        />
+
+        {/* RSVP Debug Modal */}
+        <RSVPDebugModal
+          isOpen={showDebugModal}
+          onClose={() => setShowDebugModal(false)}
         />
         
         {/* Debug component - remove in production */}
