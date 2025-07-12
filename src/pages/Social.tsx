@@ -687,6 +687,22 @@ const Social: React.FC = () => {
         </div>
       </div>
       
+      {/* Floating Messenger Button */}
+      {!showMessenger && !messengerMinimized && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <Button
+            onClick={() => {
+              setShowMessenger(true);
+              setMessengerMinimized(false);
+              setMessengerCenter(false);
+            }}
+            className="w-14 h-14 rounded-full bg-[#1877f2] hover:bg-[#166fe5] text-white shadow-lg hover:scale-105 transition-all duration-200"
+          >
+            <MessageCircle className="w-6 h-6" />
+          </Button>
+        </div>
+      )}
+
       {/* Instant Messenger Component */}
       {(showMessenger || messengerMinimized) && (
         <InstantMessenger

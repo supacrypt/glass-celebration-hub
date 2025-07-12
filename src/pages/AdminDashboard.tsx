@@ -6,6 +6,7 @@ import { useDashboardData } from '@/hooks/useDashboardData';
 import { Button } from '@/components/ui/button';
 import AdminDashboardContent from '@/components/dashboard/AdminDashboardContent';
 import SupabaseSecurityFix from '@/components/admin/SupabaseSecurityFix';
+import RSVPDebugger from '@/components/debug/RSVPDebugger';
 
 const AdminDashboard: React.FC = () => {
   const { userRole } = useAuth();
@@ -71,6 +72,11 @@ const AdminDashboard: React.FC = () => {
       {/* Security Fix Section */}
       <div className="mb-6">
         <SupabaseSecurityFix />
+      </div>
+
+      {/* RSVP Debug Section */}
+      <div className="mb-6">
+        <RSVPDebugger />
       </div>
 
       {/* Full Dashboard Content */}
