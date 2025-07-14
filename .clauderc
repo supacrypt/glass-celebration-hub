@@ -1,0 +1,31 @@
+{
+  "mcp": {
+    "servers": {
+      "filesystem": {
+        "endpoint": "http://localhost:3001",
+        "capabilities": ["read_file", "write_file", "list_directory", "create_directory"]
+      },
+      "fetch": {
+        "endpoint": "http://localhost:3002", 
+        "capabilities": ["fetch_url", "web_scraping"]
+      },
+      "sqlite": {
+        "endpoint": "http://localhost:3003",
+        "capabilities": ["sql_query", "database_operations"]
+      },
+      "docker": {
+        "endpoint": "http://localhost:3004",
+        "capabilities": ["container_management", "image_operations"]
+      },
+      "git": {
+        "endpoint": "http://localhost:3005",
+        "capabilities": ["version_control", "repository_operations"]
+      }
+    }
+  },
+  "project": {
+    "name": "Nuptul Wedding App",
+    "description": "Luxury wedding planning application with Supabase backend",
+    "workspace": "/home/lyoncrypt/Desktop/Nuptul"
+  }
+}

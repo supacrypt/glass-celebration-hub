@@ -1,0 +1,36 @@
+{
+  "name": "auto-patch-system",
+  "version": "1.0.0",
+  "description": "Automated troubleshooting and patching system for test failures",
+  "main": "index.js",
+  "bin": {
+    "auto-patch": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "run": "node index.js run",
+    "watch": "node index.js watch",
+    "test": "node index.js test",
+    "cleanup": "node index.js cleanup"
+  },
+  "keywords": [
+    "testing",
+    "automation",
+    "patching",
+    "troubleshooting",
+    "jest",
+    "playwright",
+    "storybook"
+  ],
+  "author": "Auto-Patch System",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "local"
+  }
+}
