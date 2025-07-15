@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, MapPin, ExternalLink, Edit, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import VenueDetailGallery from '@/components/venue/VenueDetailGallery';
+import { VenueImage } from '@/components/venue/VenueImage';
 
 interface Venue {
   id: string;

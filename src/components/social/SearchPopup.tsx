@@ -40,49 +40,8 @@ const SearchPopup: React.FC<SearchPopupProps> = ({
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const mockResults: SearchResult[] = [
-    {
-      id: 'user_1',
-      type: 'user',
-      title: 'Sarah Chen',
-      subtitle: 'Maid of Honor',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b647?w=150&h=150&fit=crop&crop=face'
-    },
-    {
-      id: 'user_2',
-      type: 'user',
-      title: 'Mike Johnson',
-      subtitle: 'Best Man',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'
-    },
-    {
-      id: 'post_1',
-      type: 'post',
-      title: 'Wedding cake tasting photos',
-      subtitle: 'Sarah Chen • 2 hours ago',
-      preview: 'Just had our cake tasting today! Can\'t decide between...',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b647?w=150&h=150&fit=crop&crop=face'
-    },
-    {
-      id: 'hashtag_1',
-      type: 'hashtag',
-      title: '#weddingplanning',
-      subtitle: '24 posts'
-    },
-    {
-      id: 'hashtag_2',
-      type: 'hashtag',
-      title: '#BenEan',
-      subtitle: '12 posts'
-    },
-    {
-      id: 'venue_1',
-      type: 'venue',
-      title: 'Ben Ean Pokolbin',
-      subtitle: 'Wedding Venue • Hunter Valley',
-      avatar: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=150&h=150&fit=crop'
-    }
-  ];
+  // TODO: Replace with real Supabase search implementation
+  const mockResults: SearchResult[] = [];
 
   const performSearch = async (searchQuery: string) => {
     if (!searchQuery.trim()) {

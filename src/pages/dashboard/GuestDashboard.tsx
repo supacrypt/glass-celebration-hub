@@ -24,10 +24,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { RSVPButtons } from '@/components/ui/RSVPButtons';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import RSVPIntegration from '@/components/guest/RSVPIntegration';
+import { mapDatabaseToUI, getStatusDisplayText, getStatusColorClasses } from '@/utils/rsvpStatusMapping';
 
 interface GuestStats {
   totalAccounts: number;
@@ -84,15 +86,23 @@ const GuestDashboard: React.FC = () => {
       if (allProfiles) {
         const stats: GuestStats = {
           totalAccounts: allProfiles.length,
-          confirmedRSVPs: allProfiles.filter(p => p.rsvp_status === 'confirmed').length,
-          declinedRSVPs: allProfiles.filter(p => p.rsvp_status === 'declined').length,
-          pendingRSVPs: allProfiles.filter(p => !p.rsvp_status || p.rsvp_status === 'pending').length,
+          confirmedRSVPs: allProfiles.filter(p => 
+            p.rsvp_status === 'confirmed' || p.rsvp_status === 'attending'
+          ).length,
+          declinedRSVPs: allProfiles.filter(p => 
+            p.rsvp_status === 'declined' || p.rsvp_status === 'not_attending'
+          ).length,
+          pendingRSVPs: allProfiles.filter(p => 
+            !p.rsvp_status || p.rsvp_status === 'pending'
+          ).length,
           dietaryRequests: allProfiles.filter(p => 
             (p.dietary_needs && p.dietary_needs.length > 0) || 
             (p.allergies && p.allergies.length > 0)
           ).length,
           responseRate: Math.round(
-            (allProfiles.filter(p => p.rsvp_status && p.rsvp_status !== 'pending').length / allProfiles.length) * 100
+            (allProfiles.filter(p => 
+              p.rsvp_status && p.rsvp_status !== 'pending'
+            ).length / allProfiles.length) * 100
           )
         };
         setStats(stats);
@@ -119,7 +129,7 @@ const GuestDashboard: React.FC = () => {
     }
   };
 
-  const handleQuickRSVP = async (status: 'confirmed' | 'declined') => {
+  const handleQuickRSVP = async (status: 'attending' | 'not_attending') => {
     if (!guestProfile) return;
 
     try {
@@ -134,7 +144,7 @@ const GuestDashboard: React.FC = () => {
       if (error) throw error;
 
       toast.success(
-        status === 'confirmed' 
+        status === 'attending' 
           ? 'RSVP confirmed! We\'re excited to celebrate with you!' 
           : 'Thank you for your response.'
       );
@@ -330,26 +340,18 @@ const GuestDashboard: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              <div className={`p-4 rounded-lg ${
-                guestProfile.rsvp_status === 'confirmed' 
-                  ? 'bg-green-50 border border-green-200' 
-                  : 'bg-red-50 border border-red-200'
-              }`}>
+              <div className={`p-4 rounded-lg ${getStatusColorClasses(guestProfile.rsvp_status).bg} border ${getStatusColorClasses(guestProfile.rsvp_status).border}`}>
                 <div className="flex items-center gap-2 mb-2">
-                  {guestProfile.rsvp_status === 'confirmed' ? (
-                    <CheckCircle className="w-5 h-5 text-green-600" />
+                  {(guestProfile.rsvp_status === 'confirmed' || guestProfile.rsvp_status === 'attending') ? (
+                    <CheckCircle className={`w-5 h-5 ${getStatusColorClasses(guestProfile.rsvp_status).icon}`} />
                   ) : (
-                    <XCircle className="w-5 h-5 text-red-600" />
+                    <XCircle className={`w-5 h-5 ${getStatusColorClasses(guestProfile.rsvp_status).icon}`} />
                   )}
-                  <span className={`font-medium ${
-                    guestProfile.rsvp_status === 'confirmed' ? 'text-green-800' : 'text-red-800'
-                  }`}>
-                    {guestProfile.rsvp_status === 'confirmed' ? 'Attending' : 'Not Attending'}
+                  <span className={`font-medium ${getStatusColorClasses(guestProfile.rsvp_status).text}`}>
+                    {getStatusDisplayText(guestProfile.rsvp_status)}
                   </span>
                 </div>
-                <p className={`text-sm ${
-                  guestProfile.rsvp_status === 'confirmed' ? 'text-green-700' : 'text-red-700'
-                }`}>
+                <p className={`text-sm ${getStatusColorClasses(guestProfile.rsvp_status).text}`}>
                   Responded on {new Date(guestProfile.rsvp_responded_at).toLocaleDateString()}
                 </p>
                 
@@ -487,22 +489,13 @@ const GuestDashboard: React.FC = () => {
                 Will you be attending our wedding?
               </p>
               
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <Button
-                  onClick={() => handleQuickRSVP('confirmed')}
-                  className="h-16 flex-col gap-2 bg-green-600 hover:bg-green-700"
-                >
-                  <CheckCircle className="w-6 h-6" />
-                  Yes, I'll be there!
-                </Button>
-                <Button
-                  onClick={() => handleQuickRSVP('declined')}
-                  className="h-16 flex-col gap-2 bg-red-600 hover:bg-red-700"
-                >
-                  <XCircle className="w-6 h-6" />
-                  Sorry, can't make it
-                </Button>
-              </div>
+              <RSVPButtons
+                value={guestProfile?.rsvp_status === 'attending' ? 'attending' : 
+                        guestProfile?.rsvp_status === 'not_attending' ? 'not_attending' : 'pending'}
+                onChange={(value) => handleQuickRSVP(value)}
+                size="large"
+                className="mb-4"
+              />
               
               <div className="text-center space-y-2">
                 <Button

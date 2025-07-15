@@ -369,7 +369,7 @@ const GuestManager: React.FC = () => {
                 Add Guest
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="glass-popup max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
                   {editingGuest ? 'Edit Guest' : 'Add New Guest'}

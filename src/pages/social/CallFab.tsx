@@ -149,12 +149,16 @@ const CallFab: React.FC<CallFabProps> = ({
   if (!isInCall) {
     return (
       <div className={`fixed bottom-32 right-4 z-50 ${className}`}>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           {/* Video Call Button */}
           <Button
             size="lg"
             onClick={() => handleStartCall('video')}
-            className="w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all"
+            className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+            style={{
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)'
+            }}
             aria-label="Start video call"
           >
             <Video className="w-6 h-6" />
@@ -164,7 +168,11 @@ const CallFab: React.FC<CallFabProps> = ({
           <Button
             size="lg"
             onClick={() => handleStartCall('audio')}
-            className="w-14 h-14 rounded-full bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transition-all"
+            className="w-16 h-16 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+            style={{
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)'
+            }}
             aria-label="Start audio call"
           >
             <Phone className="w-6 h-6" />
@@ -174,9 +182,9 @@ const CallFab: React.FC<CallFabProps> = ({
           {onlineUsers.length > 1 && (
             <Badge 
               variant="secondary" 
-              className="text-xs bg-white/90 text-gray-700 self-center"
+              className="text-xs bg-white/95 backdrop-blur-sm text-wedding-navy self-center shadow-lg border border-white/30"
             >
-              {onlineUsers.length - 1} online
+              💍 {onlineUsers.length - 1} online
             </Badge>
           )}
         </div>
@@ -187,15 +195,16 @@ const CallFab: React.FC<CallFabProps> = ({
   // Call Interface (when in call)
   return (
     <Card 
-      className={`fixed z-50 border-0 shadow-2xl transition-all duration-300 ${
+      className={`fixed z-50 border border-white/20 shadow-2xl transition-all duration-300 ${
         isMinimized 
           ? 'bottom-4 right-4 w-80 h-24' 
           : 'bottom-4 right-4 w-96 h-[500px]'
       } ${className}`}
       style={{
-        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.8) 100%)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
+        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 33, 71, 0.9) 100%)',
+        backdropFilter: 'blur(25px)',
+        WebkitBackdropFilter: 'blur(25px)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 215, 0, 0.1)'
       }}
     >
       <CardContent className="p-4 h-full flex flex-col">

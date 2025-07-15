@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, supabaseAdmin } from '@/integrations/supabase/client';
 
 export interface GuestMatchResult {
   matched: boolean;
@@ -6,6 +6,8 @@ export interface GuestMatchResult {
   guestName?: string;
   confidence?: 'high' | 'medium' | 'low';
   matchType?: 'exact_email' | 'exact_phone' | 'fuzzy_name' | 'manual';
+  rsvpStatus?: string;
+  rsvpRespondedAt?: string;
 }
 
 export const GuestMatcher = {
@@ -20,7 +22,7 @@ export const GuestMatcher = {
       // First try exact email match
       const { data: emailMatch } = await supabase
         .from('guest_list')
-        .select('id, name, mobile_number')
+        .select('id, name, mobile_number, rsvp_status, rsvp_responded_at')
         .eq('email_address', email)
         .is('matched_user_id', null)
         .single();
@@ -31,7 +33,9 @@ export const GuestMatcher = {
           guestId: emailMatch.id,
           guestName: emailMatch.name,
           confidence: 'high',
-          matchType: 'exact_email'
+          matchType: 'exact_email',
+          rsvpStatus: emailMatch.rsvp_status,
+          rsvpRespondedAt: emailMatch.rsvp_responded_at
         };
       }
 
@@ -40,7 +44,7 @@ export const GuestMatcher = {
         const cleanMobile = mobile.replace(/\D/g, '');
         const { data: phoneMatches } = await supabase
           .from('guest_list')
-          .select('id, name, mobile_number')
+          .select('id, name, mobile_number, rsvp_status, rsvp_responded_at')
           .is('matched_user_id', null);
 
         const phoneMatch = phoneMatches?.find(guest => {
@@ -56,7 +60,9 @@ export const GuestMatcher = {
             guestId: phoneMatch.id,
             guestName: phoneMatch.name,
             confidence: 'high',
-            matchType: 'exact_phone'
+            matchType: 'exact_phone',
+            rsvpStatus: phoneMatch.rsvp_status,
+            rsvpRespondedAt: phoneMatch.rsvp_responded_at
           };
         }
       }
@@ -65,7 +71,7 @@ export const GuestMatcher = {
       const fullName = `${firstName} ${lastName}`.toLowerCase();
       const { data: allGuests } = await supabase
         .from('guest_list')
-        .select('id, name, mobile_number')
+        .select('id, name, mobile_number, rsvp_status, rsvp_responded_at')
         .is('matched_user_id', null);
 
       const nameMatch = allGuests?.find(guest => {
@@ -83,7 +89,9 @@ export const GuestMatcher = {
           guestId: nameMatch.id,
           guestName: nameMatch.name,
           confidence: 'medium',
-          matchType: 'fuzzy_name'
+          matchType: 'fuzzy_name',
+          rsvpStatus: nameMatch.rsvp_status,
+          rsvpRespondedAt: nameMatch.rsvp_responded_at
         };
       }
 
@@ -143,8 +151,24 @@ export const GuestMatcher = {
   // Get unlinked users for admin
   async getUnlinkedUsers() {
     try {
-      // Get all users from auth
-      const { data: authData } = await supabase.auth.admin.listUsers();
+      let authUsers: any[] = [];
+      
+      // Try to get users from auth admin API first
+      if (supabaseAdmin) {
+        const { data: authData, error: authError } = await supabaseAdmin.auth.admin.listUsers();
+        if (!authError && authData) {
+          authUsers = authData.users || [];
+        }
+      }
+      
+      // Fallback to profiles table if auth admin fails
+      if (authUsers.length === 0) {
+        const { data: profilesData } = await supabase
+          .from('profiles')
+          .select('*')
+          .order('created_at', { ascending: false });
+        authUsers = profilesData || [];
+      }
       
       // Get guest list to see which users are already linked
       const { data: guestData } = await supabase
@@ -154,14 +178,14 @@ export const GuestMatcher = {
 
       const linkedUserIds = new Set(guestData?.map(g => g.matched_user_id) || []);
       
-      const unlinkedUsers = authData?.users.filter(user => !linkedUserIds.has(user.id)).map(user => ({
+      const unlinkedUsers = authUsers.filter(user => !linkedUserIds.has(user.id)).map(user => ({
         id: user.id,
-        email: user.email,
-        display_name: user.user_metadata?.display_name,
-        first_name: user.user_metadata?.first_name,
-        last_name: user.user_metadata?.last_name,
+        email: user.email || 'No email',
+        display_name: user.user_metadata?.display_name || user.display_name,
+        first_name: user.user_metadata?.first_name || user.first_name,
+        last_name: user.user_metadata?.last_name || user.last_name,
         created_at: user.created_at
-      })) || [];
+      }));
 
       return unlinkedUsers;
     } catch (error) {

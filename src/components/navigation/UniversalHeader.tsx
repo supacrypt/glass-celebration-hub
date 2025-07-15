@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
+import NotificationBell from '@/components/notifications/NotificationBell';
 
 interface UniversalHeaderProps {
   onProfileClick?: () => void;
@@ -14,7 +15,7 @@ const UniversalHeader: React.FC<UniversalHeaderProps> = ({
   onProfileClick,
   onNotificationClick
 }) => {
-  const { user, userRole } = useAuth();
+  const { user, userRole, profile } = useAuth();
   const { settings } = useAppSettings();
   const navigate = useNavigate();
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -52,6 +53,51 @@ const UniversalHeader: React.FC<UniversalHeaderProps> = ({
     return name.split(' ').map(n => n.charAt(0)).join('').toUpperCase();
   };
 
+  const getDisplayName = () => {
+    return profile?.display_name || 
+           profile?.first_name && profile?.last_name ? `${profile.first_name} ${profile.last_name}` :
+           user?.user_metadata?.full_name || 
+           'Guest';
+  };
+
+  const renderAvatar = (size: 'small' | 'large' = 'small') => {
+    const avatarUrl = profile?.avatar_url || profile?.profile_picture_url;
+    const sizeClasses = size === 'small' ? 'w-8 h-8 text-sm' : 'w-12 h-12 text-lg';
+    
+    if (avatarUrl) {
+      return (
+        <div className={`${sizeClasses} rounded-full relative`}>
+          <img 
+            src={avatarUrl} 
+            alt="Profile"
+            className={`${sizeClasses} rounded-full object-cover border-2 border-white/20`}
+            onError={(e) => {
+              // Hide the image and show the fallback initials
+              const imgElement = e.target as HTMLImageElement;
+              imgElement.style.display = 'none';
+              const fallbackElement = imgElement.nextElementSibling as HTMLElement;
+              if (fallbackElement) {
+                fallbackElement.style.display = 'flex';
+              }
+            }}
+          />
+          <div 
+            className={`avatar ${sizeClasses} bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold absolute inset-0`}
+            style={{ display: 'none' }}
+          >
+            {getInitials(getDisplayName())}
+          </div>
+        </div>
+      );
+    }
+    
+    return (
+      <div className={`avatar ${sizeClasses} bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold`}>
+        {getInitials(getDisplayName())}
+      </div>
+    );
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 lg:px-8 py-3">
       <div className="max-w-6xl mx-auto flex justify-between items-center">
@@ -61,11 +107,9 @@ const UniversalHeader: React.FC<UniversalHeaderProps> = ({
             onClick={handleProfileClick}
             className="profile-button flex items-center gap-3 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 group"
           >
-            <div className="avatar w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-              {getInitials(user?.user_metadata?.full_name)}
-            </div>
+            {renderAvatar('small')}
             <span className="text-white text-sm font-medium hidden sm:block">
-              {user?.user_metadata?.full_name || 'Guest'}
+              {getDisplayName()}
             </span>
             <ChevronDown className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
           </button>
@@ -75,12 +119,10 @@ const UniversalHeader: React.FC<UniversalHeaderProps> = ({
             <div className="absolute top-full left-0 mt-2 w-64 bg-black/90 backdrop-blur-md border border-white/20 rounded-xl shadow-xl z-10 overflow-hidden">
               <div className="p-4 border-b border-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="avatar w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-lg font-semibold">
-                    {getInitials(user?.user_metadata?.full_name)}
-                  </div>
+                  {renderAvatar('large')}
                   <div>
                     <div className="text-white font-medium">
-                      {user?.user_metadata?.full_name || 'Guest User'}
+                      {getDisplayName()}
                     </div>
                     <div className="text-white/60 text-sm">
                       {userRole?.role || 'guest'}
@@ -131,17 +173,7 @@ const UniversalHeader: React.FC<UniversalHeaderProps> = ({
 
         {/* Right: Notifications */}
         <div className="flex items-center">
-          <button
-            onClick={onNotificationClick}
-            className="notification-bell w-11 h-11 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 relative group"
-          >
-            <Bell className="w-5 h-5 text-white" />
-            {/* Notification dot */}
-            <div className="notification-dot absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-            
-            {/* Glassmorphic hover effect */}
-            <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </button>
+          <NotificationBell />
         </div>
       </div>
 

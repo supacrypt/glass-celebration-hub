@@ -386,7 +386,7 @@ const AdminMessages: React.FC = () => {
                 Compose
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="glass-popup max-w-2xl">
               <DialogHeader>
                 <DialogTitle>Compose Message</DialogTitle>
                 <DialogDescription>
@@ -694,7 +694,7 @@ const AdminMessages: React.FC = () => {
       {/* Message Detail Dialog */}
       {selectedCommunication && (
         <Dialog open={!!selectedCommunication} onOpenChange={() => setSelectedCommunication(null)}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="glass-popup max-w-2xl">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <MessageSquare className="w-5 h-5" />

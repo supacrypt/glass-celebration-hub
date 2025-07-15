@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppSettings } from '@/hooks/useAppSettings';
 import { getUrlWithFallback } from '@/utils/supabaseStorage';
 import Countdown from './Countdown';
 import RSVPCallToAction from './RSVPCallToAction';
+import { Bus, Car, BedDouble, Route } from 'lucide-react';
 
 interface HeroBackgroundProps {
   backgroundType: string;
@@ -253,6 +255,7 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ onRSVPClick }) => {
   const { settings, loading } = useAppSettings();
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -275,10 +278,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onRSVPClick }) => {
     day: 'numeric'
   });
 
-  const backgroundType = settings.hero_background_type || 'video';
-  const backgroundUrl = settings.hero_background_url || 'https://www.youtube.com/watch?v=Y8rjSEU349s';
-  const mobileBackgroundUrl = settings.hero_background_mobile_url || '';
-  const overlayOpacity = parseFloat(settings.hero_overlay_opacity || '0.7');
+  // Use Ben Ean venue image as the hero background
+  const backgroundType = settings.hero_background_type || 'image';
+  const backgroundUrl = settings.hero_background_url || 'https://iwmfxcrzzwpmxomydmuq.storage.supabase.co/v1/object/public/venue-ben-ean/Ben%20Ean%20Venue%20Main.png';
+  const mobileBackgroundUrl = settings.hero_background_mobile_url || 'https://iwmfxcrzzwpmxomydmuq.storage.supabase.co/v1/object/public/venue-ben-ean/Ben%20Ean%20Venue%20Main.png';
+  const overlayOpacity = parseFloat(settings.hero_overlay_opacity || '0.5');
   const overlayPosition = settings.hero_overlay_position || 'center';
   const videoAutoplay = settings.hero_video_autoplay === 'true';
   const videoMuted = settings.hero_video_muted === 'true';
@@ -347,6 +351,35 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onRSVPClick }) => {
           
           {/* RSVP Call to Action */}
           <RSVPCallToAction />
+        </div>
+      </div>
+
+      {/* Travel & Accommodation Cards */}
+      <div className="mb-6 sm:mb-8 lg:mb-10 animate-fade-up px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {[
+            { icon: Bus, title: 'Bus Booking', route: '/transport' },
+            { icon: Car, title: 'Car Pooling', route: '/transport' },
+            { icon: BedDouble, title: 'Accommodation Share', route: '/accommodation' },
+            { icon: Route, title: 'Long Distance Travel', route: '/transport' },
+          ].map((item, index) => (
+            <div
+              key={index}
+              onClick={() => navigate(item.route)}
+              className="glass-card p-6 text-center flex flex-col items-center justify-center gap-3 cursor-pointer hover:scale-105 transition-transform"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                borderRadius: '16px',
+                border: '1px solid rgba(255, 255, 255, 0.4)',
+                boxShadow: '10px 10px 20px rgba(163, 155, 146, 0.2), -10px -10px 20px rgba(255, 255, 255, 0.7)',
+              }}
+            >
+              <item.icon className="w-8 h-8 text-wedding-navy" />
+              <h3 className="text-base font-semibold text-wedding-navy">{item.title}</h3>
+            </div>
+          ))}
         </div>
       </div>
 

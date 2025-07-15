@@ -304,7 +304,11 @@ const WeddingCeremonyClock: React.FC<WeddingCeremonyClockProps> = ({
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
         >
           {/* Main container */}
-          <div className="relative glass-card rounded-3xl overflow-hidden p-8">
+          <div className={cn(
+            "relative rounded-3xl overflow-hidden p-8",
+            "bg-white/10 dark:bg-black/20",
+            "backdrop-blur-2xl border border-white/10"
+          )}>
             <BackgroundOrbs />
             
             <div className="relative z-10 space-y-8">
@@ -335,7 +339,12 @@ const WeddingCeremonyClock: React.FC<WeddingCeremonyClockProps> = ({
                 ].map((item, index) => (
                   <motion.div
                     key={item.label}
-                    className="relative w-24 h-28 glass-card rounded-2xl flex flex-col items-center justify-center gap-2 overflow-hidden"
+                    className={cn(
+                      "relative w-24 h-28 rounded-2xl flex flex-col items-center justify-center gap-2 overflow-hidden",
+                      "bg-gradient-to-br from-slate-800 to-slate-900 shadow-neumorphic-dark",
+                      "transition-all duration-300",
+                      item.label !== 'Seconds' && "hover:shadow-neumorphic-dark-inset hover:bg-blue-500/20"
+                    )}
                     initial={{ opacity: 0, y: 20, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ delay: index * 0.1 + 0.5 }}
@@ -348,17 +357,17 @@ const WeddingCeremonyClock: React.FC<WeddingCeremonyClockProps> = ({
                       transition={{ duration: 3, repeat: Infinity, delay: index * 0.5 }}
                     />
                     
-                    <span className="text-3xl font-bold text-wedding-navy tabular-nums">
+                    <span className="text-4xl md:text-5xl font-bold text-white font-dolly tracking-tighter">
                       {item.value.toString().padStart(2, '0')}
                     </span>
-                    <span className="text-xs font-medium text-wedding-navy/60 uppercase tracking-wider">
+                    <span className="text-xs font-medium text-white/80 uppercase tracking-widest">
                       {item.label}
                     </span>
                   </motion.div>
                 ))}
               </div>
 
-              {/* Analog Clock */}
+              {/* Analog clock */}
               <motion.div 
                 className="flex justify-center"
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -405,7 +414,11 @@ const WeddingCeremonyClock: React.FC<WeddingCeremonyClockProps> = ({
 
           {/* RSVP Section */}
           <motion.div
-            className="glass-card rounded-2xl p-6"
+            className={cn(
+              "rounded-2xl p-6",
+              "bg-white/10 dark:bg-black/20",
+              "backdrop-blur-2xl border border-white/10"
+            )}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2 }}

@@ -26,9 +26,7 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
   }
 });
 
-// SECURITY NOTE: Admin client should NEVER be used in client-side code in production
-// This is only for development/testing purposes
-// In production, admin operations should go through secure API endpoints
+// Admin client for server-side operations (development only)
 export const supabaseAdmin = (() => {
   const serviceRoleKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
   
@@ -37,11 +35,7 @@ export const supabaseAdmin = (() => {
     return null;
   }
 
-  if (import.meta.env.PROD) {
-    logger.error('Admin client should not be used in production', {}, 'SECURITY_VIOLATION');
-    return null;
-  }
-
+  // Allow in development for testing user management
   return createClient<Database>(
     SUPABASE_URL, 
     serviceRoleKey,

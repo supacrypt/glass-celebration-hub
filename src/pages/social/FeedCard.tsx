@@ -127,9 +127,9 @@ const FeedCard: React.FC<FeedCardProps> = ({
   const popularReactions = ['❤️', '😍', '🎉', '💍', '👏', '😂'];
 
   return (
-    <Card className={`w-full glass-morphism border-0 overflow-hidden ${className}`}>
+    <Card className={`w-full bg-white/80 backdrop-blur-md border border-white/30 shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 ${className}`}>
       {/* Post Header */}
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-3 bg-gradient-to-r from-white/50 to-white/30">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -138,7 +138,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
                 onClick={() => onUserClick?.(post.user_id)}
               >
                 <AvatarImage src={post.user_avatar} alt={post.user_name} />
-                <AvatarFallback className="bg-wedding-gold text-white">
+                <AvatarFallback className="bg-gradient-to-br from-wedding-gold to-yellow-500 text-white font-bold">
                   {post.user_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                 </AvatarFallback>
               </Avatar>
@@ -156,8 +156,8 @@ const FeedCard: React.FC<FeedCardProps> = ({
                   {post.user_name}
                 </span>
                 {post.is_wedding_related && (
-                  <Badge variant="secondary" className="text-xs bg-wedding-gold/20 text-wedding-gold">
-                    Wedding
+                  <Badge variant="secondary" className="text-xs bg-gradient-to-r from-wedding-gold/20 to-yellow-400/20 text-wedding-gold border border-wedding-gold/30">
+                    💍 Wedding
                   </Badge>
                 )}
               </div>
@@ -277,7 +277,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
         )}
 
         {/* Reactions Bar */}
-        <div className="flex items-center justify-between pt-2 border-t border-white/20">
+        <div className="flex items-center justify-between pt-3 border-t border-wedding-gold/20">
           <div className="flex items-center gap-4">
             {/* Like/Reaction Button */}
             <div className="relative">
@@ -300,7 +300,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
               
               {/* Reaction Picker */}
               {showReactionPicker && (
-                <div className="absolute bottom-full left-0 mb-2 flex items-center gap-1 bg-white rounded-full shadow-lg border border-gray-200 p-2 z-10">
+                <div className="absolute bottom-full left-0 mb-2 flex items-center gap-1 bg-white/95 backdrop-blur-md rounded-full shadow-2xl border border-white/50 p-2 z-10">
                   {popularReactions.map((emoji) => (
                     <Button
                       key={emoji}
@@ -356,11 +356,11 @@ const FeedCard: React.FC<FeedCardProps> = ({
 
         {/* Comments Section */}
         {showComments && (
-          <div className="space-y-3 pt-3 border-t border-white/20">
+          <div className="space-y-3 pt-3 border-t border-wedding-gold/20">
             {/* Comment Input */}
             <div className="flex items-start gap-3">
               <Avatar className="w-8 h-8">
-                <AvatarFallback className="text-xs bg-wedding-gold text-white">
+                <AvatarFallback className="text-xs bg-gradient-to-br from-wedding-gold to-yellow-500 text-white font-semibold">
                   U
                 </AvatarFallback>
               </Avatar>
@@ -403,7 +403,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
-                  <div className="bg-gray-50 rounded-lg p-3">
+                  <div className="bg-gradient-to-r from-gray-50/80 to-white/50 backdrop-blur-sm rounded-lg p-3 border border-white/30">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-semibold text-sm">{comment.user_name}</span>
                       <span className="text-xs text-muted-foreground">

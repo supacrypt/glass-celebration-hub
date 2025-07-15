@@ -167,34 +167,6 @@ export const SignInForm: React.FC<SignInFormProps> = ({
           {signInForm.formState.isSubmitting ? 'Signing In...' : 'Sign In'}
         </Button>
 
-        {/* Quick Admin Login */}
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="flex-1 text-xs"
-            onClick={() => {
-              signInForm.setValue('email', 'admin@wedding.local');
-              signInForm.setValue('password', 'admin123');
-            }}
-          >
-            Use Admin Creds #1
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="flex-1 text-xs"
-            onClick={() => {
-              signInForm.setValue('email', 'admin@example.com');
-              signInForm.setValue('password', 'password');
-            }}
-          >
-            Use Admin Creds #2
-          </Button>
-        </div>
-
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />

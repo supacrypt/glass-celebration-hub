@@ -13,6 +13,9 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import PerformanceMonitor from "./components/PerformanceMonitor";
 import { ErrorBoundary, RouteErrorBoundary } from "./components/error/ErrorBoundary";
 import { logger } from "./utils/logger";
+import { useGlobalBackground } from "./hooks/useGlobalBackground";
+import RSVPAutoPrompt from "./components/guest/RSVPAutoPrompt";
+import { PresenceProvider } from "./hooks/usePresence";
 
 // Lazy load heavy components
 const VenuePage = lazy(() => import("./pages/VenuePage"));
@@ -44,7 +47,11 @@ const DashboardRedirect = lazy(() => import("./components/DashboardRedirect"));
 const AdminEvents = lazy(() => import("./pages/dashboard/AdminEvents"));
 const AdminMessages = lazy(() => import("./pages/dashboard/AdminMessages"));
 const AdminAnalytics = lazy(() => import("./pages/dashboard/AdminAnalytics"));
+const AdminContent = lazy(() => import("./pages/dashboard/AdminContent"));
 const GuestDashboard = lazy(() => import("./pages/dashboard/GuestDashboard"));
+
+// Lazy load email confirmation page
+const EmailConfirmation = lazy(() => import("./pages/EmailConfirmation"));
 
 const queryClient = new QueryClient();
 
@@ -53,16 +60,19 @@ const AppContent = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   
+  // Initialize global background on app load
+  const { loading: backgroundLoading } = useGlobalBackground();
+  
   // Extract current route from pathname
-  const currentRoute = location.pathname === '/' ? 'home' : location.pathname.slice(1);
+  const currentRoute = location.pathname === '/' || location.pathname === '/home' ? 'home' : location.pathname.slice(1);
   
   const handleNavigate = (route: string) => {
-    const path = route === 'home' ? '/' : `/${route}`;
+    const path = route === 'home' ? '/home' : `/${route}`;
     navigate(path);
   };
 
   // Define public routes that don't require authentication
-  const publicRoutes = ['/', '/venue', '/venue/ben-ean', '/venue/prince-of-mereweather', '/venue/newcastle-beach', '/accommodation', '/transport', '/faq', '/help', '/rsvp'];
+  const publicRoutes = ['/', '/home', '/venue', '/venue/ben-ean', '/venue/prince-of-mereweather', '/venue/newcastle-beach', '/accommodation', '/transport', '/faq', '/help', '/rsvp'];
   const isPublicRoute = publicRoutes.includes(location.pathname);
   const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/dashboard');
 
@@ -100,55 +110,62 @@ const AppContent = () => {
   );
 
   return (
-    <Layout activeRoute={currentRoute} onNavigate={handleNavigate}>
-      <Suspense fallback={<LoadingSpinner />}>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/venue" element={<VenuePage />} />
-          <Route path="/venue/detail/:venueId" element={<VenueDetail />} />
-          <Route path="/venue/ben-ean" element={<BenEan />} />
-          <Route path="/venue/prince-of-mereweather" element={<PrinceOfMereweather />} />
-          <Route path="/venue/newcastle-beach" element={<NewcastleBeach />} />
-          
-          <Route path="/events" element={<AdminEvents />} />
-          <Route path="/social" element={<Social />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          {/* Gift Registry route removed - now redirects externally */}
-          <Route path="/accommodation" element={<Accommodation />} />
-          <Route path="/transport" element={<TransportPage />} />
-          <Route path="/rsvp" element={<RSVPPage />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/help" element={<HelpPage />} />
-          <Route path="/chat" element={<ChatPage />} />
-          
-          {/* Dashboard Admin Routes */}
-          <Route path="/admin/dashboard" element={<DashboardRouter />} />
-          <Route path="/dashboard" element={<DashboardRedirect />} />
-          <Route path="/dashboard/users" element={<AdminUsers />} />
-          <Route path="/dashboard/users/roles" element={<AdminUserRoles />} />
-          <Route path="/dashboard/photos" element={<AdminPhotos />} />
-          <Route path="/dashboard/photos/:status" element={<AdminPhotosDetail />} />
-          <Route path="/dashboard/events" element={<AdminEvents />} />
-          <Route path="/dashboard/messages" element={<AdminMessages />} />
-          <Route path="/dashboard/analytics" element={<AdminAnalytics />} />
-          {/* Gift management routes removed - now handled externally */}
-          <Route path="/dashboard/rsvps" element={<AdminRSVPs />} />
-          
-          {/* Guest Dashboard Routes */}
-          <Route path="/guest-dashboard" element={<GuestDashboard />} />
-          
-          {/* Social Routes - now integrated into main social page */}
-          
-          
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-    </Layout>
+    <>
+      <Layout activeRoute={currentRoute} onNavigate={handleNavigate}>
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/venue" element={<VenuePage />} />
+            <Route path="/venue/detail/:venueId" element={<VenueDetail />} />
+            <Route path="/venue/ben-ean" element={<BenEan />} />
+            <Route path="/venue/prince-of-mereweather" element={<PrinceOfMereweather />} />
+            <Route path="/venue/newcastle-beach" element={<NewcastleBeach />} />
+            
+            <Route path="/events" element={<AdminEvents />} />
+            <Route path="/social" element={<Social />} />
+            <Route path="/gallery" element={<GalleryPage />} />
+            {/* Gift Registry route removed - now redirects externally */}
+            <Route path="/accommodation" element={<Accommodation />} />
+            <Route path="/transport" element={<TransportPage />} />
+            <Route path="/rsvp" element={<RSVPPage />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/auth/confirm" element={<EmailConfirmation />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/help" element={<HelpPage />} />
+            <Route path="/chat" element={<ChatPage />} />
+            
+            {/* Dashboard Admin Routes */}
+            <Route path="/admin/dashboard" element={<DashboardRouter />} />
+            <Route path="/dashboard" element={<DashboardRedirect />} />
+            <Route path="/dashboard/users" element={<AdminUsers />} />
+            <Route path="/dashboard/users/roles" element={<AdminUserRoles />} />
+            <Route path="/dashboard/photos" element={<AdminPhotos />} />
+            <Route path="/dashboard/photos/:status" element={<AdminPhotosDetail />} />
+            <Route path="/dashboard/events" element={<AdminEvents />} />
+            <Route path="/dashboard/messages" element={<AdminMessages />} />
+            <Route path="/dashboard/analytics" element={<AdminAnalytics />} />
+            <Route path="/dashboard/content" element={<AdminContent />} />
+            {/* Gift management routes removed - now handled externally */}
+            <Route path="/dashboard/rsvps" element={<AdminRSVPs />} />
+            
+            {/* Guest Dashboard Routes */}
+            <Route path="/guest-dashboard" element={<GuestDashboard />} />
+            
+            {/* Social Routes - now integrated into main social page */}
+            
+            
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </Layout>
+      
+      {/* RSVP Auto Prompt - shows for logged-in users who haven't RSVPed */}
+      {user && !loading && !isAdminRoute && <RSVPAutoPrompt />}
+    </>
   );
 };
 
@@ -165,10 +182,12 @@ const App = () => (
         <BrowserRouter>
           <ErrorBoundary>
             <AuthProvider>
-              <RouteErrorBoundary>
-                <AppContent />
-              </RouteErrorBoundary>
-              <PerformanceMonitor />
+              <PresenceProvider>
+                <RouteErrorBoundary>
+                  <AppContent />
+                </RouteErrorBoundary>
+                <PerformanceMonitor />
+              </PresenceProvider>
             </AuthProvider>
           </ErrorBoundary>
         </BrowserRouter>

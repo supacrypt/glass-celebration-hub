@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageSquare, Send, Users, Bell, Megaphone, Mail, Heart, Reply, Trash2, Filter, Search, Calendar } from 'lucide-react';
+import { MessageSquare, Send, Users, Bell, Megaphone, Mail, Heart, Reply, Trash2, Filter, Search, Calendar, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -287,31 +287,52 @@ const CommunicationCenter: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      {/* Enhanced Stats */}
-      <div className="grid grid-cols-3 gap-2">
-        <div className="glass-card p-3 text-center">
-          <MessageSquare className="w-4 h-4 mx-auto text-glass-blue mb-1" />
-          <div className="text-sm font-semibold">{realTimeStats.totalMessages}</div>
-          <div className="text-xs text-muted-foreground">Messages</div>
+      {/* Communication Header */}
+      <div className="glass-card p-4 bg-gradient-to-r from-wedding-navy/10 to-wedding-gold/10 border border-wedding-navy/20">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-semibold text-wedding-navy flex items-center gap-2">
+            <MessageSquare className="w-5 h-5" />
+            Communication Center
+          </h3>
+          <div className="text-xs text-muted-foreground">
+            Last updated: {realTimeStats.lastUpdated.toLocaleTimeString()}
+          </div>
         </div>
-        <div className="glass-card p-3 text-center">
-          <Megaphone className="w-4 h-4 mx-auto text-glass-purple mb-1" />
-          <div className="text-sm font-semibold">{realTimeStats.activeAnnouncements}</div>
-          <div className="text-xs text-muted-foreground">Active</div>
-        </div>
-        <div className="glass-card p-3 text-center">
-          <Heart className="w-4 h-4 mx-auto text-glass-pink mb-1" />
-          <div className="text-sm font-semibold">{realTimeStats.engagementRate}</div>
-          <div className="text-xs text-muted-foreground">Avg Likes</div>
+        
+        <div className="grid grid-cols-3 gap-4">
+          <div className="neu-card p-3 text-center hover:shadow-lg transition-shadow cursor-pointer group">
+            <MessageSquare className="w-5 h-5 mx-auto text-glass-blue mb-2" />
+            <div className="text-lg font-bold text-wedding-navy group-hover:text-glass-blue transition-colors">
+              {realTimeStats.totalMessages}
+            </div>
+            <div className="text-xs text-muted-foreground">Community Messages</div>
+          </div>
+          
+          <div className="neu-card p-3 text-center hover:shadow-lg transition-shadow cursor-pointer group">
+            <Megaphone className="w-5 h-5 mx-auto text-glass-purple mb-2" />
+            <div className="text-lg font-bold text-wedding-navy group-hover:text-glass-purple transition-colors">
+              {realTimeStats.activeAnnouncements}
+            </div>
+            <div className="text-xs text-muted-foreground">Active Announcements</div>
+          </div>
+          
+          <div className="neu-card p-3 text-center hover:shadow-lg transition-shadow cursor-pointer group">
+            <Heart className="w-5 h-5 mx-auto text-glass-pink mb-2" />
+            <div className="text-lg font-bold text-wedding-navy group-hover:text-glass-pink transition-colors">
+              {realTimeStats.engagementRate}
+            </div>
+            <div className="text-xs text-muted-foreground">Avg Engagement</div>
+          </div>
         </div>
       </div>
 
       {/* Communication Tabs */}
       <Tabs defaultValue="messages" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="messages" className="text-xs">Messages</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="messages" className="text-xs">Community</TabsTrigger>
           <TabsTrigger value="announcements" className="text-xs">Announcements</TabsTrigger>
-          <TabsTrigger value="compose" className="text-xs">Compose</TabsTrigger>
+          <TabsTrigger value="mass-notify" className="text-xs">Mass Notify</TabsTrigger>
+          <TabsTrigger value="admin-posts" className="text-xs">Admin Posts</TabsTrigger>
         </TabsList>
 
         <TabsContent value="messages" className="space-y-3">
@@ -503,38 +524,152 @@ const CommunicationCenter: React.FC = () => {
           </div>
         </TabsContent>
 
-        <TabsContent value="compose" className="space-y-3">
-          {/* Quick Message Composer */}
-          <div className="glass-card p-4 space-y-3">
-            <h4 className="text-sm font-medium text-wedding-navy">Send Message to Community</h4>
-            <Textarea
-              placeholder="What would you like to share with the wedding community?"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              rows={4}
-              className="glass-secondary border-0"
-            />
-            <div className="flex justify-between items-center">
-              <div className="text-xs text-muted-foreground">
-                {newMessage.length}/500 characters
+        <TabsContent value="mass-notify" className="space-y-3">
+          {/* Mass Notification Center */}
+          <div className="glass-card p-4 space-y-4">
+            <h4 className="text-sm font-medium text-wedding-navy flex items-center gap-2">
+              <Megaphone className="w-4 h-4" />
+              Mass Notification System
+            </h4>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs text-muted-foreground">Notification Type</label>
+                <Select defaultValue="email">
+                  <SelectTrigger className="glass-secondary border-0">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="email">Email Notification</SelectItem>
+                    <SelectItem value="push">Push Notification</SelectItem>
+                    <SelectItem value="sms">SMS Alert</SelectItem>
+                    <SelectItem value="all">All Channels</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <Button onClick={sendMessage} disabled={!newMessage.trim()}>
+              
+              <div>
+                <label className="text-xs text-muted-foreground">Target Audience</label>
+                <Select defaultValue="all">
+                  <SelectTrigger className="glass-secondary border-0">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Guests</SelectItem>
+                    <SelectItem value="confirmed">RSVP Confirmed</SelectItem>
+                    <SelectItem value="pending">Pending RSVPs</SelectItem>
+                    <SelectItem value="declined">Declined RSVPs</SelectItem>
+                    <SelectItem value="accommodations">Need Accommodation</SelectItem>
+                    <SelectItem value="dietary">Dietary Restrictions</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            
+            <div>
+              <label className="text-xs text-muted-foreground">Subject Line</label>
+              <Input 
+                placeholder="Enter notification subject..."
+                className="glass-secondary border-0"
+              />
+            </div>
+            
+            <div>
+              <label className="text-xs text-muted-foreground">Message Content</label>
+              <Textarea
+                placeholder="Compose your mass notification message..."
+                rows={4}
+                className="glass-secondary border-0"
+              />
+            </div>
+            
+            <div className="flex gap-2">
+              <Button className="flex-1">
                 <Send className="w-4 h-4 mr-2" />
-                Send Message
+                Send Notification
+              </Button>
+              <Button variant="outline">
+                <Eye className="w-4 h-4 mr-2" />
+                Preview
               </Button>
             </div>
           </div>
-
-          {/* Quick Actions */}
+          
+          {/* Quick Mass Actions */}
           <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" className="glass-secondary border-0">
-              <Mail className="w-4 h-4 mr-2" />
-              Email All Guests
+            <Button variant="outline" className="glass-card p-3 h-auto flex-col gap-2">
+              <Mail className="w-5 h-5 text-glass-blue" />
+              <div className="text-xs text-center">
+                <div className="font-medium">RSVP Reminder</div>
+                <div className="text-muted-foreground">Send to pending guests</div>
+              </div>
             </Button>
-            <Button variant="outline" className="glass-secondary border-0">
-              <Bell className="w-4 h-4 mr-2" />
-              Send Push Notification
+            <Button variant="outline" className="glass-card p-3 h-auto flex-col gap-2">
+              <Bell className="w-5 h-5 text-glass-purple" />
+              <div className="text-xs text-center">
+                <div className="font-medium">Event Update</div>
+                <div className="text-muted-foreground">Notify confirmed guests</div>
+              </div>
             </Button>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="admin-posts" className="space-y-3">
+          {/* Admin Social Posts & Support */}
+          <div className="glass-card p-4 space-y-4">
+            <h4 className="text-sm font-medium text-wedding-navy flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              Admin Posts & Support
+            </h4>
+            
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="outline" className="glass-secondary border-0 justify-start text-xs">
+                <Heart className="w-3 h-3 mr-1" />
+                Wedding Update
+              </Button>
+              <Button variant="outline" className="glass-secondary border-0 justify-start text-xs">
+                <MessageSquare className="w-3 h-3 mr-1" />
+                Support Message
+              </Button>
+            </div>
+            
+            <Textarea
+              placeholder="Compose an admin post or support message for the community..."
+              rows={4}
+              className="glass-secondary border-0"
+            />
+            
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="pin-post" className="rounded" />
+                <label htmlFor="pin-post" className="text-xs text-muted-foreground">Pin to top</label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="special-style" className="rounded" />
+                <label htmlFor="special-style" className="text-xs text-muted-foreground">Special styling</label>
+              </div>
+            </div>
+            
+            <Button>
+              <Send className="w-4 h-4 mr-2" />
+              Post to Community
+            </Button>
+          </div>
+          
+          {/* Support Templates */}
+          <div className="space-y-2">
+            <h5 className="text-xs font-medium text-wedding-navy">Quick Support Templates</h5>
+            <div className="grid grid-cols-1 gap-2">
+              <Button variant="outline" className="glass-card p-2 justify-start text-xs">
+                "Thanks for your RSVP! We're excited to celebrate with you."
+              </Button>
+              <Button variant="outline" className="glass-card p-2 justify-start text-xs">
+                "If you have any questions about accommodations, please let us know."
+              </Button>
+              <Button variant="outline" className="glass-card p-2 justify-start text-xs">
+                "Don't forget to check out our venue photos in the gallery!"
+              </Button>
+            </div>
           </div>
         </TabsContent>
       </Tabs>

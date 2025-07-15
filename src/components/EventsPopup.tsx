@@ -57,12 +57,12 @@ const EventsPopup: React.FC<EventsPopupProps> = ({ isOpen, onClose }) => {
     setVenuesLoading(true);
     console.log('EventsPopup: Starting to fetch venues...');
     
-    // Fallback venue data matching the screenshot
+    // Fallback venue data with storage bucket images
     const fallbackVenues: Venue[] = [
       {
         id: '1',
         name: 'Ben Ean Winery',
-        image_url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
+        image_url: 'https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/venue-ben-ean/Screenshot%20from%202025-07-08%2017-52-15_upscayl_4x_upscayl-standard-4x.png',
         caption: 'Wedding ceremony and reception venue in the beautiful Hunter Valley. Join us for the main celebration on Sunday, October 5th, 2025.',
         address: '119 McDonalds Rd, Pokolbin NSW 2320',
         quick_facts: {
@@ -75,7 +75,7 @@ const EventsPopup: React.FC<EventsPopupProps> = ({ isOpen, onClose }) => {
       {
         id: '2',
         name: 'The Prince Hotel, Mereweather',
-        image_url: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800&q=80',
+        image_url: 'https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/venue-pub/The%20Prince%20Merewether_upscayl_4x_upscayl-standard-4x.png',
         caption: 'Pre-wedding drinks and casual dinner. Stop in to have a drink and grab yourself a meal if you are hungry.',
         address: 'Mereweather, NSW 2291',
         quick_facts: {
@@ -88,7 +88,7 @@ const EventsPopup: React.FC<EventsPopupProps> = ({ isOpen, onClose }) => {
       {
         id: '3',
         name: 'Newcastle Beach',
-        image_url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80',
+        image_url: 'https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/venue-beach/Necastle%20Beach_upscayl_4x_upscayl-standard-4x.png',
         caption: 'Recovery beach day with coffee and excellent food. Good for sobbing up... hair of the dog perhaps?',
         address: 'Newcastle Beach, NSW 2300',
         quick_facts: {

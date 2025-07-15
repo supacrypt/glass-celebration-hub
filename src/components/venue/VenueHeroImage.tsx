@@ -5,44 +5,29 @@ import { Button } from '@/components/ui/button';
 import { VenueImage } from '@/hooks/useVenueImages';
 import OptimizedImage from '@/components/OptimizedImage';
 
+
 interface VenueHeroImageProps {
   venueId: string;
   venueName: string;
   className?: string;
 }
 
+import { useVenueImages } from '@/hooks/useVenueImages';
+
 const VenueHeroImage: React.FC<VenueHeroImageProps> = ({ 
   venueId, 
   venueName, 
   className = '' 
 }) => {
-  const [images, setImages] = useState<VenueImage[]>([]);
+  const { images, loading } = useVenueImages(venueId);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const { data, error } = await (supabase as any)
-          .from('venue_images')
-          .select('*')
-          .eq('venue_id', venueId)
-          .eq('is_published', true)
-          .order('image_order', { ascending: true });
-
-        if (error) throw error;
-        setImages((data || []) as VenueImage[]);
-      } catch (error) {
-        console.error('Error fetching venue images:', error);
-        setImageError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchImages();
-  }, [venueId]);
+    if (images.length > 0) {
+      setImageError(false);
+    }
+  }, [images]);
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -63,7 +48,47 @@ const VenueHeroImage: React.FC<VenueHeroImageProps> = ({
     );
   }
 
+
+
+  // Storage bucket fallback images
+  const getFallbackImage = (venueName: string) => {
+    const normalizedName = venueName.toLowerCase();
+    if (normalizedName.includes('ben ean')) {
+      return 'https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/venue-ben-ean/Screenshot%20from%202025-07-08%2017-52-15_upscayl_4x_upscayl-standard-4x.png';
+    } else if (normalizedName.includes('prince') || normalizedName.includes('mereweather')) {
+      return 'https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/venue-pub/The%20Prince%20Merewether_upscayl_4x_upscayl-standard-4x.png';
+    } else if (normalizedName.includes('newcastle') || normalizedName.includes('beach')) {
+      return 'https://iwmfxcrzzwpmxomydmuq.supabase.co/storage/v1/object/public/venue-beach/Necastle%20Beach_upscayl_4x_upscayl-standard-4x.png';
+    }
+    return null;
+  };
+
   if (imageError || images.length === 0) {
+    const fallbackImage = getFallbackImage(venueName);
+    
+    if (fallbackImage) {
+      return (
+        <div className={`w-full h-48 sm:h-64 md:h-80 relative rounded-glass overflow-hidden ${className}`}>
+          <OptimizedImage
+            src={fallbackImage}
+            alt={`${venueName} venue image`}
+            className="w-full h-full object-cover"
+            loading="eager"
+            onError={() => setImageError(true)}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4 text-white">
+            <h3 className="text-lg font-semibold mb-1 font-dolly">
+              {venueName}
+            </h3>
+            <p className="text-sm text-white/90">
+              Beautiful venue awaits your visit
+            </p>
+          </div>
+        </div>
+      );
+    }
+    
     return (
       <div className={`w-full h-48 sm:h-64 md:h-80 bg-gradient-to-br from-glass-green/20 to-glass-blue/20 rounded-glass flex items-center justify-center ${className}`}>
         <div className="text-center">

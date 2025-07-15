@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { supabaseAdmin } from '@/integrations/supabase/client';
 
 interface SecurityIssue {
   type: 'RLS_DISABLED' | 'NO_POLICIES' | 'SECURITY_DEFINER' | 'MUTABLE_SEARCH_PATH';

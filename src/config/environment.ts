@@ -1,33 +1,39 @@
 // Environment configuration and validation
+// This file is deprecated - use src/config/deployment.ts instead
+import { getDeploymentConfig, validateDeploymentConfig } from './deployment';
+
 export const getEnvironmentConfig = () => {
+  const config = getDeploymentConfig();
   return {
-    supabaseUrl: import.meta.env.VITE_SUPABASE_URL || '',
-    supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
-    isDevelopment: import.meta.env.DEV,
-    isProduction: import.meta.env.PROD,
+    supabaseUrl: config.supabase.url,
+    supabaseAnonKey: config.supabase.anonKey,
+    isDevelopment: config.environment === 'development',
+    isProduction: config.environment === 'production',
   };
 };
 
 export const getSupabaseUrl = () => {
-  return import.meta.env.VITE_SUPABASE_URL || '';
+  return getDeploymentConfig().supabase.url;
 };
 
 export const getSupabaseAnonKey = () => {
-  return import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+  return getDeploymentConfig().supabase.anonKey;
 };
 
 export const validateEnvironment = () => {
-  const config = getEnvironmentConfig();
+  const config = getDeploymentConfig();
+  const errors = validateDeploymentConfig(config);
   
-  if (!config.supabaseUrl) {
-    console.warn('Missing VITE_SUPABASE_URL environment variable');
+  if (errors.length > 0) {
+    console.warn('Environment validation warnings:', errors);
   }
   
-  if (!config.supabaseAnonKey) {
-    console.warn('Missing VITE_SUPABASE_ANON_KEY environment variable');
-  }
-  
-  return config;
+  return {
+    supabaseUrl: config.supabase.url,
+    supabaseAnonKey: config.supabase.anonKey,
+    isDevelopment: config.environment === 'development',
+    isProduction: config.environment === 'production',
+  };
 };
 
 export default getEnvironmentConfig();

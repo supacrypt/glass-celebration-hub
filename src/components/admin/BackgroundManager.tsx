@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Upload, Eye, Save, Trash2, Palette } from 'lucide-react';
+import { Image, Upload, Eye, Save, Trash2, Palette, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,6 +17,12 @@ interface BackgroundSettings {
   opacity: number;
 }
 
+interface StorageBackground {
+  name: string;
+  url: string;
+  id: string;
+}
+
 const BackgroundManager: React.FC = () => {
   const [backgroundSettings, setBackgroundSettings] = useState<BackgroundSettings>({
     type: 'gradient',
@@ -30,6 +36,8 @@ const BackgroundManager: React.FC = () => {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
+  const [storageBackgrounds, setStorageBackgrounds] = useState<StorageBackground[]>([]);
+  const [loadingBackgrounds, setLoadingBackgrounds] = useState(false);
   const { toast } = useToast();
 
   const gradientPresets = [
@@ -73,6 +81,12 @@ const BackgroundManager: React.FC = () => {
 
   useEffect(() => {
     loadBackgroundSettings();
+    // Add a small delay to ensure Supabase client is ready
+    const timer = setTimeout(() => {
+      loadStorageBackgrounds();
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   const loadBackgroundSettings = async () => {
@@ -117,23 +131,110 @@ const BackgroundManager: React.FC = () => {
     }
   };
 
+  const loadStorageBackgrounds = async () => {
+    setLoadingBackgrounds(true);
+    try {
+      console.log('Loading backgrounds from cms-backgrounds bucket...');
+      const { data, error } = await supabase.storage
+        .from('cms-backgrounds')
+        .list('', {
+          limit: 100,
+          offset: 0,
+          sortBy: { column: 'name', order: 'asc' }
+        });
+
+      if (error) {
+        console.error('Storage error:', error);
+        throw error;
+      }
+
+      if (data) {
+        console.log('Found backgrounds:', data.length);
+        console.log('Raw data:', data);
+        
+        const backgrounds: StorageBackground[] = data
+          .filter(file => file.name && !file.name.startsWith('.')) // Filter out hidden files
+          .map(file => {
+            const publicUrl = supabase.storage.from('cms-backgrounds').getPublicUrl(file.name).data.publicUrl;
+            console.log(`Processing ${file.name} -> ${publicUrl}`);
+            return {
+              id: file.id || file.name,
+              name: file.name,
+              url: publicUrl
+            };
+          });
+        
+        console.log('Processed backgrounds:', backgrounds);
+        setStorageBackgrounds(backgrounds);
+      } else {
+        console.log('No data returned from storage');
+        setStorageBackgrounds([]);
+      }
+    } catch (error) {
+      console.error('Error loading storage backgrounds:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load backgrounds from storage",
+        variant: "destructive"
+      });
+    } finally {
+      setLoadingBackgrounds(false);
+    }
+  };
+
   const applyBackgroundPreview = (settings: BackgroundSettings) => {
     if (!previewMode) return;
     
     const body = document.body;
     
+    // Remove any Tailwind background classes
+    body.classList.remove('bg-background');
+    
     if (settings.type === 'image' && settings.imageUrl) {
-      body.style.backgroundImage = `url(${settings.imageUrl})`;
-      body.style.backgroundSize = 'cover';
-      body.style.backgroundPosition = 'center';
-      body.style.backgroundRepeat = 'no-repeat';
-      body.style.backgroundAttachment = 'fixed';
+      body.style.setProperty('background-image', `url(${settings.imageUrl})`, 'important');
+      body.style.setProperty('background-size', 'cover', 'important');
+      body.style.setProperty('background-position', 'center', 'important');
+      body.style.setProperty('background-repeat', 'no-repeat', 'important');
+      body.style.setProperty('background-attachment', 'fixed', 'important');
+      body.style.setProperty('background-color', 'transparent', 'important');
     } else if (settings.type === 'gradient') {
-      body.style.backgroundImage = `linear-gradient(${settings.gradientDirection}, ${settings.gradientStart} 0%, ${settings.gradientEnd} 100%)`;
-      body.style.backgroundSize = 'auto';
-      body.style.backgroundPosition = 'auto';
-      body.style.backgroundRepeat = 'auto';
-      body.style.backgroundAttachment = 'auto';
+      body.style.setProperty('background-image', `linear-gradient(${settings.gradientDirection}, ${settings.gradientStart} 0%, ${settings.gradientEnd} 100%)`, 'important');
+      body.style.setProperty('background-size', 'auto', 'important');
+      body.style.setProperty('background-position', 'auto', 'important');
+      body.style.setProperty('background-repeat', 'auto', 'important');
+      body.style.setProperty('background-attachment', 'auto', 'important');
+      body.style.setProperty('background-color', 'transparent', 'important');
+    }
+  };
+
+  const applyBackgroundGlobally = (settings: BackgroundSettings) => {
+    const body = document.body;
+    
+    // Remove any Tailwind background classes
+    body.classList.remove('bg-background');
+    
+    // Clear any existing background styles
+    body.style.backgroundColor = '';
+    body.style.backgroundImage = '';
+    body.style.backgroundSize = '';
+    body.style.backgroundPosition = '';
+    body.style.backgroundRepeat = '';
+    body.style.backgroundAttachment = '';
+    
+    if (settings.type === 'image' && settings.imageUrl) {
+      body.style.setProperty('background-image', `url(${settings.imageUrl})`, 'important');
+      body.style.setProperty('background-size', 'cover', 'important');
+      body.style.setProperty('background-position', 'center', 'important');
+      body.style.setProperty('background-repeat', 'no-repeat', 'important');
+      body.style.setProperty('background-attachment', 'fixed', 'important');
+      body.style.setProperty('background-color', 'transparent', 'important');
+    } else if (settings.type === 'gradient') {
+      body.style.setProperty('background-image', `linear-gradient(${settings.gradientDirection}, ${settings.gradientStart} 0%, ${settings.gradientEnd} 100%)`, 'important');
+      body.style.setProperty('background-size', 'auto', 'important');
+      body.style.setProperty('background-position', 'auto', 'important');
+      body.style.setProperty('background-repeat', 'auto', 'important');
+      body.style.setProperty('background-attachment', 'auto', 'important');
+      body.style.setProperty('background-color', 'transparent', 'important');
     }
   };
 
@@ -142,21 +243,23 @@ const BackgroundManager: React.FC = () => {
     try {
       const fileExt = file.name.split('.').pop();
       const fileName = `background-${Date.now()}.${fileExt}`;
-      const filePath = `backgrounds/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('backgrounds')
-        .upload(filePath, file);
+        .from('cms-backgrounds')
+        .upload(fileName, file);
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('backgrounds')
-        .getPublicUrl(filePath);
+        .from('cms-backgrounds')
+        .getPublicUrl(fileName);
 
       const newSettings = { ...backgroundSettings, imageUrl: publicUrl, type: 'image' as const };
       setBackgroundSettings(newSettings);
       applyBackgroundPreview(newSettings);
+
+      // Reload storage backgrounds to include the new upload
+      await loadStorageBackgrounds();
 
       toast({
         title: "Image Uploaded",
@@ -187,16 +290,26 @@ const BackgroundManager: React.FC = () => {
       ];
 
       for (const setting of settingsToSave) {
-        await supabase
+        const { error } = await supabase
           .from('app_settings')
           .upsert(setting, { onConflict: 'setting_key' });
+        
+        if (error) {
+          console.error('Error saving setting:', setting.setting_key, error);
+          throw error;
+        }
       }
 
-      applyBackgroundPreview(backgroundSettings);
+      // Apply background globally (not just preview)
+      console.log('Applying background globally:', backgroundSettings);
+      applyBackgroundGlobally(backgroundSettings);
+      
+      // Force re-render to ensure background is applied
+      window.dispatchEvent(new Event('backgroundChanged'));
       
       toast({
         title: "Background Saved",
-        description: "Background settings have been applied",
+        description: "Background settings have been applied globally",
       });
     } catch (error) {
       console.error('Error saving background settings:', error);
@@ -356,6 +469,64 @@ const BackgroundManager: React.FC = () => {
                 </div>
               </div>
             )}
+
+            {/* Storage Backgrounds */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs">Select from Storage ({storageBackgrounds.length} images)</Label>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={loadStorageBackgrounds}
+                  disabled={loadingBackgrounds}
+                  className="h-6 text-xs"
+                >
+                  Refresh
+                </Button>
+              </div>
+              {loadingBackgrounds ? (
+                <div className="flex items-center justify-center py-4">
+                  <div className="w-4 h-4 animate-spin rounded-full border border-current border-t-transparent" />
+                  <span className="ml-2 text-xs text-muted-foreground">Loading backgrounds...</span>
+                </div>
+              ) : storageBackgrounds.length === 0 ? (
+                <div className="text-center py-4 text-xs text-muted-foreground">
+                  No backgrounds found in storage. Upload an image to get started.
+                </div>
+              ) : (
+                <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto">
+                  {storageBackgrounds.map((bg) => (
+                    <button
+                      key={bg.id}
+                      onClick={() => handleSettingChange('imageUrl', bg.url)}
+                      className={`relative group rounded-lg overflow-hidden border-2 transition-all ${
+                        backgroundSettings.imageUrl === bg.url
+                          ? 'border-wedding-gold'
+                          : 'border-muted hover:border-wedding-gold/50'
+                      }`}
+                    >
+                      <img
+                        src={bg.url}
+                        alt={bg.name}
+                        className="w-full h-20 object-cover"
+                        onError={(e) => {
+                          console.error(`Failed to load image: ${bg.name}`, bg.url);
+                          e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjgwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iODAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iIGZpbGw9IiM5OTkiPkltYWdlPC90ZXh0Pjwvc3ZnPg==';
+                        }}
+                      />
+                      {backgroundSettings.imageUrl === bg.url && (
+                        <div className="absolute inset-0 bg-wedding-gold/20 flex items-center justify-center">
+                          <Check className="w-4 h-4 text-wedding-gold" />
+                        </div>
+                      )}
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-1">
+                        <p className="text-xs text-white truncate">{bg.name}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Upload New Image */}
             <div className="space-y-2">

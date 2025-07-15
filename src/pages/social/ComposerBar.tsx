@@ -133,13 +133,12 @@ const ComposerBar: React.FC<ComposerBarProps> = ({
 
   return (
     <Card 
-      className={`fixed bottom-20 left-0 right-0 z-50 border-t border-white/20 ${className}`}
+      className={`relative border-2 border-wedding-gold/20 ${className}`}
       style={{
         background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.92) 100%)',
         backdropFilter: 'blur(25px)',
         WebkitBackdropFilter: 'blur(25px)',
-        boxShadow: '0 -8px 32px rgba(0, 33, 71, 0.1), 0 -4px 16px rgba(255, 215, 0, 0.1)',
-        borderTop: '1px solid rgba(255, 215, 0, 0.3)',
+        boxShadow: '0 4px 24px rgba(0, 33, 71, 0.1), 0 2px 8px rgba(255, 215, 0, 0.1)',
       }}
     >
       <CardContent className="p-4 max-w-4xl mx-auto">
@@ -147,7 +146,7 @@ const ComposerBar: React.FC<ComposerBarProps> = ({
         <div className="flex items-start gap-3">
           <Avatar className="w-10 h-10 border-2 border-white/50">
             <AvatarImage src={profile?.avatar_url} alt={profile?.first_name || 'User'} />
-            <AvatarFallback className="bg-wedding-gold text-white">
+            <AvatarFallback className="bg-gradient-to-br from-wedding-gold to-yellow-500 text-white font-bold">
               {profile?.first_name ? profile.first_name[0] : 'U'}
             </AvatarFallback>
           </Avatar>
@@ -254,7 +253,7 @@ const ComposerBar: React.FC<ComposerBarProps> = ({
 
             {/* Emoji Picker */}
             {showEmojiPicker && (
-              <div className="absolute bottom-full left-0 mb-2 bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-50 w-80">
+              <div className="absolute bottom-full left-0 mb-2 bg-white/95 backdrop-blur-md rounded-lg shadow-2xl border border-white/50 p-4 z-50 w-80">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <h3 className="font-semibold text-sm">Wedding Emojis</h3>
@@ -393,7 +392,7 @@ const ComposerBar: React.FC<ComposerBarProps> = ({
               <Button
                 onClick={handlePost}
                 disabled={(!content.trim() && mediaFiles.length === 0) || isOverLimit}
-                className="gap-2 bg-wedding-gold hover:bg-wedding-gold/90 text-white"
+                className="gap-2 bg-gradient-to-r from-wedding-gold to-yellow-500 hover:from-wedding-gold/90 hover:to-yellow-500/90 text-white shadow-lg hover:shadow-xl transition-all"
                 size="sm"
               >
                 <Send className="w-4 h-4" />

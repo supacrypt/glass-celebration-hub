@@ -12,7 +12,7 @@ interface AuthContextType {
   profile: Profile | null;
   userRole: UserRole | null;
   loading: boolean;
-  signUp: (email: string, password: string, firstName?: string, lastName?: string, profileData?: any) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, firstName?: string, lastName?: string, profileData?: any) => Promise<{ data: any; error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<{ error: any }>;
   signInWithMagicLink: (email: string) => Promise<{ error: any }>;
@@ -41,6 +41,74 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchingRef = useRef<string | null>(null);
   const dataCache = useRef<{ profile: Profile | null; userRole: UserRole | null; userId: string } | null>(null);
   const lastFetch = useRef<number>(0);
+
+  const checkAndUploadDeferredProfilePicture = useCallback(async (userId: string) => {
+    // Check for pending profile picture
+    const base64Data = sessionStorage.getItem('pending_profile_picture');
+    const fileType = sessionStorage.getItem('pending_profile_picture_type');
+    const fileName = sessionStorage.getItem('pending_profile_picture_name');
+    const targetUserId = sessionStorage.getItem('pending_profile_picture_user_id');
+
+    // Only proceed if we have data and it's for the current user
+    if (!base64Data || !fileType || !fileName || targetUserId !== userId) return;
+
+    try {
+      // Convert base64 to blob
+      const base64Response = await fetch(base64Data);
+      const blob = await base64Response.blob();
+      const file = new File([blob], fileName, { type: fileType });
+
+      // Generate unique filename
+      const fileExt = fileName.split('.').pop();
+      const uploadFileName = `profile-${userId}-${Date.now()}.${fileExt}`;
+      const filePath = `${userId}/${uploadFileName}`;
+
+      // Upload to storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('user-profiles')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true
+        });
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('user-profiles')
+        .getPublicUrl(filePath);
+
+      const publicUrl = urlData.publicUrl;
+
+      // Update profile in database
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ 
+          profile_picture_url: publicUrl,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userId);
+
+      if (!updateError) {
+        console.log('Deferred profile picture uploaded successfully');
+      }
+
+      // Clear session storage
+      sessionStorage.removeItem('pending_profile_picture');
+      sessionStorage.removeItem('pending_profile_picture_type');
+      sessionStorage.removeItem('pending_profile_picture_name');
+      sessionStorage.removeItem('pending_profile_picture_user_id');
+
+    } catch (error) {
+      console.error('Failed to upload deferred profile picture:', error);
+      
+      // Clear session storage on error to prevent repeated attempts
+      sessionStorage.removeItem('pending_profile_picture');
+      sessionStorage.removeItem('pending_profile_picture_type');
+      sessionStorage.removeItem('pending_profile_picture_name');
+      sessionStorage.removeItem('pending_profile_picture_user_id');
+    }
+  }, []);
 
   const fetchUserData = useCallback(async (userId: string) => {
     // Prevent duplicate fetches for the same user
@@ -145,21 +213,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []); // Empty dependency array - this effect should only run once
 
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string, profileData?: any) => {
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/auth/confirm`;
     
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: redirectUrl,
         data: {
-          name: firstName && lastName ? `${firstName} ${lastName}` : firstName,
+          firstName: firstName || '',
+          lastName: lastName || '',
           phone: profileData?.phone,
           role: 'guest' // Default role for new users
         }
       }
     });
-    return { error };
+    
+    return { data, error };
   };
 
   const signIn = async (email: string, password: string) => {
@@ -176,7 +246,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signInWithMagicLink = async (email: string) => {
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/auth/confirm`;
     
     const { error } = await supabase.auth.signInWithOtp({
       email,
@@ -188,7 +258,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const resetPassword = async (email: string) => {
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/auth/confirm`;
     
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: redirectUrl

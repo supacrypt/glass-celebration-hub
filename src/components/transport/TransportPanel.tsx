@@ -350,7 +350,7 @@ const TransportPanel: React.FC<TransportPanelProps> = ({ className }) => {
               Add Transport
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="glass-popup max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingTransport ? 'Edit Transport Option' : 'Add Transport Option'}
@@ -776,7 +776,7 @@ const TransportPanel: React.FC<TransportPanelProps> = ({ className }) => {
 
       {/* Booking Details Dialog */}
       <Dialog open={showBookingDialog} onOpenChange={setShowBookingDialog}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="glass-popup max-w-3xl">
           <DialogHeader>
             <DialogTitle>Bookings for {selectedTransport?.name}</DialogTitle>
             <DialogDescription>

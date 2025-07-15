@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { PresenceProvider } from '@/hooks/usePresence';
+import { usePresence } from '@/hooks/usePresence';
 import { useSocialPosts } from '@/hooks/useSocialPosts';
 import { useWeddingStories } from '@/hooks/useWeddingStories';
 import SocialHeader from './SocialHeader';
@@ -154,7 +154,13 @@ const SocialPage: React.FC<SocialPageProps> = ({ isPopup = false, onClose }) => 
 
   return (
     <PresenceProvider>
-      <div className={`${isPopup ? 'h-full flex flex-col' : 'min-h-screen'} bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50`}>
+      <div className={`${isPopup ? 'h-full flex flex-col' : 'min-h-screen'} bg-gradient-to-br from-wedding-gold/5 via-purple-50/80 to-pink-50/80 relative overflow-hidden`}>
+        {/* Luxury background pattern */}
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000' fill-opacity='1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }} />
+        </div>
         <SocialHeader
           isPopup={isPopup}
           onClose={onClose}
@@ -178,7 +184,7 @@ const SocialPage: React.FC<SocialPageProps> = ({ isPopup = false, onClose }) => 
                 onAddStory={handleAddStory}
                 onViewStory={handleViewStory}
               />
-              <ComposerBar onPost={handlePost} />
+              <ComposerBar onPost={handlePost} className="mb-6" />
               
               {postsLoading && transformedPosts.length === 0 ? (
                 <div className="text-center py-16">
@@ -203,18 +209,49 @@ const SocialPage: React.FC<SocialPageProps> = ({ isPopup = false, onClose }) => 
         ) : (
           <div 
             ref={scrollContainerRef}
-            className="grid max-w-7xl w-full mx-auto px-4 lg:grid-cols-12 pb-44 pt-6 gap-8"
+            className="grid max-w-7xl w-full mx-auto px-4 lg:grid-cols-12 pb-8 pt-6 gap-8"
           >
             {/* Left Sidebar */}
             <aside className="hidden lg:block lg:col-span-3">
             <div className="sticky top-6 space-y-6">
-              <div className="glass-card p-4">
-                <h3 className="font-bold text-lg mb-4">Navigation</h3>
-                {/* Placeholder */}
+              <div className="glass-card p-6 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-md border border-white/20 shadow-lg">
+                <h3 className="font-bold text-lg mb-4 text-wedding-navy">Quick Actions</h3>
+                <div className="space-y-3">
+                  <button className="w-full text-left p-3 rounded-lg hover:bg-white/50 transition-colors flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-wedding-gold to-yellow-400 flex items-center justify-center">
+                      <span className="text-white text-sm">📸</span>
+                    </div>
+                    <span className="text-sm font-medium">Share Photos</span>
+                  </button>
+                  <button className="w-full text-left p-3 rounded-lg hover:bg-white/50 transition-colors flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                      <span className="text-white text-sm">🎉</span>
+                    </div>
+                    <span className="text-sm font-medium">Add Story</span>
+                  </button>
+                  <button className="w-full text-left p-3 rounded-lg hover:bg-white/50 transition-colors flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                      <span className="text-white text-sm">💬</span>
+                    </div>
+                    <span className="text-sm font-medium">Group Chat</span>
+                  </button>
+                </div>
               </div>
-              <div className="glass-card p-4">
-                <h3 className="font-bold text-lg mb-4">Upcoming Events</h3>
-                {/* Placeholder */}
+              <div className="glass-card p-6 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-md border border-white/20 shadow-lg">
+                <h3 className="font-bold text-lg mb-4 text-wedding-navy flex items-center gap-2">
+                  <span className="text-wedding-gold">💍</span>
+                  Wedding Timeline
+                </h3>
+                <div className="space-y-3">
+                  <div className="p-3 rounded-lg bg-gradient-to-r from-wedding-gold/10 to-yellow-400/10 border border-wedding-gold/20">
+                    <div className="text-sm font-medium text-wedding-navy">Ceremony</div>
+                    <div className="text-xs text-gray-600">3:00 PM - Main Chapel</div>
+                  </div>
+                  <div className="p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-300/20">
+                    <div className="text-sm font-medium text-wedding-navy">Reception</div>
+                    <div className="text-xs text-gray-600">6:00 PM - Grand Ballroom</div>
+                  </div>
+                </div>
               </div>
             </div>
           </aside>
@@ -226,7 +263,7 @@ const SocialPage: React.FC<SocialPageProps> = ({ isPopup = false, onClose }) => 
               onAddStory={handleAddStory}
               onViewStory={handleViewStory}
             />
-            <ComposerBar onPost={handlePost} />
+            <ComposerBar onPost={handlePost} className="mb-6" />
             
             {postsLoading && transformedPosts.length === 0 ? (
               <div className="text-center py-16">
@@ -251,13 +288,68 @@ const SocialPage: React.FC<SocialPageProps> = ({ isPopup = false, onClose }) => 
             {/* Right Sidebar */}
             <aside className="hidden lg:block lg:col-span-3">
             <div className="sticky top-6 space-y-6">
-              <div className="glass-card p-4">
-                <h3 className="font-bold text-lg mb-4">Guest List</h3>
-                {/* Placeholder */}
+              <div className="glass-card p-6 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-md border border-white/20 shadow-lg">
+                <h3 className="font-bold text-lg mb-4 text-wedding-navy flex items-center gap-2">
+                  <span className="text-wedding-gold">👥</span>
+                  Online Now
+                </h3>
+                <div className="space-y-3">
+                  <div className="text-center py-8">
+                    <div className="text-gray-500 text-sm">
+                      <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-r from-gray-200 to-gray-300 flex items-center justify-center">
+                        <span className="text-gray-400">👤</span>
+                      </div>
+                      Guests will appear here when online
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="glass-card p-4">
-                <h3 className="font-bold text-lg mb-4">Photo Albums</h3>
-                {/* Placeholder */}
+              <div className="glass-card p-6 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-md border border-white/20 shadow-lg">
+                <h3 className="font-bold text-lg mb-4 text-wedding-navy flex items-center gap-2">
+                  <span className="text-wedding-gold">📸</span>
+                  Recent Photos
+                </h3>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="aspect-square rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400 text-2xl">📷</span>
+                  </div>
+                  <div className="aspect-square rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400 text-2xl">📷</span>
+                  </div>
+                  <div className="aspect-square rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400 text-2xl">📷</span>
+                  </div>
+                  <div className="aspect-square rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400 text-2xl">📷</span>
+                  </div>
+                </div>
+                <button className="w-full mt-3 p-2 text-sm text-wedding-navy hover:bg-white/50 rounded-lg transition-colors">
+                  View All Photos
+                </button>
+              </div>
+              <div className="glass-card p-6 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-md border border-white/20 shadow-lg">
+                <h3 className="font-bold text-lg mb-4 text-wedding-navy flex items-center gap-2">
+                  <span className="text-wedding-gold">💝</span>
+                  Wedding Info
+                </h3>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Date:</span>
+                    <span className="font-medium">October 5, 2025</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Venue:</span>
+                    <span className="font-medium">Ben Ean Pokolbin</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Guests:</span>
+                    <span className="font-medium">120 invited</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">RSVP:</span>
+                    <span className="font-medium text-green-600">85 confirmed</span>
+                  </div>
+                </div>
               </div>
             </div>
             </aside>

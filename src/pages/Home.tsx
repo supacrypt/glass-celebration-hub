@@ -17,6 +17,7 @@ import RSVPCallToAction from '@/components/home/RSVPCallToAction';
 import VenueChangeNotice from '@/components/VenueChangeNotice';
 import EventsPopup from '@/components/EventsPopup';
 // Debug components removed for production
+import MessengerTestButton from '@/components/test/MessengerTestButton';
 
 const Home: React.FC = () => {
   const { userRole, user } = useAuth();
@@ -146,6 +147,9 @@ const Home: React.FC = () => {
         />
 
         {/* Debug modals and fix components removed for production */}
+        
+        {/* Temporary messenger test button */}
+        <MessengerTestButton />
       </div>
 
       {/* Bottom Navigation - Same for all users */}

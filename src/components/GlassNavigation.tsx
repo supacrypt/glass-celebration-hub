@@ -41,11 +41,15 @@ const GlassNavigation: React.FC<NavigationProps> = ({ activeRoute, onNavigate = 
     if (routeId === 'dashboard') {
       setIsDashboardOpen(true);
     } else if (routeId === 'social') {
-      setIsSocialOpen(true);
+      // Navigate to social page instead of opening popup
+      onNavigate(routeId);
     } else if (routeId === 'gallery') {
       setIsGalleryOpen(true);
     } else if (routeId === 'events') {
       setIsEventsOpen(true);
+    } else if (routeId === 'gifts') {
+      // Open external gift registry link
+      window.open('https://mygiftregistry.com.au/id/tim-and-kirsten/', '_blank');
     } else {
       onNavigate(routeId);
     }

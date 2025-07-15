@@ -9,11 +9,90 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Eye, EyeOff, User, Mail, Phone, MapPin, Users, Send } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, Phone, MapPin, Users, Send, Heart, Utensils, FileText, CheckCircle } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PasswordStrengthMeter } from '@/components/auth/PasswordStrengthMeter';
 import { SignUpFormData, signUpSchema } from '@/lib/auth-validation';
 import GlassCard from '@/components/GlassCard';
 import { GuestMatcher, GuestMatchResult } from '@/utils/guestMatching';
+import { supabase } from '@/integrations/supabase/client';
+import ProfilePictureSignup from '@/components/ui/ProfilePictureSignup';
+import { RSVPRadioButtons } from '@/components/ui/RSVPButtons';
+
+const DIETARY_OPTIONS = [
+  'Vegetarian',
+  'Vegan', 
+  'Gluten-free',
+  'Dairy-free',
+  'Nut-free',
+  'Kosher',
+  'Halal',
+  'Low-sodium',
+  'Keto',
+  'Pescatarian'
+];
+
+const ALLERGY_OPTIONS = [
+  'Nuts',
+  'Shellfish',
+  'Dairy',
+  'Eggs',
+  'Soy',
+  'Wheat/Gluten',
+  'Fish',
+  'Sesame',
+  'Sulfites',
+  'Other'
+];
+
+const RELATIONSHIP_OPTIONS = [
+  // Wedding Party
+  { group: '👰🤵 Wedding Party', options: [
+    'Best Man',
+    'Maid of Honor', 
+    'Bridesmaid',
+    'Groomsman',
+    'Flower Girl',
+    'Ring Bearer'
+  ]},
+  // Immediate Family
+  { group: '👨‍👩‍👧‍👦 Immediate Family', options: [
+    'Father',
+    'Mother',
+    'Sister', 
+    'Brother',
+    'Son',
+    'Daughter'
+  ]},
+  // Extended Family
+  { group: '👴👵 Extended Family', options: [
+    'Grandfather',
+    'Grandmother',
+    'Great Grandfather',
+    'Great Grandmother',
+    'Uncle',
+    'Aunt',
+    'Cousin'
+  ]},
+  // In-Laws
+  { group: '💑 In-Laws', options: [
+    'Father-in-law',
+    'Mother-in-law',
+    'Sister-in-law',
+    'Brother-in-law'
+  ]},
+  // Friends & Others
+  { group: '👥 Friends & Others', options: [
+    'Close Friend',
+    'University Friend',
+    'Work Colleague',
+    'Childhood Friend',
+    'Family Friend',
+    'Neighbor',
+    'Plus One',
+    'Other'
+  ]}
+];
 
 interface SignUpFormProps {
   onSwitchToSignIn: () => void;
@@ -26,6 +105,8 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToSignIn }) => {
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [guestMatch, setGuestMatch] = useState<GuestMatchResult | null>(null);
   const [showGuestConfirm, setShowGuestConfirm] = useState(false);
+  const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
+  const [hasExistingRSVP, setHasExistingRSVP] = useState(false);
   
   const { signUp, signInWithMagicLink } = useAuth();
   const { toast } = useToast();
@@ -37,6 +118,12 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToSignIn }) => {
       hasPlusOne: false,
       plusOneName: '',
       plusOneEmail: '',
+      dietaryRequirements: [],
+      allergies: [],
+      emergencyContact: '',
+      relationshipToCouple: '',
+      specialAccommodations: '',
+      bio: '',
     }
   });
 
@@ -53,6 +140,16 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToSignIn }) => {
     if (match.matched) {
       setGuestMatch(match);
       setShowGuestConfirm(true);
+      
+      // Check if guest has already RSVP'd
+      if (match.rsvpRespondedAt) {
+        setHasExistingRSVP(true);
+        toast({
+          title: "Welcome back!",
+          description: "We already have your RSVP response on file.",
+        });
+      }
+      
       return true;
     }
     return false;
@@ -68,15 +165,31 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToSignIn }) => {
         return;
       }
 
+      // Get RSVP response from form (only if they haven't already RSVP'd)
+      const formElement = document.querySelector('form');
+      const attendingResponse = hasExistingRSVP 
+        ? (guestMatch?.rsvpStatus === 'attending' ? 'yes' : 'no')
+        : formElement?.querySelector('input[name="attending"]:checked')?.value;
+      
       const profileData = {
         mobile: data.mobile,
         address: data.address,
+        address_suburb: data.suburb,
         state: data.state,
         country: data.country,
         postcode: data.postcode,
+        emergencyContact: data.emergencyContact,
+        relationshipToCouple: data.relationshipToCouple,
+        dietaryRequirements: data.dietaryRequirements,
+        allergies: data.allergies,
+        specialAccommodations: data.specialAccommodations,
+        bio: data.bio,
+        // Profile picture will be uploaded after user creation
         hasPlusOne: data.hasPlusOne,
         plusOneName: data.plusOneName,
         plusOneEmail: data.plusOneEmail,
+        rsvp_status: attendingResponse === 'yes' ? 'attending' : 'not_attending',
+        rsvp_responded_at: new Date().toISOString(),
       };
 
       const { data: authData, error } = await signUp(data.email, data.password, data.firstName, data.lastName, profileData);
@@ -100,6 +213,24 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToSignIn }) => {
         }
       }
 
+      // Upload profile picture if selected (using session storage for temporary persistence)
+      if (profilePictureFile && authData?.user?.id) {
+        try {
+          // Store the file temporarily in sessionStorage as base64
+          const reader = new FileReader();
+          reader.onloadend = async () => {
+            const base64Data = reader.result as string;
+            sessionStorage.setItem('pending_profile_picture', base64Data);
+            sessionStorage.setItem('pending_profile_picture_type', profilePictureFile.type);
+            sessionStorage.setItem('pending_profile_picture_name', profilePictureFile.name);
+            sessionStorage.setItem('pending_profile_picture_user_id', authData.user.id);
+          };
+          reader.readAsDataURL(profilePictureFile);
+        } catch (uploadError) {
+          console.error('Failed to store profile picture for deferred upload:', uploadError);
+        }
+      }
+
       toast({
         title: "Success!",
         description: "Please check your email to confirm your account.",
@@ -107,7 +238,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToSignIn }) => {
       
       // If they have a plus one, show the magic link option
       if (data.hasPlusOne && data.plusOneEmail) {
-        setCurrentStep(3);
+        setCurrentStep(4);
       }
     } catch (error) {
       toast({
@@ -135,9 +266,36 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToSignIn }) => {
 
   const sendPlusOneMagicLink = async () => {
     const plusOneEmail = signUpForm.getValues('plusOneEmail');
-    if (plusOneEmail) {
+    const plusOneName = signUpForm.getValues('plusOneName');
+    const mainUserEmail = signUpForm.getValues('email');
+    
+    if (plusOneEmail && plusOneName) {
       try {
-        const { error } = await signInWithMagicLink(plusOneEmail);
+        // Create a plus one guest record linked to the main invitee
+        const { error: guestError } = await supabase
+          .from('guest_list')
+          .insert([{
+            name: plusOneName,
+            email_address: plusOneEmail,
+            guest_count: 1,
+            rsvp_status: 'pending',
+            invitation_code: `PLUS${Math.random().toString(36).substr(2, 8).toUpperCase()}`,
+            notes: `Plus one for ${mainUserEmail}`,
+            save_the_date_sent: false,
+            invite_sent: true,
+            rsvp_count: 0,
+            is_plus_one: true,
+            plus_one_of: mainUserEmail
+          }]);
+
+        if (guestError) throw guestError;
+
+        // Send magic link with special plus one redirect
+        const magicLinkUrl = `${window.location.origin}/auth?plusone=true&invited_by=${encodeURIComponent(mainUserEmail)}`;
+        const { error } = await signInWithMagicLink(plusOneEmail, {
+          emailRedirectTo: magicLinkUrl
+        });
+        
         if (error) {
           toast({
             title: "Error",
@@ -148,10 +306,11 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToSignIn }) => {
           setMagicLinkSent(true);
           toast({
             title: "Magic Link Sent!",
-            description: `Invitation sent to ${plusOneEmail}`,
+            description: `Invitation sent to ${plusOneEmail}. They'll be linked as your plus one.`,
           });
         }
       } catch (error) {
+        console.error('Error creating plus one record:', error);
         toast({
           title: "Error",
           description: "Failed to send magic link.",
@@ -241,7 +400,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToSignIn }) => {
     );
   }
 
-  if (currentStep === 3) {
+  if (currentStep === 4) {
     return (
       <div className="space-y-6">
         <div className="text-center">
@@ -461,6 +620,22 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToSignIn }) => {
             )}
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="suburb" className="font-dolly">Suburb</Label>
+            <Input
+              id="suburb"
+              type="text"
+              className="glass-input font-dolly"
+              placeholder="Enter suburb"
+              {...signUpForm.register('suburb')}
+            />
+            {signUpForm.formState.errors.suburb && (
+              <p className="text-sm text-destructive">
+                {signUpForm.formState.errors.suburb.message}
+              </p>
+            )}
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div className="space-y-2">
               <Label htmlFor="state" className="font-dolly">State/Province</Label>
@@ -561,6 +736,214 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToSignIn }) => {
                 </div>
               </div>
             )}
+          </div>
+
+          <div className="flex gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={prevStep}
+              className="flex-1 font-dolly"
+            >
+              Back
+            </Button>
+            <Button
+              type="button"
+              onClick={nextStep}
+              className="flex-1 bg-wedding-navy hover:bg-wedding-navy-light min-h-[44px] font-dolly"
+            >
+              Next: Wedding Details
+            </Button>
+          </div>
+        </>
+      )}
+
+      {currentStep === 3 && (
+        <>
+          <div className="space-y-2">
+            <Label htmlFor="relationshipToCouple" className="font-dolly">Relationship to Couple</Label>
+            <Select 
+              value={signUpForm.watch('relationshipToCouple')} 
+              onValueChange={(value) => signUpForm.setValue('relationshipToCouple', value)}
+            >
+              <SelectTrigger className="glass-input font-dolly">
+                <SelectValue placeholder="Select your relationship" />
+              </SelectTrigger>
+              <SelectContent>
+                {RELATIONSHIP_OPTIONS.map((group) => (
+                  <div key={group.group}>
+                    <div className="px-2 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      {group.group}
+                    </div>
+                    {group.options.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </div>
+                ))}
+              </SelectContent>
+            </Select>
+            {signUpForm.formState.errors.relationshipToCouple && (
+              <p className="text-sm text-destructive">
+                {signUpForm.formState.errors.relationshipToCouple.message}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="emergencyContact" className="font-dolly">Emergency Contact</Label>
+            <Input
+              id="emergencyContact"
+              type="text"
+              className="glass-input font-dolly"
+              placeholder="Name and phone number"
+              {...signUpForm.register('emergencyContact')}
+            />
+            {signUpForm.formState.errors.emergencyContact && (
+              <p className="text-sm text-destructive">
+                {signUpForm.formState.errors.emergencyContact.message}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <Label className="text-base font-medium font-dolly flex items-center gap-2">
+                <Utensils className="w-4 h-4" />
+                Dietary Requirements
+              </Label>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                {DIETARY_OPTIONS.map((option) => (
+                  <div key={option} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`dietary-${option}`}
+                      checked={signUpForm.watch('dietaryRequirements')?.includes(option) || false}
+                      onCheckedChange={(checked) => {
+                        const current = signUpForm.getValues('dietaryRequirements') || [];
+                        if (checked) {
+                          signUpForm.setValue('dietaryRequirements', [...current, option]);
+                        } else {
+                          signUpForm.setValue('dietaryRequirements', current.filter(item => item !== option));
+                        }
+                      }}
+                    />
+                    <Label htmlFor={`dietary-${option}`} className="text-sm font-dolly">
+                      {option}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <Label className="text-base font-medium font-dolly">Allergies</Label>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                {ALLERGY_OPTIONS.map((option) => (
+                  <div key={option} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`allergy-${option}`}
+                      checked={signUpForm.watch('allergies')?.includes(option) || false}
+                      onCheckedChange={(checked) => {
+                        const current = signUpForm.getValues('allergies') || [];
+                        if (checked) {
+                          signUpForm.setValue('allergies', [...current, option]);
+                        } else {
+                          signUpForm.setValue('allergies', current.filter(item => item !== option));
+                        }
+                      }}
+                    />
+                    <Label htmlFor={`allergy-${option}`} className="text-sm font-dolly">
+                      {option}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {hasExistingRSVP && guestMatch && (
+            <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center gap-2 text-green-700">
+                <CheckCircle className="w-5 h-5" />
+                <span className="font-medium">You've already RSVP'd!</span>
+              </div>
+              <p className="text-sm text-green-600 mt-1">
+                We have your response as: {guestMatch.rsvpStatus === 'attending' ? "Yes, attending" : "Not attending"}
+              </p>
+            </div>
+          )}
+
+          {!hasExistingRSVP && (
+            <div className="space-y-4">
+              <div className="p-4 bg-muted/30 rounded-lg border-2 border-wedding-navy/20">
+                <div className="text-center mb-4">
+                  <h3 className="text-lg font-semibold font-dolly text-wedding-navy">
+                    Tim & Kirsten's Wedding
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    October 5th, 2025 • Ben Ean Winery
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Arrival: 2:30 PM • Ceremony: 3:00 PM
+                  </p>
+                </div>
+                <Label className="text-base font-medium font-dolly flex items-center gap-2 mb-3">
+                  <Heart className="w-5 h-5 text-wedding-navy" />
+                  Will you be able to attend our wedding?
+                </Label>
+                <RSVPRadioButtons 
+                  name="attending" 
+                  defaultValue="yes"
+                  className="mt-2"
+                />
+            </div>
+          </div>
+          )}
+
+          <div className="space-y-2">
+            <Label htmlFor="specialAccommodations" className="font-dolly">Special Accommodations</Label>
+            <Textarea
+              id="specialAccommodations"
+              className="glass-input font-dolly resize-none"
+              placeholder="Any accessibility needs, special requests, or accommodations..."
+              rows={3}
+              {...signUpForm.register('specialAccommodations')}
+            />
+            {signUpForm.formState.errors.specialAccommodations && (
+              <p className="text-sm text-destructive">
+                {signUpForm.formState.errors.specialAccommodations.message}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="bio" className="font-dolly flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              Tell us about yourself (Bio)
+            </Label>
+            <Textarea
+              id="bio"
+              className="glass-input font-dolly resize-none"
+              placeholder="Share a little about yourself, your hobbies, or your connection to the couple..."
+              rows={4}
+              {...signUpForm.register('bio')}
+            />
+            {signUpForm.formState.errors.bio && (
+              <p className="text-sm text-destructive">
+                {signUpForm.formState.errors.bio.message}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-3">
+            <Label className="font-dolly text-base font-medium">Profile Picture (Optional)</Label>
+            <div className="flex justify-center">
+              <ProfilePictureSignup
+                onImageSelect={setProfilePictureFile}
+                size="lg"
+              />
+            </div>
           </div>
 
           <div className="flex gap-3">

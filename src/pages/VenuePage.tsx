@@ -7,8 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ChevronLeft, ChevronRight, MapPin, ExternalLink, Edit, Upload, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MapPin, ExternalLink, Edit, Upload, Trash2, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
+import { VenueImage } from '@/components/venue/VenueImage';
+import { StorageService } from '@/services/storageService';
 
 interface Venue {
   id: string;
@@ -165,39 +167,21 @@ const VenuePage: React.FC = () => {
 
     setUploading(true);
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${venue.name.toLowerCase().replace(/\s+/g, '-')}.${fileExt}`;
-      
-      // Determine bucket based on venue name
-      let bucketName = 'venue-ben-ean';
-      if (venue.name.includes('Prince')) bucketName = 'venue-pub';
-      if (venue.name.includes('Beach')) bucketName = 'venue-beach';
+      // Upload using StorageService
+      const result = await StorageService.uploadVenueImage(
+        venue.id,
+        file,
+        'hero'
+      );
 
-      // Delete old image
-      if (venue.image_path) {
-        await supabase.storage
-          .from(bucketName)
-          .remove([venue.image_path.split('/').pop() || '']);
-      }
+      if (!result.success) throw result.error;
 
-      // Upload new image
-      const { error: uploadError } = await supabase.storage
-        .from(bucketName)
-        .upload(fileName, file, { upsert: true });
-
-      if (uploadError) throw uploadError;
-
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from(bucketName)
-        .getPublicUrl(fileName);
-
-      // Update venue record
+      // Update venue record with new URL
       const { error: dbError } = await supabase
         .from('venues')
         .update({
-          image_url: publicUrl,
-          image_path: `${bucketName}/${fileName}`
+          image_url: result.publicUrl,
+          image_path: result.path
         })
         .eq('id', venue.id);
 
@@ -359,15 +343,19 @@ const VenuePage: React.FC = () => {
         </div>
 
         {/* Main Venue Carousel */}
-        <div className="glass-card overflow-hidden">
+        <div className="glass-card overflow-hidden shadow-2xl">
           <div className="relative">
             {/* Image */}
-            <div className="aspect-video relative">
-              <img
-                src={currentVenue.image_url}
-                alt={currentVenue.name}
-                className="w-full h-full object-cover"
+            <div className="aspect-video relative group">
+              <VenueImage
+                venueId={currentVenue.id}
+                venueName={currentVenue.name}
+                fallbackUrl={currentVenue.image_url}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
+              
+              {/* Enhanced Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
               
               {/* Navigation Arrows */}
               {displayVenues.length > 1 && (
@@ -495,51 +483,95 @@ const VenuePage: React.FC = () => {
             {displayVenues.map((venue, index) => (
               <div
                 key={venue.id}
-                className={`transition-all duration-300 ${
-                  index === currentIndex ? 'ring-2 ring-primary shadow-lg' : ''
+                className={`transition-all duration-500 ${
+                  index === currentIndex ? 'scale-[1.03]' : 'scale-100'
                 }`}
               >
                 <Card
-                  className={`glass-card cursor-pointer transition-all duration-300 hover:shadow-xl transform hover:scale-[1.02] ${
-                    index === currentIndex ? 'ring-2 ring-primary' : ''
+                  className={`glass-card cursor-pointer transition-all duration-500 hover:shadow-2xl transform hover:scale-[1.02] overflow-hidden ${
+                    index === currentIndex 
+                      ? 'ring-2 ring-primary shadow-2xl bg-gradient-to-br from-primary/5 to-primary/10' 
+                      : 'hover:ring-1 hover:ring-primary/50'
                   }`}
                   onClick={() => setCurrentIndex(index)}
                 >
-                  <div className="aspect-[4/3] sm:aspect-video relative rounded-t-lg overflow-hidden">
-                    <img
-                      src={venue.image_url}
-                      alt={venue.name}
-                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                      loading="lazy"
+                  <div className="aspect-[4/3] sm:aspect-video relative overflow-hidden group">
+                    <VenueImage
+                      venueId={venue.id}
+                      venueName={venue.name}
+                      fallbackUrl={venue.image_url}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
+                    
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    
+                    {/* Quick Actions on Hover */}
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        className="bg-white/90 hover:bg-white"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleVenueClick(venue.name);
+                        }}
+                      >
+                        View Details
+                      </Button>
+                    </div>
                     
                     {/* Active Indicator */}
                     {index === currentIndex && (
-                      <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
-                        <div className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <div className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1">
+                          <div className="w-2 h-2 bg-primary-foreground rounded-full animate-pulse" />
                           Currently Viewing
                         </div>
                       </div>
                     )}
                   </div>
                   
-                  <CardContent className="p-3 sm:p-4 text-center">
-                    <h3 className="font-semibold text-sm sm:text-base line-clamp-2 mb-2 font-dolly">
+                  <CardContent className="p-4 space-y-3">
+                    <h3 className="font-bold text-base sm:text-lg line-clamp-1 font-dolly text-foreground">
                       {venue.name}
                     </h3>
                     
                     {venue.caption && (
-                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 mb-2">
+                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
                         {venue.caption}
                       </p>
                     )}
                     
-                    {venue.address && (
-                      <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
-                        <MapPin className="w-3 h-3 flex-shrink-0" />
-                        <span className="line-clamp-1">{venue.address}</span>
-                      </div>
-                    )}
+                    <div className="pt-2 space-y-2">
+                      {venue.address && (
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <MapPin className="w-4 h-4 flex-shrink-0 text-primary" />
+                          <span className="line-clamp-1">{venue.address}</span>
+                        </div>
+                      )}
+                      
+                      {/* Extract key quick fact */}
+                      {venue.quick_facts?.Date && (
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <Calendar className="w-4 h-4 flex-shrink-0 text-primary" />
+                          <span>{venue.quick_facts.Date}</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* View Button */}
+                    <Button 
+                      className="w-full mt-3"
+                      size="sm"
+                      variant={index === currentIndex ? "default" : "outline"}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleVenueClick(venue.name);
+                      }}
+                    >
+                      View Full Details
+                    </Button>
                   </CardContent>
                 </Card>
               </div>

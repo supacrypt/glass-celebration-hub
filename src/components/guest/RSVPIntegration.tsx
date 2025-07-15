@@ -27,12 +27,13 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/select';
+import { RSVPButtons } from '@/components/ui/RSVPButtons';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 
 interface RSVPFormData {
-  rsvp_status: 'confirmed' | 'declined';
+  rsvp_status: 'attending' | 'not_attending';
   plus_one_name: string;
   plus_one_email: string;
   dietary_needs: string[];
@@ -47,6 +48,9 @@ interface RSVPFormData {
   contact_updates: {
     phone: string;
     address: string;
+    suburb: string;
+    state: string;
+    postcode: string;
     emergency_contact: string;
   };
 }
@@ -93,7 +97,7 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
   const [submitting, setSubmitting] = useState(false);
   const [currentGuest, setCurrentGuest] = useState<any>(null);
   const [formData, setFormData] = useState<RSVPFormData>({
-    rsvp_status: 'confirmed',
+    rsvp_status: 'attending',
     plus_one_name: '',
     plus_one_email: '',
     dietary_needs: [],
@@ -103,6 +107,9 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
     contact_updates: {
       phone: '',
       address: '',
+      suburb: '',
+      state: '',
+      postcode: '',
       emergency_contact: ''
     }
   });
@@ -131,16 +138,19 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
       // Pre-populate form with existing data
       setFormData(prev => ({
         ...prev,
-        rsvp_status: data.rsvp_status || 'confirmed',
+        rsvp_status: data.rsvp_status || 'attending',
         plus_one_name: data.plus_one_name || '',
         plus_one_email: data.plus_one_email || '',
-        dietary_needs: data.dietary_needs || [],
+        dietary_needs: data.dietary_requirements || [],
         allergies: data.allergies || [],
-        special_requests: data.special_requests || '',
+        special_requests: data.special_accommodations || '',
         contact_updates: {
-          phone: data.phone || '',
-          address: data.contact_details?.address || '',
-          emergency_contact: data.contact_details?.emergency_contact || ''
+          phone: data.mobile || '',
+          address: data.address || '',
+          suburb: data.address_suburb || '',
+          state: data.state || '',
+          postcode: data.postcode || '',
+          emergency_contact: data.emergency_contact || ''
         }
       }));
     } catch (error) {
@@ -166,16 +176,19 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
         setCurrentGuest(data);
         setFormData(prev => ({
           ...prev,
-          rsvp_status: data.rsvp_status || 'confirmed',
+          rsvp_status: data.rsvp_status || 'attending',
           plus_one_name: data.plus_one_name || '',
           plus_one_email: data.plus_one_email || '',
-          dietary_needs: data.dietary_needs || [],
+          dietary_needs: data.dietary_requirements || [],
           allergies: data.allergies || [],
-          special_requests: data.special_requests || '',
+          special_requests: data.special_accommodations || '',
           contact_updates: {
-            phone: data.phone || '',
-            address: data.contact_details?.address || '',
-            emergency_contact: data.contact_details?.emergency_contact || ''
+            phone: data.mobile || '',
+            address: data.address || '',
+            suburb: data.address_suburb || '',
+            state: data.state || '',
+            postcode: data.postcode || '',
+            emergency_contact: data.emergency_contact || ''
           }
         }));
       }
@@ -191,32 +204,44 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
       setSubmitting(true);
       
       const targetGuestId = guestId || currentGuest?.id;
-      if (!targetGuestId) {
+      if (!targetGuestId && !user?.id) {
         toast.error('No guest record found');
         return;
       }
 
       // Update guest record with RSVP data
       const updateData = {
-        rsvp_status: formData.rsvp_status,
+        rsvp_status: formData.rsvp_status, // Already using 'attending' or 'not_attending'
         rsvp_responded_at: new Date().toISOString(),
         plus_one_name: formData.plus_one_name || null,
         plus_one_email: formData.plus_one_email || null,
-        dietary_needs: formData.dietary_needs,
+        dietary_requirements: formData.dietary_needs,
         allergies: formData.allergies,
-        special_requests: formData.special_requests || null,
-        phone: formData.contact_updates.phone,
-        contact_details: {
-          ...currentGuest?.contact_details,
-          address: formData.contact_updates.address,
-          emergency_contact: formData.contact_updates.emergency_contact
-        }
+        special_accommodations: formData.special_requests || null,
+        mobile: formData.contact_updates.phone,
+        address: formData.contact_updates.address,
+        address_suburb: formData.contact_updates.suburb,
+        state: formData.contact_updates.state,
+        postcode: formData.contact_updates.postcode,
+        emergency_contact: formData.contact_updates.emergency_contact
       };
 
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update(updateData)
-        .eq('id', targetGuestId);
+      let updateQuery;
+      if (targetGuestId) {
+        // Update by profile ID
+        updateQuery = supabase
+          .from('profiles')
+          .update(updateData)
+          .eq('id', targetGuestId);
+      } else {
+        // Update by user_id (current user)
+        updateQuery = supabase
+          .from('profiles')
+          .update(updateData)
+          .eq('user_id', user?.id);
+      }
+
+      const { error: updateError } = await updateQuery;
 
       if (updateError) throw updateError;
 
@@ -228,12 +253,10 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
             first_name: guest.first_name,
             last_name: guest.last_name,
             email: guest.email,
-            rsvp_status: 'confirmed',
+            rsvp_status: 'attending', // Using database format
             rsvp_responded_at: new Date().toISOString(),
-            contact_details: { 
-              relationship: guest.relationship,
-              added_by_guest: targetGuestId
-            }
+            relationship_to_couple: guest.relationship,
+            added_by_guest: targetGuestId || user?.id
           }));
 
         if (newGuestInserts.length > 0) {
@@ -248,42 +271,58 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
       }
 
       // Archive guest if they declined
-      if (formData.rsvp_status === 'declined') {
-        await supabase
-          .from('profiles')
-          .update({ 
-            is_archived: true,
-            archived_at: new Date().toISOString(),
-            archive_reason: 'Declined RSVP'
-          })
-          .eq('id', targetGuestId);
+      if (formData.rsvp_status === 'not_attending') {
+        const archiveQuery = targetGuestId 
+          ? supabase.from('profiles').update({ 
+              is_archived: true,
+              archived_at: new Date().toISOString(),
+              archive_reason: 'Declined RSVP'
+            }).eq('id', targetGuestId)
+          : supabase.from('profiles').update({ 
+              is_archived: true,
+              archived_at: new Date().toISOString(),
+              archive_reason: 'Declined RSVP'
+            }).eq('user_id', user?.id);
+        
+        await archiveQuery;
       }
 
       // Log RSVP change in history
-      await supabase
-        .from('rsvp_history')
-        .insert([{
-          guest_id: targetGuestId,
-          old_status: currentGuest?.rsvp_status || 'pending',
-          new_status: formData.rsvp_status,
-          change_method: 'online_form',
-          change_reason: 'Guest RSVP submission'
-        }]);
+      const finalGuestId = targetGuestId || currentGuest?.id;
+      if (finalGuestId) {
+        try {
+          await supabase
+            .from('rsvp_history')
+            .insert([{
+              guest_id: finalGuestId,
+              old_status: currentGuest?.rsvp_status || 'pending',
+              new_status: formData.rsvp_status,
+              change_method: 'online_form',
+              change_reason: 'Guest RSVP submission'
+            }]);
+        } catch (historyError) {
+          console.log('Note: Could not create RSVP history (table may not exist):', historyError.message);
+        }
 
-      // Send confirmation communication log
-      await supabase
-        .from('guest_communications')
-        .insert([{
-          guest_id: targetGuestId,
-          communication_type: 'email',
-          subject: `RSVP ${formData.rsvp_status === 'confirmed' ? 'Confirmation' : 'Decline'} Received`,
-          content: `Guest ${formData.rsvp_status} their invitation${formData.plus_one_name ? ` with plus one: ${formData.plus_one_name}` : ''}`,
-          direction: 'inbound',
-          status: 'received'
-        }]);
+        // Send confirmation communication log
+        try {
+          await supabase
+            .from('guest_communications')
+            .insert([{
+              guest_id: finalGuestId,
+              communication_type: 'email',
+              subject: `RSVP ${formData.rsvp_status === 'attending' ? 'Confirmation' : 'Decline'} Received`,
+              content: `Guest ${formData.rsvp_status} their invitation${formData.plus_one_name ? ` with plus one: ${formData.plus_one_name}` : ''}`,
+              direction: 'inbound',
+              status: 'received'
+            }]);
+        } catch (commError) {
+          console.log('Note: Could not create communication log (table may not exist):', commError.message);
+        }
+      }
 
       toast.success(
-        formData.rsvp_status === 'confirmed' 
+        formData.rsvp_status === 'attending' 
           ? 'RSVP confirmed! We\'re excited to celebrate with you!' 
           : 'RSVP received. Thank you for letting us know.'
       );
@@ -292,7 +331,25 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
         onRSVPSubmitted(formData);
       }
 
-      // Refresh guest data
+      // Update current guest state immediately to reflect the response
+      setCurrentGuest(prev => ({
+        ...prev,
+        rsvp_status: formData.rsvp_status,
+        rsvp_responded_at: new Date().toISOString(),
+        plus_one_name: formData.plus_one_name || null,
+        plus_one_email: formData.plus_one_email || null,
+        dietary_requirements: formData.dietary_needs,
+        allergies: formData.allergies,
+        special_accommodations: formData.special_requests || null,
+        mobile: formData.contact_updates.phone,
+        address: formData.contact_updates.address,
+        address_suburb: formData.contact_updates.suburb,
+        state: formData.contact_updates.state,
+        postcode: formData.contact_updates.postcode,
+        emergency_contact: formData.contact_updates.emergency_contact
+      }));
+
+      // Refresh guest data from database
       if (guestId) {
         await fetchGuestData();
       } else {
@@ -344,7 +401,7 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
     );
   }
 
-  const isAlreadyResponded = currentGuest?.rsvp_responded_at && readonly;
+  const isAlreadyResponded = currentGuest?.rsvp_responded_at || readonly;
 
   return (
     <div className="space-y-6">
@@ -382,41 +439,18 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
             Will you be attending?
           </h3>
           
-          <div className="grid grid-cols-2 gap-4">
-            <Button
-              variant={formData.rsvp_status === 'confirmed' ? 'default' : 'outline'}
-              onClick={() => setFormData(prev => ({ ...prev, rsvp_status: 'confirmed' }))}
-              disabled={readonly}
-              className={`h-20 flex-col gap-2 ${
-                formData.rsvp_status === 'confirmed' 
-                  ? 'bg-green-600 hover:bg-green-700' 
-                  : 'border-green-200 text-green-700 hover:bg-green-50'
-              }`}
-            >
-              <CheckCircle className="w-6 h-6" />
-              Yes, I'll be there!
-            </Button>
-            
-            <Button
-              variant={formData.rsvp_status === 'declined' ? 'default' : 'outline'}
-              onClick={() => setFormData(prev => ({ ...prev, rsvp_status: 'declined' }))}
-              disabled={readonly}
-              className={`h-20 flex-col gap-2 ${
-                formData.rsvp_status === 'declined' 
-                  ? 'bg-red-600 hover:bg-red-700' 
-                  : 'border-red-200 text-red-700 hover:bg-red-50'
-              }`}
-            >
-              <XCircle className="w-6 h-6" />
-              Sorry, can't make it
-            </Button>
-          </div>
+          <RSVPButtons
+            value={formData.rsvp_status}
+            onChange={(value) => setFormData(prev => ({ ...prev, rsvp_status: value }))}
+            disabled={isAlreadyResponded}
+            size="large"
+          />
         </div>
       </GlassCard>
 
       {/* Conditional sections based on RSVP status */}
       <AnimatePresence>
-        {formData.rsvp_status === 'confirmed' && (
+        {formData.rsvp_status === 'attending' && (
           <>
             {/* Plus One Section */}
             <motion.div
@@ -439,7 +473,7 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
                         value={formData.plus_one_name}
                         onChange={(e) => setFormData(prev => ({ ...prev, plus_one_name: e.target.value }))}
                         placeholder="Full name"
-                        disabled={readonly}
+                        disabled={isAlreadyResponded}
                       />
                     </div>
                     <div>
@@ -450,7 +484,7 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
                         value={formData.plus_one_email}
                         onChange={(e) => setFormData(prev => ({ ...prev, plus_one_email: e.target.value }))}
                         placeholder="email@example.com"
-                        disabled={readonly}
+                        disabled={isAlreadyResponded}
                       />
                     </div>
                   </div>
@@ -493,7 +527,7 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
                                   }));
                                 }
                               }}
-                              disabled={readonly}
+                              disabled={isAlreadyResponded}
                             />
                             <Label htmlFor={`dietary-${option}`} className="text-sm">
                               {option}
@@ -524,7 +558,7 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
                                   }));
                                 }
                               }}
-                              disabled={readonly}
+                              disabled={isAlreadyResponded}
                             />
                             <Label htmlFor={`allergy-${option}`} className="text-sm">
                               {option}
@@ -539,7 +573,7 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
             </motion.div>
 
             {/* Additional Guests */}
-            {!readonly && (
+            {!isAlreadyResponded && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
@@ -644,7 +678,7 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
                   contact_updates: { ...prev.contact_updates, phone: e.target.value }
                 }))}
                 placeholder="Your phone number"
-                disabled={readonly}
+                disabled={isAlreadyResponded}
               />
             </div>
             <div>
@@ -657,23 +691,65 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
                   contact_updates: { ...prev.contact_updates, emergency_contact: e.target.value }
                 }))}
                 placeholder="Name and phone number"
-                disabled={readonly}
+                disabled={isAlreadyResponded}
               />
             </div>
           </div>
           
           <div>
-            <Label htmlFor="contact_address">Mailing Address</Label>
-            <Textarea
+            <Label htmlFor="contact_address">Street Address</Label>
+            <Input
               id="contact_address"
               value={formData.contact_updates.address}
               onChange={(e) => setFormData(prev => ({
                 ...prev,
                 contact_updates: { ...prev.contact_updates, address: e.target.value }
               }))}
-              placeholder="Full mailing address for thank you notes"
-              disabled={readonly}
+              placeholder="Enter your full address"
+              disabled={isAlreadyResponded}
             />
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <Label htmlFor="contact_suburb">Suburb</Label>
+              <Input
+                id="contact_suburb"
+                value={formData.contact_updates.suburb}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  contact_updates: { ...prev.contact_updates, suburb: e.target.value }
+                }))}
+                placeholder="Enter suburb"
+                disabled={isAlreadyResponded}
+              />
+            </div>
+            <div>
+              <Label htmlFor="contact_state">State/Province</Label>
+              <Input
+                id="contact_state"
+                value={formData.contact_updates.state}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  contact_updates: { ...prev.contact_updates, state: e.target.value }
+                }))}
+                placeholder="Enter state/province"
+                disabled={isAlreadyResponded}
+              />
+            </div>
+            <div>
+              <Label htmlFor="contact_postcode">Postcode/Zip Code</Label>
+              <Input
+                id="contact_postcode"
+                value={formData.contact_updates.postcode}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  contact_updates: { ...prev.contact_updates, postcode: e.target.value }
+                }))}
+                placeholder="Enter postcode/zip"
+                disabled={isAlreadyResponded}
+              />
+            </div>
           </div>
         </div>
       </GlassCard>
@@ -697,14 +773,14 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
       </GlassCard>
 
       {/* Submit Button */}
-      {!readonly && (
+      {!isAlreadyResponded && (
         <GlassCard className="p-6">
           <div className="text-center space-y-4">
             <Button
               onClick={handleSubmitRSVP}
               disabled={submitting}
               className={`w-full md:w-auto px-8 py-3 text-lg ${
-                formData.rsvp_status === 'confirmed'
+                formData.rsvp_status === 'attending'
                   ? 'bg-green-600 hover:bg-green-700'
                   : 'bg-red-600 hover:bg-red-700'
               }`}
@@ -716,7 +792,7 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
                 </div>
               ) : (
                 <>
-                  {formData.rsvp_status === 'confirmed' ? (
+                  {formData.rsvp_status === 'attending' ? (
                     <>
                       <CheckCircle className="w-5 h-5 mr-2" />
                       Confirm My Attendance
@@ -732,7 +808,7 @@ const RSVPIntegration: React.FC<RSVPIntegrationProps> = ({
             </Button>
             
             <p className="text-sm text-[#7a736b]">
-              {formData.rsvp_status === 'confirmed' 
+              {formData.rsvp_status === 'attending' 
                 ? "We can't wait to celebrate with you!" 
                 : "Thank you for letting us know. We'll miss you!"
               }

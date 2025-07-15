@@ -47,6 +47,8 @@ export interface RSVPStats {
   pending: number;
   maybe: number;
   totalGuests: number;
+  registeredUsers: number;
+  unregisteredGuests: number;
   dietaryRestrictions: number;
   plusOnes: number;
   needAccommodation: number;

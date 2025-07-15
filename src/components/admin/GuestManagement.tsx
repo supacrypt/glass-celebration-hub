@@ -303,7 +303,7 @@ const GuestManagement: React.FC<GuestManagementProps> = ({ users, onRefresh }) =
               Add Guest
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md">
+          <DialogContent className="glass-popup max-w-md">
             <DialogHeader>
               <DialogTitle>Add New Guest</DialogTitle>
             </DialogHeader>

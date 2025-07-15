@@ -45,17 +45,14 @@ const RSVPPage: React.FC = () => {
     }
   };
 
-  const handleRSVPSubmitted = () => {
-    // Refresh guest data after RSVP submission
-    loadGuestData();
-    
+  const handleRSVPSubmitted = async () => {
     // Show success message
     toast.success('Thank you for your RSVP response!');
     
-    // Navigate back to home after a delay
+    // Navigate back to home after a short delay to let the toast show
     setTimeout(() => {
       navigate('/');
-    }, 2000);
+    }, 1500);
   };
 
   if (loading) {
@@ -74,12 +71,11 @@ const RSVPPage: React.FC = () => {
   }
 
   const weddingDetails = {
-    date: 'June 15, 2025',
-    time: '4:00 PM',
+    date: 'October 5, 2025',
+    time: '3:00 PM',
     ceremony: 'Ben Ean Winery, Hunter Valley',
     reception: 'Same Location',
-    dress_code: 'Cocktail Attire',
-    deadline: 'May 1, 2025'
+    dress_code: 'Cocktail Attire'
   };
 
   return (
@@ -123,7 +119,7 @@ const RSVPPage: React.FC = () => {
           <GlassCard className="p-6">
             <div className="text-center space-y-4">
               <h2 className="text-xl font-bold text-[#2d3f51]">
-                Sarah & Michael's Wedding
+                Tim & Kirsten's Wedding
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -145,11 +141,6 @@ const RSVPPage: React.FC = () => {
                 </div>
               </div>
               
-              <div className="pt-4 border-t border-gray-200/50">
-                <p className="text-sm text-[#7a736b]">
-                  Please respond by <strong>{weddingDetails.deadline}</strong>
-                </p>
-              </div>
             </div>
           </GlassCard>
         </motion.div>
@@ -212,21 +203,28 @@ const RSVPPage: React.FC = () => {
         >
           <GlassCard className="p-4">
             <p className="text-sm text-[#7a736b]">
-              Having trouble with your RSVP? Contact us at{' '}
-              <a 
-                href="mailto:wedding@sarahandmichael.com" 
-                className="text-wedding-navy hover:underline"
-              >
-                wedding@sarahandmichael.com
-              </a>
-              {' '}or{' '}
-              <a 
-                href="tel:+1234567890" 
-                className="text-wedding-navy hover:underline"
-              >
-                (123) 456-7890
-              </a>
+              Having trouble with your RSVP? Contact us at:
             </p>
+            <div className="mt-2 space-y-1">
+              <p className="text-sm">
+                <strong className="text-wedding-navy">Tim:</strong>{' '}
+                <a 
+                  href="tel:0401372025" 
+                  className="text-wedding-navy hover:underline"
+                >
+                  0401 372 025
+                </a>
+              </p>
+              <p className="text-sm">
+                <strong className="text-wedding-navy">Kirsten:</strong>{' '}
+                <a 
+                  href="tel:0402180915" 
+                  className="text-wedding-navy hover:underline"
+                >
+                  0402 180 915
+                </a>
+              </p>
+            </div>
           </GlassCard>
         </motion.div>
       </div>

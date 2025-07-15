@@ -48,6 +48,77 @@ const ProfileDropdown: React.FC = () => {
     return user?.email?.split('@')[0] || 'User';
   };
 
+  const renderProfileAvatar = () => {
+    const avatarUrl = profile?.avatar_url || profile?.profile_picture_url;
+    
+    if (avatarUrl) {
+      return (
+        <div style={{ position: 'relative', width: '32px', height: '32px' }}>
+          <img 
+            src={avatarUrl} 
+            alt="Profile"
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+              border: '2px solid rgba(255, 255, 255, 0.3)'
+            }}
+            onError={(e) => {
+              // Hide the image and show the fallback initials
+              const imgElement = e.target as HTMLImageElement;
+              imgElement.style.display = 'none';
+              const fallbackElement = imgElement.nextElementSibling as HTMLElement;
+              if (fallbackElement) {
+                fallbackElement.style.display = 'flex';
+              }
+            }}
+          />
+          <div
+            className="profile-avatar"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              display: 'none',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              fontWeight: '600',
+              fontSize: '14px'
+            }}
+          >
+            {getInitials()}
+          </div>
+        </div>
+      );
+    }
+    
+    return (
+      <div
+        className="profile-avatar"
+        style={{
+          width: '32px',
+          height: '32px',
+          borderRadius: '50%',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white',
+          fontWeight: '600',
+          fontSize: '14px'
+        }}
+      >
+        {getInitials()}
+      </div>
+    );
+  };
+
   return (
     <>
       {/* Profile Button */}
@@ -81,23 +152,7 @@ const ProfileDropdown: React.FC = () => {
           if (!isOpen) e.currentTarget.style.transform = 'scale(1)';
         }}
       >
-        <div
-          className="profile-avatar"
-          style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontWeight: '600',
-            fontSize: '14px'
-          }}
-        >
-          {getInitials()}
-        </div>
+        {renderProfileAvatar()}
       </button>
 
       {/* Profile Dropdown */}

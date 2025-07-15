@@ -15,44 +15,7 @@ interface PresenceAvatarStackProps {
   maxVisible?: number;
 }
 
-// Dummy users for when presence is not yet connected
-const dummyUsers: PresenceUser[] = [
-  {
-    user_id: '1',
-    name: 'Sarah Johnson',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b77c?w=150&h=150&fit=crop&crop=face',
-    last_seen: new Date().toISOString(),
-    status: 'online'
-  },
-  {
-    user_id: '2', 
-    name: 'Mike Chen',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-    last_seen: new Date().toISOString(),
-    status: 'online'
-  },
-  {
-    user_id: '3',
-    name: 'Emma Wilson',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
-    last_seen: new Date().toISOString(), 
-    status: 'online'
-  },
-  {
-    user_id: '4',
-    name: 'James Miller',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
-    last_seen: new Date().toISOString(),
-    status: 'online'
-  },
-  {
-    user_id: '5',
-    name: 'Lisa Davis',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
-    last_seen: new Date().toISOString(),
-    status: 'online'
-  }
-];
+// No dummy users - use only real presence data
 
 const PresenceAvatarStack: React.FC<PresenceAvatarStackProps> = ({ 
   className, 
@@ -60,10 +23,9 @@ const PresenceAvatarStack: React.FC<PresenceAvatarStackProps> = ({
 }) => {
   const { onlineUsers, isLoading } = usePresence();
 
-  // Use dummy data if no real users or loading
-  const usersToShow = onlineUsers.length > 0 ? onlineUsers : dummyUsers;
-  const visibleUsers = usersToShow.slice(0, maxVisible);
-  const remainingCount = Math.max(0, usersToShow.length - maxVisible);
+  // Use only real presence data
+  const visibleUsers = onlineUsers.slice(0, maxVisible);
+  const remainingCount = Math.max(0, onlineUsers.length - maxVisible);
 
   const tooltipItems = visibleUsers.map(user => ({
     id: user.user_id,
@@ -85,6 +47,11 @@ const PresenceAvatarStack: React.FC<PresenceAvatarStackProps> = ({
         </div>
       </div>
     );
+  }
+
+  // Don't render anything if no users are online
+  if (onlineUsers.length === 0) {
+    return null;
   }
 
   return (

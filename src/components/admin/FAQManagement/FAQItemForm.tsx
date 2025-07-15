@@ -117,7 +117,7 @@ const FAQItemForm: React.FC<FAQItemFormProps> = ({
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="glass-popup sm:max-w-[600px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">

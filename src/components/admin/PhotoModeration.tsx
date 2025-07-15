@@ -380,7 +380,7 @@ const PhotoModeration: React.FC<PhotoModerationProps> = ({ photos, onRefresh }) 
                       View
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-3xl">
+                  <DialogContent className="glass-popup max-w-3xl">
                     <DialogHeader>
                       <DialogTitle>Photo Details</DialogTitle>
                     </DialogHeader>

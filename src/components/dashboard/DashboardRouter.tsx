@@ -44,11 +44,6 @@ export const DashboardRouter: React.FC<DashboardRouterProps> = ({
   // Route based on user role and display mode
   let role = userRole?.role || 'guest';
   
-  // Temporary hardcoded admin check for Daniel
-  if (user?.email === 'daniel.j.fleuren@gmail.com') {
-    role = 'admin';
-  }
-  
   
   
   // Route based on role - only popup versions

@@ -18,6 +18,11 @@
     "test:integration": "jest --testPathPattern=integration",
     "test:ci": "jest --coverage --watchAll=false --maxWorkers=2",
     "test:e2e": "playwright test --config=e2e/config/playwright.config.ts",
+    "setup:dev": "node setup_dev_environment.js",
+    "setup:production": "node setup_production_environment.js",
+    "deploy:staging": "npm run build && npm run deploy:staging:upload",
+    "deploy:production": "npm run build && npm run deploy:production:upload",
+    "type-check": "tsc --noEmit",
     "test:e2e:headed": "playwright test --config=e2e/config/playwright.config.ts --headed",
     "test:e2e:debug": "playwright test --config=e2e/config/playwright.config.ts --debug",
     "test:e2e:public": "playwright test --config=e2e/config/playwright.config.ts e2e/tests/public-routes.spec.ts",
@@ -40,7 +45,9 @@
     "lighthouse:audit": "npx lhci autorun --config=scans/performance/lighthouse-config.js",
     "scan:all": "./scans/run-all-scans.sh",
     "scan:security": "npm run security:scan",
-    "scan:performance": "npm run performance:scan && npm run bundle:analyze"
+    "scan:performance": "npm run performance:scan && npm run bundle:analyze",
+    "test:registration": "node test_registration_flow.js",
+    "test:sql": "node -e \"require('./test_registration_flow.js').validateSQL()\""
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
@@ -104,6 +111,7 @@
     "@eslint/js": "^9.9.0",
     "@jest/globals": "^30.0.4",
     "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.54.1",
     "@tailwindcss/typography": "^0.5.15",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",

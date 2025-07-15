@@ -9,6 +9,9 @@ interface PerformanceMetrics {
 }
 
 const PerformanceMonitor: React.FC = () => {
+  // Return null immediately in production
+  if (import.meta.env.PROD) return null;
+  
   const [metrics, setMetrics] = useState<Partial<PerformanceMetrics>>({});
   const [isDev, setIsDev] = useState(false);
 
@@ -60,7 +63,7 @@ const PerformanceMonitor: React.FC = () => {
   }, []);
 
   // Only render in development
-  if (!isDev) return null;
+  if (!isDev || import.meta.env.PROD) return null;
 
   const formatTime = (time: number) => `${Math.round(time)}ms`;
   

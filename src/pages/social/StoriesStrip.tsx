@@ -39,50 +39,8 @@ const StoriesStrip: React.FC<StoriesStripProps> = ({
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
-  // Mock stories for demo
-  const mockStories: Story[] = [
-    {
-      id: '1',
-      user_id: 'user1',
-      user_name: 'Sarah Chen',
-      user_avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b647?w=150&h=150&fit=crop&crop=face',
-      media_url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=400&h=600&fit=crop',
-      media_type: 'image',
-      caption: 'Getting ready for the big day! 💍',
-      created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
-      expires_at: new Date(Date.now() + 22 * 60 * 60 * 1000).toISOString(), // 22 hours from now
-      view_count: 12,
-      is_viewed: false
-    },
-    {
-      id: '2',
-      user_id: 'user2',
-      user_name: 'Mike Johnson',
-      user_avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-      media_url: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&h=600&fit=crop',
-      media_type: 'image',
-      caption: 'Bachelor party vibes! 🎉',
-      created_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(), // 4 hours ago
-      expires_at: new Date(Date.now() + 20 * 60 * 60 * 1000).toISOString(), // 20 hours from now
-      view_count: 8,
-      is_viewed: true
-    },
-    {
-      id: '3',
-      user_id: 'user3',
-      user_name: 'Emma Wilson',
-      user_avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
-      media_url: 'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=400&h=600&fit=crop',
-      media_type: 'image',
-      caption: 'Venue setup looking amazing! ✨',
-      created_at: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(), // 1 hour ago
-      expires_at: new Date(Date.now() + 23 * 60 * 60 * 1000).toISOString(), // 23 hours from now
-      view_count: 15,
-      is_viewed: false
-    }
-  ];
-
-  const allStories = [...mockStories, ...stories];
+  // Use only real stories from Supabase
+  const allStories = stories;
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -121,8 +79,8 @@ const StoriesStrip: React.FC<StoriesStripProps> = ({
   };
 
   return (
-    <Card className={`w-full glass-morphism border-0 ${className}`}>
-      <CardContent className="p-4">
+    <Card className={`w-full bg-white/80 backdrop-blur-md border border-white/30 shadow-xl ${className}`}>
+      <CardContent className="p-4 bg-gradient-to-r from-white/50 to-white/30">
         <div className="relative">
           {/* Left scroll button */}
           {canScrollLeft && (
@@ -149,7 +107,7 @@ const StoriesStrip: React.FC<StoriesStripProps> = ({
               <Button
                 variant="outline"
                 size="sm"
-                className="w-16 h-16 p-0 rounded-full border-2 border-dashed border-wedding-gold hover:border-wedding-gold/80 bg-white/50 hover:bg-white/70 transition-all"
+                className="w-16 h-16 p-0 rounded-full border-2 border-dashed border-wedding-gold hover:border-wedding-gold/80 bg-gradient-to-br from-white/70 to-white/50 hover:from-white/80 hover:to-white/60 transition-all shadow-lg hover:shadow-xl"
                 onClick={onAddStory}
                 aria-label="Add your story"
               >
@@ -174,10 +132,10 @@ const StoriesStrip: React.FC<StoriesStripProps> = ({
                 >
                   <div className="relative">
                     {/* Story ring */}
-                    <div className={`w-16 h-16 rounded-full p-0.5 ${
+                    <div className={`w-16 h-16 rounded-full p-0.5 shadow-lg ${
                       story.is_viewed 
                         ? 'bg-gradient-to-tr from-gray-300 to-gray-400' 
-                        : 'bg-gradient-to-tr from-wedding-gold via-pink-500 to-purple-500'
+                        : 'bg-gradient-to-tr from-wedding-gold via-pink-500 to-purple-500 animate-pulse'
                     }`}>
                       <div className="w-full h-full rounded-full p-0.5 bg-white">
                         <Avatar className="w-full h-full">
@@ -232,11 +190,15 @@ const StoriesStrip: React.FC<StoriesStripProps> = ({
         </div>
 
         {/* Story count */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/20">
-          <span className="text-xs text-muted-foreground">
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-wedding-gold/20">
+          <span className="text-xs text-muted-foreground flex items-center gap-1">
+            <span className="text-wedding-gold">📸</span>
             {allStories.length} active stories
           </span>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-muted-foreground flex items-center gap-1">
+            {allStories.filter(s => !s.is_viewed).length > 0 && (
+              <span className="w-2 h-2 bg-wedding-gold rounded-full animate-pulse" />
+            )}
             {allStories.filter(s => !s.is_viewed).length} new
           </span>
         </div>

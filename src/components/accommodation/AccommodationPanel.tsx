@@ -423,7 +423,7 @@ const AccommodationPanel: React.FC<AccommodationPanelProps> = ({ className }) =>
               Add Accommodation
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="glass-popup max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingAccommodation ? 'Edit Accommodation' : 'Add Accommodation'}
@@ -926,7 +926,7 @@ const AccommodationPanel: React.FC<AccommodationPanelProps> = ({ className }) =>
 
       {/* Booking Details Dialog */}
       <Dialog open={showBookingDialog} onOpenChange={setShowBookingDialog}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="glass-popup max-w-3xl">
           <DialogHeader>
             <DialogTitle>Bookings for {selectedAccommodation?.name}</DialogTitle>
             <DialogDescription>

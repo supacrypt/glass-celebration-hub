@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, Users, Calendar, MessageSquare, Camera, Settings, BarChart3, CheckCircle, AlertCircle, Clock, UserPlus, Gift, MapPin, Activity, TrendingUp, Heart } from 'lucide-react';
+import { X, Users, Calendar, MessageSquare, Camera, CheckCircle, Clock, UserPlus, TrendingUp, Heart, Palette, Activity } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
-import LiveMetrics from '@/components/admin/LiveMetrics';
-import CentralGuestList from '@/components/guest/CentralGuestList';
 // Temporarily disabled for emergency recovery
 // import { AuthGuard } from '@/components/security/AuthGuard';
 
@@ -33,28 +31,197 @@ const AdminDashboardPopup: React.FC<AdminDashboardPopupProps> = ({ onClose }) =>
     photoUploads: 0
   });
   const [loading, setLoading] = useState(true);
-  const [currentView, setCurrentView] = useState<'dashboard' | 'metrics' | 'guestlist'>('dashboard');
+  const [recentActivity, setRecentActivity] = useState<Array<{
+    type: string;
+    message: string;
+    time: string;
+    icon: any;
+  }>>([]);
 
   useEffect(() => {
     loadAdminStats();
+    loadRecentActivity();
   }, []);
 
   const loadAdminStats = async () => {
     try {
-      // Mock data for now to avoid Supabase issues
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      // Get counts from both profiles and guest_list tables
+      // Get total registered users
+      const { count: registeredUsers } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true });
+      
+      // Get total guest list entries
+      const { count: guestListTotal } = await supabase
+        .from('guest_list')
+        .select('*', { count: 'exact', head: true });
+      
+      // Get RSVP counts from profiles (registered users)
+      const { data: profileRsvpData } = await supabase
+        .from('profiles')
+        .select('rsvp_status');
+      
+      // Get RSVP counts from guest_list
+      const { data: guestListRsvpData } = await supabase
+        .from('guest_list')
+        .select('rsvp_status');
+      
+      // Combine RSVP counts
+      const profileConfirmed = profileRsvpData?.filter(p => p.rsvp_status === 'attending').length || 0;
+      const guestListConfirmed = guestListRsvpData?.filter(g => g.rsvp_status === 'attending').length || 0;
+      const totalConfirmed = profileConfirmed + guestListConfirmed;
+      
+      const profilePending = profileRsvpData?.filter(p => p.rsvp_status === 'pending' || !p.rsvp_status).length || 0;
+      const guestListPending = guestListRsvpData?.filter(g => g.rsvp_status === 'pending' || !g.rsvp_status).length || 0;
+      const totalPending = profilePending + guestListPending;
+      
+      // Use the larger of the two totals for total guests
+      const totalGuests = Math.max(registeredUsers || 0, guestListTotal || 0);
+      
+      // Get total events count
+      const { count: totalEvents } = await supabase
+        .from('events')
+        .select('*', { count: 'exact', head: true });
+      
+      // Get recent messages count (last 24 hours)
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      
+      const { count: recentMessages } = await supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', yesterday.toISOString());
+      
+      // Get photo uploads count
+      const { count: photoUploads } = await supabase
+        .from('photos')
+        .select('*', { count: 'exact', head: true });
+      
       setStats({
-        totalGuests: 45,
-        confirmedRSVPs: 38,
-        pendingRSVPs: 7,
-        totalEvents: 4,
-        recentMessages: 12,
-        photoUploads: 23
+        totalGuests,
+        confirmedRSVPs: totalConfirmed,
+        pendingRSVPs: totalPending,
+        totalEvents: totalEvents || 0,
+        recentMessages: recentMessages || 0,
+        photoUploads: photoUploads || 0
       });
     } catch (error) {
       console.error('Error loading admin stats:', error);
+      // Set default values on error
+      setStats({
+        totalGuests: 0,
+        confirmedRSVPs: 0,
+        pendingRSVPs: 0,
+        totalEvents: 0,
+        recentMessages: 0,
+        photoUploads: 0
+      });
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadRecentActivity = async () => {
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const activities = [];
+      
+      // Get recent RSVPs (last 7 days)
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      
+      const { data: recentRSVPs } = await supabase
+        .from('profiles')
+        .select('full_name, updated_at, rsvp_status')
+        .gte('updated_at', weekAgo.toISOString())
+        .not('rsvp_status', 'is', null)
+        .order('updated_at', { ascending: false })
+        .limit(5);
+      
+      if (recentRSVPs) {
+        recentRSVPs.forEach(rsvp => {
+          const timeAgo = getTimeAgo(new Date(rsvp.updated_at));
+          activities.push({
+            type: 'rsvp',
+            message: `${rsvp.full_name || 'Guest'} RSVP'd as ${rsvp.rsvp_status === 'attending' ? 'attending' : 'not attending'}`,
+            time: timeAgo,
+            icon: UserPlus
+          });
+        });
+      }
+      
+      // Get recent messages
+      const { data: recentMessages } = await supabase
+        .from('messages')
+        .select('content, created_at, sender_id')
+        .gte('created_at', weekAgo.toISOString())
+        .order('created_at', { ascending: false })
+        .limit(3);
+      
+      if (recentMessages && recentMessages.length > 0) {
+        activities.push({
+          type: 'message',
+          message: `${recentMessages.length} new messages in guest chat`,
+          time: getTimeAgo(new Date(recentMessages[0].created_at)),
+          icon: MessageSquare
+        });
+      }
+      
+      // Get recent photo uploads
+      const { data: recentPhotos } = await supabase
+        .from('photos')
+        .select('created_at')
+        .gte('created_at', weekAgo.toISOString())
+        .order('created_at', { ascending: false });
+      
+      if (recentPhotos && recentPhotos.length > 0) {
+        activities.push({
+          type: 'photo',
+          message: `${recentPhotos.length} new photos uploaded`,
+          time: getTimeAgo(new Date(recentPhotos[0].created_at)),
+          icon: Camera
+        });
+      }
+      
+      // Get recent event updates
+      const { data: recentEvents } = await supabase
+        .from('events')
+        .select('title, updated_at')
+        .gte('updated_at', weekAgo.toISOString())
+        .order('updated_at', { ascending: false })
+        .limit(3);
+      
+      if (recentEvents) {
+        recentEvents.forEach(event => {
+          activities.push({
+            type: 'event',
+            message: `Timeline updated for ${event.title}`,
+            time: getTimeAgo(new Date(event.updated_at)),
+            icon: Calendar
+          });
+        });
+      }
+      
+      // Sort activities by most recent and take top 4
+      setRecentActivity(activities.slice(0, 4));
+    } catch (error) {
+      console.error('Error loading recent activity:', error);
+    }
+  };
+  
+  const getTimeAgo = (date: Date): string => {
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 60) return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+    if (diffDays < 7) return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+    return date.toLocaleDateString();
   };
 
   const quickStats = [
@@ -91,18 +258,11 @@ const AdminDashboardPopup: React.FC<AdminDashboardPopupProps> = ({ onClose }) =>
   const quickActions = [
     { 
       icon: Heart, 
-      title: 'Central Guest List', 
-      subtitle: 'Manage all guests and RSVPs',
-      action: () => setCurrentView('guestlist'),
+      title: 'User & Guest Management', 
+      subtitle: 'Manage users, roles, and guest list',
+      href: '/dashboard/users',
       color: 'text-wedding-gold',
       primary: true
-    },
-    { 
-      icon: Activity, 
-      title: 'Live Metrics', 
-      subtitle: 'Real-time wedding analytics',
-      action: () => setCurrentView('metrics'),
-      color: 'text-emerald-600'
     },
     { 
       icon: Users, 
@@ -120,8 +280,8 @@ const AdminDashboardPopup: React.FC<AdminDashboardPopupProps> = ({ onClose }) =>
     },
     { 
       icon: MessageSquare, 
-      title: 'Guest Messages', 
-      subtitle: 'View recent communications',
+      title: 'Communication', 
+      subtitle: 'Mass notifications & messaging',
       href: '/dashboard/messages',
       color: 'text-green-600'
     },
@@ -133,27 +293,14 @@ const AdminDashboardPopup: React.FC<AdminDashboardPopupProps> = ({ onClose }) =>
       color: 'text-pink-600'
     },
     { 
-      icon: BarChart3, 
-      title: 'Analytics', 
-      subtitle: 'View detailed reports',
-      href: '/dashboard/analytics',
-      color: 'text-indigo-600'
-    },
-    { 
-      icon: Settings, 
-      title: 'User Management', 
-      subtitle: 'Manage user roles',
-      href: '/dashboard/users',
-      color: 'text-gray-600'
+      icon: Palette, 
+      title: 'Content Management', 
+      subtitle: 'Edit site content and themes',
+      href: '/dashboard/content',
+      color: 'text-rose-600'
     }
   ];
 
-  const recentActivity = [
-    { type: 'rsvp', message: 'New RSVP from Sarah Johnson', time: '2 hours ago', icon: UserPlus },
-    { type: 'message', message: '3 new messages in guest chat', time: '4 hours ago', icon: MessageSquare },
-    { type: 'photo', message: '5 new photos uploaded', time: '6 hours ago', icon: Camera },
-    { type: 'event', message: 'Timeline updated for ceremony', time: '1 day ago', icon: Calendar }
-  ];
 
   if (loading) {
     return (
@@ -170,36 +317,15 @@ const AdminDashboardPopup: React.FC<AdminDashboardPopupProps> = ({ onClose }) =>
     // Temporarily disabled AuthGuard for emergency recovery
     <React.Fragment>
       <div className="w-full h-full flex flex-col max-h-[90vh] overflow-hidden">
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl w-full h-full max-h-[90vh] overflow-hidden border border-white/20">
+        <div className="glass-popup w-full h-full max-h-[90vh] overflow-hidden">
         
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200/50">
           <div className="flex items-center space-x-3">
-            {(currentView === 'metrics' || currentView === 'guestlist') && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setCurrentView('dashboard')}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <Clock className="w-4 h-4" />
-              </Button>
-            )}
             <div>
-              <h2 className="text-xl font-bold text-wedding-navy">
-                {currentView === 'dashboard' && 'Admin Dashboard'}
-                {currentView === 'metrics' && 'Live Metrics'}
-                {currentView === 'guestlist' && (
-                  <span className="flex items-center gap-2">
-                    <Heart className="w-5 h-5 text-wedding-gold" />
-                    Central Guest List
-                  </span>
-                )}
-              </h2>
+              <h2 className="text-xl font-bold text-wedding-navy">Admin Dashboard</h2>
               <p className="text-sm text-muted-foreground">
-                {currentView === 'dashboard' && `Welcome back, ${profile?.first_name || 'Admin'}`}
-                {currentView === 'metrics' && 'Real-time wedding planning analytics'}
-                {currentView === 'guestlist' && 'The heart of your wedding - manage all guests and RSVPs'}
+                Welcome back, {profile?.first_name || 'Admin'}
               </p>
             </div>
           </div>
@@ -216,27 +342,45 @@ const AdminDashboardPopup: React.FC<AdminDashboardPopupProps> = ({ onClose }) =>
         </div>
 
         {/* Content */}
-        {currentView === 'dashboard' ? (
-          <div className="p-4 space-y-6 overflow-y-auto max-h-[calc(90vh-80px)]">
-            
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 gap-3">
-              {quickStats.map((stat, index) => {
-                const Icon = stat.icon;
-                return (
-                  <div key={index} className={`${stat.bgColor} rounded-lg p-3 text-center`}>
-                    <Icon className={`w-6 h-6 ${stat.color} mx-auto mb-1`} />
-                    <div className={`text-lg font-bold ${stat.color}`}>{stat.value}</div>
-                    <div className="text-xs text-gray-600">{stat.label}</div>
-                  </div>
-                );
-              })}
+        <div className="p-4 space-y-6 overflow-y-auto max-h-[calc(90vh-80px)]">
+          
+          {/* Quick Stats */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-semibold text-wedding-navy flex items-center">
+                <TrendingUp className="w-4 h-4 mr-2" />
+                Live Statistics
+              </h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  loadAdminStats();
+                  loadRecentActivity();
+                }}
+                className="text-xs"
+              >
+                <Clock className="w-3 h-3 mr-1" />
+                Refresh
+              </Button>
+            </div>
+              <div className="grid grid-cols-2 gap-3">
+                {quickStats.map((stat, index) => {
+                  const Icon = stat.icon;
+                  return (
+                    <div key={index} className={`${stat.bgColor} rounded-lg p-3 text-center`}>
+                      <Icon className={`w-6 h-6 ${stat.color} mx-auto mb-1`} />
+                      <div className={`text-lg font-bold ${stat.color}`}>{stat.value}</div>
+                      <div className="text-xs text-gray-600">{stat.label}</div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Quick Actions */}
             <div>
-              <h3 className="font-semibold text-wedding-navy mb-3 flex items-center">
-                <Settings className="w-4 h-4 mr-2" />
+              <h3 className="font-semibold text-wedding-navy mb-3">
                 Quick Actions
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -278,52 +422,28 @@ const AdminDashboardPopup: React.FC<AdminDashboardPopupProps> = ({ onClose }) =>
                 Recent Activity
               </h3>
               <div className="space-y-2">
-                {recentActivity.map((activity, index) => {
-                  const Icon = activity.icon;
-                  return (
-                    <div key={index} className="glass-card p-3 flex items-start space-x-3">
-                      <Icon className="w-4 h-4 text-wedding-navy mt-1" />
-                      <div className="flex-1">
-                        <div className="text-sm text-wedding-navy">{activity.message}</div>
-                        <div className="text-xs text-muted-foreground">{activity.time}</div>
+                {recentActivity.length > 0 ? (
+                  recentActivity.map((activity, index) => {
+                    const Icon = activity.icon;
+                    return (
+                      <div key={index} className="glass-card p-3 flex items-start space-x-3">
+                        <Icon className="w-4 h-4 text-wedding-navy mt-1" />
+                        <div className="flex-1">
+                          <div className="text-sm text-wedding-navy">{activity.message}</div>
+                          <div className="text-xs text-muted-foreground">{activity.time}</div>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                ) : (
+                  <div className="glass-card p-3 text-center text-sm text-muted-foreground">
+                    No recent activity in the last 7 days
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Emergency Actions */}
-            <div className="pt-4 border-t border-gray-200/50">
-              <div className="grid grid-cols-2 gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="text-orange-600 border-orange-200 hover:bg-orange-50"
-                >
-                  <AlertCircle className="w-4 h-4 mr-1" />
-                  Alerts
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="text-blue-600 border-blue-200 hover:bg-blue-50"
-                >
-                  <BarChart3 className="w-4 h-4 mr-1" />
-                  Reports
-                </Button>
-              </div>
-            </div>
           </div>
-        ) : currentView === 'metrics' ? (
-          <div className="overflow-y-auto max-h-[calc(90vh-80px)]">
-            <LiveMetrics />
-          </div>
-        ) : currentView === 'guestlist' ? (
-          <div className="overflow-y-auto max-h-[calc(90vh-80px)]">
-            <CentralGuestList />
-          </div>
-        ) : null}
         </div>
       </div>
     </React.Fragment>

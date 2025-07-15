@@ -131,6 +131,8 @@ const RSVPManagement: React.FC<RSVPManagementProps> = ({ rsvps, onRefresh }) => 
     pending: rsvps.filter(r => r.status === 'pending').length,
     maybe: rsvps.filter(r => r.status === 'maybe').length,
     totalGuests: rsvps.filter(r => r.status === 'attending').reduce((sum, r) => sum + (r.guest_count || 1), 0),
+    registeredUsers: rsvps.filter(r => r.profiles.first_name && r.profiles.last_name && r.status === 'attending').length,
+    unregisteredGuests: rsvps.filter(r => (!r.profiles.first_name || !r.profiles.last_name) && r.status === 'attending').length,
     dietaryRestrictions: rsvps.filter(r => r.dietary_restrictions).length,
     plusOnes: rsvps.filter(r => r.plus_one_name && r.status === 'attending').length,
     needAccommodation: rsvps.filter(r => r.accommodation_needed && r.status === 'attending').length,

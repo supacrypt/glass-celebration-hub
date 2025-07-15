@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useDirectChats } from '@/hooks/useDirectChats';
 import { useChatMessages } from '@/hooks/useChatMessages';
+import { registerMessenger, MessengerOptions } from '@/utils/messengerUtils';
 
 // Enhanced chat components
 import MediaUploadModal from './MediaUploadModal';
@@ -134,6 +135,46 @@ const InstantMessenger: React.FC<InstantMessengerProps> = ({
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, [isMobile]);
+
+  // Register messenger callbacks
+  useEffect(() => {
+    const handleOpen = (options?: MessengerOptions) => {
+      if (options?.chatId) {
+        setSelectedChatId(options.chatId);
+      }
+      if (options?.minimized === false && isMinimized && onMinimize) {
+        onMinimize(); // Unminimize
+      }
+    };
+
+    const handleVideoCall = (chatId: string) => {
+      setSelectedChatId(chatId);
+      const chat = chats.find(c => c.id === chatId);
+      if (chat) {
+        const participant = chat.participants.find(p => p.id !== user?.id);
+        if (participant) {
+          handleStartCall(participant.id, 'video');
+        }
+      }
+    };
+
+    const handleAudioCall = (chatId: string) => {
+      setSelectedChatId(chatId);
+      const chat = chats.find(c => c.id === chatId);
+      if (chat) {
+        const participant = chat.participants.find(p => p.id !== user?.id);
+        if (participant) {
+          handleStartCall(participant.id, 'audio');
+        }
+      }
+    };
+
+    registerMessenger({
+      onOpen: handleOpen,
+      onVideoCall: handleVideoCall,
+      onAudioCall: handleAudioCall
+    });
+  }, [isMinimized, onMinimize, chats, user, handleStartCall]);
 
   // Real data from Supabase hooks
   const { chats: directChats, loading: chatsLoading, createDirectChat } = useDirectChats();
@@ -324,7 +365,7 @@ const InstantMessenger: React.FC<InstantMessengerProps> = ({
   };
 
   // Enhanced call handlers
-  const handleStartCall = async (userId: string, type: 'audio' | 'video') => {
+  const handleStartCall = useCallback(async (userId: string, type: 'audio' | 'video') => {
     try {
       await webRTCManager.startCall(userId, type);
       const user = onlineUsers.find(u => u.id === userId);
@@ -349,7 +390,7 @@ const InstantMessenger: React.FC<InstantMessengerProps> = ({
         variant: "destructive"
       });
     }
-  };
+  }, [webRTCManager, onlineUsers, toast]);
   
   const handleAcceptCall = async (callId: string) => {
     try {

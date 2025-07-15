@@ -6,31 +6,37 @@ export const DashboardRedirect: React.FC = () => {
   const { userRole, user, loading } = useAuth();
   const navigate = useNavigate();
   
-  
+  // Wait for auth to finish loading
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-wedding-navy"></div>
+      </div>
+    );
+  }
+
+  // If no user, redirect to auth
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
 
   useEffect(() => {
-    
-    
-    // For guests, trigger the dashboard popup by dispatching a custom event
-    if (userRole?.role !== 'admin') {
-      
-      // Navigate to home first
-      navigate('/', { replace: true });
-      
-      // Then trigger dashboard popup after a brief delay
-      setTimeout(() => {
-        
-        const event = new CustomEvent('openDashboard');
-        window.dispatchEvent(event);
-      }, 100);
+    // Only proceed if user is loaded and we have role data (or confirmed no role)
+    if (!loading && user) {
+      // For guests (users without admin role), redirect to guest dashboard
+      if (!userRole || userRole?.role !== 'admin') {
+        navigate('/guest-dashboard', { replace: true });
+      }
     }
-  }, [userRole, navigate]);
+  }, [userRole, user, loading, navigate]);
 
   // Redirect admin users to admin dashboard
   if (userRole?.role === 'admin') {
     return <Navigate to="/admin/dashboard" replace />;
   }
 
-  // Redirect regular users to home (the dashboard popup will open via the event)
-  return <Navigate to="/" replace />;
+  // Redirect regular users to guest dashboard
+  return <Navigate to="/guest-dashboard" replace />;
 };
+
+export default DashboardRedirect;

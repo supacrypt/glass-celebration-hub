@@ -76,7 +76,7 @@ const FAQReorderModal: React.FC<FAQReorderModalProps> = ({
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] max-h-[80vh]">
+      <DialogContent className="glass-popup sm:max-w-[600px] max-h-[80vh]">
         <DialogHeader>
           <DialogTitle>Reorder FAQ Items</DialogTitle>
           <DialogDescription>

@@ -11,7 +11,7 @@ const Index = () => {
       if (!user) {
         // Redirect to auth if not logged in
         navigate('/auth');
-      } else if (profile && !profile.rsvp_completed) {
+      } else if (profile && !profile.rsvp_responded_at && (!profile.rsvp_status || profile.rsvp_status === 'pending')) {
         // Redirect to RSVP if logged in but haven't completed RSVP
         navigate('/rsvp');
       } else {

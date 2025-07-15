@@ -27,6 +27,8 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import BusSeatVisualization from './BusSeatVisualization';
+import BusAdministration from './BusAdministration';
 
 interface TransportationOption {
   id: string;
@@ -299,9 +301,10 @@ const TransportationManager: React.FC = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="bus-transport">Bus Transport</TabsTrigger>
+          <TabsTrigger value="bus-admin">Bus Admin</TabsTrigger>
           <TabsTrigger value="carpools">Carpools</TabsTrigger>
           <TabsTrigger value="guest-status">Guest Status</TabsTrigger>
         </TabsList>
@@ -371,80 +374,76 @@ const TransportationManager: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="bus-transport" className="space-y-4">
-          {transportOptions.map(option => (
-            <Card key={option.id}>
+          {/* Enhanced Bus Seat Visualization */}
+          <BusSeatVisualization 
+            adminMode={true}
+            onSeatClick={(seatNumber, seat) => {
+              if (seat.isBooked) {
+                toast.info(`Seat ${seatNumber} is booked by ${seat.guestName}`);
+              } else if (!seat.isDriver && !seat.isGuide) {
+                toast.info(`Seat ${seatNumber} is available for booking`);
+              }
+            }}
+          />
+          
+          {/* Legacy Transport Options (if any exist) */}
+          {transportOptions.length > 0 && (
+            <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Bus className="w-5 h-5" />
-                  {option.method_name}
-                  <Badge variant={option.featured ? 'default' : 'outline'}>
-                    {option.featured ? 'Featured' : 'Standard'}
-                  </Badge>
-                </CardTitle>
-                <p className="text-sm text-muted-foreground">{option.description}</p>
+                <CardTitle>Legacy Transport Options</CardTitle>
               </CardHeader>
               <CardContent>
-                {option.schedules && option.schedules.length > 0 ? (
-                  <div className="space-y-4">
-                    {option.schedules.map(schedule => (
-                      <div key={schedule.id} className="border rounded-lg p-4">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-1">
-                              <Clock className="w-4 h-4" />
-                              {schedule.departure_time}
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <MapPin className="w-4 h-4" />
-                              {schedule.departure_location}
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-sm font-medium">
-                              {schedule.current_bookings}/{schedule.max_capacity || 'Unlimited'} booked
-                            </div>
-                            <Badge variant={schedule.is_active ? 'default' : 'secondary'}>
-                              {schedule.is_active ? 'Active' : 'Inactive'}
-                            </Badge>
-                          </div>
-                        </div>
-
-                        {/* Show bookings for this schedule */}
-                        {option.bookings && option.bookings.filter(b => b.schedule_id === schedule.id).length > 0 && (
-                          <div className="mt-3 pt-3 border-t">
-                            <h4 className="font-medium mb-2">Bookings</h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                              {option.bookings
-                                .filter(booking => booking.schedule_id === schedule.id)
-                                .map(booking => (
-                                  <div key={booking.id} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                                    <span className="text-sm">
-                                      {booking.user_profile?.first_name} {booking.user_profile?.last_name}
-                                    </span>
-                                    <div className="flex items-center gap-2">
-                                      <Badge variant="outline" className="text-xs">
-                                        {booking.guest_count} guest{booking.guest_count !== 1 ? 's' : ''}
-                                      </Badge>
-                                      <Badge variant={booking.status === 'confirmed' ? 'default' : 'secondary'} className="text-xs">
-                                        {booking.status}
-                                      </Badge>
-                                    </div>
-                                  </div>
-                                ))}
-                            </div>
-                          </div>
-                        )}
+                {transportOptions.map(option => (
+                  <div key={option.id} className="border rounded-lg p-4 mb-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <h4 className="font-medium">{option.method_name}</h4>
+                        <p className="text-sm text-muted-foreground">{option.description}</p>
                       </div>
-                    ))}
+                      <Badge variant={option.featured ? 'default' : 'outline'}>
+                        {option.featured ? 'Featured' : 'Standard'}
+                      </Badge>
+                    </div>
+                    
+                    {option.schedules && option.schedules.length > 0 ? (
+                      <div className="space-y-2">
+                        {option.schedules.map(schedule => (
+                          <div key={schedule.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                            <div className="flex items-center gap-4">
+                              <div className="flex items-center gap-1">
+                                <Clock className="w-4 h-4" />
+                                {schedule.departure_time}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <MapPin className="w-4 h-4" />
+                                {schedule.departure_location}
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-sm font-medium">
+                                {schedule.current_bookings}/{schedule.max_capacity || 'Unlimited'} booked
+                              </div>
+                              <Badge variant={schedule.is_active ? 'default' : 'secondary'}>
+                                {schedule.is_active ? 'Active' : 'Inactive'}
+                              </Badge>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-4 text-muted-foreground">
+                        No schedules configured
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    No schedules configured for this transport option
-                  </div>
-                )}
+                ))}
               </CardContent>
             </Card>
-          ))}
+          )}
+        </TabsContent>
+
+        <TabsContent value="bus-admin" className="space-y-4">
+          <BusAdministration />
         </TabsContent>
 
         <TabsContent value="carpools" className="space-y-4">
