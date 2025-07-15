@@ -188,3 +188,7 @@ claude_mcp_config.json
 *.old
 Supabase/
 /start_mcp_servers.sh
+
+# Claude Code settings (contains sensitive information)
+.claude/
+.claude/**/*
